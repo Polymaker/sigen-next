@@ -17,6 +17,10 @@ SiGen is a modern application for designing and configuring stringed instrument 
 - Multi-language support
 - Intuitive user interface for instrument design
 
+## Preview
+Here is a multiscale layout with 2 bass strings and 5 guitar strings:
+![image](.github/images/preview-1.png)
+
 ## Status
 
 This version is under active development and not yet feature-complete. For a stable and production-ready version, please see [SiGen Stable Repository](https://github.com/Polymaker/sigen).
