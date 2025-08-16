@@ -1,0 +1,214 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+		Microsoft ResX Schema
+
+		Version 1.3
+
+		The primary goals of this format is to allow a simple XML format 
+		that is mostly human readable. The generation and parsing of the 
+		various data types are done through the TypeConverter classes 
+		associated with the data types.
+
+		Example:
+
+		... ado.net/XML headers & schema ...
+		<resheader name="resmimetype">text/microsoft-resx</resheader>
+		<resheader name="version">1.3</resheader>
+		<resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+		<resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+		<data name="Name1">this is my long string</data>
+		<data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+		<data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+			[base64 mime encoded serialized .NET Framework object]
+		</data>
+		<data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+			[base64 mime encoded string representing a byte array form of the .NET Framework object]
+		</data>
+
+		There are any number of "resheader" rows that contain simple 
+		name/value pairs.
+
+		Each data row contains a name, and value. The row also contains a 
+		type or mimetype. Type corresponds to a .NET class that support 
+		text/value conversion through the TypeConverter architecture. 
+		Classes that don't support this are serialized and stored with the 
+		mimetype set.
+
+		The mimetype is used for serialized objects, and tells the 
+		ResXResourceReader how to depersist the object. This is currently not 
+		extensible. For a given mimetype the value must be set accordingly:
+
+		Note - application/x-microsoft.net.object.binary.base64 is the format 
+		that the ResXResourceWriter will generate, however the reader can 
+		read any of the formats listed below.
+
+		mimetype: application/x-microsoft.net.object.binary.base64
+		value   : The object must be serialized with 
+			: System.Serialization.Formatters.Binary.BinaryFormatter
+			: and then encoded with base64 encoding.
+
+		mimetype: application/x-microsoft.net.object.soap.base64
+		value   : The object must be serialized with 
+			: System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+			: and then encoded with base64 encoding.
+
+		mimetype: application/x-microsoft.net.object.bytearray.base64
+		value   : The object must be serialized into a byte array 
+			: using a System.ComponentModel.TypeConverter
+			: and then encoded with base64 encoding.
+	-->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>1.3</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="FingerboardSide.Bass" xml:space="preserve">
+    <value>Bass</value>
+  </data>
+  <data name="FingerboardSide.Treble" xml:space="preserve">
+    <value>Treble</value>
+  </data>
+  <data name="StringsLabel" xml:space="preserve">
+    <value>Strings</value>
+  </data>
+  <data name="StringLabel" xml:space="preserve">
+    <value>String</value>
+  </data>
+  <data name="StringCountControl_AddBassTooltip" xml:space="preserve">
+    <value>Add a string on the bass side</value>
+  </data>
+  <data name="StringCountControl_RemoveBassTooltip" xml:space="preserve">
+    <value>Remove a string from the bass side</value>
+  </data>
+  <data name="StringCountControl_AddTrebleTooltip" xml:space="preserve">
+    <value>Add a string on the treble side</value>
+  </data>
+  <data name="StringCountControl_RemoveTrebleTooltip" xml:space="preserve">
+    <value>Remove a string from the treble side</value>
+  </data>
+  <data name="Editor.Handedness.Left" xml:space="preserve">
+    <value>Left handed</value>
+  </data>
+  <data name="Editor.Handedness.Right" xml:space="preserve">
+    <value>Right handed</value>
+  </data>
+  <data name="Editor.Handedness.Select" xml:space="preserve">
+    <value>Instrument orientation</value>
+  </data>
+  <data name="Editor.ScaleLengthMode.Single" xml:space="preserve">
+    <value>Single</value>
+  </data>
+  <data name="Editor.ScaleLengthMode.Multiscale" xml:space="preserve">
+    <value>Multiscale</value>
+  </data>
+  <data name="Editor.ScaleLengthMode.PerString" xml:space="preserve">
+    <value>Per-string</value>
+  </data>
+  <data name="Editor.ScaleLengthMode.Single.Tooltip" xml:space="preserve">
+    <value>All strings use the same scale length.</value>
+  </data>
+  <data name="Editor.ScaleLengthMode.Multiscale.Tooltip" xml:space="preserve">
+    <value>Different scale lengths for bass and treble strings.</value>
+  </data>
+  <data name="Editor.ScaleLengthMode.PerString.Tooltip" xml:space="preserve">
+    <value>Each string can have its own scale length.</value>
+  </data>
+  <data name="Editor.NumberOfStrings" xml:space="preserve">
+    <value>Number of strings</value>
+  </data>
+  <data name="Editor.NumberOfStrings.Tooltip" xml:space="preserve">
+    <value>Set the total number of strings for your instrument.</value>
+  </data>
+  <data name="Editor.InstrumentType" xml:space="preserve">
+    <value>Instrument Type</value>
+  </data>
+  <data name="Editor.InstrumentType.Tooltip" xml:space="preserve">
+    <value>Choose the instrument type (e.g., Electric Guitar, Bass, Banjo). This affects default values and available options.</value>
+  </data>
+  <data name="Editor.NumberOfFrets" xml:space="preserve">
+    <value>Number of Frets</value>
+  </data>
+  <data name="Editor.NumberOfFrets.Tooltip" xml:space="preserve">
+    <value>Specify the total number of frets. Set to zero for fretless instruments. You can also set frets per string in advanced settings.</value>
+  </data>
+  <data name="Editor.Handedness.Tooltip" xml:space="preserve">
+    <value>Select whether the instrument layout is for a right-handed or left-handed player.</value>
+  </data>
+  <data name="Editor.ScaleLengthMode.Select" xml:space="preserve">
+    <value>Scale Length Mode</value>
+  </data>
+  <data name="ScaleLength" xml:space="preserve">
+    <value>Scale Length</value>
+  </data>
+  <data name="Length" xml:space="preserve">
+    <value>Length</value>
+  </data>
+  <data name="InstrumentType.ElectricGuitar" xml:space="preserve">
+    <value>Electric Guitar</value>
+  </data>
+  <data name="InstrumentType.AcousticGuitar" xml:space="preserve">
+    <value>Acoustic Guitar</value>
+  </data>
+  <data name="InstrumentType.ClassicalGuitar" xml:space="preserve">
+    <value>Classical Guitar</value>
+  </data>
+  <data name="InstrumentType.BassGuitar" xml:space="preserve">
+    <value>Electric Bass</value>
+  </data>
+  <data name="InstrumentType.AcousticBass" xml:space="preserve">
+    <value>Acoustic Bass</value>
+  </data>
+  <data name="InstrumentType.Mandolin" xml:space="preserve">
+    <value>Mandolin</value>
+  </data>
+  <data name="InstrumentType.Banjo" xml:space="preserve">
+    <value>Banjo</value>
+  </data>
+  <data name="InstrumentType.Ukulele" xml:space="preserve">
+    <value>Ukulele</value>
+  </data>
+  <data name="InstrumentType.Custom" xml:space="preserve">
+    <value>Custom</value>
+  </data>
+  <data name="InstrumentFamilly.Guitar" xml:space="preserve">
+    <value>Guitar</value>
+  </data>
+  <data name="InstrumentFamilly.Bass" xml:space="preserve">
+    <value>Bass</value>
+  </data>
+</root>

@@ -1,0 +1,191 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="300"
+             x:Class="SiGen.UI.Controls.StringCountControl"
+			 xmlns:vm="using:SiGen.ViewModels"
+			 xmlns:ctrl="using:SiGen.UI.Controls"
+			 
+			 xmlns:lang="using:SiGen.Lang"
+			 VerticalAlignment="Top"
+			 MinWidth="230"
+			 >
+	<UserControl.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.ThemeDictionaries>
+				<ResourceDictionary  x:Key="Light">
+					<SolidColorBrush x:Key='BackgroundBrush'>White</SolidColorBrush>
+					<SolidColorBrush x:Key='HeaderLabelBrush'>#888</SolidColorBrush>
+					<SolidColorBrush x:Key='DotsBackgroundBrush'>#FAFAFA</SolidColorBrush>
+					<SolidColorBrush x:Key='DotsBorderBrush'>#DDD</SolidColorBrush>
+					<SolidColorBrush x:Key='StringDotBrush'>#666</SolidColorBrush>
+
+					<SolidColorBrush x:Key='BassColorBrush'>#FFA04D</SolidColorBrush>
+					<SolidColorBrush x:Key='TrebleColorBrush'>#64B5F6</SolidColorBrush>
+				</ResourceDictionary >
+				<ResourceDictionary x:Key="Dark">
+					<SolidColorBrush x:Key='BackgroundBrush'>Black</SolidColorBrush>
+					<SolidColorBrush x:Key='HeaderLabelBrush'>#CCC</SolidColorBrush>
+					<SolidColorBrush x:Key='DotsBackgroundBrush'>#080808</SolidColorBrush>
+					<SolidColorBrush x:Key='DotsBorderBrush'>#999</SolidColorBrush>
+					<SolidColorBrush x:Key='StringDotBrush'>#BBB</SolidColorBrush>
+
+					<SolidColorBrush x:Key='BassColorBrush'>#FFA04D</SolidColorBrush>
+					<SolidColorBrush x:Key='TrebleColorBrush'>#64B5F6</SolidColorBrush>
+				</ResourceDictionary>
+			</ResourceDictionary.ThemeDictionaries>
+		</ResourceDictionary>
+	</UserControl.Resources>
+	
+	<UserControl.Styles>
+		<Style Selector="Button.string-button">
+			<Setter Property="Width" Value="24"/>
+			<Setter Property="Height" Value="24"/>
+			<Setter Property="CornerRadius" Value="12"/>
+			<Setter Property="FontSize" Value="16"/>
+			<Setter Property="FontWeight" Value="Bold"/>
+			<Setter Property="Margin" Value="0"/>
+			<Setter Property="Padding" Value="0,0,0,1"/>
+			<Setter Property="HorizontalContentAlignment" Value="Center"/>
+			<Setter Property="VerticalContentAlignment" Value="Center"/>
+			<Setter Property="TextBlock.TextAlignment" Value="Center"/>
+			<Setter Property="Foreground" Value="White"/>
+		</Style>
+
+		<Style Selector="Button.string-button:pressed /template/ ContentPresenter">
+			<Setter Property="Foreground" Value="White"/>
+		</Style>
+
+		<!--<Style Selector="Button.string-button:pointerover /template/ ContentPresenter">
+			<Setter Property="Foreground" Value="White"/>
+		</Style>-->
+
+		<Style Selector="Button.bass-button">
+			<Setter Property="Background" Value="{DynamicResource BassColorBrush}"/>
+		</Style>
+
+		<!--<Style Selector="Button.bass-button:pointerover /template/ ContentPresenter">
+			<Setter Property="Background" Value="#FFC97F"/>
+		</Style>-->
+
+		<Style Selector="Button.treble-button">
+			<Setter Property="Background" Value="{DynamicResource TrebleColorBrush}"/>
+		</Style>
+
+		<Style Selector="Ellipse.string-dot">
+			<Setter Property="Width" Value="12"/>
+			<Setter Property="Height" Value="12"/>
+			<Setter Property="Fill" Value="{DynamicResource StringDotBrush}"/>
+			<Setter Property="Margin" Value="0,2"/>
+		</Style>
+
+		<Style Selector="Ellipse.string-dot.bass">
+			<Setter Property="Fill" Value="{DynamicResource BassColorBrush}"/>
+		</Style>
+
+		<Style Selector="Ellipse.string-dot.treble">
+			<Setter Property="Fill" Value="{DynamicResource TrebleColorBrush}"/>
+		</Style>
+	</UserControl.Styles>
+
+
+	<!--<ThemeVariantScope RequestedThemeVariant="Dark" >-->
+	
+	<!-- Background="{DynamicResource BackgroundBrush}" -->
+		<Border  DataContext="{Binding RelativeSource={RelativeSource AncestorType=ctrl:StringCountControl}, Path=ViewModel}"
+			Padding="4">
+
+			<StackPanel Orientation="Vertical" Spacing="8">
+
+				<!-- Header with labels -->
+				<Grid >
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="52"/>
+						<ColumnDefinition Width="*"/>
+						<ColumnDefinition Width="52"/>
+					</Grid.ColumnDefinitions>
+			
+					<TextBlock Grid.Column="{Binding BassButtonsColumn}"
+							   Text="{x:Static lang:Resources.FingerboardSide_Bass}"
+							   FontSize="14"
+							   Foreground="{DynamicResource HeaderLabelBrush}"
+							   HorizontalAlignment="Center"/>
+
+					<TextBlock Grid.Column="1"
+							   Text="{Binding StringCountText}"
+							   FontSize="14"
+							   Foreground="{DynamicResource HeaderLabelBrush}"
+							   HorizontalAlignment="Center"/>
+
+					<TextBlock Grid.Column="{Binding TrebleButtonsColumn}"
+							   Text="{x:Static lang:Resources.FingerboardSide_Treble}"
+							   FontSize="14"
+							   Foreground="{DynamicResource HeaderLabelBrush}"
+							   HorizontalAlignment="Center"/>
+				</Grid>
+
+				<!-- Main control area -->
+				<Grid>
+					<Grid.ColumnDefinitions>
+						<ColumnDefinition Width="Auto"/>
+						<ColumnDefinition Width="*"/>
+						<ColumnDefinition Width="Auto"/>
+					</Grid.ColumnDefinitions>
+
+					<!-- Bass side controls -->
+					<StackPanel Grid.Column="{Binding BassButtonsColumn}" Orientation="Horizontal" Spacing="4">
+						<Button Classes="string-button bass-button"
+								Content="+"
+								Command="{Binding AddBassStringCommand}"
+								ToolTip.Tip="{x:Static lang:Resources.StringCountControl_AddBassTooltip}"
+								IsEnabled="{Binding CanAddBassString}"/>
+						<Button Classes="string-button bass-button"
+								Content="−"
+								Command="{Binding RemoveBassStringCommand}"
+								ToolTip.Tip="{x:Static lang:Resources.StringCountControl_RemoveBassTooltip}"
+								IsEnabled="{Binding CanRemoveBassString}"/>
+					</StackPanel>
+
+					<!-- String visualization -->
+					<Border Grid.Column="1"
+							Background="{DynamicResource DotsBackgroundBrush}"
+							BorderBrush="{DynamicResource DotsBorderBrush}"
+							BorderThickness="1"
+							CornerRadius="12"
+							Padding="10,8"
+							Margin="8,0"
+							x:Name="DotContainer">
+
+						<StackPanel Orientation="Horizontal"
+									HorizontalAlignment="Center"
+										Spacing="3"
+									Name="StringDotsPanel">
+							<!-- String dots will be generated in code-behind -->
+						</StackPanel>
+
+					</Border>
+
+					<!-- Treble side controls -->
+					<StackPanel Grid.Column="{Binding TrebleButtonsColumn}" Orientation="Horizontal" Spacing="4">
+						<Button Classes="string-button treble-button"
+								Content="+"
+								Command="{Binding AddTrebleStringCommand}"
+								ToolTip.Tip="{x:Static lang:Resources.StringCountControl_AddTrebleTooltip}"
+								IsEnabled="{Binding CanAddTrebleString}"/>
+						<Button Classes="string-button treble-button"
+								Content="−"
+								Command="{Binding RemoveTrebleStringCommand}"
+								ToolTip.Tip="{x:Static lang:Resources.StringCountControl_RemoveTrebleTooltip}"
+								IsEnabled="{Binding CanRemoveTrebleString}"/>
+					</StackPanel>
+
+				</Grid>
+
+			</StackPanel>
+
+		</Border>
+	<!--</ThemeVariantScope>-->
+
+
+</UserControl>

@@ -1,0 +1,54 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="SiGen.UI.LayoutViewer.LayoutViewer"
+			 xmlns:ui="using:SiGen.UI"
+			 
+			 >
+  <Grid>
+	  <Grid.RowDefinitions>
+		  <RowDefinition Height="auto" />
+		  <RowDefinition Height="*" />
+		  <RowDefinition Height="30" />
+	  </Grid.RowDefinitions>
+	  <Grid.ColumnDefinitions>
+		  
+	  </Grid.ColumnDefinitions>
+
+
+	  <Border x:Name="BorderContainer" Grid.Row="0" Grid.RowSpan="3" Background="#1e3250" ZIndex="1"
+			  PointerPressed="Canvas_PointerPressed"
+				PointerMoved="Canvas_PointerMoved"
+				PointerReleased="Canvas_PointerReleased"
+				  PointerWheelChanged="Canvas_OnPointerWheel"
+			  >
+		  <Border.GestureRecognizers>
+			  <PinchGestureRecognizer/>
+		  </Border.GestureRecognizers>
+		  <Grid>
+			  
+			  <Canvas x:Name="RenderCanvas" >
+				  <ui:BlueprintGrid Width="50" Height="50" x:Name="BlueprintRect" />
+			  </Canvas>
+			  <Canvas x:Name="OverlayCanvas" />
+		  </Grid>
+		 
+	  </Border>
+
+	  <Border	
+				Background="#77000000"
+				ZIndex="10" Grid.Row="0"  
+				HorizontalAlignment="Stretch">
+		  <StackPanel Orientation="Horizontal" Spacing="4" 
+					  HorizontalAlignment="Center"
+					  Margin="4">
+			  <Button Content="Test" x:Name="Button1" />
+			  <Button Content="Test" x:Name="Button2" />
+			  <Button Content="Test" x:Name="Button3" />
+			  <TextBlock x:Name="DebugText" />
+		  </StackPanel>
+	  </Border>
+  </Grid>
+</UserControl>

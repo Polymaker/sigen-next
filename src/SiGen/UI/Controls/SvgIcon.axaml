@@ -1,0 +1,29 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:controls="using:SiGen.UI.Controls">
+
+  <!--
+    Additional resources 
+    Using Control Themes:
+         https://docs.avaloniaui.net/docs/basics/user-interface/styling/control-themes
+    Using Theme Variants:
+         https://docs.avaloniaui.net/docs/guides/styles-and-resources/how-to-use-theme-variants
+  -->
+  
+  <Design.PreviewWith>
+    <StackPanel Width="200" Spacing="4">      
+        <StackPanel Background="{DynamicResource SystemRegionBrush}">
+          <controls:SvgIcon SvgImage="/Assets/LeftHandedLayout.svg" />
+        </StackPanel>
+    </StackPanel>
+  </Design.PreviewWith>
+ 
+  <ControlTheme x:Key="{x:Type controls:SvgIcon}" TargetType="controls:SvgIcon">
+    <Setter Property="Template">
+      <ControlTemplate>
+		  <Svg Path="{TemplateBinding SvgImage}" Css="{TemplateBinding IconCss}" 
+			   Width="{TemplateBinding Width}" Height="{TemplateBinding Height}" />
+      </ControlTemplate>
+    </Setter>
+  </ControlTheme>
+</ResourceDictionary>
