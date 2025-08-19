@@ -2,39 +2,34 @@
 using Avalonia.Controls;
 using Avalonia.Media;
 using SiGen.Measuring;
-using SiGen.UI.LayoutViewer;
 using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SiGen.UI
 {
-    public class BlueprintGrid : Control
+    public class LayoutGridControl : Control
     {
 
         public static readonly StyledProperty<double> ZoomProperty =
-        AvaloniaProperty.Register<BlueprintGrid, double>(nameof(Zoom), 1);
+        AvaloniaProperty.Register<LayoutGridControl, double>(nameof(Zoom), 1);
 
         public static readonly StyledProperty<IBrush> MillimeterGridBrushProperty =
-       AvaloniaProperty.Register<BlueprintGrid, IBrush>(nameof(MillimeterGridBrush),
+       AvaloniaProperty.Register<LayoutGridControl, IBrush>(nameof(MillimeterGridBrush),
            new SolidColorBrush(Color.FromArgb(20, 255, 255, 255)));
 
         public static readonly StyledProperty<IBrush> MinorGridBrushProperty =
-            AvaloniaProperty.Register<BlueprintGrid, IBrush>(nameof(MinorGridBrush),
+            AvaloniaProperty.Register<LayoutGridControl, IBrush>(nameof(MinorGridBrush),
                 new SolidColorBrush(Color.FromArgb(40, 255, 255, 255)));
 
         public static readonly StyledProperty<IBrush> MajorGridBrushProperty =
-            AvaloniaProperty.Register<BlueprintGrid, IBrush>(nameof(MajorGridBrush),
+            AvaloniaProperty.Register<LayoutGridControl, IBrush>(nameof(MajorGridBrush),
                 new SolidColorBrush(Color.FromArgb(80, 255, 255, 255)));
 
         public static readonly StyledProperty<UnitMode> UnitModeProperty =
-            AvaloniaProperty.Register<BlueprintGrid, UnitMode>(nameof(UnitMode), UnitMode.Metric);
+            AvaloniaProperty.Register<LayoutGridControl, UnitMode>(nameof(UnitMode), UnitMode.Metric);
 
         public static readonly StyledProperty<RectangleM?> LayoutBoundsProperty =
-            AvaloniaProperty.Register<BlueprintGrid, RectangleM?>(nameof(LayoutBounds));
+            AvaloniaProperty.Register<LayoutGridControl, RectangleM?>(nameof(LayoutBounds));
 
         private double GridSize => UnitMode == UnitMode.Metric ? 37.7952755906 : 96;
 
@@ -77,9 +72,9 @@ namespace SiGen.UI
             set => SetValue(LayoutBoundsProperty, value);
         }
 
-        static BlueprintGrid()
+        static LayoutGridControl()
         {
-            AffectsRender<BlueprintGrid>(UnitModeProperty, ZoomProperty, LayoutBoundsProperty);
+            AffectsRender<LayoutGridControl>(UnitModeProperty, ZoomProperty, LayoutBoundsProperty);
         }
 
         private Rect blueprintGridRect = new Rect();
@@ -98,12 +93,6 @@ namespace SiGen.UI
                 var gridBrush = CreateGridBrush(showSubUnits);
                 context.FillRectangle(gridBrush, blueprintGridRect);
 
-                //if (UnitMode == UnitMode.Metric)
-                //    DrawMetricRulers(context);
-                //else
-                //{
-                //    // Draw imperial rulers if needed
-                //}
                 double majorPenSize = Math.Max(3 / Zoom, 0.45);
                 var majorPen = new Pen(MajorGridBrush, majorPenSize);
                 context.DrawLine(majorPen, new Point(centerLineOffsetX, blueprintGridRect.Top), new Point(centerLineOffsetX, blueprintGridRect.Bottom));
@@ -112,20 +101,6 @@ namespace SiGen.UI
 
 
             base.Render(context);
-        }
-
-        private void DrawMetricRulers(DrawingContext context)
-        {
-            context.PushTransform(new Matrix(1, 0, 0, -1, 0, 0));
-            var formattedText = new FormattedText(
-                "0",
-                CultureInfo.CurrentUICulture,
-                FlowDirection.LeftToRight,
-                new Typeface("Arial"),
-                16, // Font size
-                Brushes.White // Text color
-            );
-            context.DrawText(formattedText, new Point(0, blueprintGridRect.Top));
         }
 
         protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
@@ -147,8 +122,9 @@ namespace SiGen.UI
         public void SetBluePrintBounds(RectangleM bounds)
         {
             double scale = LayoutViewer.LayoutViewer.CmScaleFactor;
-            int columnCount = (int)Math.Ceiling((double)(bounds.Top - bounds.Bottom).NormalizedValue * scale / GridSize) + 10;
+            int columnCount = (int)Math.Ceiling((double)(bounds.Top - bounds.Bottom).NormalizedValue * scale / GridSize) + 20;
             columnCount = (int)Math.Ceiling(Math.Floor(columnCount / (double)MajorGridDivisions) / 2d) * 2 * MajorGridDivisions;
+            
             //columnCount = (int)Math.Ceiling(columnCount / 2d) * 2;
             blueprintGridRect = new Rect(0, 0, columnCount * GridSize, columnCount * GridSize);
             centerLineOffsetX = blueprintGridRect.Width / 2d;

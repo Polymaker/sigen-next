@@ -20,6 +20,9 @@ namespace SiGen.Layouts.Elements
         public bool IsNut => Segment.IsNut();
         public bool IsBridge => Segment.IsBridge();
 
+        public int BassStringIndex => Segment.FretPoints.Where(x => !x.IsReference).Select(x => x.StringIndex).Min();
+        public int TrebleStringIndex => Segment.FretPoints.Where(x => !x.IsReference).Select(x => x.StringIndex).Max();
+
         public FretSegmentElement(int fretIndex, FretSegment segment, PathBase path)
         {
             FretIndex = fretIndex;
@@ -52,6 +55,11 @@ namespace SiGen.Layouts.Elements
                 return IsNut;
             else
                 return IsBridge;
+        }
+
+        public FretPoint? GetFretPoint(int stringIndex)
+        {
+            return Segment.FretPoints.FirstOrDefault(x => x.StringIndex == stringIndex);
         }
 
         protected override RectangleM? CalculateBoundsCore()

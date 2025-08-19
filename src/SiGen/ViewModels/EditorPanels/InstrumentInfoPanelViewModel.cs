@@ -10,9 +10,6 @@ namespace SiGen.ViewModels.EditorPanels
 {
     public partial class InstrumentInfoPanelViewModel : EditorPanelViewModelBase
     {
-        private readonly IInstrumentValuesProviderFactory valuesProviderFactory;
-
-
         [ObservableProperty]
         private SiGen.Data.Common.InstrumentType? instrumentType;
 
@@ -29,18 +26,11 @@ namespace SiGen.ViewModels.EditorPanels
 
         public bool RightHanded => !LeftHanded;
 
-        public InstrumentInfoPanelViewModel(IInstrumentValuesProviderFactory instrumentValuesProviderFactory)
-        {
-            this.valuesProviderFactory = instrumentValuesProviderFactory;
-        }
-
-        //For Design Mode
         public InstrumentInfoPanelViewModel()
         {
-            this.valuesProviderFactory = new InstrumentValuesProviderFactory();
         }
 
-        protected override void OnConfigurationChanged()
+        public override void OnConfigurationChanged()
         {
             if (Configuration == null)
             {
@@ -76,26 +66,32 @@ namespace SiGen.ViewModels.EditorPanels
         protected override void OnPropertyChanged(PropertyChangedEventArgs e)
         {
             base.OnPropertyChanged(e);
+
             if (e.PropertyName == nameof(LeftHanded))
+            {
                 OnPropertyChanged(nameof(RightHanded));
-            if (e.PropertyName != nameof(HasMadeChanges))
-                NotifyLayoutPropertiesChanged();
+                LayoutDocumentContext.UpdateConfiguration("Change handedness", config => config.LeftHanded = LeftHanded);
+            }
+                
 
             if (e.PropertyName == nameof(InstrumentType))
                 RebuildSuggestions();
         }
 
-        protected override void OnLayoutPropertyChanged(string propertyName)
+
+        public override void OnInstrumentTypeChanged()
         {
-            if (propertyName == nameof(InstrumentType))
-                RebuildSuggestions();
+            RebuildSuggestions();
         }
 
         private void RebuildSuggestions()
         {
             if (Configuration == null) return;
-            var provider = (valuesProviderFactory ?? new InstrumentValuesProviderFactory()).Create(Configuration.InstrumentType);
-            var test = provider.GetScaleLengthPresets();
+
+            if (LayoutDocumentContext.InstrumentValuesProvider == null)
+                return;
+
+            var test = LayoutDocumentContext.InstrumentValuesProvider.GetScaleLengthPresets();
         }
 
         #region Add/Remove Strings
@@ -121,6 +117,25 @@ namespace SiGen.ViewModels.EditorPanels
                     else
                         stringConfigurations.Add(GetNewStringConfiguration(side)); // Add new string at the end
                 }
+
+                
+
+                LayoutDocumentContext.UpdateConfiguration("Add string", config =>
+                {
+                    config.NumberOfStrings = stringConfigurations.Count;
+                    config.StringConfigurations = stringConfigurations.ToList();
+
+                    if (Configuration!.NutSpacing.StringDistances.Count > 1)
+                    {
+                        var prev = side == FingerboardSide.Bass ? Configuration.NutSpacing.StringDistances[0] : Configuration.NutSpacing.StringDistances[^1];
+                        Configuration.NutSpacing.AddDistance(side, prev);
+                    }
+                    if (Configuration!.BridgeSpacing.StringDistances.Count > 1)
+                    {
+                        var prev = side == FingerboardSide.Bass ? Configuration.BridgeSpacing.StringDistances[0] : Configuration.BridgeSpacing.StringDistances[^1];
+                        Configuration.BridgeSpacing.AddDistance(side, prev);
+                    }
+                });
             }
         }
 
@@ -131,14 +146,54 @@ namespace SiGen.ViewModels.EditorPanels
                 : (stringConfigurations.Count > 0 ? stringConfigurations[^1] : null);
 
             // Create a new StringConfiguration with default values
-            var newStringConfig = new SingleStringConfiguration();
+            BaseStringConfiguration newStringConfig = previousString is StringGroupConfiguration ?
+                new StringGroupConfiguration() : 
+                new SingleStringConfiguration();
+
             if (previousString != null)
             {
                 newStringConfig.ScaleLength = previousString.ScaleLength;
-                
                 newStringConfig.MultiScaleRatio = previousString.MultiScaleRatio;
                 newStringConfig.Frets = previousString.Frets; //todo: clone object to break reference
 
+                if (Configuration!.ScaleLength.Mode == ScaleLengthMode.PerString && 
+                    stringConfigurations.Count > 1 &&
+                    !Measuring.Measure.IsNullOrEmpty(previousString.ScaleLength))
+                {
+                    var secondPrevious = side == FingerboardSide.Bass
+                        ? (stringConfigurations.Count > 0 ? stringConfigurations[1] : null)
+                        : (stringConfigurations.Count > 0 ? stringConfigurations[^2] : null);
+
+                    if (secondPrevious != null && !Measuring.Measure.IsNullOrEmpty(secondPrevious.ScaleLength))
+                    {
+                        var scaleDiff = previousString.ScaleLength - secondPrevious.ScaleLength;
+                        newStringConfig.ScaleLength = previousString.ScaleLength + scaleDiff;
+                    }
+                }
+               
+                if (newStringConfig is SingleStringConfiguration currConfig && 
+                    previousString is SingleStringConfiguration prevConfig)
+                {
+                    currConfig.Gauge = prevConfig.Gauge;
+                    if (!Measuring.Measure.IsNullOrEmpty(prevConfig.Gauge))
+                    {
+                        var newGauge = prevConfig.Gauge * (side == FingerboardSide.Bass ? 1.15 : 0.85);
+                        currConfig.Gauge = Measuring.Measure.Min(Measuring.Measure.Max(newGauge, Measuring.Measure.In(0.007)), Measuring.Measure.In(0.15));
+                    }
+                }
+                else if (newStringConfig is StringGroupConfiguration groupConfiguration1 &&
+                    previousString is StringGroupConfiguration groupConfiguration2)
+                {
+                    foreach (var str in groupConfiguration2.Strings)
+                    {
+                        groupConfiguration1.Strings.Add(new StringProperties
+                        {
+                            Gauge = (str.Gauge ?? Measuring.Measure.Zero) * (side == FingerboardSide.Bass ? 1.10 : 0.9),
+                            Tuning = str.Tuning
+                        });
+                    }
+                    groupConfiguration1.Spacing = groupConfiguration2.Spacing;
+                }
                 //newStringConfig.Gauge = previousString.Gauge;
             }
 
@@ -161,6 +216,21 @@ namespace SiGen.ViewModels.EditorPanels
                     removedTrebleStrings.Push(stringConfigurations[^1]);
                     stringConfigurations.RemoveAt(stringConfigurations.Count - 1);
                 }
+
+                LayoutDocumentContext.UpdateConfiguration("Remove string", config =>
+                {
+                    config.NumberOfStrings = stringConfigurations.Count;
+                    config.StringConfigurations = stringConfigurations.ToList();
+
+                    if (Configuration!.NutSpacing.StringDistances.Count > 1)
+                    {
+                        Configuration.NutSpacing.RemoveDistance(side);
+                    }
+                    if (Configuration!.BridgeSpacing.StringDistances.Count > 1)
+                    {
+                        Configuration.BridgeSpacing.RemoveDistance(side);
+                    }
+                });
             }
         }
 

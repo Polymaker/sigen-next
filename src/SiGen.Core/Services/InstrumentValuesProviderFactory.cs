@@ -9,7 +9,7 @@ namespace SiGen.Services
 {
     public interface IInstrumentValuesProviderFactory
     {
-        IInstrumentValuesProvider Create(InstrumentType type);
+        IInstrumentValuesProvider CreateProvider(InstrumentType type);
     }
 
     public class InstrumentValuesProviderFactory : IInstrumentValuesProviderFactory
@@ -31,7 +31,7 @@ namespace SiGen.Services
             };
         }
 
-        public IInstrumentValuesProvider Create(InstrumentType type)
+        public IInstrumentValuesProvider CreateProvider(InstrumentType type)
         {
             if (_registry.TryGetValue(type, out var creator))
                 return creator();

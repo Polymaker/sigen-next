@@ -1,13 +1,16 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using Avalonia.Data;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.DependencyInjection;
 using SiGen.Layouts;
 using SiGen.Layouts.Builders;
 using SiGen.Layouts.Configuration;
+using SiGen.Serialization;
 using SiGen.Services;
 using SiGen.ViewModels.EditorPanels;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -19,12 +22,11 @@ namespace SiGen.ViewModels
     /// <summary>
     /// Represents a single layout document in the editor.
     /// </summary>
-    public partial class LayoutDocumentViewModel : ObservableObject
+    public partial class LayoutDocumentViewModel : ObservableObject, ILayoutDocumentContext
     {
-        /// <summary>
-        /// The configuration for this layout document
-        /// </summary>
-        public InstrumentLayoutConfiguration? Configuration { get; private set; }
+        private readonly IInstrumentValuesProviderFactory valuesProviderFactory;
+        public IInstrumentValuesProvider? InstrumentValuesProvider { get; private set; }
+
 
         // File location (null if not yet saved)
         private string? _filePath;
@@ -48,99 +50,154 @@ namespace SiGen.ViewModels
         }
 
         // Panel ViewModels
-        public InstrumentInfoPanelViewModel InstrumentInfoPanel { get; }
-        public ScaleLengthPanelViewModel ScaleLengthPanel { get; }
         private List<EditorPanelViewModelBase> panelViewModels = new();
 
         [ObservableProperty]
-        private StringedInstrumentLayout layout;
+        private StringedInstrumentLayout currentLayout;
+
+        public event EventHandler? LayoutChanged;
 
         //public MarginPanelViewModel MarginPanel { get; }
         // Add other panels as needed
 
-        public LayoutDocumentViewModel(IServiceProvider serviceProvider, IFileDialogService fileDialogService)
+        public LayoutDocumentViewModel(IServiceProvider serviceProvider, IFileDialogService fileDialogService, IInstrumentValuesProviderFactory valuesProviderFactory = null)
         {
-            //Configuration = config;
+            this.valuesProviderFactory = valuesProviderFactory;
+
             this.fileDialogService = fileDialogService;
-            layout = new StringedInstrumentLayout();
-            // Initialize panel view models, passing the shared configuration
-            InstrumentInfoPanel = serviceProvider.GetRequiredService<InstrumentInfoPanelViewModel>();
-            ScaleLengthPanel = serviceProvider.GetRequiredService<ScaleLengthPanelViewModel>();
-            //MarginPanel = new MarginPanelViewModel(Configuration);
+
+            currentLayout = new StringedInstrumentLayout();
+            StableConfiguration = new InstrumentLayoutConfiguration();
+            WorkingConfiguration = new InstrumentLayoutConfiguration();
+
 
             Type[] panelTypes = [typeof(InstrumentInfoPanelViewModel), typeof(ScaleLengthPanelViewModel)]; //, typeof(MarginPanelViewModel)];
             foreach (var type in panelTypes)
             {
                 var panel = (EditorPanelViewModelBase)serviceProvider.GetRequiredService(type);
-                panel.SetConfiguration(Configuration);
+                panel.AssignContext(this);
                 panelViewModels.Add(panel);
             }
-            // Subscribe to panel changes to track unsaved changes
-            InstrumentInfoPanel.ChangesApplied += OnChangesApplied;
-            ScaleLengthPanel.ChangesApplied += OnChangesApplied;
-            //MarginPanel.ChangesApplied += OnChangesApplied;
         }
-        //public LayoutDocumentViewModel(InstrumentLayoutConfiguration config, IFileDialogService fileDialogService, string? filePath = null)
-        //{
-        //    Configuration = config;
-        //    this.fileDialogService = fileDialogService;
-        //    FilePath = filePath;
-        //    layout = new StringedInstrumentLayout();
-        //    // Initialize panel view models, passing the shared configuration
-        //    InstrumentInfoPanel = new InstrumentInfoPanelViewModel();
-        //    ScaleLengthPanel = new ScaleLengthPanelViewModel();
-        //    //MarginPanel = new MarginPanelViewModel(Configuration);
 
-        //    // Subscribe to panel changes to track unsaved changes
-        //    InstrumentInfoPanel.ChangesApplied += OnChangesApplied;
-        //    ScaleLengthPanel.ChangesApplied += OnChangesApplied;
-        //    //MarginPanel.ChangesApplied += OnChangesApplied;
-        //}
+        public T GetPanelViewModel<T>() where T : EditorPanelViewModelBase
+        {
+            return (T)panelViewModels.First(p => p is T) ?? throw new InvalidOperationException($"Panel of type {typeof(T).Name} not found.");
+        }
+
+        protected override void OnPropertyChanged(PropertyChangedEventArgs e)
+        {
+            base.OnPropertyChanged(e);
+            if (e.PropertyName == nameof(CurrentLayout))
+            {
+                LayoutChanged?.Invoke(this, EventArgs.Empty);
+            }
+        }
+
 
         public void SetDocument(InstrumentLayoutConfiguration configuration, string? filepath = null)
         {
-            Configuration = configuration;
+            StableConfiguration = configuration;
+            WorkingConfiguration = CloneConfiguration(configuration);
+            InstrumentValuesProvider = valuesProviderFactory?.CreateProvider(StableConfiguration.InstrumentType);
             FilePath = filepath;
-
-            InstrumentInfoPanel.SetConfiguration(configuration);
-            ScaleLengthPanel.SetConfiguration(configuration);
+            OnConfigurationChanged();
+            NotifyConfigurationChanged();
         }
 
-        private void OnChangesApplied(object? sender, EventArgs e)
+        private InstrumentLayoutConfiguration CloneConfiguration(InstrumentLayoutConfiguration config)
         {
-            // Mark as dirty on any panel change (customize as needed)
-            HasUnsavedChanges = true;
-
-            RebuildLayout();
+            var options = new JsonSerializerOptions();
+            options.Converters.Add(new BaseStringConfigurationConverter());
+            options.Converters.Add(new MeasureConverter());
+            var json = JsonSerializer.Serialize(config, options);
+            return JsonSerializer.Deserialize<InstrumentLayoutConfiguration>(json, options)!;
         }
+
 
         protected void RebuildLayout()
         {
-            if (Configuration == null) return;
             // Rebuild the layout using the current configuration
-            var result = LayoutBuilder.Build(Configuration);
+            var result = LayoutBuilder.Build(WorkingConfiguration);
             if (result.Success)
             {
-                Layout = result.Layout!;
+                CurrentLayout = result.Layout!;
             }
             else
             {
+
                 // Handle errors (e.g., show messages, log, etc.)
                 // For now, just clear the layout
-                //Layout = new StringedInstrumentLayout();
             }
         }
 
-        private EditorPanelViewModelBase[] GetEditorPanelViewModels()
+        #region Configuration Editing
+
+        public InstrumentLayoutConfiguration StableConfiguration { get; private set; }
+        public InstrumentLayoutConfiguration WorkingConfiguration { get; private set; }
+
+        InstrumentLayoutConfiguration ILayoutDocumentContext.Configuration => WorkingConfiguration;
+        private bool isLoadingConfig = false;
+
+        public void UpdateConfiguration(string reason, Action<InstrumentLayoutConfiguration> updateAction)
         {
-            return [InstrumentInfoPanel, ScaleLengthPanel]; //, MarginPanel];
+            if (isLoadingConfig) return;
+            
+            int numberOfStrings = WorkingConfiguration.NumberOfStrings;
+            var instrumentType = WorkingConfiguration.InstrumentType;
+
+            // Apply the update action to the working configuration
+            updateAction(WorkingConfiguration);
+
+            if (WorkingConfiguration.NumberOfStrings != numberOfStrings)
+                NotifyNumberOfStringsChanged();
+
+            if (WorkingConfiguration.InstrumentType != instrumentType)
+            {
+                InstrumentValuesProvider = valuesProviderFactory?.CreateProvider(WorkingConfiguration.InstrumentType);
+                NotifyInstrumentTypeChanged();
+            }
+
+            OnConfigurationChanged();
+            HasUnsavedChanges = true;
         }
 
-        private void LoadConfigToPanels(InstrumentLayoutConfiguration config)
+        private void NotifyConfigurationChanged()
         {
-            foreach (var panel in GetEditorPanelViewModels())
-                panel.SetConfiguration(config);
+            isLoadingConfig = true;
+            foreach (var panel in panelViewModels)
+                panel.NotifyConfigurationChanged();
+            isLoadingConfig = false;
         }
+
+        private void NotifyNumberOfStringsChanged()
+        {
+            foreach (var panel in panelViewModels)
+                panel.OnNumberOfStringsChanged();
+        }
+
+        private void NotifyInstrumentTypeChanged()
+        {
+            foreach (var panel in panelViewModels)
+                panel.OnInstrumentTypeChanged();
+        }
+
+        protected void OnConfigurationChanged()
+        {
+            RebuildLayout();
+        }
+
+        public void ApplyChanges()
+        {
+            // Apply changes from working configuration to stable configuration
+            StableConfiguration = CloneConfiguration(WorkingConfiguration);
+            HasUnsavedChanges = false;
+            // Notify all panels that the configuration has changed
+            foreach (var panel in panelViewModels)
+                panel.LoadConfiguration(StableConfiguration);
+        }
+
+        #endregion
 
         #region Commands
 
@@ -160,7 +217,14 @@ namespace SiGen.ViewModels
             try
             {
                 // Serialize the configuration (replace with your preferred format)
-                var json = JsonSerializer.Serialize(Configuration, new JsonSerializerOptions { WriteIndented = true });
+                var options = new JsonSerializerOptions
+                {
+                    WriteIndented = true,
+                    PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+                };
+                options.Converters.Add(new BaseStringConfigurationConverter());
+                options.Converters.Add(new MeasureConverter());
+                var json = JsonSerializer.Serialize(StableConfiguration, options);
                 await File.WriteAllTextAsync(FilePath, json);
 
                 HasUnsavedChanges = false;

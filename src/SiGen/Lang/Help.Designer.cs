@@ -61,38 +61,25 @@ namespace SiGen.Lang {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Choose the scale length mode.
+        ///   Looks up a localized string similar to Sets the amount of skew between bass and treble strings.
+        ///Use this to create fanned frets even when all strings share the same scale length.
+        ///Positive values angle the frets one way, negative values the other. Leave blank for no skew..
+        /// </summary>
+        public static string BassTrebleSkew_Help {
+            get {
+                return ResourceManager.GetString("BassTrebleSkew_Help", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Choose the scale length mode:
+        ///• **Single**: A single scale length for all strings.
+        ///• **Multiscale**: A separate scale length for treble and bass strings.
+        ///• **Per-string**: A separate scale length for each string..
         /// </summary>
         public static string ScaleLengthMode_Help {
             get {
                 return ResourceManager.GetString("ScaleLengthMode_Help", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to A separate scale length for treble and bass strings..
-        /// </summary>
-        public static string ScaleLengthMode_Multiscale_Help {
-            get {
-                return ResourceManager.GetString("ScaleLengthMode_Multiscale_Help", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to A separate scale length for each string..
-        /// </summary>
-        public static string ScaleLengthMode_PerString_Help {
-            get {
-                return ResourceManager.GetString("ScaleLengthMode_PerString_Help", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to A single scale length for all strings..
-        /// </summary>
-        public static string ScaleLengthMode_Single_Help {
-            get {
-                return ResourceManager.GetString("ScaleLengthMode_Single_Help", resourceCulture);
             }
         }
     }

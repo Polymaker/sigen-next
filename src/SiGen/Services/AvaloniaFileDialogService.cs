@@ -10,15 +10,21 @@ namespace SiGen.Services
 {
     public class AvaloniaFileDialogService : IFileDialogService
     {
-        private readonly Window _window;
+        private Window? _window;
 
-        public AvaloniaFileDialogService(Window window)
+        //todo: find a way to inject the window or use a static reference
+        public AvaloniaFileDialogService()
         {
-            _window = window;
+            //_window = window;
         }
+
+
 
         public async Task<string?> ShowSaveFileDialogAsync()
         {
+            if (_window == null) 
+                return null;
+
             var file = await _window.StorageProvider.SaveFilePickerAsync(new FilePickerSaveOptions
             {
                 Title = "Save Layout",

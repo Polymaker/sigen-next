@@ -1,11 +1,14 @@
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Documents;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
+using SiGen.Converters;
 using SiGen.Layouts.Configuration;
 using SiGen.Services.InstrumentProfiles;
 using SiGen.ViewModels.EditorPanels;
 using System;
+using System.Globalization;
 
 namespace SiGen.UI.EditorPanels;
 
@@ -14,7 +17,6 @@ public partial class ScaleLengthEditorPanel : UserControl
     public ScaleLengthEditorPanel()
     {
         InitializeComponent();
-        TestButton.Click += TestButton_Click;
     }
 
     protected override void OnDataContextChanged(EventArgs e)
@@ -22,22 +24,23 @@ public partial class ScaleLengthEditorPanel : UserControl
         base.OnDataContextChanged(e);
         if (DataContext is ScaleLengthPanelViewModel viewModel)
         {
-            
+            viewModel.ConfigurationChanged += ViewModel_ConfigurationChanged;
         }
+    }
+
+    private void ViewModel_ConfigurationChanged(object? sender, EventArgs e)
+    {
+        //todo: get the difference between the bass and treble scale length and set the min/max of the SkewMeasureBox to the difference plus/minus a constant (e.g. 20mm)
+
     }
 
     protected override void OnLoaded(RoutedEventArgs e)
     {
         base.OnLoaded(e);
         ConfigureSingleScalePresets();
-    }
-
-    private void TestButton_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
-    {
-        if (DataContext is ScaleLengthPanelViewModel viewModel)
-        {
-            
-        }
+        //var skewHelpTextBlock = new TextBlock();
+        //skewHelpTextBlock.Inlines = StringToInlinesConverter.Instance.Convert(Lang.Help.BassTrebleSkew_Help, typeof(InlineCollection), null, CultureInfo.CurrentCulture) as InlineCollection;
+        //BassTrebleSkewField.Help = skewHelpTextBlock;
     }
 
     private void ConfigureSingleScalePresets()

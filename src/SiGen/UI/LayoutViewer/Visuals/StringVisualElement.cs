@@ -21,19 +21,15 @@ using System.Threading.Tasks;
 using System.Xml.Linq;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
-namespace SiGen.UI
+namespace SiGen.UI.LayoutViewer.Visuals
 {
-    public class StringVisualElement : Panel
+    public class StringVisualElement : VisualElementBase<StringElement>
     {
-        public SiGen.Layouts.Elements.StringElement Element { get; }
 
-        public StringVisualElement(Layouts.Elements.StringElement element)
+        public StringVisualElement(StringElement element) : base(element)
         {
-            Element = element;
-            GenerateVisuals();
             ToolTip.SetTip(this, $"{Lang.Resources.StringLabel} {element.StringIndex + 1}");
         }
-
 
         protected override void OnPointerEntered(PointerEventArgs e)
         {
@@ -41,13 +37,13 @@ namespace SiGen.UI
             Classes.Add("overOnce");
         }
 
-        protected void GenerateVisuals()
+        protected override void GenerateVisuals()
         {
             Children.Clear();
             
             var stringClipGeom = GetStringClip();
             var stringGauge = Element.GetGauge();
-            double stringThickness = !Measuring.Measure.IsNullOrEmpty(stringGauge) ? MeasureToPixels(stringGauge) : 6;
+            double stringThickness = !Measuring.Measure.IsNullOrEmpty(stringGauge) ? MeasureToPixels(stringGauge) : 1;
             
 
             var perpLine = Element.Path.GetEquation().GetPerpendicular(Element.Path.Start);
@@ -167,7 +163,7 @@ namespace SiGen.UI
             double maxOpacity = 0.4;
             var fadeInAnim = new Animation
             {
-                Duration = TimeSpan.FromMilliseconds(200),
+                Duration = TimeSpan.FromMilliseconds(150),
                 FillMode = FillMode.Forward,
                 Easing = new CubicEaseIn(),
             };
@@ -175,7 +171,7 @@ namespace SiGen.UI
             {
                 Setters =
                 {
-                    new Setter(Line.OpacityProperty, 0.0)
+                    new Setter(OpacityProperty, 0.0)
                 },
                 Cue = new Cue(0),
             });
@@ -183,7 +179,7 @@ namespace SiGen.UI
             {
                 Setters =
                 {
-                    new Setter(Line.OpacityProperty, maxOpacity)
+                    new Setter(OpacityProperty, maxOpacity)
                 },
                 Cue = new Cue(1),
             });
@@ -197,7 +193,7 @@ namespace SiGen.UI
             {
                 Setters =
                 {
-                    new Setter(Line.OpacityProperty, maxOpacity)
+                    new Setter(OpacityProperty, maxOpacity)
                 },
                 Cue = new Cue(0),
             });
@@ -205,7 +201,7 @@ namespace SiGen.UI
             {
                 Setters =
                 {
-                    new Setter(Line.OpacityProperty, 0.0)
+                    new Setter(OpacityProperty, 0.0)
                 },
                 Cue = new Cue(1),
             });
@@ -213,7 +209,7 @@ namespace SiGen.UI
             {
                 Setters =
                 {
-                    new Setter(Line.OpacityProperty, 0.0)
+                    new Setter(OpacityProperty, 0.0)
                 }
             });
             Styles.Add(new Style(x => x.OfType<StringVisualElement>().Class("overOnce").Not(y => y.Class(":pointerover")).Child().Class("highlight"))
@@ -227,7 +223,7 @@ namespace SiGen.UI
             {
                 Setters =
                 {
-                    new Setter(Line.IsVisibleProperty, true)
+                    new Setter(IsVisibleProperty, true)
                 },
                 Animations = {
                     fadeInAnim
@@ -308,11 +304,11 @@ namespace SiGen.UI
             var pen2 = new Pen(new SolidColorBrush(Color.FromArgb(50, 0,0,0)), thickness);
             pen2.LineCap = PenLineCap.Round;
             double startY = thickness / 2d;
-            double endY = patternSize - (thickness / 2d);
+            double endY = patternSize - thickness / 2d;
             double stride = patternSize / winds;
             for (int i = 0; i <= winds + 1; i++)
             {
-                double posX = (stride * -0.5) + (stride * i);
+                double posX = stride * -0.5 + stride * i;
                 drawingGroup.Children.Add(new GeometryDrawing
                 {
                     Pen = pen,
@@ -327,8 +323,8 @@ namespace SiGen.UI
                     Pen = pen2,
                     Geometry = new LineGeometry
                     {
-                        StartPoint = new Point(posX + (thickness *0.80), startY),
-                        EndPoint = new Point(posX + (thickness * 0.80) + stride / 2, endY),
+                        StartPoint = new Point(posX + thickness *0.80, startY),
+                        EndPoint = new Point(posX + thickness * 0.80 + stride / 2, endY),
                     },
                 });
             }

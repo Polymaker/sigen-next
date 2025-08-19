@@ -38,7 +38,7 @@ public class SvgIcon : TemplatedControl
         if (Foreground != null && Foreground is ISolidColorBrush solid)
         {
             string hex = GetColorHex(solid.Color);
-            IconCss = $"path {{fill: {hex}; }}";
+            IconCss = $"path {{fill: {hex} !important; }} ";
         }
         else
             IconCss = null;

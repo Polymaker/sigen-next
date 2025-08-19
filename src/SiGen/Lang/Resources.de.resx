@@ -201,10 +201,16 @@
   <data name="InstrumentType.Custom" xml:space="preserve">
     <value>Benutzerdefiniert</value>
   </data>
-  <data name="InstrumentFamilly.Bass" xml:space="preserve">
+  <data name="InstrumentFamily.Bass" xml:space="preserve">
     <value>Bass</value>
   </data>
-  <data name="InstrumentFamilly.Guitar" xml:space="preserve">
+  <data name="InstrumentFamily.Guitar" xml:space="preserve">
     <value>Gitarre</value>
+  </data>
+  <data name="Editor.NumberOfFrets" xml:space="preserve">
+    <value>Anzahl der Bünde</value>
+  </data>
+  <data name="Editor.BassTrebleSkew" xml:space="preserve">
+    <value>Schrägstellung</value>
   </data>
 </root>

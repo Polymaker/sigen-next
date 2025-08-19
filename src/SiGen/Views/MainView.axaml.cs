@@ -1,10 +1,12 @@
 using Avalonia.Controls;
 using Avalonia.Interactivity;
+using Microsoft.Extensions.DependencyInjection;
 using SiGen.Layouts.Builders;
 using SiGen.Layouts.Configuration;
 using SiGen.Layouts.Data;
 using SiGen.Physics;
 using SiGen.Serialization;
+using SiGen.ViewModels;
 using System.Text.Json;
 
 namespace SiGen.Views;
@@ -19,23 +21,44 @@ public partial class MainView : UserControl
     protected override void OnLoaded(RoutedEventArgs e)
     {
         base.OnLoaded(e);
+        var services = (App.Current as App)?.Services;
+
         var config = CreateMultiScaleConfig2();
-        var result = LayoutBuilder.Build(config);
-        SILayoutViewer.Layout = result.Layout;
-        var infoVM = new ViewModels.EditorPanels.InstrumentInfoPanelViewModel();
-        infoVM.SetConfiguration(config);
-        InfoPanel.DataContext = infoVM;
 
-        var scaleVM = new ViewModels.EditorPanels.ScaleLengthPanelViewModel();
-        scaleVM.SetConfiguration(config);
-        ScalePanel.DataContext = scaleVM;
+        if (services != null)
+        {
+            var documentContext = services.GetRequiredService<LayoutDocumentViewModel>();
+            InfoPanel.DataContext = documentContext.GetPanelViewModel< ViewModels.EditorPanels.InstrumentInfoPanelViewModel>();
+            ScalePanel.DataContext = documentContext.GetPanelViewModel<ViewModels.EditorPanels.ScaleLengthPanelViewModel>();
 
-        var options = new JsonSerializerOptions();
-        options.WriteIndented = true;
-        options.Converters.Add(new MeasureConverter());
-        options.Converters.Add(new BaseStringConfigurationConverter());
-        string json = JsonSerializer.Serialize(config, options);
-        var config2 = JsonSerializer.Deserialize<InstrumentLayoutConfiguration>(json, options);
+            documentContext.SetDocument(config, null);
+            SILayoutViewer.Layout = documentContext.CurrentLayout;
+            documentContext.LayoutChanged += (s, args) =>
+            {
+                SILayoutViewer.Layout = documentContext.CurrentLayout;
+            };
+        }
+        else
+        {
+            var result = LayoutBuilder.Build(config);
+            SILayoutViewer.Layout = result.Layout;
+            var infoVM = new ViewModels.EditorPanels.InstrumentInfoPanelViewModel();
+            infoVM.LoadConfiguration(config);
+            InfoPanel.DataContext = infoVM;
+
+            var scaleVM = new ViewModels.EditorPanels.ScaleLengthPanelViewModel();
+            scaleVM.LoadConfiguration(config);
+            ScalePanel.DataContext = scaleVM;
+
+            var options = new JsonSerializerOptions();
+            options.WriteIndented = true;
+            options.Converters.Add(new MeasureConverter());
+            options.Converters.Add(new BaseStringConfigurationConverter());
+            //string json = JsonSerializer.Serialize(config, options);
+            //var config2 = JsonSerializer.Deserialize<InstrumentLayoutConfiguration>(json, options);
+        }
+            
+       
     }
 
     private InstrumentLayoutConfiguration CreateSingleScaleConfig()
@@ -159,11 +182,11 @@ public partial class MainView : UserControl
         layoutConfig.ScaleLength.Mode = ScaleLengthMode.PerString;
         for (int i = 0; i < layoutConfig.NumberOfStrings; i++)
         {
-            var baseScale = i < 2 ? SiGen.Measuring.Measure.In(34) : SiGen.Measuring.Measure.In(25.4);
+            var baseScale = i < 2 ? SiGen.Measuring.Measure.In(34) : SiGen.Measuring.Measure.In(27);
             if (i == 1)
                 baseScale *= 0.98;
             else if (i >= 2)
-                baseScale *= 1d - ((i - 2) * 0.02d);
+                baseScale *= 1d - ((i - 2) * 0.015d);
             layoutConfig.StringConfigurations[i].ScaleLength = baseScale;
             //layoutConfig.StringConfigurations[i].MultiScaleRatio = 1;
         }

@@ -205,10 +205,16 @@
   <data name="InstrumentType.Custom" xml:space="preserve">
     <value>Custom</value>
   </data>
-  <data name="InstrumentFamilly.Guitar" xml:space="preserve">
+  <data name="InstrumentFamily.Guitar" xml:space="preserve">
     <value>Guitar</value>
   </data>
-  <data name="InstrumentFamilly.Bass" xml:space="preserve">
+  <data name="InstrumentFamily.Bass" xml:space="preserve">
     <value>Bass</value>
+  </data>
+  <data name="Editor.BassTrebleSkew" xml:space="preserve">
+    <value>Skew</value>
+  </data>
+  <data name="FretLabel" xml:space="preserve">
+    <value>Fret</value>
   </data>
 </root>

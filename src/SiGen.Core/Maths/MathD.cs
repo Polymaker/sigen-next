@@ -76,8 +76,6 @@ namespace SiGen.Maths
             return (PreciseDouble)Math.Atan2(y.DoubleValue, x.DoubleValue);
         }
 
-        #region MyRegion
-
         public static PreciseDouble Pow(PreciseDouble x, PreciseDouble y)
         {
             return Math.Pow(x.DoubleValue, y.DoubleValue);
@@ -92,8 +90,6 @@ namespace SiGen.Maths
         {
             return x > max ? max : (x < min ? min : x);
         }
-
-        #endregion
 
         public static bool EqualOrClose(this PreciseDouble n1, PreciseDouble n2)
         {

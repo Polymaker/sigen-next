@@ -14,7 +14,16 @@ namespace SiGen.UI.Controls
     public class MeasureTextBox : TextBox
     {
         public static readonly StyledProperty<Measure?> ValueProperty =
-            AvaloniaProperty.Register<MeasureTextBox, Measure?>(nameof(Value));
+            AvaloniaProperty.Register<MeasureTextBox, Measure?>(nameof(Value), coerce: CoerceValue);
+
+        public static readonly StyledProperty<Measure?> MinimumValueProperty =
+            AvaloniaProperty.Register<MeasureTextBox, Measure?>(nameof(MinimumValue));
+
+        public static readonly StyledProperty<Measure?> MaximumValueProperty =
+            AvaloniaProperty.Register<MeasureTextBox, Measure?>(nameof(MaximumValue));
+
+        public static readonly StyledProperty<bool> AllowEmptyProperty =
+            AvaloniaProperty.Register<MeasureTextBox, bool>(nameof(AllowEmpty), false);
 
         protected override Type StyleKeyOverride => typeof(TextBox);
 
@@ -24,6 +33,25 @@ namespace SiGen.UI.Controls
             set => SetValue(ValueProperty, value);
         }
 
+        public Measure? MinimumValue
+        {
+            get => GetValue(MinimumValueProperty);
+            set => SetValue(MinimumValueProperty, value);
+        }
+
+        public Measure? MaximumValue
+        {
+            get => GetValue(MaximumValueProperty);
+            set => SetValue(MaximumValueProperty, value);
+        }
+
+        public bool AllowEmpty
+        {
+            get => GetValue(AllowEmptyProperty);
+            set => SetValue(AllowEmptyProperty, value);
+        }
+
+
         public MeasureTextBox()
         {
             AddHandler(GotFocusEvent, OnGotFocus, RoutingStrategies.Tunnel);
@@ -32,21 +60,54 @@ namespace SiGen.UI.Controls
 
         }
 
+        private static Measure? CoerceValue(AvaloniaObject sender, Measure? value)
+        {
+            if (value is null) return null; // Allow null values
+
+            var min = (sender as MeasureTextBox)?.MinimumValue;
+            var max = (sender as MeasureTextBox)?.MaximumValue;
+            var coerced = value;
+
+            if (min is not null && coerced.CompareTo(min) < 0)
+                coerced = min;
+            if (max is not null && coerced.CompareTo(max) > 0)
+                coerced = max;
+
+            return coerced; 
+        }
+
         protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
         {
             base.OnPropertyChanged(change);
             if (change.Property == ValueProperty)
             {
-                // Update the Text property when Value changes
                 if (Value is not null)
                 {
-                    Text = Value.ToStringFormatted(); // e.g., 4 1/2"
+                    Text = Value.ToStringFormatted();
                 }
                 else
                 {
-                    Text = string.Empty; // Clear text if Value is null
+                    Text = string.Empty;
                 }
             }
+            else if (change.Property == MinimumValueProperty || change.Property == MaximumValueProperty)
+            {
+                // Re-coerce Value if min/max changed
+                if (Value is not null)
+                {
+                    var coerced = CoerceValue(this, Value);
+
+                    if (coerced != null && !Equals(coerced, Value))
+                        Value = coerced;
+                }
+            }
+        }
+
+        protected override void OnKeyUp(KeyEventArgs e)
+        {
+            base.OnKeyUp(e);
+            if (e.Key == Key.Enter)
+                ValidateTextInput();
         }
 
         private void OnGotFocus(object? sender, GotFocusEventArgs e)
@@ -57,10 +118,21 @@ namespace SiGen.UI.Controls
 
         private void OnLostFocus(object? sender, RoutedEventArgs e)
         {
+            ValidateTextInput();
+        }
+
+        private void ValidateTextInput()
+        {
+            if (string.IsNullOrEmpty(Text) && AllowEmpty)
+            {
+                Value = null; // Clear value if text is empty and AllowEmpty is true
+                return;
+            }
+
             if (MeasureParser.TryParse(Text ?? string.Empty, out var parsed, Value?.Unit))
             {
                 Value = parsed;
-                Text = parsed.ToStringFormatted(); // e.g., 4 1/2"
+                //Text = parsed.ToStringFormatted(); // e.g., 4 1/2"
             }
             else
             {

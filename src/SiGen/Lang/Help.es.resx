@@ -118,15 +118,14 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="ScaleLengthMode_Help" xml:space="preserve">
-    <value>Elija el modo de longitud de escala</value>
+    <value>Elija el modo de longitud de escala:
+• **Única**: Una sola longitud de escala para todas las cuerdas.
+• **Multiescala**: Una longitud de escala separada para cuerdas agudas y graves.
+• **Por cuerda**: Una longitud de escala separada para cada cadena.</value>
   </data>
-  <data name="ScaleLengthMode_Single_Help" xml:space="preserve">
-    <value>Una sola longitud de escala para todas las cuerdas.</value>
-  </data>
-  <data name="ScaleLengthMode_Multiscale_Help" xml:space="preserve">
-    <value>Una longitud de escala separada para cuerdas agudas y graves.</value>
-  </data>
-  <data name="ScaleLengthMode_PerString_Help" xml:space="preserve">
-    <value>Una longitud de escala separada para cada cadena.</value>
+  <data name="BassTrebleSkew_Help" xml:space="preserve">
+    <value>Establece el grado de inclinación entre las cuerdas graves y agudas.
+Úsalo para crear trastes en abanico incluso cuando todas las cuerdas comparten la misma longitud de escala.
+Los valores positivos inclinan los trastes hacia un lado, los negativos hacia el otro. Deja este campo en blanco para que no haya inclinación.</value>
   </data>
 </root>

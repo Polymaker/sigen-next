@@ -118,15 +118,14 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="ScaleLengthMode_Help" xml:space="preserve">
-    <value>Choisissez le mode de longueur de diapason</value>
+    <value>Choisissez le mode de longueur de diapason:
+• **Simple**: Une seule longueur de diapason pour toutes les cordes.
+• **Multidiapason**: Une longueur de diapason séparée pour les aigus et les basses.
+• **Par corde**: Une longueur de diapason  distincte pour chaque corde.</value>
   </data>
-  <data name="ScaleLengthMode_Single_Help" xml:space="preserve">
-    <value>Une seule longueur d'échelle pour toutes les cordes.</value>
-  </data>
-  <data name="ScaleLengthMode_Multiscale_Help" xml:space="preserve">
-    <value>Une longueur d'échelle séparée pour les aigus et les basses.</value>
-  </data>
-  <data name="ScaleLengthMode_PerString_Help" xml:space="preserve">
-    <value>Une longueur d'échelle distincte pour chaque corde.</value>
+  <data name="BassTrebleSkew_Help" xml:space="preserve">
+    <value>Définit l'inclinaison entre les cordes graves et aiguës.
+Utilisez cette option pour créer des frettes en éventail même lorsque toutes les cordes ont la même longueur de diapason.
+Les valeurs positives inclinent les frettes d'un côté, les valeurs négatives de l'autre. Laissez vide pour éviter toute inclinaison.</value>
   </data>
 </root>

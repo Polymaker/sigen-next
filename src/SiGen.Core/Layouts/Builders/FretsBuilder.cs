@@ -84,7 +84,7 @@ namespace SiGen.Layouts.Builders
 
             foreach (var fretGroup in points.GroupBy(x => x.FretIndex))
             {
-                var fretSegments = CreateFretSegments(fretGroup.ToList(), 30, 10);
+                var fretSegments = CreateFretSegments(fretGroup.ToList(), 25, 10);
                 foreach (var segment in fretSegments)
                 {
                     var segmentPath = CreateSegmentPath(segment);

@@ -3,6 +3,7 @@ using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Data.Core;
 using Avalonia.Data.Core.Plugins;
 using Avalonia.Markup.Xaml;
+using Microsoft.Extensions.DependencyInjection;
 using SiGen.ViewModels;
 using SiGen.Views;
 using System;
@@ -19,6 +20,7 @@ public partial class App : Application
     {
         Services = services;
     }
+
     public App()
     {
         
@@ -40,14 +42,14 @@ public partial class App : Application
             DisableAvaloniaDataAnnotationValidation();
             desktop.MainWindow = new MainWindow
             {
-                DataContext = new MainViewModel()
+                DataContext = Services?.GetService<MainViewModel>() ?? new MainViewModel()
             };
         }
         else if (ApplicationLifetime is ISingleViewApplicationLifetime singleViewPlatform)
         {
             singleViewPlatform.MainView = new MainView
             {
-                DataContext = new MainViewModel()
+                DataContext = Services?.GetService<MainViewModel>() ?? new MainViewModel()
             };
         }
 

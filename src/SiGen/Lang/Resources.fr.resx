@@ -181,7 +181,7 @@
     <value>Type d'instrument</value>
   </data>
   <data name="Editor.NumberOfFrets" xml:space="preserve">
-    <value>Nombre de frets</value>
+    <value>Nombre de frettes</value>
   </data>
   <data name="Editor.ScaleLengthMode.Select" xml:space="preserve">
     <value>Mode de diapason</value>
@@ -213,10 +213,19 @@
   <data name="InstrumentType.Custom" xml:space="preserve">
     <value>Personnalisé</value>
   </data>
-  <data name="InstrumentFamilly.Bass" xml:space="preserve">
+  <data name="InstrumentFamily.Bass" xml:space="preserve">
     <value>Basse</value>
   </data>
-  <data name="InstrumentFamilly.Guitar" xml:space="preserve">
+  <data name="InstrumentFamily.Guitar" xml:space="preserve">
     <value>Guitare</value>
+  </data>
+  <data name="Editor.NumberOfFrets.Tooltip" xml:space="preserve">
+    <value>Spécifiez le nombre total de frettes. Réglez-le sur zéro pour les instruments sans frettes. Vous pouvez également définir le nombre de frettes par corde dans les paramètres avancés.</value>
+  </data>
+  <data name="Editor.BassTrebleSkew" xml:space="preserve">
+    <value>Inclinaison</value>
+  </data>
+  <data name="FretLabel" xml:space="preserve">
+    <value>Frette</value>
   </data>
 </root>

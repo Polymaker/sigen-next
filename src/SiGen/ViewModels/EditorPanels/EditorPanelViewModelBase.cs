@@ -1,8 +1,11 @@
 ﻿using Avalonia.Controls;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.Extensions.DependencyInjection;
 using SiGen.Data.Common;
 using SiGen.Layouts.Configuration;
+using SiGen.Services;
+using SiGen.ViewModels.Design;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,88 +16,63 @@ namespace SiGen.ViewModels.EditorPanels
 {
     public class EditorPanelViewModelBase : ObservableObject
     {
-        protected InstrumentLayoutConfiguration? Configuration { get; private set; }
+        protected InstrumentLayoutConfiguration? Configuration => LayoutDocumentContext?.Configuration;
+
         private int numberOfStringsCached;
         private SiGen.Data.Common.InstrumentType? cachedInstrumentType;
+        protected ILayoutDocumentContext LayoutDocumentContext { get; private set; }
 
         public int NumberOfStrings => Configuration?.NumberOfStrings ?? 0;
 
         public bool HasMadeChanges { get; protected set; }
 
+        public event EventHandler? ConfigurationChanged;
+
         public EditorPanelViewModelBase()
         {
             ApplyCommand = new RelayCommand(ApplyChanges, CanApplyChanges);
-            numberOfStringsCached = 0;
-
-            //if (Design.IsDesignMode)
-            {
-                var layoutConfig = new InstrumentLayoutConfiguration
-                {
-                    InstrumentType = Data.Common.InstrumentType.ElectricGuitar,
-                    NumberOfStrings = 6,
-                    LeftHanded = false,
-                    NumberOfFrets = 24,
-                };
-                layoutConfig.ScaleLength.Mode = ScaleLengthMode.Single;
-                layoutConfig.ScaleLength.SingleScale = Measuring.Measure.In(25.5);
-
-                layoutConfig.NutSpacing.StringDistances.Add(Measuring.Measure.Mm(7.5));
-                layoutConfig.NutSpacing.CenterAlignment = Layouts.Data.LayoutCenterAlignment.OuterStrings;
-                layoutConfig.BridgeSpacing.StringDistances.Add(Measuring.Measure.Mm(10.5));
-                layoutConfig.BridgeSpacing.CenterAlignment = Layouts.Data.LayoutCenterAlignment.OuterStrings;
-
-                layoutConfig.Margin.SetAll(Measuring.Measure.Mm(3.25));
-                layoutConfig.InitializeStringConfigs();
-                SetConfiguration(layoutConfig);
-            }
-        }
-
-        //public EditorPanelViewModelBase(InstrumentLayoutConfiguration config)
-        //{
-        //    Configuration = config;
-        //    ApplyCommand = new RelayCommand(ApplyChanges, CanApplyChanges);
-        //    numberOfStringsCached = config.NumberOfStrings;
-        //    OnConfigurationChanged();
-        //}
-
-        // Optionally, allow updating the config reference (e.g., on undo/redo)
-        public virtual void SetConfiguration(InstrumentLayoutConfiguration? config)
-        {
-            Configuration = config;
+            LayoutDocumentContext = new MockLayoutDocumentContext(); // For design mode, replace with actual context in production
+            //LoadConfiguration(LayoutDocumentContext.Configuration);
             OnConfigurationChanged();
-            HasMadeChanges = false;
-
-            if (config != null && config.NumberOfStrings != numberOfStringsCached)
-            {
-                numberOfStringsCached = config.NumberOfStrings;
-                OnLayoutPropertyChanged(nameof(InstrumentLayoutConfiguration.NumberOfStrings));
-            }
-            else
-            {
-                numberOfStringsCached = 0;
-            }
-
-            if (config != null && config.InstrumentType != cachedInstrumentType)
-            {
-                cachedInstrumentType = config.InstrumentType;
-                OnLayoutPropertyChanged(nameof(InstrumentLayoutConfiguration.InstrumentType));
-            }
-            else
-            {
-                cachedInstrumentType = null;
-            }
         }
 
-        protected virtual void OnLayoutPropertyChanged(string propertyName)
+        public void AssignContext(ILayoutDocumentContext context)
+        {
+            //if (LayoutDocumentContext != null)
+            //    throw new InvalidOperationException("This panel is already assigned to a document context.");
+            LayoutDocumentContext = context ?? throw new ArgumentNullException(nameof(context));
+            NotifyConfigurationChanged();
+        }
+
+
+        public virtual void LoadConfiguration(InstrumentLayoutConfiguration? config)
         {
             
         }
 
+        public virtual void OnNumberOfStringsChanged()
+        {
+        }
+
+        public virtual void OnInstrumentTypeChanged()
+        {
+        }
+
+        public void NotifyConfigurationChanged()
+        {
+            // Notify that the configuration has changed
+            ConfigurationChanged?.Invoke(this, EventArgs.Empty);
+            OnConfigurationChanged();
+        }
+
+
         // Called when the config is replaced (e.g., after undo/redo)
-        protected virtual void OnConfigurationChanged()
+        public virtual void OnConfigurationChanged()
         {
             // Derived panels can override to refresh their state
         }
+
+
 
         #region Apply Changes
 
@@ -136,7 +114,7 @@ namespace SiGen.ViewModels.EditorPanels
             if (Configuration == null) return;
 
             // Reset changes to the last saved state
-            SetConfiguration(Configuration);
+            LoadConfiguration(Configuration);
             if (HasMadeChanges)
             {
                 HasMadeChanges = false;

@@ -56,5 +56,21 @@ namespace SiGen.Layouts.Configuration
         //public StringSpacingMode BridgeSpacingMode { get; set; }
         //public LayoutCenterAlignment BridgeCenterAlignment { get; set; }
         //public List<Measure>? BridgeDistances { get; set; }
+
+        public void AddDistance(FingerboardSide side, Measure distance)
+        {
+            if (side == FingerboardSide.Bass)
+                StringDistances.Insert(0, distance);
+            else if (side == FingerboardSide.Treble)
+                StringDistances.Add(distance);
+        }
+
+        public void RemoveDistance(FingerboardSide side)
+        {
+            if (side == FingerboardSide.Bass && StringDistances.Count > 0)
+                StringDistances.RemoveAt(0);
+            else if (side == FingerboardSide.Treble && StringDistances.Count > 0)
+                StringDistances.RemoveAt(StringDistances.Count - 1);
+        }
     }
 }

@@ -6,12 +6,16 @@ using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using Avalonia.Media;
 using Avalonia.Reactive;
-using SiGen.Layouts.Elements;
 using SiGen.Layouts;
+using SiGen.Layouts.Elements;
 using SiGen.Maths;
 using SiGen.Measuring;
 using SiGen.Paths;
+using SiGen.UI.LayoutViewer.Overlays;
+using SiGen.UI.LayoutViewer.Visuals;
+using SiGen.Utilities;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Reactive.Linq;
@@ -22,21 +26,11 @@ namespace SiGen.UI.LayoutViewer;
 
 public partial class LayoutViewer : UserControl
 {
-
-    public static readonly StyledProperty<LayoutViewMode> ViewModeProperty =
-        AvaloniaProperty.Register<LayoutViewer, LayoutViewMode>(nameof(ViewMode));
-
     public static readonly StyledProperty<LayoutOrientation> OrientationProperty =
         AvaloniaProperty.Register<LayoutViewer, LayoutOrientation>(nameof(Orientation), LayoutOrientation.HorizontalNutRight);
 
     public static readonly StyledProperty<StringedInstrumentLayout?> LayoutProperty =
         AvaloniaProperty.Register<LayoutViewer, StringedInstrumentLayout?>(nameof(Layout));
-
-    public LayoutViewMode ViewMode
-    {
-        get => GetValue(ViewModeProperty);
-        set => SetValue(ViewModeProperty, value);
-    }
 
     public LayoutOrientation Orientation
     {
@@ -51,18 +45,20 @@ public partial class LayoutViewer : UserControl
     }
 
     private TranslateTransform _centerTransform;
-    private ScaleTransform _scaleTransform;
+    private ScaleTransform _zoomTransform;
     private TranslateTransform _translateTransform;
     private RotateTransform _orientationTransform;
+
     private double zoomToFit = 1;
 
     public LayoutViewer()
     {
         InitializeComponent();
 
-        _scaleTransform = new ScaleTransform(1, -1);
+        _zoomTransform = new ScaleTransform(1, -1);
         _translateTransform = new TranslateTransform(0, 0);
         _centerTransform = new TranslateTransform(0, 0);
+
         _orientationTransform = new RotateTransform(Orientation switch
         {
             LayoutOrientation.HorizontalNutRight => 90,
@@ -83,7 +79,7 @@ public partial class LayoutViewer : UserControl
 
         var transformGroup = new TransformGroup
         {
-            Children = { _centerTransform, _scaleTransform, _orientationTransform, _translateTransform }
+            Children = { _centerTransform, _zoomTransform, _orientationTransform, _translateTransform }
         };
         RenderCanvas.RenderTransform = transformGroup;
         OverlayCanvas.RenderTransform = new TransformGroup
@@ -92,7 +88,6 @@ public partial class LayoutViewer : UserControl
         };
        
         BorderContainer.AddHandler(Gestures.PinchEvent, Canvas_PinchGesture, handledEventsToo: true);
-        //BlueprintRect.SetBluePrintSize(new Size(200, 200));
 
         
         //BlueprintRect.UnitMode = UnitMode.Imperial;
@@ -103,10 +98,6 @@ public partial class LayoutViewer : UserControl
         };
     }
 
-    #region Transforms
-
-    #endregion
-
     protected override void OnLoaded(RoutedEventArgs e)
     {
         base.OnLoaded(e);
@@ -114,161 +105,124 @@ public partial class LayoutViewer : UserControl
 
     private void Button1_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
     {
-        RebuildLayout();
+        CreateLayoutVisualsAndOverlays();
     }
 
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
         base.OnPropertyChanged(change);
+
         if (change.Property == LayoutProperty)
         {
-            RebuildLayout();
-            isZoomToFit = true;
+            CreateLayoutVisualsAndOverlays();
+            
             CalculateZoomToFit();
-            _scaleTransform.ScaleX = zoomToFit;
-            _scaleTransform.ScaleY = zoomToFit * -1;
+
+            if (isZoomToFit)
+                SetZoom(zoomToFit);
+            else if (Layout != null)
+                ClampZoom();
         }
         else if (change.Property == OrientationProperty)
         {
-            //_orientationTransform.Angle = Orientation switch
-            //{
-            //    LayoutOrientation.HorizontalNutRight => 90,
-            //    LayoutOrientation.HorizontalNutLeft => 270,
-            //    _ => 0
-            //};
+            ResetZoomAndTranslation();
+            //RepositionOverlays();
         }
     }
 
     protected override void OnSizeChanged(SizeChangedEventArgs e)
     {
+        base.OnSizeChanged(e);
+
         if (!double.IsNaN(e.NewSize.Width) && !double.IsNaN(e.NewSize.Height))
         {
             _centerTransform.X = e.NewSize.Width / 2d;
             _centerTransform.Y = e.NewSize.Height / 2d;
         }
 
+        CalculateZoomToFit();
         if (isZoomToFit)
-        {
-            CalculateZoomToFit();
-            _scaleTransform.ScaleX = zoomToFit;
-            _scaleTransform.ScaleY = zoomToFit * -1;
-        }
-
-        base.OnSizeChanged(e);
+            SetZoom(zoomToFit);
+        else if (Layout != null)
+            ClampZoom();
     }
 
-    #region Canvas Panning/Zooming
+    #region Zoom Handling
 
     private const double ZoomFactorStep = 1.1;
     private Point _lastMousePosition;
     private bool _isPanning;
     private bool isZoomToFit = true;
+    private double minimumZoom = 0.5;
+    private double maximumZoom = 2.0;
 
-    public void ZoomAtCenter(double scaleFactor)
+    private bool SetZoom(double amount)
     {
-        _translateTransform.X -= _translateTransform.X * (scaleFactor - 1);
-        _translateTransform.Y -= _translateTransform.Y * (scaleFactor - 1);
-
-        _scaleTransform.ScaleX *= scaleFactor;
-        _scaleTransform.ScaleY *= scaleFactor;
-        BlueprintRect.Zoom = _scaleTransform.ScaleX;
-        isZoomToFit = false;
+        double oldZoom = _zoomTransform.ScaleX;
+        _zoomTransform.ScaleX = Math.Clamp(amount, minimumZoom, maximumZoom);
+        _zoomTransform.ScaleY = Math.Clamp(amount, minimumZoom, maximumZoom) * -1d;
+        if (Math.Abs(_zoomTransform.ScaleX - oldZoom) > 0.001)
+        {
+            OnZoomChanged();
+            return true;
+        }
+        return false;
     }
 
-    public void ZoomAtPoint(Point origin, double scaleFactor)
+    private bool AdjustZoom(double delta)
+    {
+        double oldZoom = _zoomTransform.ScaleX;
+        _zoomTransform.ScaleX = Math.Clamp(oldZoom * delta, minimumZoom, maximumZoom);
+        _zoomTransform.ScaleY = Math.Clamp(oldZoom * delta, minimumZoom, maximumZoom) * -1d;
+        if (Math.Abs(_zoomTransform.ScaleX - oldZoom) > 0.001)
+        {
+            OnZoomChanged();
+            return true;
+        }
+        return false;
+    }
+
+    public void ZoomAtCenter(double zoomDelta)
+    {
+        ZoomAtPoint(new Point(_centerTransform.X, _centerTransform.Y), zoomDelta);
+    }
+
+    public void ZoomAtPoint(Point origin, double zoomDelta)
     {
         var centeredPoint = new Point(origin.X - _centerTransform.X, origin.Y - _centerTransform.Y);
 
-        _translateTransform.X -= (centeredPoint.X - _translateTransform.X) * (scaleFactor - 1);
-        _translateTransform.Y -= (centeredPoint.Y - _translateTransform.Y) * (scaleFactor - 1);
+        var targetTrans = new Point(
+            _translateTransform.X - (centeredPoint.X - _translateTransform.X) * (zoomDelta - 1),
+            _translateTransform.Y - (centeredPoint.Y - _translateTransform.Y) * (zoomDelta - 1)
+        );
 
-        _scaleTransform.ScaleX *= scaleFactor;
-        _scaleTransform.ScaleY *= scaleFactor;
-        BlueprintRect.Zoom = _scaleTransform.ScaleX;
-        isZoomToFit = false;
-        OnTranslateRender();
+        var transDelta = targetTrans - new Point(_translateTransform.X, _translateTransform.Y);
+
+        if (AdjustZoom(zoomDelta))
+        {
+            isZoomToFit = false;
+            TranslateView(transDelta);
+        }
     }
 
-    public void Recenter()
+    public void ResetZoomAndTranslation()
     {
         isZoomToFit = true;
-        _scaleTransform.ScaleX = zoomToFit;
-        _scaleTransform.ScaleY = zoomToFit * -1;
+        bool zoomChanged = SetZoom(zoomToFit);
         _translateTransform.X = 0;
         _translateTransform.Y = 0;
-        BlueprintRect.Zoom = 1;
-        OnTranslateRender();
+        OnTranslationChanged();
+        if (!zoomChanged)
+            OnZoomChanged();
     }
-
-    protected void OnTranslateRender()
-    {
-        DebugText.Text = $"Translate: ({_translateTransform.X:0.##}, {_translateTransform.Y:0.##})";
-    }
-
-    #region Mouse Handling
-
-    public void Canvas_PointerPressed(object? sender, PointerPressedEventArgs e)
-    {
-        var point = e.GetCurrentPoint(RenderCanvas);
-        if (point.Pointer.Type != PointerType.Mouse || point.Properties.IsLeftButtonPressed)
-        {
-            _lastMousePosition = e.GetPosition(this);
-            _isPanning = true;
-            RenderCanvas.Cursor = new Cursor(StandardCursorType.Hand);
-        }
-    }
-
-    public void Canvas_PointerMoved(object? sender, PointerEventArgs e)
-    {
-        if (_isPanning)
-        {
-            var currentPosition = e.GetPosition(this);
-            var delta = currentPosition - _lastMousePosition;
-            _translateTransform.X += delta.X;
-            _translateTransform.Y += delta.Y;
-            isZoomToFit = false;
-            OnTranslateRender();
-            _lastMousePosition = currentPosition;
-        }
-    }
-
-    public void Canvas_PointerReleased(object? sender, PointerReleasedEventArgs e)
-    {
-        if (_isPanning)
-        {
-            _isPanning = false;
-            RenderCanvas.Cursor = new Cursor(StandardCursorType.Arrow);
-        }
-    }
-
-    public void Canvas_OnPointerWheel(object? sender, PointerWheelEventArgs e)
-    {
-        double factor = e.Delta.Y > 0 ? ZoomFactorStep : 1 / ZoomFactorStep;
-        ZoomAtPoint(e.GetPosition(this), factor);
-    }
-
-    #endregion
-
-    private void Canvas_PinchGesture(object? sender, PinchEventArgs e)
-    {
-        // e.Scale gives the scale delta since last event
-        var center = e.ScaleOrigin;
-        var scaleFactor = e.Scale;
-
-        ZoomAtPoint(center, scaleFactor);
-    }
-
-    #endregion
-
-    #region MyRegion
-
-    internal const double CmScaleFactor = 37.7952755906; // 1 cm in pixels at 96 DPI
 
     private void CalculateZoomToFit()
     {
         if (Layout == null)
         {
             zoomToFit = 1;
+            minimumZoom = 0.5;
+            maximumZoom = 2;
             return;
         }
 
@@ -288,9 +242,213 @@ public partial class LayoutViewer : UserControl
                 availableSize.Width / (layoutBounds.Height.NormalizedValue * CmScaleFactor)
             );
         }
+
+        minimumZoom = zoomToFit * 0.95;
+        maximumZoom = 10;
     }
 
-    private void RebuildLayout()
+    private void ClampZoom()
+    {
+        double oldZoom = _zoomTransform.ScaleX;
+        _zoomTransform.ScaleX = Math.Clamp(_zoomTransform.ScaleX, minimumZoom, maximumZoom);
+        _zoomTransform.ScaleY = Math.Clamp(Math.Abs(_zoomTransform.ScaleY), minimumZoom, maximumZoom) * -1d;
+        if (Math.Abs(_zoomTransform.ScaleX - oldZoom) > 0.001)
+            OnZoomChanged();
+    }
+
+    protected void OnZoomChanged()
+    {
+        BlueprintRect.Zoom = _zoomTransform.ScaleX;
+        RepositionOverlays();
+    }
+
+    #endregion
+
+    #region Mouse / Touch Handling
+
+    public void Canvas_PointerPressed(object? sender, PointerPressedEventArgs e)
+    {
+        var point = e.GetCurrentPoint(RenderCanvas);
+        if (point.Pointer.Type != PointerType.Mouse || point.Properties.IsLeftButtonPressed)
+        {
+            _lastMousePosition = e.GetPosition(this);
+            _isPanning = true;
+            RenderCanvas.Cursor = new Cursor(StandardCursorType.Hand);
+        }
+    }
+
+    public void Canvas_PointerMoved(object? sender, PointerEventArgs e)
+    {
+        if (_isPanning)
+        {
+            var currentPosition = e.GetPosition(this);
+            var delta = currentPosition - _lastMousePosition;
+            TranslateView(delta);
+            //_translateTransform.X += delta.X;
+            //_translateTransform.Y += delta.Y;
+            isZoomToFit = false;
+            OnTranslationChanged();
+            _lastMousePosition = currentPosition;
+        }
+    }
+
+    public void Canvas_PointerReleased(object? sender, PointerReleasedEventArgs e)
+    {
+        if (_isPanning)
+        {
+            _isPanning = false;
+            RenderCanvas.Cursor = new Cursor(StandardCursorType.Arrow);
+        }
+    }
+
+    public void Canvas_OnPointerWheel(object? sender, PointerWheelEventArgs e)
+    {
+        double factor = e.Delta.Y > 0 ? ZoomFactorStep : 1 / ZoomFactorStep;
+        ZoomAtPoint(e.GetPosition(this), factor);
+    }
+
+    private void Canvas_PinchGesture(object? sender, PinchEventArgs e)
+    {
+        // e.Scale gives the scale delta since last event
+        var center = e.ScaleOrigin;
+        var scaleFactor = e.Scale;
+
+        ZoomAtPoint(center, scaleFactor);
+    }
+
+    #endregion
+
+    #region Translation
+
+    protected Rect GetAdjustedLayoutBounds()
+    {
+        if (Layout?.Bounds == null)
+            return new Rect();
+
+        var layoutBoundsPx = Layout.Bounds.ToAvalonia();
+
+
+        if (Orientation == LayoutOrientation.HorizontalNutRight)
+        {
+            return new Rect(layoutBoundsPx.Top, layoutBoundsPx.Left, layoutBoundsPx.Height, layoutBoundsPx.Width);
+        }
+        else if (Orientation == LayoutOrientation.HorizontalNutLeft)
+        {
+            return new Rect(layoutBoundsPx.Top * -1d, layoutBoundsPx.Right, layoutBoundsPx.Height, layoutBoundsPx.Width);
+        }
+
+        return layoutBoundsPx;
+    }
+
+    //private void SetTranslation(Point translation)
+    //{
+    //    if (Layout?.Bounds == null)
+    //        return;
+
+    //    double zoom = _zoomTransform.ScaleX;
+    //    var layoutBoundsPx = GetAdjustedLayoutBounds() * zoom;
+    //    double layoutWidth = layoutBoundsPx.Width;
+    //    double layoutHeight = layoutBoundsPx.Height;
+    //    double viewWidth = Bounds.Width;
+    //    double viewHeight = Bounds.Height;
+    //    double minX, maxX, minY, maxY;
+    //    // X axis
+    //    if (layoutWidth <= viewWidth)
+    //    {
+    //        minX = (viewWidth - layoutWidth) * -0.5d;
+    //        maxX = -minX;
+    //    }
+    //    else
+    //    {
+    //        double visibleView = viewWidth * 0.75;
+    //        minX = (layoutWidth + viewWidth) * -0.5d + visibleView;
+    //        maxX = -minX;
+    //    }
+    //    // Y axis
+    //    if (layoutHeight <= viewHeight)
+    //    {
+    //        minY = (viewHeight - layoutHeight) * -0.5d;
+    //        maxY = -minY;
+    //    }
+    //    else
+    //    {
+    //        double visibleView = viewHeight * 0.75d;
+    //        minY = (layoutHeight + viewHeight) * -0.5d + visibleView;
+    //        maxY = -minY;
+    //    }
+    //    _translateTransform.X = Math.Clamp(translation.X, minX, maxX);
+    //    _translateTransform.Y = Math.Clamp(translation.Y, minY, maxY);
+    //}
+
+    public void TranslateView(Point delta)
+    {
+        if (Layout?.Bounds == null)
+            return;
+
+        double zoom = _zoomTransform.ScaleX;
+        var layoutBoundsPx = GetAdjustedLayoutBounds() * zoom;
+        var viewerSize = Bounds;
+
+        double layoutWidth = layoutBoundsPx.Width;
+        double layoutHeight = layoutBoundsPx.Height;
+        double viewWidth = viewerSize.Width;
+        double viewHeight = viewerSize.Height;
+
+        double minX, maxX, minY, maxY;
+
+        //todo: ease the transition between the two modes
+
+        // X axis
+        if (layoutWidth <= viewWidth)
+        {
+            minX = (viewWidth - layoutWidth * 0.8d) * -0.5d;
+            maxX = -minX;
+        }
+        else
+        {
+            double visibleView = viewWidth * 0.75;
+            minX = (layoutWidth + viewWidth) * -0.5d + visibleView;
+            maxX = -minX;
+        }
+
+        // Y axis
+        if (layoutHeight <= viewHeight)
+        {
+            minY = (viewHeight - layoutHeight * 0.8d) * -0.5d;
+            maxY = -minY;
+        }
+        else
+        {
+            double visibleView = viewHeight * 0.75d;
+            minY = (layoutHeight + viewHeight) * -0.5d + visibleView;
+            maxY = -minY;
+        }
+
+        var newTranslation = new Point(
+            Math.Clamp(_translateTransform.X + delta.X, minX, maxX),
+            Math.Clamp(_translateTransform.Y + delta.Y, minY, maxY)
+        );
+
+        if (newTranslation.X != _translateTransform.X || newTranslation.Y != _translateTransform.Y)
+        {
+            _translateTransform.X = newTranslation.X;
+            _translateTransform.Y = newTranslation.Y;
+            OnTranslationChanged();
+        }
+    }
+
+    protected void OnTranslationChanged()
+    {
+        //DebugText.Text = $"Translate: ({_translateTransform.X:0.##}, {_translateTransform.Y:0.##})";
+    }
+
+    #endregion
+
+    #region Visuals and Overlays
+
+    internal const double CmScaleFactor = 37.7952755906; // 1 cm in pixels at 96 DPI
+
+    private void CreateLayoutVisualsAndOverlays()
     {
         RenderCanvas.Children.Clear();
         OverlayCanvas.Children.Clear();
@@ -305,17 +463,8 @@ public partial class LayoutViewer : UserControl
         BlueprintRect.LayoutBounds = layoutBounds;
         RenderCanvas.Children.Add(BlueprintRect);
 
-        //RenderCanvas.Children.Add(new Line
-        //{
-        //    Stroke = new SolidColorBrush(Color.FromArgb(120, 0, 255, 0)),
-        //    StrokeThickness = 2,
-        //    StartPoint = Convert(new PointM(Measuring.Measure.Zero, layoutBounds.Top).ToVector()),
-        //    EndPoint = Convert(new PointM(Measuring.Measure.Zero, layoutBounds.Bottom).ToVector()),
-        //});
-
-        //var fretElem = Layout.Elements.OfType<FretSegmentElement>().FirstOrDefault(x => x.FretIndex == 1);
-        //PlaceOverlayText("Fret 1", fretElem!.FretShape!.GetFirstPoint(), Colors.White, new Point(0, -15));
-
+        GenerateOverlays();
+       
         foreach (var @string in Layout.Elements.OfType<StringMedianElement>())
         {
             RenderCanvas.Children.Add(new Line
@@ -328,55 +477,9 @@ public partial class LayoutViewer : UserControl
             });
         }
 
-        var fretElements = Layout.Elements.OfType<FretSegmentElement>().ToList();
-        double fretThickness = MeasureToPixels(SiGen.Measuring.Measure.Mm(2));
+        foreach (var fretSegment in Layout.Elements.OfType<FretSegmentElement>())
+            RenderCanvas.Children.Add(new FretSegmentVisual(fretSegment));
 
-
-        foreach (var fret in fretElements)
-        {
-            var adjustedShape = fret.FretShape?.Extend(0.25);
-            if (adjustedShape == null)
-                continue;
-
-
-            var clipGeom = GetFretClipGeom(fret);
-
-            //if (fret.FretIndex == 12)
-            //{
-
-            //    var fretPt = Convert(fret.FretShape!.GetFirstPoint());
-            //    RenderCanvas.Children.Add(new Path
-            //    {
-            //        Data = clipGeom,
-            //        Fill = Brushes.LightGray,
-            //        //RenderTransform = new TranslateTransform(fretPt.X, fretPt.Y)
-            //    });
-            //    isFirst = false;
-            //}
-            var color = fret.Segment.IsNut() ? Brushes.Brown : Brushes.Silver;
-            
-            if (adjustedShape is LinearPath linearPath)
-            {
-                RenderCanvas.Children.Add(new Line
-                {
-                    Stroke = color,
-                    StrokeThickness = fret.IsNut || fret.IsBridge ? 2 : fretThickness,
-                    StartPoint = Convert(linearPath.Start),
-                    EndPoint = Convert(linearPath.End),
-                    Clip = clipGeom,
-
-                });
-            }
-            else if (adjustedShape is PolyLinePath polyLine)
-            {
-                RenderCanvas.Children.Add(new Polyline
-                {
-                    Stroke = color,
-                    StrokeThickness = fretThickness,
-                    Points = polyLine.Points.Select(Convert).ToArray()
-                });
-            }
-        }
         foreach (var edge in Layout.Elements.OfType<FingerboardSideElement>())
         {
             RenderCanvas.Children.Add(new Line
@@ -388,83 +491,8 @@ public partial class LayoutViewer : UserControl
             });
         }
 
-        var stringsElements = Layout.Strings;
-        foreach (var @string in stringsElements)
-        {
-            if (@string.Path is LinearPath linearPath)
-            {
-                //double stringThickness = @string.Configuration.Gauge != null ? MeasureToPixels(@string.Configuration.Gauge) : 6;
-                RenderCanvas.Children.Add(new StringVisualElement(@string));
-                //RenderCanvas.Children.Add(new Line
-                //{
-                //    Stroke = new SolidColorBrush(Color.FromArgb(60, 0, 0, 0)),
-                //    StrokeThickness = stringThickness,
-                //    StartPoint = Convert(linearPath.Start) + new Point(4, 0),
-                //    EndPoint = Convert(linearPath.End) + new Point(4, 0)
-                //});
-                //RenderCanvas.Children.Add(new Line
-                //{
-                //    Stroke = new SolidColorBrush(Color.FromRgb(200, 200, 210)),
-                //    StrokeThickness = stringThickness,
-                //    StartPoint = Convert(linearPath.Start),
-                //    EndPoint = Convert(linearPath.End)
-                //});
-                //RenderCanvas.Children.Add(new Line
-                //{
-                //    Stroke = new SolidColorBrush(Color.FromArgb(120, 255, 255, 255)),
-                //    StrokeThickness = stringThickness * 0.4,
-                //    StartPoint = Convert(linearPath.Start) + new Point(stringThickness * 0.1, 0),
-                //    EndPoint = Convert(linearPath.End) + new Point(stringThickness * 0.1, 0),
-                //    //Effect = new BlurEffect
-                //    //{
-                //    //    Radius = stringThickness * 0.25,
-                //    //}
-                //});
-            }
-        }
-    }
-
-    private void PlaceOverlayText(string text, VectorD position, Color color, Point offset = new Point())
-    {
-        var overlayText = new TextBlock
-        {
-            Text = text,
-            Foreground = new SolidColorBrush(color),
-            FontSize = 12,
-            FontWeight = FontWeight.Bold,
-            TextAlignment = TextAlignment.Center,
-            HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Center,
-        };
-        overlayText.Measure(Size.Infinity);
-        var screenPt = GetOverlayPoint(position);
-        OverlayCanvas.Children.Add(overlayText);
-        Canvas.SetLeft(overlayText, screenPt.X - (overlayText.DesiredSize.Width / 2d) + offset.X);
-        Canvas.SetTop(overlayText, screenPt.Y - (overlayText.DesiredSize.Height / 2d) + offset.Y);
-    }
-
-    //todo: cache clip geometries by covered string range
-    private Geometry? GetFretClipGeom(FretSegmentElement element)
-    {
-        var bassLine = element.GetEdgePath(Layouts.Data.FingerboardSide.Bass);
-        var trebleLine = element.GetEdgePath(Layouts.Data.FingerboardSide.Treble);
-        if (bassLine == null || trebleLine == null || element.FretShape == null)
-            return null;
-        
-        var bp1 = bassLine.GetPointForY(Layout!.Bounds!.Top.NormalizedValue + 1);
-        var bp2 = bassLine.GetPointForY(Layout!.Bounds!.Bottom.NormalizedValue - 1);
-        var tp1 = trebleLine.GetPointForY(Layout!.Bounds!.Top.NormalizedValue + 1);
-        var tp2 = trebleLine.GetPointForY(Layout!.Bounds!.Bottom.NormalizedValue - 1);
-
-        var pathGeometry = new PathGeometry();
-        var ctx = pathGeometry.Open();
-        ctx.BeginFigure(Convert(bp2), true);
-        ctx.LineTo(Convert(bp1));
-        ctx.LineTo(Convert(tp1));
-        ctx.LineTo(Convert(tp2));
-        ctx.EndFigure(true);
-
-        pathGeometry.Transform = new TranslateTransform(0.001, 0.001);
-        return pathGeometry;
+        foreach (var @string in Layout.Strings)
+            RenderCanvas.Children.Add(new StringVisualElement(@string));
     }
 
     private Point Convert(VectorD point)
@@ -479,29 +507,55 @@ public partial class LayoutViewer : UserControl
 
     #endregion
 
-    #region Overlay
+    #region Overlays
 
-    private Point GetOverlayPoint(VectorD point)
+    private class OverlayPositionHelper : IOverlayPositionHelper
     {
-        var zoom = _scaleTransform.ScaleX;
+        public double Zoom { get; }
+        public LayoutOrientation ViewerOrientation { get; }
 
+        public StringedInstrumentLayout Layout { get; }
 
-        if (Orientation == LayoutOrientation.HorizontalNutRight)
+        public OverlayPositionHelper(StringedInstrumentLayout layout, double zoom, LayoutOrientation viewerOrientation)
         {
-            return new Point((double)point.Y * CmScaleFactor * zoom, (double)point.X * CmScaleFactor * zoom);
+            Layout = layout;
+            Zoom = zoom;
+            ViewerOrientation = viewerOrientation;
         }
 
-        if (Orientation == LayoutOrientation.HorizontalNutLeft)
+        public Point VectorToScreen(VectorD point)
         {
-            return new Point(-(double)point.Y * CmScaleFactor * zoom, -(double)point.X * CmScaleFactor * zoom);
-        }
+            if (ViewerOrientation == LayoutOrientation.HorizontalNutRight)
+            {
+                return new Point((double)point.Y * CmScaleFactor * Zoom, (double)point.X * CmScaleFactor * Zoom);
+            }
 
-        return new Point((double)point.X * CmScaleFactor * zoom, -(double)point.Y * CmScaleFactor * zoom);
+            if (ViewerOrientation == LayoutOrientation.HorizontalNutLeft)
+            {
+                return new Point(-(double)point.Y * CmScaleFactor * Zoom, -(double)point.X * CmScaleFactor * Zoom);
+            }
+
+            return new Point((double)point.X * CmScaleFactor * Zoom, -(double)point.Y * CmScaleFactor * Zoom);
+        }
     }
 
-    private Point GetOverlayPoint(PointM point)
+    private void GenerateOverlays()
     {
-        return GetOverlayPoint(point.ToVector());
+        if (Layout == null) return;
+
+        var helper = new OverlayPositionHelper(Layout, _zoomTransform.ScaleX, Orientation);
+
+        FretNumberOverlay.CreateElements(helper, OverlayCanvas);
+
+        //RepositionOverlays();
+    }
+
+    private void RepositionOverlays()
+    {
+        if (Layout == null) return;
+        var helper = new OverlayPositionHelper(Layout, _zoomTransform.ScaleX, Orientation);
+        foreach (var overlay in OverlayCanvas.Children.OfType<ILayoutOverlay>())
+            overlay.Reposition(helper);
     }
 
     #endregion

@@ -118,15 +118,14 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="ScaleLengthMode_Help" xml:space="preserve">
-    <value>Wählen Sie den Skalenlängenmodus</value>
+    <value>Wählen Sie den Skalenlängenmodus:
+• **Einzeln**: Eine einzige Skalenlänge für alle Saiten.
+• **Multimensur**: Eine separate Skalenlänge für Hoch- und Basssaiten.
+• **Pro Saite**: Eine separate Skalenlänge für jede Saite.</value>
   </data>
-  <data name="ScaleLengthMode_Single_Help" xml:space="preserve">
-    <value>Eine einzige Skalenlänge für alle Saiten.</value>
-  </data>
-  <data name="ScaleLengthMode_Multiscale_Help" xml:space="preserve">
-    <value>Eine separate Skalenlänge für Hoch- und Basssaiten.</value>
-  </data>
-  <data name="ScaleLengthMode_PerString_Help" xml:space="preserve">
-    <value>Eine separate Skalenlänge für jede Saite.</value>
+  <data name="BassTrebleSkew_Help" xml:space="preserve">
+    <value>Legt den Versatz zwischen Bass- und Diskantsaiten fest.
+Verwenden Sie diese Option, um fächerförmige Bünde zu erzeugen, auch wenn alle Saiten die gleiche Mensur haben.
+Positive Werte versetzen die Bünde in eine Richtung, negative Werte in die andere. Leer lassen, um keinen Versatz zu erzeugen.</value>
   </data>
 </root>

@@ -30,7 +30,7 @@
 		  <Grid>
 			  
 			  <Canvas x:Name="RenderCanvas" >
-				  <ui:BlueprintGrid Width="50" Height="50" x:Name="BlueprintRect" />
+				  <ui:LayoutGridControl Width="50" Height="50" x:Name="BlueprintRect" />
 			  </Canvas>
 			  <Canvas x:Name="OverlayCanvas" />
 		  </Grid>

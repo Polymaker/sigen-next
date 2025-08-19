@@ -2,6 +2,7 @@
 using SiGen.Layouts.Configuration;
 using SiGen.Layouts.Data;
 using SiGen.Measuring;
+using SiGen.Physics;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -30,12 +31,16 @@ namespace SiGen.ViewModels.EditorPanels
         private Measure? bassScale;
 
         [ObservableProperty]
-        private double? multiScaleRatio;
+        private double multiScaleRatio;
 
         [ObservableProperty]
         private Measure? bassTrebleSkew;
 
+        public record AlignmentRatioPreset(double Ratio, string Label);
+
         public ObservableCollection<StringScaleViewModel> PerStringScales { get; } = new();
+
+        public ObservableCollection<AlignmentRatioPreset> MultiScaleRatioPresets { get; } = new ();
 
         public Array ScaleLengthModes => Enum.GetValues(typeof(ScaleLengthMode));
 
@@ -63,7 +68,7 @@ namespace SiGen.ViewModels.EditorPanels
         //    BassTrebleSkew = null;
         //}
 
-        protected override void OnConfigurationChanged()
+        public override void OnConfigurationChanged()
         {
             base.OnConfigurationChanged();
             if (Configuration == null)
@@ -73,7 +78,9 @@ namespace SiGen.ViewModels.EditorPanels
             SingleScale = Configuration.ScaleLength.SingleScale;
             TrebleScale = Configuration.ScaleLength.TrebleScale;
             BassScale = Configuration.ScaleLength.BassScale;
+            MultiScaleRatio = Configuration.ScaleLength.MultiScaleRatio ?? 0.5; // Default to 50% if not set
             UpdateIndividualScaleLengths();
+            RebuildMultiScaleRatioPresets();
         }
 
         protected override void OnPropertyChanged(PropertyChangedEventArgs e)
@@ -82,8 +89,69 @@ namespace SiGen.ViewModels.EditorPanels
             if (e.PropertyName == nameof(Mode) && Mode == ScaleLengthMode.PerString)
                 UpdateIndividualScaleLengths(false);
 
-            if (e.PropertyName != nameof(HasMadeChanges))
-                NotifyLayoutPropertiesChanged();
+            if (e.PropertyName == nameof(BassTrebleSkew))
+            {
+                LayoutDocumentContext.UpdateConfiguration("BassTrebleSkew", config =>
+                {
+                    config.ScaleLength.BassTrebleSkew = BassTrebleSkew;
+                });
+            }
+
+            if (e.PropertyName == nameof(Mode))
+            {
+                if (Mode == ScaleLengthMode.Single && Measure.IsNullOrEmpty(SingleScale)) return;
+                if (Mode == ScaleLengthMode.Multiscale && (Measure.IsNullOrEmpty(TrebleScale) || Measure.IsNullOrEmpty(BassScale))) return;
+                if (Mode == ScaleLengthMode.PerString && (PerStringScales.Any(x => Measure.IsNullOrEmpty(x.Scale)))) return;
+
+                LayoutDocumentContext.UpdateConfiguration("ScaleLengthMode", config =>
+                {
+                    config.ScaleLength.Mode = Mode;
+                    if (Mode == ScaleLengthMode.Multiscale)
+                        config.ScaleLength.MultiScaleRatio = MultiScaleRatio;
+                });
+            }
+
+            if (e.PropertyName == nameof(SingleScale) && Mode == ScaleLengthMode.Single)
+            {
+                LayoutDocumentContext.UpdateConfiguration("SingleScale", config =>
+                {
+                    if (config.ScaleLength.Mode != ScaleLengthMode.Single)
+                        config.ScaleLength.Mode = Mode;
+                    config.ScaleLength.SingleScale = SingleScale;
+                });
+            }
+
+            if ((e.PropertyName == nameof(BassScale) || e.PropertyName == nameof(TrebleScale) )
+                && Mode == ScaleLengthMode.Multiscale && BassScale != null && TrebleScale != null)
+            {
+                LayoutDocumentContext.UpdateConfiguration(e.PropertyName, config =>
+                {
+                    if (config.ScaleLength.Mode != ScaleLengthMode.Multiscale)
+                        config.ScaleLength.Mode = Mode;
+                    config.ScaleLength.BassScale = BassScale;
+                    config.ScaleLength.TrebleScale = TrebleScale;
+                });
+            }
+
+            if (e.PropertyName == nameof(MultiScaleRatio) && Mode == ScaleLengthMode.Multiscale)
+            {
+                LayoutDocumentContext.UpdateConfiguration("MultiScaleRatio", config =>
+                {
+                    config.ScaleLength.MultiScaleRatio = MultiScaleRatio;
+                });
+            }
+
+
+            //if (e.PropertyName != nameof(HasMadeChanges))
+            //    NotifyLayoutPropertiesChanged();
+        }
+
+        public override void OnNumberOfStringsChanged()
+        {
+            base.OnNumberOfStringsChanged();
+
+            if (Mode == ScaleLengthMode.PerString)
+                UpdateIndividualScaleLengths(false);
         }
 
         private void UpdateIndividualScaleLengths(bool recreate = true)
@@ -95,7 +163,7 @@ namespace SiGen.ViewModels.EditorPanels
                 return;
 
             foreach (var scale in PerStringScales)
-                scale.PropertyChanged -= ScaleLengthPanelViewModel_PropertyChanged;
+                scale.PropertyChanged -= StringScaleLength_PropertyChanged;
 
             PerStringScales.Clear();
             // Update the individual scale lengths based on the current configuration
@@ -106,15 +174,46 @@ namespace SiGen.ViewModels.EditorPanels
                 var stringConfig = Configuration.GetString(i);
                 if (stringConfig != null && stringConfig.ScaleLength != null)
                     scaleLengths[i] = stringConfig.ScaleLength;
-                var model = new StringScaleViewModel(i + 1, scaleLengths[i]);
-                model.PropertyChanged += ScaleLengthPanelViewModel_PropertyChanged;
+                var model = new StringScaleViewModel(i + 1, scaleLengths[i], stringConfig?.MultiScaleRatio ?? 0.5);
+                model.PropertyChanged += StringScaleLength_PropertyChanged;
                 PerStringScales.Add(model);
             }
         }
 
-        private void ScaleLengthPanelViewModel_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+        private void RebuildMultiScaleRatioPresets()
         {
-            NotifyLayoutPropertiesChanged();
+            MultiScaleRatioPresets.Clear();
+            if (Configuration == null)
+                return;
+
+            int maxFrets = Configuration.GetMaxFrets();
+
+            for (int i = 0; i <= maxFrets; i++)
+            {
+                double ratio = (double)(i + 1) / maxFrets;
+                var interval = PitchInterval.From12TET(i, 0);
+                var fretRatio = 1d - (1d / interval.Ratio);
+                string fretLabel = i == 0 ? SiGen.Localization.Texts.FingerboardEnd_Nut : $"{Lang.Resources.FretLabel} {i}";
+                MultiScaleRatioPresets.Add(new AlignmentRatioPreset(fretRatio, fretLabel));
+            }
+            
+        }
+
+        private void StringScaleLength_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+        {
+            if (sender is not StringScaleViewModel scaleViewModel || Configuration == null)
+                return;
+
+            LayoutDocumentContext.UpdateConfiguration("StringScaleLength", config =>
+            {
+                var strConfig = config.GetString(scaleViewModel.StringNumber - 1);
+                if (strConfig != null)
+                {
+                    strConfig.MultiScaleRatio = scaleViewModel.Ratio;
+                    strConfig.ScaleLength = scaleViewModel.Scale;
+                }
+            });
+            //NotifyLayoutPropertiesChanged();
         }
 
         public override void ApplyChanges()
@@ -176,13 +275,15 @@ namespace SiGen.ViewModels.EditorPanels
         public int StringNumber { get; }
         [ObservableProperty]
         private Measure? scale;
-
+        [ObservableProperty]
+        private double ratio;
         public string Label => $"{Lang.Resources.StringLabel} {StringNumber}";
 
-        public StringScaleViewModel(int stringNumber, Measure? scale)
+        public StringScaleViewModel(int stringNumber, Measure? scale, double ratio)
         {
             StringNumber = stringNumber;
             this.scale = scale;
+            this.ratio = ratio;
         }
     }
 }

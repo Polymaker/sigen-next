@@ -1,6 +1,7 @@
 ﻿using SiGen.Maths;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
@@ -10,6 +11,7 @@ using System.Threading.Tasks;
 
 namespace SiGen.Measuring
 {
+    [TypeConverter(typeof(MeasureTypeConverter))]
     public class Measure : IComparable, IComparable<Measure>
     {
         private PreciseDouble? _CachedValue;

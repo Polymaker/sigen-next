@@ -104,6 +104,21 @@ namespace SiGen.Layouts.Configuration
 
             }
         }
+
+        public int GetMaxFrets()
+        {
+            int numberOfFrets = NumberOfFrets ?? 0;
+
+            foreach (var @string in StringConfigurations)
+            {
+                if (@string.Frets?.NumberOfFrets != null)
+                    numberOfFrets = Math.Max(numberOfFrets, @string.Frets.NumberOfFrets.Value);
+            }
+            if (NumberOfFrets.HasValue)
+                return NumberOfFrets.Value;
+
+            return numberOfFrets; 
+        }
     }
 
     public enum ScaleLengthMode

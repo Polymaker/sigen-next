@@ -12,11 +12,4 @@ namespace SiGen.UI.LayoutViewer
         Realistic,
         Blueprint
     }
-
-    public enum LayoutOrientation
-    {
-        Vertical,             // Vertical view, nut at top
-        HorizontalNutLeft,    // Horizontal view, nut at left
-        HorizontalNutRight    // Horizontal view, nut at right
-    }
 }

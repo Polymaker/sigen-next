@@ -61,6 +61,15 @@ namespace SiGen.Lang {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Skew.
+        /// </summary>
+        public static string Editor_BassTrebleSkew {
+            get {
+                return ResourceManager.GetString("Editor.BassTrebleSkew", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Left handed.
         /// </summary>
         public static string Editor_Handedness_Left {
@@ -232,20 +241,29 @@ namespace SiGen.Lang {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Fret.
+        /// </summary>
+        public static string FretLabel {
+            get {
+                return ResourceManager.GetString("FretLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Bass.
         /// </summary>
-        public static string InstrumentFamilly_Bass {
+        public static string InstrumentFamily_Bass {
             get {
-                return ResourceManager.GetString("InstrumentFamilly.Bass", resourceCulture);
+                return ResourceManager.GetString("InstrumentFamily.Bass", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Guitar.
         /// </summary>
-        public static string InstrumentFamilly_Guitar {
+        public static string InstrumentFamily_Guitar {
             get {
-                return ResourceManager.GetString("InstrumentFamilly.Guitar", resourceCulture);
+                return ResourceManager.GetString("InstrumentFamily.Guitar", resourceCulture);
             }
         }
         

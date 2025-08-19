@@ -21,9 +21,10 @@ namespace SiGen.DependencyInjection
 
             // ViewModels
             services.AddSingleton<MainViewModel>();
-            services.AddTransient<InstrumentValuesProviderFactory>();
+            services.AddSingleton<InstrumentValuesProviderFactory>();
             services.AddTransient<ScaleLengthPanelViewModel>();
-
+            services.AddTransient<InstrumentInfoPanelViewModel>();
+            services.AddTransient<LayoutDocumentViewModel>();
             return services;
         }
     }
