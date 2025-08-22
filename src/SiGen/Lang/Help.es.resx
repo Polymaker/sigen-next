@@ -128,4 +128,10 @@
 Úsalo para crear trastes en abanico incluso cuando todas las cuerdas comparten la misma longitud de escala.
 Los valores positivos inclinan los trastes hacia un lado, los negativos hacia el otro. Deja este campo en blanco para que no haya inclinación.</value>
   </data>
+  <data name="NumberOfStrings_Help" xml:space="preserve">
+    <value>Establezca el número total de cuerdas para su instrumento.</value>
+  </data>
+  <data name="Handedness_Help" xml:space="preserve">
+    <value>Seleccione si el diseño del instrumento es para un jugador diestro o zurdo.</value>
+  </data>
 </root>

@@ -128,4 +128,10 @@
 Verwenden Sie diese Option, um fächerförmige Bünde zu erzeugen, auch wenn alle Saiten die gleiche Mensur haben.
 Positive Werte versetzen die Bünde in eine Richtung, negative Werte in die andere. Leer lassen, um keinen Versatz zu erzeugen.</value>
   </data>
+  <data name="NumberOfStrings_Help" xml:space="preserve">
+    <value>Legen Sie die Gesamtzahl der Saiten für Ihr Instrument fest.</value>
+  </data>
+  <data name="Handedness_Help" xml:space="preserve">
+    <value>Wählen Sie aus, ob das Instrumentenlayout für Rechts- oder Linkshänder gedacht ist.</value>
+  </data>
 </root>

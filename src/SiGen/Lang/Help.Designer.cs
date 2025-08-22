@@ -72,6 +72,24 @@ namespace SiGen.Lang {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Sélectionnez si la disposition de l&apos;instrument est destinée à un joueur droitier ou gaucher..
+        /// </summary>
+        public static string Handedness_Help {
+            get {
+                return ResourceManager.GetString("Handedness_Help", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Set the total number of strings for your instrument..
+        /// </summary>
+        public static string NumberOfStrings_Help {
+            get {
+                return ResourceManager.GetString("NumberOfStrings_Help", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Choose the scale length mode:
         ///• **Single**: A single scale length for all strings.
         ///• **Multiscale**: A separate scale length for treble and bass strings.

@@ -2,16 +2,20 @@
 using Avalonia.Animation;
 using Avalonia.Animation.Easings;
 using Avalonia.Controls;
+using Avalonia.Controls.Documents;
 using Avalonia.Controls.Shapes;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Media;
+using Avalonia.Media.TextFormatting;
 using Avalonia.Styling;
 using Avalonia.Threading;
 using SiGen.Layouts.Elements;
 using SiGen.Maths;
 using SiGen.Measuring;
 using SiGen.Paths;
+using SiGen.Settings;
+using SiGen.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -23,12 +27,24 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace SiGen.UI.LayoutViewer.Visuals
 {
-    public class StringVisualElement : VisualElementBase<StringElement>
+    /// <summary>
+    /// Visual element for rendering a single string in the layout viewer.
+    /// Handles drawing the string, its highlight, and applies theme settings.
+    /// </summary>
+    public class StringVisualElement : VisualElementBase<StringElement>, INotifyZoomChanged
     {
+        private Line? _mainStringLine;
+        private Line? selectionHighlight;
 
-        public StringVisualElement(StringElement element) : base(element)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="StringVisualElement"/> class.
+        /// </summary>
+        /// <param name="element">The string element to visualize.</param>
+        /// <param name="themeRenderSettings">Theme settings for rendering.</param>
+        public StringVisualElement(StringElement element, ThemeRenderSettings themeRenderSettings)
+            : base(element, themeRenderSettings)
         {
-            ToolTip.SetTip(this, $"{Lang.Resources.StringLabel} {element.StringIndex + 1}");
+            BuildTooltip();
         }
 
         protected override void OnPointerEntered(PointerEventArgs e)
@@ -37,128 +53,113 @@ namespace SiGen.UI.LayoutViewer.Visuals
             Classes.Add("overOnce");
         }
 
+        /// <summary>
+        /// Generates the visuals for the string, including highlight and main line.
+        /// </summary>
         protected override void GenerateVisuals()
         {
             Children.Clear();
-            
-            var stringClipGeom = GetStringClip();
+            var stringClipGeometry = GetStringClip();
             var stringGauge = Element.GetGauge();
-            double stringThickness = !Measuring.Measure.IsNullOrEmpty(stringGauge) ? MeasureToPixels(stringGauge) : 1;
-            
-
-            var perpLine = Element.Path.GetEquation().GetPerpendicular(Element.Path.Start);
-            var p1 = Convert(Element.Path.Start - perpLine.Vector * (stringThickness / CmScaleFactor) * 0.5d);
-            var p2 = Convert(Element.Path.Start + perpLine.Vector * (stringThickness / CmScaleFactor) * 0.5d);
-
+            double stringThicknessPx = !Measuring.Measure.IsNullOrEmpty(stringGauge) ? stringGauge.ToPixels() : 1;
+            var perpendicularLine = Element.Path.GetEquation().GetPerpendicular(Element.Path.Start);
+            var highlightStart = (Element.Path.Start - perpendicularLine.Vector * (stringThicknessPx / CmScaleFactor) * 0.5d).ToAvalonia();
+            var highlightEnd = (Element.Path.Start + perpendicularLine.Vector * (stringThicknessPx / CmScaleFactor) * 0.5d).ToAvalonia();
             var extendedPath = (LinearPath)Element.Path.Extend(0.2)!;
 
-            var test2 = new LinearGradientBrush
+            var stringGradientBrush = new LinearGradientBrush
             {
                 SpreadMethod = GradientSpreadMethod.Repeat,
-                StartPoint = new RelativePoint(p1.X, p1.Y, RelativeUnit.Absolute),
-                EndPoint = new RelativePoint(p2.X, p2.Y, RelativeUnit.Absolute),
+                StartPoint = new RelativePoint(highlightStart.X, highlightStart.Y, RelativeUnit.Absolute),
+                EndPoint = new RelativePoint(highlightEnd.X, highlightEnd.Y, RelativeUnit.Absolute),
                 GradientStops = new GradientStops
                 {
-                    new GradientStop
-                    {
-                        Color = Color.FromArgb(60,0,0,0),
-                        Offset = 0
-                    },
-                    new GradientStop
-                    {
-                        Color = Color.FromArgb(0,200,200,200),
-                        Offset = 0.25
-                    },
-                    new GradientStop
-                    {
-                        Color = Color.FromArgb(100,255,255,255),
-                        Offset = 0.5
-                    },
-                    new GradientStop
-                    {
-                        Color = Color.FromArgb(100,255,255,255),
-                        Offset = 0.6
-                    },
-                    new GradientStop
-                    {
-                        Color = Color.FromArgb(0,200,200,200),
-                        Offset = 0.75
-                    },
-                    new GradientStop
-                    {
-                        Color = Color.FromArgb(40,0,0,0),
-                        Offset = 1
-                    },
+                    new GradientStop { Color = Color.FromArgb(60,0,0,0), Offset = 0 },
+                    new GradientStop { Color = Color.FromArgb(0,200,200,200), Offset = 0.25 },
+                    new GradientStop { Color = Color.FromArgb(80,255,255,255), Offset = 0.5 },
+                    new GradientStop { Color = Color.FromArgb(80,255,255,255), Offset = 0.6 },
+                    new GradientStop { Color = Color.FromArgb(0,200,200,200), Offset = 0.75 },
+                    new GradientStop { Color = Color.FromArgb(40,0,0,0), Offset = 1 },
                 },
-                //Transform = new RotateTransform((double)GetRotationAngleFromNormal(Element.Path.Direction)),
-                //TransformOrigin = new RelativePoint(0, stringThickness * 0.5, RelativeUnit.Relative)
             };
 
-            //Children.Add(new Line
-            //{
-            //    Stroke = new SolidColorBrush(Color.FromArgb(60, 0, 0, 0)),
-            //    StrokeThickness = stringThickness,
-            //    StartPoint = Convert(extendedPath.Start) + new Point(4, 0),
-            //    EndPoint = Convert(extendedPath.End) + new Point(4, 0),
-            //    IsEnabled = false,
-            //    IsHitTestVisible= false,
-            //    Clip = stringClipGeom
-            //});
+            CreateHighlight(stringThicknessPx);
 
-            CreateHighlight(stringThickness);
-
-            if (stringThickness < 5)
+            if (stringThicknessPx < 5)
             {
                 Children.Add(new Line
                 {
                     Stroke = new SolidColorBrush(Color.FromArgb(0, 200, 200, 200)),
-                    StrokeThickness = Math.Max(5, stringThickness * 1.5),
-                    StartPoint = Convert(Element.Path.Start),
-                    EndPoint = Convert(Element.Path.End),
-                    Clip = stringClipGeom
+                    StrokeThickness = Math.Max(5, stringThicknessPx * 1.5),
+                    StartPoint = Element.Path.Start.ToAvalonia(),
+                    EndPoint = Element.Path.End.ToAvalonia(),
+                    Clip = stringClipGeometry
                 });
             }
 
+            _mainStringLine = new Line
+            {
+                Stroke = new SolidColorBrush(ThemeRenderSettings.StringColor),
+                StrokeThickness = stringThicknessPx,
+                StartPoint = extendedPath.Start.ToAvalonia(),
+                EndPoint = extendedPath.End.ToAvalonia(),
+                Clip = stringClipGeometry,
+            };
+            Children.Add(_mainStringLine);
+
+            CreateStringShadowEffect();
+
             Children.Add(new Line
             {
-                Stroke = new SolidColorBrush(Color.FromRgb(230,230,240)),
-                StrokeThickness = stringThickness,
-                StartPoint = Convert(extendedPath.Start),
-                EndPoint = Convert(extendedPath.End),
-                Clip = stringClipGeom,
-                Effect = new DropShadowEffect
-                {
-                    Color = Color.FromArgb(100, 0, 0, 0),
-                    BlurRadius = 2,
-                    OffsetX = 4
-                }
-            });
-            Children.Add(new Line
-            {
-                Stroke = test2,
-                StrokeThickness = stringThickness,
-                StartPoint = Convert(extendedPath.Start),
-                EndPoint = Convert(extendedPath.End),
-                Clip = stringClipGeom
+                Stroke = stringGradientBrush,
+                StrokeThickness = stringThicknessPx,
+                StartPoint = extendedPath.Start.ToAvalonia(),
+                EndPoint = extendedPath.End.ToAvalonia(),
+                Clip = stringClipGeometry
             });
         }
 
-        private void CreateHighlight(double stringThickness)
+
+        private void BuildTooltip()
         {
-            var highlightGeom = new Line
+            if (Element.GroupIndex.HasValue)
+            {
+                var textBlock = new TextBlock();
+                textBlock.Inlines = new InlineCollection();
+                textBlock.Inlines!.Add(new Run($"{Lang.Resources.StringGroupLabel} {Element.StringIndex + 1}"));
+                textBlock.Inlines.Add(new LineBreak());
+                textBlock.Inlines.Add(new Run($"{Lang.Resources.StringLabel} {Element.GroupIndex.Value + 1}"));
+                ToolTip.SetTip(this, textBlock);
+            }
+            else
+                ToolTip.SetTip(this, $"{Lang.Resources.StringLabel} {Element.StringIndex + 1}");
+        }
+
+        public override void UpdateTheme(ThemeRenderSettings theme)
+        {
+            base.UpdateTheme(theme);
+            if (_mainStringLine != null)
+                _mainStringLine.Stroke = new SolidColorBrush(ThemeRenderSettings.StringColor);
+        }
+
+        /// <summary>
+        /// Creates a highlight effect for the string.
+        /// </summary>
+        /// <param name="stringThicknessPx">Thickness of the string in pixels.</param>
+        private void CreateHighlight(double stringThicknessPx)
+        {
+            selectionHighlight = new Line
             {
                 Stroke = new SolidColorBrush(Color.FromRgb(200, 200, 200)),
-                StrokeThickness = stringThickness + 8,
+                StrokeThickness = stringThicknessPx + 8,
                 StrokeLineCap = PenLineCap.Round,
-                StartPoint = Convert(Element.Path.Start),
-                EndPoint = Convert(Element.Path.End),
+                StartPoint = Element.Path.Start.ToAvalonia(),
+                EndPoint = Element.Path.End.ToAvalonia(),
                 IsHitTestVisible = false,
-       
             };
 
-            highlightGeom.Classes.Add("highlight");
-
-            Children.Add(highlightGeom);
+            selectionHighlight.Classes.Add("highlight");
+            Children.Add(selectionHighlight);
 
             double maxOpacity = 0.4;
             var fadeInAnim = new Animation
@@ -228,70 +229,56 @@ namespace SiGen.UI.LayoutViewer.Visuals
                 Animations = {
                     fadeInAnim
                 },
-                //Setters =
-                //{
-                //    new Setter(Line.OpacityProperty, 0.5)
-                //}
             });
-
-            
-
         }
 
+        /// <summary>
+        /// Gets the geometry used to clip the string rendering between nut and bridge.
+        /// </summary>
+        /// <returns>Geometry for clipping, or null if unavailable.</returns>
         private Geometry? GetStringClip()
         {
             if (Element.Layout == null)
-                return null; 
+                return null;
 
             var nutBridgeFrets = Element.Layout.Elements.OfType<FretSegmentElement>()
                 .Where(x => x.ContainsString(Element.StringIndex) && (x.IsNut || x.IsBridge)).ToList();
 
             var pathGeometry = new PathGeometry();
             var ctx = pathGeometry.Open();
-            ctx.BeginFigure(Convert(nutBridgeFrets[0].FretShape!.GetFirstPoint()), true);
-            ctx.LineTo(Convert(nutBridgeFrets[0].FretShape!.GetLastPoint()));
-            ctx.LineTo(Convert(nutBridgeFrets[1].FretShape!.GetLastPoint()));
-            ctx.LineTo(Convert(nutBridgeFrets[1].FretShape!.GetFirstPoint()));
+            ctx.BeginFigure(nutBridgeFrets[0].FretShape!.GetFirstPoint().ToAvalonia(), true);
+            ctx.LineTo(nutBridgeFrets[0].FretShape!.GetLastPoint().ToAvalonia());
+            ctx.LineTo(nutBridgeFrets[1].FretShape!.GetLastPoint().ToAvalonia());
+            ctx.LineTo(nutBridgeFrets[1].FretShape!.GetFirstPoint().ToAvalonia());
             ctx.EndFigure(true);
 
             pathGeometry.Transform = new TranslateTransform(0.001, 0.001);
             return pathGeometry;
         }
 
+        /// <summary>
+        /// Converts a string's normal vector to a rotation angle in degrees.
+        /// </summary>
         public static PreciseDouble GetRotationAngleFromNormal(VectorD normal)
         {
-            // Convert to angle using atan2
             var angleRadians = MathD.Atan2(normal.Y, normal.X);
-
-            // Convert radians to degrees
             var angleDegrees = angleRadians * 180.0 / Math.PI;
-
             return angleDegrees;
         }
 
         private const double CmScaleFactor = 37.7952755906; // 1 cm in pixels at 96 DPI
-        private Point Convert(VectorD point)
-        {
-            return new Point((double)point.X * CmScaleFactor, (double)point.Y * CmScaleFactor);
-        }
 
-        private double MeasureToPixels(Measure measure)
-        {
-            return (double)measure.NormalizedValue * CmScaleFactor;
-        }
-        //public override void Render(DrawingContext context)
-        //{
-        //    var brush = CreateWoundStringBrush();// new SolidColorBrush(Color.FromRgb(30, 50, 80)); // Blueprint blue
+ 
 
-        //    var renderBounds = new Rect(0, 0, Bounds.Width, Bounds.Height);
-        //    context.FillRectangle(brush, renderBounds);
-        //    base.Render(context);
-        //}
         protected override void OnPointerPressed(PointerPressedEventArgs e)
         {
             base.OnPointerPressed(e);
             Trace.WriteLine($"Clicked on string {Element.StringIndex}");
         }
+
+        /// <summary>
+        /// Creates a brush for wound string rendering.
+        /// </summary>
         private DrawingBrush CreateWoundStringBrush(double rotation = 0)
         {
             double patternSize = 10;
@@ -328,50 +315,48 @@ namespace SiGen.UI.LayoutViewer.Visuals
                     },
                 });
             }
-
-            //drawingGroup.Children.Add(new GeometryDrawing
-            //{
-            //    Pen = pen,
-            //    Geometry = new LineGeometry
-            //    {
-            //        StartPoint = new Point(-2.5, 2.5),
-            //        EndPoint = new Point(0, 7.5),
-            //    },
-            //});
-            //drawingGroup.Children.Add(new GeometryDrawing
-            //{
-            //    Pen = pen,
-            //    Geometry = new LineGeometry
-            //    {
-            //        StartPoint = new Point(2.5, 2.5),
-            //        EndPoint = new Point(5, 7.5),
-            //    },
-            //});
-            //drawingGroup.Children.Add(new GeometryDrawing
-            //{
-            //    Pen = pen,
-            //    Geometry = new LineGeometry
-            //    {
-            //        StartPoint = new Point(7.5, 2.5),
-            //        EndPoint = new Point(10, 7.5),
-            //    },
-            //});
             return new DrawingBrush
             {
                 Drawing = drawingGroup,
                 TileMode = TileMode.Tile,
                 AlignmentX = AlignmentX.Left,
                 AlignmentY = AlignmentY.Top,
-                //Stretch = Stretch.Uniform,
-                //TransformOrigin = new RelativePoint(patternSize / 2d, patternSize / 2d, RelativeUnit.Absolute),
                 SourceRect = new RelativeRect(new Rect(0, -1, patternSize, patternSize + 2), RelativeUnit.Relative),
                 DestinationRect = new RelativeRect(new Rect(0, -1, patternSize, patternSize + 2), RelativeUnit.Relative),
-                
-                //DestinationRect = new RelativeRect(new Rect(0, 0, majorGridSize, majorGridSize), RelativeUnit.Absolute),
-                //Transform = new RotateTransform(rotation)
-                //Viewport = new Rect(0, 0, majorGridSize, majorGridSize),
-                //ViewportUnits = BrushMappingMode.Absolute
             };
+        }
+
+        public void ZoomChanged(double newZoom)
+        {
+            if (selectionHighlight == null)
+                return;
+            var stringGauge = Element.GetGauge();
+            double stringThicknessPx = !Measuring.Measure.IsNullOrEmpty(stringGauge) ? stringGauge.ToPixels() : 1;
+            selectionHighlight.StrokeThickness = stringThicknessPx + 12 / newZoom;
+        }
+
+        public void BeginZoomChange()
+        {
+            if (_mainStringLine != null)
+                _mainStringLine.Effect = null;
+        }
+
+        public void EndZoomChange()
+        {
+            CreateStringShadowEffect();
+        }
+
+        private void CreateStringShadowEffect()
+        {
+            if (_mainStringLine != null)
+            {
+                _mainStringLine.Effect = new DropShadowEffect
+                {
+                    Color = Color.FromArgb(100, 0, 0, 0),
+                    BlurRadius = 2,
+                    OffsetX = 4,
+                };
+            }
         }
     }
 }

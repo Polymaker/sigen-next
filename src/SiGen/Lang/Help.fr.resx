@@ -128,4 +128,10 @@
 Utilisez cette option pour créer des frettes en éventail même lorsque toutes les cordes ont la même longueur de diapason.
 Les valeurs positives inclinent les frettes d'un côté, les valeurs négatives de l'autre. Laissez vide pour éviter toute inclinaison.</value>
   </data>
+  <data name="NumberOfStrings_Help" xml:space="preserve">
+    <value>Définissez le nombre total de cordes pour votre instrument.</value>
+  </data>
+  <data name="Handedness_Help" xml:space="preserve">
+    <value>Sélectionnez si la disposition de l'instrument est destinée à un joueur droitier ou gaucher.</value>
+  </data>
 </root>

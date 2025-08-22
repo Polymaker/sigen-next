@@ -228,4 +228,7 @@
   <data name="FretLabel" xml:space="preserve">
     <value>Frette</value>
   </data>
+  <data name="StringGroupLabel" xml:space="preserve">
+    <value>Groupe de corde</value>
+  </data>
 </root>

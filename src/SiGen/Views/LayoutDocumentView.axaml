@@ -1,0 +1,49 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="800"
+             x:Class="SiGen.Views.LayoutDocumentView"
+			 xmlns:vm="clr-namespace:SiGen.ViewModels"
+			 xmlns:lv="clr-namespace:SiGen.UI.LayoutViewer;assembly=SiGen"
+			 xmlns:editors="clr-namespace:SiGen.UI.EditorPanels;assembly=SiGen"
+			 x:DataType="vm:DocumentViewModel"
+			 >
+	<UserControl.Resources>
+
+
+		<ResourceDictionary>
+			<ResourceDictionary.ThemeDictionaries>
+				<ResourceDictionary  x:Key="Light">
+					<SolidColorBrush x:Key='GridSplitterBrush'>#DEDEDE</SolidColorBrush>
+					<SolidColorBrush x:Key='BottomPanelBrush'>#F5F5F5</SolidColorBrush>
+				</ResourceDictionary >
+				<ResourceDictionary x:Key="Dark">
+					<SolidColorBrush x:Key='GridSplitterBrush'>#494949</SolidColorBrush>
+					<SolidColorBrush x:Key='BottomPanelBrush'>#191919</SolidColorBrush>
+				</ResourceDictionary>
+			</ResourceDictionary.ThemeDictionaries>
+		</ResourceDictionary>
+	</UserControl.Resources>
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="*" />
+			<RowDefinition Height="5" />
+			<RowDefinition Height="300" />
+		</Grid.RowDefinitions>
+	
+		<lv:LayoutViewerControl x:Name="Viewer" />
+		<GridSplitter Grid.Row="1" Background="{DynamicResource GridSplitterBrush}" />
+		<Border Background="{DynamicResource BottomPanelBrush}" Grid.Row="2">
+			<ScrollViewer>
+				<StackPanel Orientation="Horizontal"  >
+					<editors:InstrumentInfoEditorPanel Width="300" />
+					<editors:ScaleLengthEditorPanel />
+					<editors:StringSpacingEditorPanel />
+				</StackPanel>
+			</ScrollViewer>
+		</Border>
+
+
+	</Grid>
+</UserControl>

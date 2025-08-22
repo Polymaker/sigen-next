@@ -22,7 +22,7 @@
 		</Grid.RowDefinitions>
 
 
-		<lv:LayoutViewer x:Name="SILayoutViewer" Orientation="HorizontalNutRight" Grid.Row="0" />
+		<lv:LayoutViewerControl x:Name="SILayoutViewer" Orientation="HorizontalNutRight" Grid.Row="0" />
 
 		<GridSplitter Grid.Row="1" />
 

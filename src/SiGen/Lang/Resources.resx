@@ -217,4 +217,7 @@
   <data name="FretLabel" xml:space="preserve">
     <value>Fret</value>
   </data>
+  <data name="StringGroupLabel" xml:space="preserve">
+    <value>String Group</value>
+  </data>
 </root>

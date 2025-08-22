@@ -17,6 +17,7 @@ namespace SiGen.Services.InstrumentProfiles
                 new SpacingPreset("Standard (10.4 mm)", Measure.Mm(10.4)),
                 new SpacingPreset("Wide     (10.7 mm)", Measure.Mm(10.7)),
             ];
+
         }
 
         public override IReadOnlyList<SpacingPreset> GetNutSpacingPresets()
@@ -42,8 +43,8 @@ namespace SiGen.Services.InstrumentProfiles
             return
             [
                 new ScaleLengthPreset("Gibson", Measure.In(24.75)),
-                new ScaleLengthPreset("Fender/Ibanez", Measure.In(25.5)),
                 new ScaleLengthPreset("PRS", Measure.In(25.0)),
+                new ScaleLengthPreset("Fender/Ibanez", Measure.In(25.5)),
                 new ScaleLengthPreset("Baritone", Measure.In(27.0)),
             ];
         }

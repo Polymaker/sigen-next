@@ -1,0 +1,23 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="800"
+             x:Class="SiGen.Views.MobileMainView"
+			 xmlns:lv="using:SiGen.UI.LayoutViewer">
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="30" />
+			<RowDefinition Height="*" />
+
+		</Grid.RowDefinitions>
+
+		<StackPanel Orientation="Horizontal" Spacing="4">
+			<Button x:Name="Button1" Content="Layout 1" />
+			<Button x:Name="Button2" Content="Layout 2" />
+			<Button x:Name="Button3" Content="Layout 3" />
+		</StackPanel>
+
+		<lv:LayoutViewerControl x:Name="SILayoutViewer" Orientation="Vertical" Grid.Row="1" />
+	</Grid>
+</UserControl>

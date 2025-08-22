@@ -58,13 +58,13 @@
 				<ctrl:CustomFormField.Help>
 					<TextBlock
 						TextWrapping="Wrap" MaxWidth="400"
-						Text="{x:Static lang:Resources.Editor_Handedness_Tooltip}"/>
+						Text="{x:Static lang:Help.Handedness_Help}"/>
 				</ctrl:CustomFormField.Help>
 			</ctrl:CustomFormField>
 
 
 			<ctrl:CustomFormField Label="{x:Static lang:Resources.Editor_NumberOfStrings}"
-								  Orientation="Vertical" 
+								  Orientation="Vertical"
 								  LabelHorizontalAlignment="Center"
 								  >
 				<ctrl:CustomFormField.Input>
@@ -76,21 +76,21 @@
 									 IsLeftHanded="{Binding LeftHanded}"/>
 				</ctrl:CustomFormField.Input>
 				<ctrl:CustomFormField.Help>
-					<TextBlock 
+					<TextBlock
 						TextWrapping="Wrap" MaxWidth="400"
-						Text="{x:Static lang:Resources.Editor_NumberOfStrings_Tooltip}"/>
+						Text="{x:Static lang:Help.NumberOfStrings_Help}"/>
 				</ctrl:CustomFormField.Help>
 			</ctrl:CustomFormField>
 
 
 			<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="8">
-				<Button>
+				<Button ToolTip.Tip="{x:Static lang:Resources.StringsLabel}">
 					<ctrl:SvgIcon SvgImage="/Assets/Icons/StringIcon.svg" Width="24" />
 				</Button>
-				<Button>
+				<Button ToolTip.Tip="Frets">
 					<ctrl:SvgIcon SvgImage="/Assets/Icons/FretIcon.svg" Width="24" />
 				</Button>
-				<Button>
+				<Button ToolTip.Tip="Tuning">
 					<ctrl:SvgIcon SvgImage="/Assets/Icons/TuningIcon.svg" Width="24" />
 				</Button>
 			</StackPanel>

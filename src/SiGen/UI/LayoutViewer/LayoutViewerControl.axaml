@@ -3,15 +3,16 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="SiGen.UI.LayoutViewer.LayoutViewer"
+             x:Class="SiGen.UI.LayoutViewer.LayoutViewerControl"
 			 xmlns:ui="using:SiGen.UI"
-			 
+			 xmlns:lv="using:SiGen.UI.LayoutViewer"
+			 xmlns:materialIcons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
 			 >
   <Grid>
 	  <Grid.RowDefinitions>
 		  <RowDefinition Height="auto" />
 		  <RowDefinition Height="*" />
-		  <RowDefinition Height="30" />
+		  <RowDefinition Height="auto" />
 	  </Grid.RowDefinitions>
 	  <Grid.ColumnDefinitions>
 		  
@@ -30,7 +31,7 @@
 		  <Grid>
 			  
 			  <Canvas x:Name="RenderCanvas" >
-				  <ui:LayoutGridControl Width="50" Height="50" x:Name="BlueprintRect" />
+				  <ui:LayoutGridControl Width="50" Height="50" x:Name="LayoutGrid" />
 			  </Canvas>
 			  <Canvas x:Name="OverlayCanvas" />
 		  </Grid>
@@ -40,15 +41,27 @@
 	  <Border	
 				Background="#77000000"
 				ZIndex="10" Grid.Row="0"  
-				HorizontalAlignment="Stretch">
+				HorizontalAlignment="Stretch" IsVisible="False">
 		  <StackPanel Orientation="Horizontal" Spacing="4" 
 					  HorizontalAlignment="Center"
-					  Margin="4">
+					  Margin="4" >
 			  <Button Content="Test" x:Name="Button1" />
 			  <Button Content="Test" x:Name="Button2" />
 			  <Button Content="Test" x:Name="Button3" />
-			  <TextBlock x:Name="DebugText" />
+			  <TextBlock x:Name="DebugText"  />
 		  </StackPanel>
 	  </Border>
+
+	  <Border Grid.Row="2"  ZIndex="10" Padding="4">
+		  <StackPanel Orientation="Horizontal"
+					  HorizontalAlignment="Right"
+					  Spacing="4">
+			  <TextBox x:Name="ZoomTextBox"/>
+			  <Button x:Name="ResetViewButton" ToolTip.Tip="Reset View" Click="ResetViewButton_Click">
+				  <materialIcons:MaterialIcon Kind="ImageFilterCenterFocusStrong" />
+			  </Button>
+		  </StackPanel>
+	  </Border>
+
   </Grid>
 </UserControl>

@@ -15,18 +15,18 @@ sealed class Program
     [STAThread]
     public static void Main(string[] args)
     {
-        var host = Host.CreateDefaultBuilder(args)
-            .ConfigureServices((context, services) =>
-            {
-                // Call the shared registration method
-                services.AddSiGenServices();
+        //var host = Host.CreateDefaultBuilder(args)
+        //    .ConfigureServices((context, services) =>
+        //    {
+        //        // Call the shared registration method
+        //        services.AddSiGenServices();
                 
-                // Register platform-specific services if needed
-                services.AddSingleton<IFileDialogService, AvaloniaFileDialogService>();
-            })
-            .Build();
+        //        // Register platform-specific services if needed
+        //        services.AddSingleton<IFileDialogService, AvaloniaFileDialogService>();
+        //    })
+        //    .Build();
 
-        BuildAvaloniaApp(host)
+        BuildAvaloniaApp(/*host*/)
             .StartWithClassicDesktopLifetime(args);
     }
 

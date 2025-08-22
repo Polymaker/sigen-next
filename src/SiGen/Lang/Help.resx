@@ -108,4 +108,10 @@
 Use this to create fanned frets even when all strings share the same scale length.
 Positive values angle the frets one way, negative values the other. Leave blank for no skew.</value>
   </data>
+  <data name="NumberOfStrings_Help" xml:space="preserve">
+    <value>Set the total number of strings for your instrument.</value>
+  </data>
+  <data name="Handedness_Help" xml:space="preserve">
+    <value>Sélectionnez si la disposition de l'instrument est destinée à un joueur droitier ou gaucher.</value>
+  </data>
 </root>

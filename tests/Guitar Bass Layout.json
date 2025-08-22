@@ -1,0 +1,128 @@
+{
+  "NumberOfStrings": 7,
+  "InstrumentType": "ElectricGuitar",
+  "StringConfigurations": [
+    {
+      "$type": "Single",
+      "Properties": {
+        "Gauge": "0.13in",
+        "Tuning": {
+          "Cents": 2800,
+          "Ratio": 5.039684199579493
+        }
+      },
+      "ScaleLength": "34in",
+      "Frets": {
+        "StartingFret": null,
+        "NumberOfFrets": 22,
+        "Intervals": null
+      }
+    },
+    {
+      "$type": "Single",
+      "Properties": {
+        "Gauge": "0.1in",
+        "Tuning": {
+          "Cents": 3300,
+          "Ratio": 6.727171322029716
+        }
+      },
+      "ScaleLength": "33.32in"
+    },
+    {
+      "$type": "Single",
+      "Properties": {
+        "Gauge": "0.046in",
+        "Tuning": {
+          "Cents": 2800,
+          "Ratio": 5.039684199579493
+        }
+      },
+      "ScaleLength": "27in"
+    },
+    {
+      "$type": "Single",
+      "Properties": {
+        "Gauge": "0.036in",
+        "Tuning": {
+          "Cents": 3300,
+          "Ratio": 6.727171322029716
+        }
+      },
+      "ScaleLength": "26.595in"
+    },
+    {
+      "$type": "Single",
+      "Properties": {
+        "Gauge": "0.026in",
+        "Tuning": {
+          "Cents": 3800,
+          "Ratio": 8.979696386474982
+        }
+      },
+      "ScaleLength": "26.19in"
+    },
+    {
+      "$type": "Single",
+      "Properties": {
+        "Gauge": "0.017in",
+        "Tuning": {
+          "Cents": 4300,
+          "Ratio": 11.986456615013454
+        }
+      },
+      "ScaleLength": "25.785in"
+    },
+    {
+      "$type": "Single",
+      "Properties": {
+        "Gauge": "0.013in",
+        "Tuning": {
+          "Cents": 4700,
+          "Ratio": 15.101989002907095
+        }
+      },
+      "ScaleLength": "25.38in"
+    }
+  ],
+  "Margin": {
+    "NutTreble": "3.25mm",
+    "NutBass": "3.25mm",
+    "BridgeTreble": "3.25mm",
+    "BridgeBass": "3.25mm",
+    "CompensateForStrings": true
+  },
+  "NutSpacing": {
+    "SpacingMode": "CenterToCenter",
+    "CenterAlignment": "SymmetricFingerboard",
+    "StringDistances": [
+      "9.2mm",
+      "8mm",
+      "7.3mm",
+      "7.3mm",
+      "7.3mm",
+      "7.3mm"
+    ]
+  },
+  "BridgeSpacing": {
+    "SpacingMode": "CenterToCenter",
+    "CenterAlignment": "SymmetricFingerboard",
+    "StringDistances": [
+      "18mm",
+      "14mm",
+      "10.5mm",
+      "10.5mm",
+      "10.5mm",
+      "10.5mm"
+    ]
+  },
+  "ScaleLength": {
+    "CalculationMethod": "AlongString",
+    "Mode": "PerString",
+    "MultiScaleRatio": 0.5,
+    "BassTrebleSkew": null
+  },
+  "NumberOfFrets": 24,
+  "LeftHanded": false,
+  "StringSetId": null
+}

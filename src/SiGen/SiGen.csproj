@@ -2,7 +2,7 @@
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
     <Nullable>enable</Nullable>
-    <LangVersion>latest</LangVersion>
+    <LangVersion>preview</LangVersion>
     <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
   </PropertyGroup>
   
@@ -21,6 +21,7 @@
       <PrivateAssets Condition="'$(Configuration)' != 'Debug'">All</PrivateAssets>
     </PackageReference>
     <PackageReference Include="CommunityToolkit.Mvvm" />
+    <PackageReference Include="Material.Avalonia" />
     <PackageReference Include="Material.Icons.Avalonia" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" />
     <PackageReference Include="Svg.Controls.Skia.Avalonia" />
@@ -45,8 +46,8 @@
     <Compile Update="UI\EditorPanels\InstrumentInfoEditorPanel.axaml.cs">
       <DependentUpon>InstrumentInfoEditorPanel.axaml</DependentUpon>
     </Compile>
-    <Compile Update="Views\DocumentEditorView.axaml.cs">
-      <DependentUpon>DocumentEditorView.axaml</DependentUpon>
+    <Compile Update="UI\LayoutViewer\LayoutViewerControl.axaml.cs">
+      <DependentUpon>LayoutViewerControl.axaml</DependentUpon>
     </Compile>
   </ItemGroup>
 
@@ -59,9 +60,5 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="UI\Views\" />
   </ItemGroup>
 </Project>

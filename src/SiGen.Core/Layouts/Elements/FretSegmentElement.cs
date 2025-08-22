@@ -95,6 +95,26 @@ namespace SiGen.Layouts.Elements
                     return Layout.GetStringMedian(lastPt.StringIndex).Path;
             }
         }
+    
+        public VectorD GetVector(FingerboardSide side)
+        {
+            if (FretShape is LinearPath linear)
+            {
+                if (side == FingerboardSide.Bass)
+                    return linear.Direction * -1d;
+                else
+                    return linear.Direction;
+            }
+            else if (FretShape is PolyLinePath polyline)
+            {
+
+                if (side == FingerboardSide.Bass)
+                    return (polyline.Points[0] - polyline.Points[1]).Normalized;
+                else
+                    return (polyline.Points[^1] - polyline.Points[^2]).Normalized;
+            }
+            return default;
+        }
     }
 
     public class FretPoint

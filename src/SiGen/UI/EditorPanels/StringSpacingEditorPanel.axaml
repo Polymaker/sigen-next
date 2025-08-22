@@ -1,0 +1,81 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="450"
+             x:Class="SiGen.UI.EditorPanels.StringSpacingEditorPanel"
+			 xmlns:ctrl="using:SiGen.UI.Controls">
+	<Grid Margin="4">
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="*" MinWidth="120" />
+			<ColumnDefinition Width="1.5*" />
+			<ColumnDefinition Width="1.5*" />
+		</Grid.ColumnDefinitions>
+
+		<Grid.RowDefinitions>
+			<RowDefinition Height="auto" />
+			<RowDefinition Height="auto" />
+			<RowDefinition Height="auto" />
+			<RowDefinition Height="auto" />
+			<RowDefinition Height="10" />
+			<RowDefinition Height="auto" />
+			<RowDefinition Height="auto" />
+			<RowDefinition Height="auto" />
+			<RowDefinition Height="*" />
+		</Grid.RowDefinitions>
+		
+		<!-- Headers -->
+		<TextBlock Text="Spacing" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Center" />
+		<TextBlock Text="Spread" Grid.Row="0" Grid.Column="2" HorizontalAlignment="Center" />
+
+		<TextBlock Text="Nut Spacing" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" />
+		<ctrl:MeasureTextBox Grid.Row="1" Grid.Column="1" Margin="0,4,4,4"/>
+		<ctrl:MeasureTextBox Grid.Row="1" Grid.Column="2" Margin="4,4,0,4"/>
+		
+		<TextBlock Text="Method" Grid.Row="2" Grid.Column="0"
+				   HorizontalAlignment="Left" VerticalAlignment="Center" />
+		<ComboBox Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" 
+				  HorizontalAlignment="Stretch" Margin="0,4">
+			<ComboBoxItem>Proportional</ComboBoxItem>
+			<ComboBoxItem>Center-to-center</ComboBoxItem>
+		</ComboBox>
+
+		<TextBlock Text="Alignment" Grid.Row="3" Grid.Column="0" 
+				   HorizontalAlignment="Left" VerticalAlignment="Center" />
+		<ComboBox Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" 
+				  HorizontalAlignment="Stretch" Margin="0,4">
+			<ComboBoxItem>Outer Strings</ComboBoxItem>
+			<ComboBoxItem>MiddleStrings</ComboBoxItem>
+			<ComboBoxItem>Fingerboard</ComboBoxItem>
+			<ComboBoxItem>Symmetric Strings</ComboBoxItem>
+			<ComboBoxItem>Symmetric Fingerboard</ComboBoxItem>
+			<ComboBoxItem>Manual</ComboBoxItem>
+		</ComboBox>
+		
+		<Separator Grid.Row="4" Grid.ColumnSpan="3" Margin="4,8"/>
+		
+		<TextBlock Text="Bridge Spacing" Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" />
+		<ctrl:MeasureTextBox Grid.Row="5" Grid.Column="1" Margin="0,4,4,4"/>
+		<ctrl:MeasureTextBox Grid.Row="5" Grid.Column="2" Margin="4,4,0,4"/>
+
+		<TextBlock Text="Method" Grid.Row="6" Grid.Column="0"
+				   HorizontalAlignment="Left" VerticalAlignment="Center" />
+		<ComboBox Grid.Row="6" Grid.Column="1" Grid.ColumnSpan="2"
+				  HorizontalAlignment="Stretch" Margin="0,4">
+			<ComboBoxItem>Proportional</ComboBoxItem>
+			<ComboBoxItem>Center-to-center</ComboBoxItem>
+		</ComboBox>
+
+		<TextBlock Text="Alignment" Grid.Row="7" Grid.Column="0"
+				   HorizontalAlignment="Left" VerticalAlignment="Center" />
+		<ComboBox Grid.Row="7" Grid.Column="1" Grid.ColumnSpan="2"
+				  HorizontalAlignment="Stretch" Margin="0,4">
+			<ComboBoxItem>Outer Strings</ComboBoxItem>
+			<ComboBoxItem>MiddleStrings</ComboBoxItem>
+			<ComboBoxItem>Fingerboard</ComboBoxItem>
+			<ComboBoxItem>Symmetric Strings</ComboBoxItem>
+			<ComboBoxItem>Symmetric Fingerboard</ComboBoxItem>
+			<ComboBoxItem>Manual</ComboBoxItem>
+		</ComboBox>
+	</Grid>
+</UserControl>

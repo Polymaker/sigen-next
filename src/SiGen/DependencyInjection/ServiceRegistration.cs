@@ -16,15 +16,17 @@ namespace SiGen.DependencyInjection
         {
             // Register all shared services here
             services.AddSingleton<IInstrumentValuesProviderFactory, InstrumentValuesProviderFactory>();
-            //services.AddSingleton<IScalePresetRepository, ScalePresetRepository>();
-            //services.AddSingleton<ITuningPresetRepository, TuningPresetRepository>();
+            //services.AddSingleton<InstrumentValuesProviderFactory>();
 
             // ViewModels
+
             services.AddSingleton<MainViewModel>();
-            services.AddSingleton<InstrumentValuesProviderFactory>();
+            
+            services.AddSingleton<DesktopMainViewModel>();
             services.AddTransient<ScaleLengthPanelViewModel>();
             services.AddTransient<InstrumentInfoPanelViewModel>();
             services.AddTransient<LayoutDocumentViewModel>();
+            
             return services;
         }
     }

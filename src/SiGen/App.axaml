@@ -4,7 +4,8 @@
              x:Class="SiGen.App"
 			 xmlns:materialIcons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
 			 xmlns:controls="using:SiGen.UI.Controls"
-             RequestedThemeVariant="Default">
+			 xmlns:themes="clr-namespace:Material.Styles.Themes;assembly=Material.Styles"
+             RequestedThemeVariant="Dark">
              <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
 
     <Application.DataTemplates>
@@ -13,6 +14,7 @@
 
     <Application.Styles>
         <FluentTheme />
+		<!--<themes:MaterialTheme PrimaryColor="Purple" SecondaryColor="Lime" />-->
 		<materialIcons:MaterialIconStyles />
 		<StyleInclude Source="avares://Avalonia.Controls.ColorPicker/Themes/Fluent/Fluent.xaml" />
     </Application.Styles>

@@ -85,6 +85,9 @@ namespace SiGen.Layouts.Builders
                     element.FlipHorizontal();
             }
 
+            if (Success)
+                Layout.CalculateBounds();
+
             return new LayoutBuildResult(Success, Layout, Messages.ToList());
         }
 

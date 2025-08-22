@@ -71,13 +71,16 @@
 					  CornerRadius="10"
 					  VerticalAlignment="Center"
 					  IsVisible="{TemplateBinding Help, Converter={x:Static ObjectConverters.IsNotNull}}">
-					  <TextBlock Text="?"
+					  <materialIcons:MaterialIcon
+						  Kind="QuestionMark" 
+						  Foreground="{DynamicResource SystemAccentColor}" />
+					  <!--<TextBlock Text="?"
 								FontSize="11"
 								FontWeight="Bold"
 								Foreground="{DynamicResource SystemAccentColor}"
 								HorizontalAlignment="Center"
 								VerticalAlignment="Center"
-								 Margin="1,0,0,0"/>
+								 Margin="1,0,0,0"/>-->
 					  <Button.Styles>
 						  <Style Selector="Button:pointerover:not(:pressed) /template/ ContentPresenter">
 							  <Setter Property="Background" Value="#55999999"/>
@@ -91,6 +94,7 @@
 				  </Button>
 				  
 			  </Grid>
+			  
 			  <Grid Name="PART_InputContainer"
 					HorizontalAlignment="{TemplateBinding InputHorizontalAlignment}"
 					Margin="4">
@@ -112,7 +116,7 @@
 							Width="20"
 					  Height="20"
 					  Padding="0"
-					  Margin="4,0,0,0"
+					  Margin="8,0,0,0"
 					  Background="Transparent"
 					  BorderBrush="{DynamicResource SystemAccentColor}"
 					  BorderThickness="1"
@@ -120,7 +124,7 @@
 					  VerticalAlignment="Center"
 					  IsVisible="{TemplateBinding Info, Converter={x:Static ObjectConverters.IsNotNull}}">
 					  <materialIcons:MaterialIcon
-						  Kind="InformationSerifSymbol" FontSize="11"
+						  Kind="InformationSerifSymbol" 
 						  Foreground="{DynamicResource SystemAccentColor}" />
 					  <Button.Styles>
 						  <Style Selector="Button:pointerover:not(:pressed) /template/ ContentPresenter">

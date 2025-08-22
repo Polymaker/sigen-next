@@ -24,5 +24,65 @@ namespace SiGen.Settings
         public Color GuideLineColor { get; set; } = Colors.DarkGray;
 
         #endregion
+
+        public static ThemeRenderSettings Blueprint
+        {
+            get
+            {
+                return new ThemeRenderSettings
+                {
+                    BackgroundColor = Color.Parse("#1E3250"),
+                    GridColor = Color.Parse("#EFEFEF"),
+                    MajorAxisColor = Colors.White,
+                    OverlayTextColor = Colors.White,
+                    StringColor = Color.FromRgb(230, 230, 240),
+                    FretColor = Colors.Silver,
+                    FingerBoardEdgeColor = Colors.White,
+                    NutColor = Colors.Sienna,
+                    BridgeColor = Colors.Sienna,
+                    GuideLineColor = Colors.DarkGray
+                };
+            }
+        }
+
+        public static ThemeRenderSettings DarkMode
+        {
+            get
+            {
+                return new ThemeRenderSettings
+                {
+                    BackgroundColor = Color.Parse("#262626"),
+                    GridColor = Colors.White,
+                    MajorAxisColor = Colors.White,
+                    OverlayTextColor = Colors.White,
+                    StringColor = Color.FromRgb(230, 230, 240),
+                    FretColor = Colors.Silver,
+                    FingerBoardEdgeColor = Colors.White,
+                    NutColor = Colors.Sienna,
+                    BridgeColor = Colors.Sienna,
+                    GuideLineColor = Colors.DarkGray
+                };
+            }
+        }
+
+        public static ThemeRenderSettings LightMode
+        {
+            get
+            {
+                return new ThemeRenderSettings
+                {
+                    BackgroundColor = Colors.White,
+                    GridColor = Colors.Gray,
+                    MajorAxisColor = Colors.Gray,
+                    OverlayTextColor = Colors.Black,
+                    StringColor = Color.FromRgb(180, 180, 180),
+                    FretColor = Colors.Gray,
+                    FingerBoardEdgeColor = Colors.SaddleBrown,
+                    NutColor = Colors.Sienna,
+                    BridgeColor = Colors.Sienna,
+                    GuideLineColor = Colors.DarkGray
+                };
+            }
+        }
     }
 }

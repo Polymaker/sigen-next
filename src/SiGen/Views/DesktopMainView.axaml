@@ -1,0 +1,127 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="1000" d:DesignHeight="800"
+             x:Class="SiGen.Views.DesktopMainView"
+			 xmlns:vm="clr-namespace:SiGen.ViewModels"
+			 x:DataType="vm:DesktopMainViewModel"
+			 xmlns:conv="clr-namespace:SiGen.Converters;assembly=SiGen"
+			 xmlns:views="clr-namespace:SiGen.Views"
+			 Design.DataContext="{x:Static vm:DesignData.DesktopMainViewModel}"
+			 xmlns:materialIcons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+
+			 >
+	<UserControl.Resources>
+		
+
+		<ResourceDictionary>
+			<conv:EqualsConverter x:Key="EqualsConverter" />
+			<!--<Thickness x:Key="TabItemHeaderMargin">0,0,0,0</Thickness>-->
+			<x:Double x:Key="TabItemMinHeight">30</x:Double>
+			<x:Double x:Key="TabItemHeaderFontSize">15</x:Double>
+			<Thickness x:Key="TabItemMargin">0</Thickness>
+			<Thickness x:Key="TabItemHeaderMargin">8,4,8,0</Thickness>
+			<Thickness x:Key="TabControlTopPlacementItemMargin">0</Thickness>
+			
+			<ResourceDictionary.ThemeDictionaries>
+				<ResourceDictionary x:Key="Light">
+					<SolidColorBrush x:Key="MenuBackground">#F9F9F9</SolidColorBrush>
+					<SolidColorBrush x:Key="WindowBackground">#EFEFEF</SolidColorBrush>
+					<SolidColorBrush x:Key="TabItemHeaderBackgroundSelected">#FFFFFF</SolidColorBrush>
+					<SolidColorBrush x:Key="TabItemHeaderBackgroundSelectedPointerOver">#FFFFFF</SolidColorBrush>
+					<SolidColorBrush x:Key="TabItemHeaderBackgroundUnselected">#F5F5F5</SolidColorBrush>
+					<SolidColorBrush x:Key="TabItemHeaderBackgroundUnselectedPointerOver">#FAFAFA</SolidColorBrush>
+				</ResourceDictionary >
+				<ResourceDictionary x:Key="Dark">
+					<SolidColorBrush x:Key="MenuBackground">#191919</SolidColorBrush>
+					<SolidColorBrush x:Key="WindowBackground">#0C0C0C</SolidColorBrush>
+					<SolidColorBrush x:Key="TabItemHeaderBackgroundSelected">#3D3D3D</SolidColorBrush>
+					<SolidColorBrush x:Key="TabItemHeaderBackgroundSelectedPointerOver">#3D3D3D</SolidColorBrush>
+					<SolidColorBrush x:Key="TabItemHeaderBackgroundUnselected">#1E1E1E</SolidColorBrush>
+					<SolidColorBrush x:Key="TabItemHeaderBackgroundUnselectedPointerOver">#2D2D2D</SolidColorBrush>
+				</ResourceDictionary>
+			</ResourceDictionary.ThemeDictionaries>
+		</ResourceDictionary>
+	</UserControl.Resources>
+	
+	<Border Background="{DynamicResource WindowBackground}">
+		
+		<DockPanel>
+			<Menu DockPanel.Dock="Top" Background="{DynamicResource MenuBackground}">
+				<MenuItem Header="_File">
+					<MenuItem Header="_Open..." Command="{Binding OpenCommand}" />
+					<MenuItem Header="_Save..." Command="{Binding SaveCommand}" />
+					<MenuItem Header="_Save As..." Command="{Binding SaveAsCommand}" />
+					<Separator/>
+					<MenuItem Header="_Exit"/>
+				</MenuItem>
+				<MenuItem Header="_Edit">
+					<MenuItem Header="Copy"/>
+					<MenuItem Header="Paste"/>
+				</MenuItem>
+				<!--<Menu.Effect>
+					<DropShadowEffect OffsetY="2" Opacity="0.5" OffsetX="-1" />
+				</Menu.Effect>-->
+			</Menu>
+			<Grid>
+				<TabControl x:Name="DocumentsTabControl" Margin="0,4,0,0"
+							ItemsSource="{Binding OpenDocuments}" 
+							SelectedItem="{Binding SelectedDocument, Mode=TwoWay}">
+					<TabControl.ItemTemplate>
+						<DataTemplate>
+							<StackPanel Orientation="Horizontal">
+								<TextBlock Text="{Binding Title}" />
+								<TextBlock Text="*" IsVisible="{Binding HasUnsavedChanges, Converter={StaticResource EqualsConverter}, ConverterParameter=True}" />
+								<Button Classes="CloseButton"
+									Command="{Binding $parent[views:DesktopMainView].DataContext.CloseDocumentCommand}"
+									CommandParameter="{Binding}"
+									Padding="0" Margin="8,0,0,4"
+									
+									Width="20" Height="20">
+
+									<materialIcons:MaterialIcon Kind="WindowClose"
+															   IconSize="8"
+															   HorizontalAlignment="Center"
+															   VerticalAlignment="Center"/>
+
+								</Button>
+
+							</StackPanel>
+
+						</DataTemplate>
+					</TabControl.ItemTemplate>
+					<TabControl.ContentTemplate>
+						<DataTemplate DataType="vm:DocumentViewModel">
+							<views:LayoutDocumentView DataContext="{Binding}" />
+						</DataTemplate>
+					</TabControl.ContentTemplate>
+
+					<TabControl.Styles>
+	
+						<Style Selector="TabItem:pointerover">
+							<!--<Setter Property="Background" Value="Red" />-->
+						</Style>
+						<Style Selector="TabItem">
+							<Setter Property="Margin" Value="0,0,3,0" />
+							<Setter Property="CornerRadius" Value="1,1,0,0" />
+						</Style>
+						<Style Selector="TabItem:not(:selected) Button.CloseButton">
+							<Setter Property="Opacity" Value="0"/>
+							<Setter Property="IsHitTestVisible" Value="False"/>
+						</Style>
+						<Style Selector="TabItem:not(:selected):pointerover Button.CloseButton">
+							<Setter Property="Opacity" Value="1"/>
+							<Setter Property="IsHitTestVisible" Value="True"/>
+						</Style>
+						<Style Selector="TabItem:selected Button.CloseButton">
+							<Setter Property="Opacity" Value="1"/>
+							<Setter Property="IsHitTestVisible" Value="True"/>
+						</Style>
+					</TabControl.Styles>
+				</TabControl>
+			</Grid>
+		</DockPanel>
+	</Border>
+
+</UserControl>

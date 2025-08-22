@@ -13,7 +13,7 @@
   <Design.PreviewWith>
     <StackPanel Width="200" Spacing="4">      
         <StackPanel Background="{DynamicResource SystemRegionBrush}">
-          <controls:SvgIcon SvgImage="/Assets/LeftHandedLayout.svg" />
+          <controls:SvgIcon SvgImage="/Assets/Icons/StringIcon.svg" Foreground="Red" />
         </StackPanel>
     </StackPanel>
   </Design.PreviewWith>

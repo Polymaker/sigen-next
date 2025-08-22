@@ -1,0 +1,126 @@
+{
+  "NumberOfStrings": 4,
+  "InstrumentType": "ElectricGuitar",
+  "StringConfigurations": [
+    {
+      "$type": "Group",
+      "Spacing": "2mm",
+      "Strings": [
+        {
+          "Gauge": "0.04in",
+          "Tuning": {
+            "Cents": 0,
+            "Ratio": 0
+          }
+        },
+        {
+          "Gauge": "0.04in",
+          "Tuning": {
+            "Cents": 0,
+            "Ratio": 0
+          }
+        }
+      ]
+    },
+    {
+      "$type": "Group",
+      "Spacing": "1.75mm",
+      "Strings": [
+        {
+          "Gauge": "0.026in",
+          "Tuning": {
+            "Cents": 0,
+            "Ratio": 0
+          }
+        },
+        {
+          "Gauge": "0.026in",
+          "Tuning": {
+            "Cents": 0,
+            "Ratio": 0
+          }
+        }
+      ]
+    },
+    {
+      "$type": "Group",
+      "Spacing": "1.6mm",
+      "Strings": [
+        {
+          "Gauge": "0.016in",
+          "Tuning": {
+            "Cents": 0,
+            "Ratio": 0
+          }
+        },
+        {
+          "Gauge": "0.016in",
+          "Tuning": {
+            "Cents": 0,
+            "Ratio": 0
+          }
+        }
+      ],
+      "Frets": {
+        "StartingFret": null,
+        "NumberOfFrets": 19,
+        "Intervals": null
+      }
+    },
+    {
+      "$type": "Group",
+      "Spacing": "1.5mm",
+      "Strings": [
+        {
+          "Gauge": "0.011in",
+          "Tuning": {
+            "Cents": 0,
+            "Ratio": 0
+          }
+        },
+        {
+          "Gauge": "0.011in",
+          "Tuning": {
+            "Cents": 0,
+            "Ratio": 0
+          }
+        }
+      ],
+      "Frets": {
+        "StartingFret": null,
+        "NumberOfFrets": 22,
+        "Intervals": null
+      }
+    }
+  ],
+  "Margin": {
+    "NutTreble": "2.5mm",
+    "NutBass": "2.5mm",
+    "BridgeTreble": "2.5mm",
+    "BridgeBass": "2.5mm",
+    "CompensateForStrings": true
+  },
+  "NutSpacing": {
+    "SpacingMode": "Proportional",
+    "CenterAlignment": "OuterStrings",
+    "StringDistances": [
+      "7.5mm"
+    ]
+  },
+  "BridgeSpacing": {
+    "SpacingMode": "CenterToCenter",
+    "CenterAlignment": "OuterStrings",
+    "StringDistances": [
+      "10.5mm"
+    ]
+  },
+  "ScaleLength": {
+    "CalculationMethod": "AlongFingerboard",
+    "Mode": "Single",
+    "SingleScale": "13.875in",
+    "BassTrebleSkew": null
+  },
+  "NumberOfFrets": 18,
+  "LeftHanded": false,
+  "StringSetId": null
+}

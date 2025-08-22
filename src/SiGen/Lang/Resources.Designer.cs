@@ -403,6 +403,15 @@ namespace SiGen.Lang {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to String Group.
+        /// </summary>
+        public static string StringGroupLabel {
+            get {
+                return ResourceManager.GetString("StringGroupLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to String.
         /// </summary>
         public static string StringLabel {
