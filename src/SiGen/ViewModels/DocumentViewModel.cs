@@ -4,7 +4,9 @@ using SiGen.Layouts;
 using SiGen.Layouts.Builders;
 using SiGen.Layouts.Configuration;
 using SiGen.Measuring;
+using SiGen.Services;
 using SiGen.UI.LayoutViewer;
+using SiGen.ViewModels.EditorPanels;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -14,7 +16,7 @@ using System.Threading.Tasks;
 
 namespace SiGen.ViewModels
 {
-    public partial class DocumentViewModel : ObservableObject
+    public partial class LayoutDocumentViewModel : ObservableObject, ILayoutDocumentContext, IDocumentTabViewModel
     {
         [ObservableProperty]
         private string title;
@@ -31,6 +33,8 @@ namespace SiGen.ViewModels
         [ObservableProperty]
         public partial StringedInstrumentLayout? Layout { get; private set; }
 
+        public event EventHandler? LayoutChanged;
+
         #region Layout Viewer Properties
 
         [ObservableProperty]
@@ -45,30 +49,57 @@ namespace SiGen.ViewModels
         [ObservableProperty]
         private UnitMode layoutUnitMode = UnitMode.Metric;
 
+        public bool IsZoomToFit { get; set; } = true;
+
         #endregion
 
-        public DocumentViewModel(string title, string? filePath, InstrumentLayoutConfiguration configuration)
+        private List<EditorPanelViewModelBase> PanelViewModels = new();
+
+        public IInstrumentValuesProvider? InstrumentValuesProvider { get; private set; }
+
+        string? IDocumentTabViewModel.TabToolTip => FilePath;
+
+        public bool IsBindingPanels { get; set; } = false;
+
+        public LayoutDocumentViewModel(string title, string? filePath, InstrumentLayoutConfiguration configuration)
         {
             this.title = title;
             this.filePath = filePath;
             Configuration = configuration;
+            InstrumentValuesProvider = new InstrumentValuesProviderFactory().CreateProvider(Configuration.InstrumentType);
+            InitializePanelViewModels();
         }
 
-        protected void UpdateConfiguration(InstrumentLayoutConfiguration newConfig)
+        private void InitializePanelViewModels()
         {
-            Configuration = newConfig;
-            HasUnsavedChanges = true;
+            GetType().Assembly.GetTypes()
+                .Where(t => t.IsSubclassOf(typeof(EditorPanelViewModelBase)) && !t.IsAbstract)
+                .ToList()
+                .ForEach(t =>
+                {
+                    if (Activator.CreateInstance(t) is EditorPanelViewModelBase panel)
+                    {
+                        panel.AssignContext(this);
+                        PanelViewModels.Add(panel);
+                    }
+                });
         }
+
+        public T? GetPanelViewModel<T>() where T : EditorPanelViewModelBase
+        {
+            return PanelViewModels.OfType<T>().FirstOrDefault();
+        }
+
 
         partial void OnConfigurationChanged(InstrumentLayoutConfiguration value)
         {
             RebuildLayout();
         }
 
-        partial void OnLayoutZoomChanging(double oldValue, double newValue)
-        {
-            Trace.WriteLine($"{Title} zoom changing from {oldValue} to {newValue}");
-        }
+        //partial void OnLayoutZoomChanging(double oldValue, double newValue)
+        //{
+        //    Trace.WriteLine($"{Title} zoom changing from {oldValue} to {newValue}");
+        //}
 
         private void RebuildLayout()
         {
@@ -80,6 +111,58 @@ namespace SiGen.ViewModels
             else
             {
                 //Layout = null;
+            }
+        }
+
+        partial void OnLayoutChanged(StringedInstrumentLayout? value)
+        {
+            LayoutChanged?.Invoke(this, EventArgs.Empty);
+        }
+
+        public void UpdateConfiguration(string reason, Action<InstrumentLayoutConfiguration> updateAction)
+        {
+            if (IsBindingPanels)
+                return;
+
+            int numberOfStrings = Configuration.NumberOfStrings;
+            var instrumentType = Configuration.InstrumentType;
+            updateAction(Configuration);
+            HasUnsavedChanges = true;
+            if (Configuration.NumberOfStrings != numberOfStrings)
+            {
+                NotifyNumberOfStringsChanged();
+            }
+            if (Configuration.InstrumentType != instrumentType)
+            {
+                InstrumentValuesProvider = new InstrumentValuesProviderFactory().CreateProvider(Configuration.InstrumentType);
+                NotifyInstrumentTypeChanged();
+            }
+
+            NotifyConfigurationChanged();
+            RebuildLayout();
+        }
+
+        private void NotifyConfigurationChanged()
+        {
+            foreach (var panel in PanelViewModels)
+            {
+                panel.NotifyConfigurationChanged();
+            }
+        }
+
+        private void NotifyNumberOfStringsChanged()
+        {
+            foreach (var panel in PanelViewModels)
+            {
+                panel.NotifyNumberOfStringsChanged();
+            }
+        }
+
+        private void NotifyInstrumentTypeChanged()
+        {
+            foreach (var panel in PanelViewModels)
+            {
+                panel.NotifyInstrumentTypeChanged();
             }
         }
     }

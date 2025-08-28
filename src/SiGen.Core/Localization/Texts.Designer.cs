@@ -115,6 +115,60 @@ namespace SiGen.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Fingerboard edges.
+        /// </summary>
+        public static string LayoutCenterAlignment_Fingerboard {
+            get {
+                return ResourceManager.GetString("LayoutCenterAlignment.Fingerboard", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Manual.
+        /// </summary>
+        public static string LayoutCenterAlignment_Manual {
+            get {
+                return ResourceManager.GetString("LayoutCenterAlignment.Manual", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Middle strings.
+        /// </summary>
+        public static string LayoutCenterAlignment_MiddleStrings {
+            get {
+                return ResourceManager.GetString("LayoutCenterAlignment.MiddleStrings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Outer strings.
+        /// </summary>
+        public static string LayoutCenterAlignment_OuterStrings {
+            get {
+                return ResourceManager.GetString("LayoutCenterAlignment.OuterStrings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Symmetric fingerboard.
+        /// </summary>
+        public static string LayoutCenterAlignment_SymmetricFingerboard {
+            get {
+                return ResourceManager.GetString("LayoutCenterAlignment.SymmetricFingerboard", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Symmetric strings.
+        /// </summary>
+        public static string LayoutCenterAlignment_SymmetricStrings {
+            get {
+                return ResourceManager.GetString("LayoutCenterAlignment.SymmetricStrings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A.
         /// </summary>
         public static string NoteName_A {
@@ -223,6 +277,33 @@ namespace SiGen.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Narrow.
+        /// </summary>
+        public static string Preset_Narrow {
+            get {
+                return ResourceManager.GetString("Preset_Narrow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Standard.
+        /// </summary>
+        public static string Preset_Standard {
+            get {
+                return ResourceManager.GetString("Preset_Standard", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Wide.
+        /// </summary>
+        public static string Preset_Wide {
+            get {
+                return ResourceManager.GetString("Preset_Wide", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Multiscale.
         /// </summary>
         public static string ScaleLengthMode_Multiscale {
@@ -300,6 +381,33 @@ namespace SiGen.Localization {
         public static string StringSpacingManualAlignmentRatioNotSet {
             get {
                 return ResourceManager.GetString("StringSpacingManualAlignmentRatioNotSet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Centered / Equal.
+        /// </summary>
+        public static string StringSpacingMode_CenterToCenter {
+            get {
+                return ResourceManager.GetString("StringSpacingMode.CenterToCenter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Manual.
+        /// </summary>
+        public static string StringSpacingMode_Manual {
+            get {
+                return ResourceManager.GetString("StringSpacingMode.Manual", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Proportional.
+        /// </summary>
+        public static string StringSpacingMode_Proportional {
+            get {
+                return ResourceManager.GetString("StringSpacingMode.Proportional", resourceCulture);
             }
         }
         

@@ -6,7 +6,9 @@ using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using Avalonia.Media;
 using Avalonia.Reactive;
+using Avalonia.Styling;
 using Avalonia.Threading;
+using Material.Colors.ColorManipulation;
 using SiGen.Layouts;
 using SiGen.Layouts.Elements;
 using SiGen.Maths;
@@ -171,9 +173,7 @@ public partial class LayoutViewerControl : UserControl, ILayoutViewerContext
 
             _zoomTransform.ScaleX = newZoom;
             _zoomTransform.ScaleY = newZoom * -1d;
-
-            if (Math.Abs(fitToViewZoom - newZoom) > 0.001 && Translation.X == 0 && Translation.Y == 0)
-                isZoomToFit = false;
+            IsZoomToFit = Math.Abs(fitToViewZoom - newZoom) <= 0.001 && Translation.X == 0 && Translation.Y == 0;
 
             OnZoomChanged();
         }
@@ -181,9 +181,7 @@ public partial class LayoutViewerControl : UserControl, ILayoutViewerContext
         {
             _translateTransform.X = change.GetNewValue<Point>().X;
             _translateTransform.Y = change.GetNewValue<Point>().Y;
-
-            if (Math.Abs(fitToViewZoom - Zoom) > 0.001 && Translation.X == 0 && Translation.Y == 0)
-                isZoomToFit = false;
+            IsZoomToFit = Math.Abs(fitToViewZoom - Zoom) <= 0.001 && Translation.X == 0 && Translation.Y == 0;
 
             OnTranslationChanged();
         }
@@ -201,9 +199,9 @@ public partial class LayoutViewerControl : UserControl, ILayoutViewerContext
             
             CalculateZoomToFit();
 
-            if (isZoomToFit)
+            if (IsZoomToFit)
             {
-                isZoomToFit = true;
+                IsZoomToFit = true;
                 IsAssigningLayout = false;
                 Zoom = fitToViewZoom;
             }
@@ -232,7 +230,7 @@ public partial class LayoutViewerControl : UserControl, ILayoutViewerContext
             CalculateTranslationBounds();
             CreateLayoutVisualsAndOverlays();
             CalculateZoomToFit();
-            if (isZoomToFit)
+            if (IsZoomToFit)
             {
                 Zoom = fitToViewZoom;
             }
@@ -255,7 +253,7 @@ public partial class LayoutViewerControl : UserControl, ILayoutViewerContext
 
         CalculateZoomToFit();
 
-        if (isZoomToFit)
+        if (IsZoomToFit)
         {
             Zoom = fitToViewZoom;
         }
@@ -271,7 +269,7 @@ public partial class LayoutViewerControl : UserControl, ILayoutViewerContext
     private const double ZoomFactorStep = 1.1;
     private Point _lastMousePosition;
     private bool _isPanning;
-    private bool isZoomToFit = true;
+    public bool IsZoomToFit { get; private set; } = true;
     private bool isZooming = false;
     private double minimumZoom = 0.5;
     private double maximumZoom = 2.0;
@@ -343,7 +341,7 @@ public partial class LayoutViewerControl : UserControl, ILayoutViewerContext
 
     public void ResetZoomAndTranslation()
     {
-        isZoomToFit = true;
+        IsZoomToFit = true;
         Zoom = fitToViewZoom;
         Translation = new Point(0, 0);
     }
@@ -890,6 +888,16 @@ public partial class LayoutViewerControl : UserControl, ILayoutViewerContext
         foreach (var overlay in OverlayCanvas.Children.OfType<LayoutOverlayBase>())
         {
             overlay.UpdateTheme(RenderSettings);
+        }
+
+        double luminance = RenderSettings.BackgroundColor.RelativeLuminance();
+        if (luminance > 0.5)
+        {
+            ZoomPanelThemeVariant.RequestedThemeVariant = ThemeVariant.Light;
+        }
+        else
+        {
+            ZoomPanelThemeVariant.RequestedThemeVariant = ThemeVariant.Dark;
         }
     }
 }

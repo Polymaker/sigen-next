@@ -17,9 +17,11 @@ namespace SiGen.ViewModels.Design
 
         public bool HasUnsavedChanges { get; private set; }
 
-        public StringedInstrumentLayout? CurrentLayout { get; private set; }
+        public StringedInstrumentLayout? Layout { get; private set; }
 
         public IInstrumentValuesProvider? InstrumentValuesProvider { get; }
+
+        public string? FilePath => string.Empty;
 
         public MockLayoutDocumentContext()
         {
@@ -38,11 +40,11 @@ namespace SiGen.ViewModels.Design
             Configuration.NutSpacing.CenterAlignment = Layouts.Data.LayoutCenterAlignment.OuterStrings;
             Configuration.BridgeSpacing.StringDistances.Add(Measuring.Measure.Mm(10.5));
             Configuration.BridgeSpacing.CenterAlignment = Layouts.Data.LayoutCenterAlignment.OuterStrings;
-            Configuration.Margin.SetAll(Measuring.Measure.Mm(3.25));
+            Configuration.Fingerboard.SetAllMargins(Measuring.Measure.Mm(3.25));
             Configuration.InitializeStringConfigs();
 
             var result = LayoutBuilder.Build(Configuration);
-            CurrentLayout = result.Layout;
+            Layout = result.Layout;
         }
 
         public void UpdateConfiguration(string reason, Action<InstrumentLayoutConfiguration> updateAction)

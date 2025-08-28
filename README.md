@@ -6,7 +6,8 @@
 
 ## Overview
 
-SiGen is a modern application for designing and configuring stringed instrument layouts. It provides advanced tools for luthiers and builders to create custom fretboards, string spacings, scale lengths, and more, supporting a wide range of instrument types and tunings.
+SiGen is a modern application for designing and configuring stringed instruments fretboards/fingerboards. 
+It provides advanced tools for luthiers and builders to create custom fretboards, string spacings, scale lengths, and more, supporting a wide range of instrument types and tunings.
 
 ## Features
 
@@ -16,6 +17,7 @@ SiGen is a modern application for designing and configuring stringed instrument 
 - Advanced fret calculation and compensation
 - Multi-language support
 - Intuitive user interface for instrument design
+- Export layouts to SVG and DXF formats
 
 ## Preview
 Here is a multiscale layout with 2 bass strings and 5 guitar strings:

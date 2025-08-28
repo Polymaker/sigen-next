@@ -30,6 +30,9 @@ public class CustomFormField : TemplatedControl, INotifyPropertyChanged
     public static readonly StyledProperty<object?> InfoProperty =
         AvaloniaProperty.Register<CustomFormField, object?>(nameof(Info));
 
+    public static readonly StyledProperty<bool> ShowInfoProperty =
+        AvaloniaProperty.Register<CustomFormField, bool>(nameof(ShowInfo), true);
+
     //public static readonly StyledProperty<bool> ShowHelpProperty =
     //    AvaloniaProperty.Register<CustomFormField, bool>(nameof(ShowHelp), true);
 
@@ -56,6 +59,12 @@ public class CustomFormField : TemplatedControl, INotifyPropertyChanged
     {
         get => GetValue(InputProperty);
         set => SetValue(InputProperty, value);
+    }
+
+    public bool ShowInfo
+    {
+        get => GetValue(ShowInfoProperty);
+        set => SetValue(ShowInfoProperty, value);
     }
 
     public HorizontalAlignment InputHorizontalAlignment
@@ -117,9 +126,13 @@ public class CustomFormField : TemplatedControl, INotifyPropertyChanged
             //helpButton.IsVisible = Help != null;
         }
         infoButton = e.NameScope.Find<Button>("PART_InfoButton");
-        if (infoButton != null)
-            infoButton.Click += InfoButton_Click;
 
+        if (infoButton != null)
+        {
+            infoButton.Click += InfoButton_Click;
+            infoButton.IsVisible = ShowInfo && Info != null;
+        }
+        
         ConfigureHelpFlyout();
         ConfigureInfoFlyout();
         SetContainersDock();
@@ -165,6 +178,8 @@ public class CustomFormField : TemplatedControl, INotifyPropertyChanged
 
         if (change.Property == HelpProperty) ConfigureHelpFlyout();
         if (change.Property == InfoProperty) ConfigureInfoFlyout();
+        if ((change.Property == InfoProperty || change.Property == ShowInfoProperty) && infoButton != null)
+            infoButton.IsVisible = ShowInfo && Info != null;
 
         if (change.Property == OrientationProperty && labelContainer != null && inputContainer != null) SetContainersDock();
     }

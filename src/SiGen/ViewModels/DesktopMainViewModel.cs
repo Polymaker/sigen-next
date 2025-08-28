@@ -1,9 +1,12 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using Avalonia.Styling;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using SiGen.Layouts.Configuration;
 using SiGen.Serialization;
 using SiGen.Services;
+using SiGen.Settings;
 using SiGen.Utilities;
+using SiGen.ViewModels.Dialogs;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -15,27 +18,45 @@ using System.Windows.Input;
 
 namespace SiGen.ViewModels
 {
-    public partial class DesktopMainViewModel : ObservableObject
+    public partial class DesktopMainViewModel : ObservableObject, IDocumentManager
     {
-        private readonly IFileDialogService fileDialogService;
+        private readonly IDialogService dialogService;
+        private readonly ISettingsService settingsService;
 
+        //public ICommand NewCommand { get; }
+        public ICommand OpenHomeCommand { get; }
+        public ICommand OpenFileCommand { get; }
         public RelayCommand SaveCommand { get; }
         public RelayCommand SaveAsCommand { get; }
         public ICommand OpenCommand { get; }
-        public RelayCommand<DocumentViewModel> CloseDocumentCommand { get; }
+        public ICommand TestCommand { get; }
+        public RelayCommand<IDocumentTabViewModel> CloseDocumentCommand { get; }
 
-        public ObservableCollection<DocumentViewModel> OpenDocuments { get; } = new ObservableCollection<DocumentViewModel>();
+        public ObservableCollection<IDocumentTabViewModel> OpenDocuments { get; } = new ObservableCollection<IDocumentTabViewModel>();
+
+        public List<RecentFileMenuModel> RecentFiles { get; } = new();
 
         [ObservableProperty]
-        private DocumentViewModel? selectedDocument;
+        private IDocumentTabViewModel? selectedDocument;
 
-        public DesktopMainViewModel(IFileDialogService fileDialogService)
+        public DesktopMainViewModel(IDialogService dialogService, ISettingsService settingsService)
         {
-            this.fileDialogService = fileDialogService;
+            this.dialogService = dialogService;
+            this.settingsService = settingsService;
             SaveCommand = new RelayCommand(OnSave, CanSave);
             SaveAsCommand = new RelayCommand(OnSaveAs, CanSave);
             OpenCommand = new RelayCommand(OnOpen);
-            CloseDocumentCommand = new RelayCommand<DocumentViewModel>(CloseDocument, CanCloseDocument);
+            CloseDocumentCommand = new RelayCommand<IDocumentTabViewModel>(CloseDocument, CanCloseDocument);
+            TestCommand = new RelayCommand(() =>
+            {
+                // For testing purposes only
+
+                App.Current!.RequestedThemeVariant = ThemeVariant.Light;
+            });
+            OpenHomeCommand = new RelayCommand(OpenHomePage);
+            OpenFileCommand = new RelayCommand<string>(OpenDocumentFile);
+
+            RebuildRecentFilesMenu();
         }
 
         //public DesktopMainViewModel() : this(new DummyFileDialogService())
@@ -46,51 +67,92 @@ namespace SiGen.ViewModels
         //    SelectedDocument = OpenDocuments.FirstOrDefault();
         //}
 
-        partial void OnSelectedDocumentChanged(DocumentViewModel? value)
+        public void ReorderDocuments(int oldIndex, int newIndex)
+        {
+            if (oldIndex < 0 || oldIndex >= OpenDocuments.Count || newIndex < 0 || newIndex >= OpenDocuments.Count)
+                throw new ArgumentOutOfRangeException();
+            if (oldIndex == newIndex)
+                return;
+            var doc = OpenDocuments[oldIndex];
+            OpenDocuments.RemoveAt(oldIndex);
+            OpenDocuments.Insert(newIndex, doc);
+            SelectedDocument = doc;
+        }
+
+        partial void OnSelectedDocumentChanged(IDocumentTabViewModel? value)
         {
             SaveCommand.NotifyCanExecuteChanged();
             SaveAsCommand.NotifyCanExecuteChanged();
+            if (SelectedDocument is HomePageViewModel home)
+            {
+                //todo: only refresh if the recent files have changed since the last time the home page was shown
+                //home.ReloadRecentDocuments();
+            }
         }
 
-        private bool CanSave() => SelectedDocument != null;
+        private bool CanSave() => SelectedDocument != null && SelectedDocument is LayoutDocumentViewModel;
 
-        private bool CanCloseDocument(DocumentViewModel? document) => document != null;
+        private bool CanCloseDocument(IDocumentTabViewModel? document) => document != null;
 
         private void OnSave()
         {
-            if (SelectedDocument == null)
+            if (SelectedDocument is not LayoutDocumentViewModel layoutDocument)
                 return;
 
-            if (string.IsNullOrEmpty(SelectedDocument.FilePath))
+            if (string.IsNullOrEmpty(layoutDocument.FilePath))
                 OnSaveAs();
             else
-                SaveDocument(SelectedDocument, SelectedDocument.FilePath);
+                SaveDocument(layoutDocument, layoutDocument.FilePath);
         }
 
         private async void OnSaveAs()
         {
-            if (SelectedDocument == null)
+            if (SelectedDocument is not LayoutDocumentViewModel layoutDocument)
                 return;
 
-            var filePath = await fileDialogService.ShowSaveFileDialogAsync(defaultFileName: SelectedDocument.Title, filters: [
+            var filePath = await dialogService.ShowSaveFileDialogAsync(defaultFileName: SelectedDocument.Title, filters: [
                 new FileDialogFilter {
                     Name = "SiGen Layout Files",
                     Extensions = new List<string> { "json" }
                 }]);
 
             if (!string.IsNullOrEmpty(filePath))
-                SaveDocument(SelectedDocument, filePath);
+                SaveDocument(layoutDocument, filePath);
         }
 
-        private void SaveDocument(DocumentViewModel document, string filePath)
+        private void SaveDocument(LayoutDocumentViewModel document, string filePath)
         {
-            var options = new JsonSerializerOptions();
-            options.WriteIndented = true;
-            options.Converters.Add(new MeasureConverter());
-            options.Converters.Add(new BaseStringConfigurationConverter());
-            using var stream = System.IO.File.Create(filePath);
-            JsonSerializer.Serialize(stream, document.Configuration, options);
-            document.Title = System.IO.Path.GetFileNameWithoutExtension(filePath);
+            try
+            {
+                var options = new JsonSerializerOptions();
+                options.WriteIndented = true;
+                options.Converters.Add(new MeasureConverter());
+                options.Converters.Add(new BaseStringConfigurationConverter());
+                using var stream = System.IO.File.Create(filePath);
+                JsonSerializer.Serialize(stream, document.Configuration, options);
+                document.Title = System.IO.Path.GetFileNameWithoutExtension(filePath);
+                document.HasUnsavedChanges = false;
+            }
+            catch
+            {
+
+            }
+        }
+
+        public void OpenHomePage()
+        {
+            
+            var homeDoc = OpenDocuments.OfType<HomePageViewModel>().FirstOrDefault();
+            if (homeDoc == null)
+            {
+                var homePage = new HomePageViewModel(settingsService, this);
+                OpenDocuments.Insert(0, homePage);
+                SelectedDocument = homePage;
+            }
+            else
+            {
+                SelectedDocument = homeDoc;
+            }
         }
 
         #region Open layout documents
@@ -98,7 +160,7 @@ namespace SiGen.ViewModels
         private async void OnOpen()
         {
             // Example basic implementation using fileDialogService
-            var filePath = await fileDialogService.ShowOpenFileDialogAsync("Open layout", [
+            var filePath = await dialogService.ShowOpenFileDialogAsync("Open layout", [
                 new FileDialogFilter {
                     Name = "SiGen Layout Files",
                     Extensions = new List<string> { "json" }
@@ -114,14 +176,16 @@ namespace SiGen.ViewModels
                 OpenDocumentFile(filePath);
         }
 
-        public void OpenDocumentFile(string filePath)
+        public void OpenDocumentFile(string? filePath)
         {
             if (string.IsNullOrEmpty(filePath))
                 throw new ArgumentNullException(nameof(filePath));
+
             // Check if the document is already open, if so, just select it
-            if (OpenDocuments.Any(d => string.Equals(d.FilePath, filePath, StringComparison.OrdinalIgnoreCase)))
+            var existingDoc = OpenDocuments.OfType<LayoutDocumentViewModel>().FirstOrDefault(d => string.Equals(d.FilePath, filePath, StringComparison.OrdinalIgnoreCase));
+            if (existingDoc != null)
             {
-                SelectedDocument = OpenDocuments.First(d => string.Equals(d.FilePath, filePath, StringComparison.OrdinalIgnoreCase));
+                SelectedDocument = existingDoc;
                 return;
             }
 
@@ -142,15 +206,19 @@ namespace SiGen.ViewModels
             if (config == null) return;
 
 
-            var document = new DocumentViewModel(
+            var document = new LayoutDocumentViewModel(
                 System.IO.Path.GetFileNameWithoutExtension(filePath),
                 filePath,
                 config);
+
+            settingsService.AddRecentFile(document);
             OpenDocuments.Add(document);
             SelectedDocument = document;
+
+            RebuildRecentFilesMenu();
         }
 
-        public void OpenDocument(DocumentViewModel document)
+        public void OpenDocument(LayoutDocumentViewModel document)
         {
             if (document == null)
                 throw new ArgumentNullException(nameof(document));
@@ -162,12 +230,26 @@ namespace SiGen.ViewModels
             SelectedDocument = document;
         }
 
-        public void CloseDocument(DocumentViewModel? document)
+        public async void CloseDocument(IDocumentTabViewModel? document)
         {
             if (document == null)
                 throw new ArgumentNullException(nameof(document));
             if (OpenDocuments.Contains(document))
             {
+                if (document is LayoutDocumentViewModel layoutDocument && document.HasUnsavedChanges)
+                {
+                    var result = await dialogService.ShowSaveChangesAsync(document.Title);
+                    if (result == SaveChangesResult.Cancel)
+                        return;
+
+                    if (result == SaveChangesResult.Save)
+                    {
+                        OnSave();
+                        if (string.IsNullOrEmpty(layoutDocument.FilePath))
+                            return;
+                    }
+                }
+                
                 OpenDocuments.Remove(document);
                 if (SelectedDocument == document)
                 {
@@ -179,6 +261,32 @@ namespace SiGen.ViewModels
 
         #endregion
 
+        #region Menu handling
 
+        private void RebuildRecentFilesMenu()
+        {
+            RecentFiles.Clear();
+            RecentFiles.AddRange(settingsService.Settings.RecentFiles.Take(10).Select((f, i) => new RecentFileMenuModel(i + 1, f, OpenDocumentFile)));
+            OnPropertyChanged(nameof(RecentFiles));
+        }
+
+        #endregion
+    }
+
+    public class RecentFileMenuModel
+    {
+        public int Index { get; }
+        public RecentFileModel RecentFile { get; }
+        public string FilePath => RecentFile.FilePath;
+        public string DisplayName => RecentFile.DisplayName;
+        public DateTime LastOpened => RecentFile.LastOpened;
+        public ICommand OpenCommand { get; }
+
+        public RecentFileMenuModel(int index, RecentFileModel recentFile, Action<string?> openCommand)
+        {
+            Index = index;
+            RecentFile = recentFile ?? throw new ArgumentNullException(nameof(recentFile));
+            OpenCommand = new RelayCommand(() => openCommand(recentFile.FilePath), ()=> true);
+        }
     }
 }

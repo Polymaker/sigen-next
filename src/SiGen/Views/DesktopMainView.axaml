@@ -8,9 +8,11 @@
 			 x:DataType="vm:DesktopMainViewModel"
 			 xmlns:conv="clr-namespace:SiGen.Converters;assembly=SiGen"
 			 xmlns:views="clr-namespace:SiGen.Views"
+			 xmlns:ctrl="using:SiGen.UI.Controls"
 			 Design.DataContext="{x:Static vm:DesignData.DesktopMainViewModel}"
 			 xmlns:materialIcons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
-
+			 xmlns:settings="using:SiGen.Settings"
+			 Name="MainView"
 			 >
 	<UserControl.Resources>
 		
@@ -51,13 +53,34 @@
 			<Menu DockPanel.Dock="Top" Background="{DynamicResource MenuBackground}">
 				<MenuItem Header="_File">
 					<MenuItem Header="_Open..." Command="{Binding OpenCommand}" />
+					<MenuItem Header="_Home Page" Command="{Binding OpenHomeCommand}" />
+					<Separator/>
 					<MenuItem Header="_Save..." Command="{Binding SaveCommand}" />
 					<MenuItem Header="_Save As..." Command="{Binding SaveAsCommand}" />
+					<Separator/>
+					<MenuItem Header="Recent files" x:Name="RecentFilesMenu" ItemsSource="{Binding RecentFiles}">
+						<MenuItem.ItemTemplate>
+							<DataTemplate x:DataType="vm:RecentFileMenuModel">
+								<MenuItem Padding="0"
+										  ToolTip.Tip="{Binding FilePath}"
+										  Click="RecentFileMenuItem_Click">
+									<MenuItem.Header>
+										<AccessText >
+											<Run Text="{Binding Index}" />
+											<Run Text=": " />
+											<Run Text="{Binding DisplayName}" />
+										</AccessText>
+									</MenuItem.Header>
+								</MenuItem>
+							</DataTemplate>
+						</MenuItem.ItemTemplate>
+					</MenuItem>
+					
 					<Separator/>
 					<MenuItem Header="_Exit"/>
 				</MenuItem>
 				<MenuItem Header="_Edit">
-					<MenuItem Header="Copy"/>
+					<MenuItem Header="Copy" Command="{Binding TestCommand}"/>
 					<MenuItem Header="Paste"/>
 				</MenuItem>
 				<!--<Menu.Effect>
@@ -65,12 +88,13 @@
 				</Menu.Effect>-->
 			</Menu>
 			<Grid>
-				<TabControl x:Name="DocumentsTabControl" Margin="0,4,0,0"
-							ItemsSource="{Binding OpenDocuments}" 
+				<ctrl:TabControlEx x:Name="DocumentsTabControl" Margin="0,4,0,0"
+							ItemsSource="{Binding OpenDocuments}"
 							SelectedItem="{Binding SelectedDocument, Mode=TwoWay}">
 					<TabControl.ItemTemplate>
-						<DataTemplate>
-							<StackPanel Orientation="Horizontal">
+						<DataTemplate x:DataType="vm:IDocumentTabViewModel">
+
+							<StackPanel Orientation="Horizontal" ToolTip.Tip="{Binding TabToolTip}" >
 								<TextBlock Text="{Binding Title}" />
 								<TextBlock Text="*" IsVisible="{Binding HasUnsavedChanges, Converter={StaticResource EqualsConverter}, ConverterParameter=True}" />
 								<Button Classes="CloseButton"
@@ -88,17 +112,30 @@
 								</Button>
 
 							</StackPanel>
-
 						</DataTemplate>
 					</TabControl.ItemTemplate>
-					<TabControl.ContentTemplate>
-						<DataTemplate DataType="vm:DocumentViewModel">
+					<TabControl.DataTemplates>
+						<DataTemplate x:DataType="vm:LayoutDocumentViewModel">
 							<views:LayoutDocumentView DataContext="{Binding}" />
 						</DataTemplate>
-					</TabControl.ContentTemplate>
+						<DataTemplate x:DataType="vm:HomePageViewModel">
+							<views:HomePageView DataContext="{Binding}" />
+						</DataTemplate>
+					</TabControl.DataTemplates>
+						<!--<TabControl.ContentTemplates>
+						<DataTemplates>
+							<DataTemplate DataType="vm:DocumentViewModel">
+								<views:LayoutDocumentView DataContext="{Binding}" />
+							</DataTemplate>
+							<DataTemplate x:DataType="vm:HomePageViewModel">
+
+								<views:HomePageView DataContext="{Binding}" />
+							</DataTemplate>
+						</DataTemplates>
+					</TabControl.ContentTemplates>-->
 
 					<TabControl.Styles>
-	
+
 						<Style Selector="TabItem:pointerover">
 							<!--<Setter Property="Background" Value="Red" />-->
 						</Style>
@@ -119,7 +156,7 @@
 							<Setter Property="IsHitTestVisible" Value="True"/>
 						</Style>
 					</TabControl.Styles>
-				</TabControl>
+				</ctrl:TabControlEx>
 			</Grid>
 		</DockPanel>
 	</Border>

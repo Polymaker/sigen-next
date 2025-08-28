@@ -18,19 +18,17 @@ namespace SiGen.ViewModels.EditorPanels
     {
         protected InstrumentLayoutConfiguration? Configuration => LayoutDocumentContext?.Configuration;
 
-        private int numberOfStringsCached;
-        private SiGen.Data.Common.InstrumentType? cachedInstrumentType;
-        protected ILayoutDocumentContext LayoutDocumentContext { get; private set; }
+        public ILayoutDocumentContext LayoutDocumentContext { get; private set; }
 
         public int NumberOfStrings => Configuration?.NumberOfStrings ?? 0;
-
-        public bool HasMadeChanges { get; protected set; }
+        protected bool IsLoading { get; private set; }
 
         public event EventHandler? ConfigurationChanged;
+        public event EventHandler? NumberOfStringsChanged;
+        public event EventHandler? InstrumentTypeChanged;
 
         public EditorPanelViewModelBase()
         {
-            ApplyCommand = new RelayCommand(ApplyChanges, CanApplyChanges);
             LayoutDocumentContext = new MockLayoutDocumentContext(); // For design mode, replace with actual context in production
             //LoadConfiguration(LayoutDocumentContext.Configuration);
             OnConfigurationChanged();
@@ -41,87 +39,75 @@ namespace SiGen.ViewModels.EditorPanels
             //if (LayoutDocumentContext != null)
             //    throw new InvalidOperationException("This panel is already assigned to a document context.");
             LayoutDocumentContext = context ?? throw new ArgumentNullException(nameof(context));
-            NotifyConfigurationChanged();
+            InitializeCore();
         }
 
+        private void InitializeCore()
+        {
+            IsLoading = true;
+            OnInitialize();
+            NotifyConfigurationChanged();
+            IsLoading = false;
+        }
+
+        protected virtual void OnInitialize()
+        {
+            
+        }
+
+        private bool isUpdatingConfig;
 
         public virtual void LoadConfiguration(InstrumentLayoutConfiguration? config)
         {
             
         }
 
-        public virtual void OnNumberOfStringsChanged()
+        protected void UpdateConfiguration(string reason, Action<InstrumentLayoutConfiguration> updateAction)
         {
+            if (IsLoading) return;
+
+            isUpdatingConfig = true;
+            LayoutDocumentContext.UpdateConfiguration(reason, updateAction);
+            isUpdatingConfig = false;
         }
 
-        public virtual void OnInstrumentTypeChanged()
-        {
-        }
+        #region Notify methods
 
         public void NotifyConfigurationChanged()
         {
+            if (isUpdatingConfig)
+                return;
+
             // Notify that the configuration has changed
             ConfigurationChanged?.Invoke(this, EventArgs.Empty);
             OnConfigurationChanged();
         }
 
-
-        // Called when the config is replaced (e.g., after undo/redo)
-        public virtual void OnConfigurationChanged()
+        public void NotifyInstrumentTypeChanged()
         {
-            // Derived panels can override to refresh their state
+            InstrumentTypeChanged?.Invoke(this, EventArgs.Empty);
+            OnInstrumentTypeChanged();
         }
 
-
-
-        #region Apply Changes
-
-        public IRelayCommand ApplyCommand { get; }
-
-        public event EventHandler? ChangesApplied;
-
-        public virtual void ApplyChanges()
+        public void NotifyNumberOfStringsChanged()
         {
-            // Derived panels override to push their state into Configuration
-            ChangesApplied?.Invoke(this, EventArgs.Empty);
-        }
-
-        protected virtual bool CanApplyChanges()
-        {
-            // Derived panels can override to control when ApplyChanges is enabled
-            return true;
-        }
-
-        protected void NotifyCanApplyChangesChanged()
-        {
-            // Notify that the CanExecute state of ApplyCommand may have changed
-            ApplyCommand.NotifyCanExecuteChanged();
-        }
-
-        protected void NotifyLayoutPropertiesChanged()
-        {
-            // Notify that properties have changed, e.g., after user input
-            OnPropertyChanged(nameof(HasMadeChanges));
-            if (!HasMadeChanges)
-            {
-                HasMadeChanges = true;
-                NotifyCanApplyChangesChanged();
-            }
-        }
-
-        public void CancelChanges()
-        {
-            if (Configuration == null) return;
-
-            // Reset changes to the last saved state
-            LoadConfiguration(Configuration);
-            if (HasMadeChanges)
-            {
-                HasMadeChanges = false;
-                NotifyCanApplyChangesChanged();
-            }
+            NumberOfStringsChanged?.Invoke(this, EventArgs.Empty);
+            OnNumberOfStringsChanged();
         }
 
         #endregion
+
+        protected virtual void OnNumberOfStringsChanged()
+        {
+        }
+
+        protected virtual void OnInstrumentTypeChanged()
+        {
+        }
+
+        protected virtual void OnConfigurationChanged()
+        {
+        }
+
     }
 }

@@ -100,7 +100,7 @@ namespace SiGen.Layouts.Builders
             int minimumFrets = Configuration.StringConfigurations.Min(x => x.Frets?.StartingFret ?? 0);
             int maximumFrets = Math.Max(Configuration.StringConfigurations.Max(x => x.Frets?.NumberOfFrets ?? 0), Configuration.NumberOfFrets ?? 0);
 
-            if (maximumFrets == 0) return points;
+            //if (maximumFrets == 0) return points;
 
             for (int i = 0; i < NumberOfStrings; i++)
             {

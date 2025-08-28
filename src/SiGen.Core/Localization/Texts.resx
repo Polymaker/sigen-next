@@ -196,4 +196,40 @@
   <data name="FeetAbbreviation" xml:space="preserve">
     <value>ft</value>
   </data>
+  <data name="StringSpacingMode.Proportional" xml:space="preserve">
+    <value>Proportional</value>
+  </data>
+  <data name="StringSpacingMode.CenterToCenter" xml:space="preserve">
+    <value>Centered / Equal</value>
+  </data>
+  <data name="StringSpacingMode.Manual" xml:space="preserve">
+    <value>Manual</value>
+  </data>
+  <data name="LayoutCenterAlignment.OuterStrings" xml:space="preserve">
+    <value>Outer strings</value>
+  </data>
+  <data name="LayoutCenterAlignment.MiddleStrings" xml:space="preserve">
+    <value>Middle strings</value>
+  </data>
+  <data name="LayoutCenterAlignment.Fingerboard" xml:space="preserve">
+    <value>Fingerboard edges</value>
+  </data>
+  <data name="LayoutCenterAlignment.SymmetricStrings" xml:space="preserve">
+    <value>Symmetric strings</value>
+  </data>
+  <data name="LayoutCenterAlignment.SymmetricFingerboard" xml:space="preserve">
+    <value>Symmetric fingerboard</value>
+  </data>
+  <data name="LayoutCenterAlignment.Manual" xml:space="preserve">
+    <value>Manual</value>
+  </data>
+  <data name="Preset_Narrow" xml:space="preserve">
+    <value>Narrow</value>
+  </data>
+  <data name="Preset_Standard" xml:space="preserve">
+    <value>Standard</value>
+  </data>
+  <data name="Preset_Wide" xml:space="preserve">
+    <value>Wide</value>
+  </data>
 </root>

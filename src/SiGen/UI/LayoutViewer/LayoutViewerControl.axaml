@@ -53,14 +53,17 @@
 	  </Border>
 
 	  <Border Grid.Row="2"  ZIndex="10" Padding="4">
-		  <StackPanel Orientation="Horizontal"
+		  <ThemeVariantScope x:Name="ZoomPanelThemeVariant" RequestedThemeVariant="Default">
+			  <StackPanel Orientation="Horizontal"
 					  HorizontalAlignment="Right"
 					  Spacing="4">
-			  <TextBox x:Name="ZoomTextBox"/>
-			  <Button x:Name="ResetViewButton" ToolTip.Tip="Reset View" Click="ResetViewButton_Click">
-				  <materialIcons:MaterialIcon Kind="ImageFilterCenterFocusStrong" />
-			  </Button>
-		  </StackPanel>
+				  <TextBox x:Name="ZoomTextBox" MinHeight="0" FontSize="12"/>
+				  <Button x:Name="ResetViewButton" ToolTip.Tip="Reset View" Click="ResetViewButton_Click">
+					  <materialIcons:MaterialIcon Kind="ImageFilterCenterFocusStrong" IconSize="18" />
+				  </Button>
+			  </StackPanel>
+		  </ThemeVariantScope>
+
 	  </Border>
 
   </Grid>

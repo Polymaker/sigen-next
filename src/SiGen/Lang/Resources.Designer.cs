@@ -61,15 +61,6 @@ namespace SiGen.Lang {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Skew.
-        /// </summary>
-        public static string Editor_BassTrebleSkew {
-            get {
-                return ResourceManager.GetString("Editor.BassTrebleSkew", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Left handed.
         /// </summary>
         public static string Editor_Handedness_Left {
@@ -93,15 +84,6 @@ namespace SiGen.Lang {
         public static string Editor_Handedness_Select {
             get {
                 return ResourceManager.GetString("Editor.Handedness.Select", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Select whether the instrument layout is for a right-handed or left-handed player..
-        /// </summary>
-        public static string Editor_Handedness_Tooltip {
-            get {
-                return ResourceManager.GetString("Editor.Handedness.Tooltip", resourceCulture);
             }
         }
         
@@ -196,7 +178,7 @@ namespace SiGen.Lang {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Scale Length Mode.
+        ///   Looks up a localized string similar to Mode.
         /// </summary>
         public static string Editor_ScaleLengthMode_Select {
             get {
@@ -219,6 +201,15 @@ namespace SiGen.Lang {
         public static string Editor_ScaleLengthMode_Single_Tooltip {
             get {
                 return ResourceManager.GetString("Editor.ScaleLengthMode.Single.Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fingerboard margins.
+        /// </summary>
+        public static string FingerboardEditorPanel_Header {
+            get {
+                return ResourceManager.GetString("FingerboardEditorPanel.Header", resourceCulture);
             }
         }
         
@@ -250,6 +241,25 @@ namespace SiGen.Lang {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Design, Customize, and Create Instrument Layouts.
+        /// </summary>
+        public static string HomePageView_Header {
+            get {
+                return ResourceManager.GetString("HomePageView.Header", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SiGen helps you design and customize stringed instrument layouts with precision.
+        ///Open a recent file to continue your work, or start a new layout using one of our templates..
+        /// </summary>
+        public static string HomePageView_WelcomText {
+            get {
+                return ResourceManager.GetString("HomePageView.WelcomText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Bass.
         /// </summary>
         public static string InstrumentFamily_Bass {
@@ -264,6 +274,42 @@ namespace SiGen.Lang {
         public static string InstrumentFamily_Guitar {
             get {
                 return ResourceManager.GetString("InstrumentFamily.Guitar", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Instrument orientation.
+        /// </summary>
+        public static string InstrumentInfoEditorPanel_Handedness {
+            get {
+                return ResourceManager.GetString("InstrumentInfoEditorPanel.Handedness", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Instrument Info.
+        /// </summary>
+        public static string InstrumentInfoEditorPanel_Header {
+            get {
+                return ResourceManager.GetString("InstrumentInfoEditorPanel.Header", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Instrument type.
+        /// </summary>
+        public static string InstrumentInfoEditorPanel_InstrumentType {
+            get {
+                return ResourceManager.GetString("InstrumentInfoEditorPanel.InstrumentType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Layout name.
+        /// </summary>
+        public static string InstrumentInfoEditorPanel_LayoutName {
+            get {
+                return ResourceManager.GetString("InstrumentInfoEditorPanel.LayoutName", resourceCulture);
             }
         }
         
@@ -295,15 +341,6 @@ namespace SiGen.Lang {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Electric Bass.
-        /// </summary>
-        public static string InstrumentType_BassGuitar {
-            get {
-                return ResourceManager.GetString("InstrumentType.BassGuitar", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Classical Guitar.
         /// </summary>
         public static string InstrumentType_ClassicalGuitar {
@@ -318,6 +355,15 @@ namespace SiGen.Lang {
         public static string InstrumentType_Custom {
             get {
                 return ResourceManager.GetString("InstrumentType.Custom", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Electric Bass.
+        /// </summary>
+        public static string InstrumentType_ElectricBass {
+            get {
+                return ResourceManager.GetString("InstrumentType.ElectricBass", resourceCulture);
             }
         }
         
@@ -358,11 +404,47 @@ namespace SiGen.Lang {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Scale Length.
+        ///   Looks up a localized string similar to Scale length.
         /// </summary>
         public static string ScaleLength {
             get {
                 return ResourceManager.GetString("ScaleLength", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Skew.
+        /// </summary>
+        public static string ScaleLengthEditorPanel_BassTrebleSkew {
+            get {
+                return ResourceManager.GetString("ScaleLengthEditorPanel.BassTrebleSkew", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Scale length configuration.
+        /// </summary>
+        public static string ScaleLengthEditorPanel_Header {
+            get {
+                return ResourceManager.GetString("ScaleLengthEditorPanel.Header", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Alignment.
+        /// </summary>
+        public static string ScaleLengthEditorPanel_MultiScaleRatio {
+            get {
+                return ResourceManager.GetString("ScaleLengthEditorPanel.MultiScaleRatio", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Mode.
+        /// </summary>
+        public static string ScaleLengthEditorPanel_ScaleLengthMode {
+            get {
+                return ResourceManager.GetString("ScaleLengthEditorPanel.ScaleLengthMode", resourceCulture);
             }
         }
         
@@ -403,7 +485,7 @@ namespace SiGen.Lang {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to String Group.
+        ///   Looks up a localized string similar to String group.
         /// </summary>
         public static string StringGroupLabel {
             get {
@@ -421,11 +503,119 @@ namespace SiGen.Lang {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Strings &amp; Frets.
+        /// </summary>
+        public static string StringsFretsEditorPanel_Header {
+            get {
+                return ResourceManager.GetString("StringsFretsEditorPanel.Header", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Number of frets.
+        /// </summary>
+        public static string StringsFretsEditorPanel_NumberOfFrets {
+            get {
+                return ResourceManager.GetString("StringsFretsEditorPanel.NumberOfFrets", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Number of strings.
+        /// </summary>
+        public static string StringsFretsEditorPanel_NumberOfStrings {
+            get {
+                return ResourceManager.GetString("StringsFretsEditorPanel.NumberOfStrings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Strings.
         /// </summary>
         public static string StringsLabel {
             get {
                 return ResourceManager.GetString("StringsLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Bridge spacing.
+        /// </summary>
+        public static string StringSpacingEditorPanel_BridgeSpacing {
+            get {
+                return ResourceManager.GetString("StringSpacingEditorPanel.BridgeSpacing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Centering.
+        /// </summary>
+        public static string StringSpacingEditorPanel_CenterAlignment {
+            get {
+                return ResourceManager.GetString("StringSpacingEditorPanel.CenterAlignment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Configure….
+        /// </summary>
+        public static string StringSpacingEditorPanel_ConfigureSpacingButton {
+            get {
+                return ResourceManager.GetString("StringSpacingEditorPanel.ConfigureSpacingButton", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to String Spacing &amp; Layout.
+        /// </summary>
+        public static string StringSpacingEditorPanel_Header {
+            get {
+                return ResourceManager.GetString("StringSpacingEditorPanel.Header", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nut spacing.
+        /// </summary>
+        public static string StringSpacingEditorPanel_NutSpacing {
+            get {
+                return ResourceManager.GetString("StringSpacingEditorPanel.NutSpacing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Spacing.
+        /// </summary>
+        public static string StringSpacingEditorPanel_SpacingHeader {
+            get {
+                return ResourceManager.GetString("StringSpacingEditorPanel.SpacingHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Method.
+        /// </summary>
+        public static string StringSpacingEditorPanel_SpacingMode {
+            get {
+                return ResourceManager.GetString("StringSpacingEditorPanel.SpacingMode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Common spacings.
+        /// </summary>
+        public static string StringSpacingEditorPanel_SpacingPresetHeader {
+            get {
+                return ResourceManager.GetString("StringSpacingEditorPanel.SpacingPresetHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Total spread.
+        /// </summary>
+        public static string StringSpacingEditorPanel_SpreadHeader {
+            get {
+                return ResourceManager.GetString("StringSpacingEditorPanel.SpreadHeader", resourceCulture);
             }
         }
     }

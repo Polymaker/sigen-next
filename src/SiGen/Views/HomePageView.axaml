@@ -1,0 +1,86 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="SiGen.Views.HomePageView"
+			 Background="{DynamicResource SystemRegionBrush}"
+			 xmlns:vm="using:SiGen.ViewModels"
+			 x:DataType="vm:HomePageViewModel"
+			 xmlns:settings="using:SiGen.Settings"
+			 xmlns:conv="clr-namespace:SiGen.Converters"
+			 Design.DataContext="{x:Static vm:DesignData.HomePageViewModel}"
+			 xmlns:lang="using:SiGen.Lang"
+			 xmlns:ctrl="using:SiGen.UI.Controls">
+	<UserControl.Resources>
+
+
+		<ResourceDictionary>
+			<conv:DateTimeToStringConverter x:Key="DateTimeToStringConverter" Format="g" />
+			<conv:MarkdownToInlinesConverter x:Key="MarkdownConverter" />
+			<conv:InstrumentTypeToSvgPathConverter x:Key="InstrumentTypeToSvgPathConverter" />
+			
+			<ResourceDictionary.ThemeDictionaries>
+				<ResourceDictionary  x:Key="Light">
+					<SolidColorBrush x:Key='AlternateListItemBackground'>#F8F8F8</SolidColorBrush>
+				</ResourceDictionary >
+				<ResourceDictionary x:Key="Dark">
+					<SolidColorBrush x:Key='AlternateListItemBackground'>#191919</SolidColorBrush>
+				</ResourceDictionary>
+			</ResourceDictionary.ThemeDictionaries>
+		</ResourceDictionary>
+	</UserControl.Resources>
+	<Grid ColumnDefinitions="*,*" RowDefinitions="Auto,*" Margin="4" ColumnSpacing="4">
+		
+		<StackPanel Orientation="Vertical" Grid.ColumnSpan="2"
+					HorizontalAlignment="Left" Spacing="8" Margin="4">
+			<!--<Svg Path="/Assets/SigenLogo.svg" Height="30" />-->
+			<TextBlock Text="{x:Static lang:Resources.HomePageView_Header}"
+
+                   VerticalAlignment="Center"
+                   FontSize="24"/>
+
+			<TextBlock TextWrapping="Wrap" 
+						   Inlines="{Binding Source={x:Static lang:Resources.HomePageView_WelcomText}, Converter={StaticResource MarkdownConverter}}"/>
+		</StackPanel>
+
+		<StackPanel Grid.Column="0" Grid.Row="1" Margin="4" Spacing="4">
+			<TextBlock Text="Open Recent" FontSize="20" />
+			<TextBox Watermark="Search..." Text="{Binding SearchText, Mode=TwoWay}" />
+			<ListBox ItemsSource="{Binding FilteredRecentFiles}" Grid.Column="0" Grid.Row="1"
+				  SelectionChanged="RecentFilesListBox_SelectionChanged">
+				<ListBox.ItemTemplate>
+					<DataTemplate x:DataType="settings:RecentFileModel">
+						<Grid ColumnDefinitions="Auto,*,Auto" RowDefinitions="Auto,*">
+							<ctrl:SvgIcon SvgImage="{Binding InstrumentType, Converter={StaticResource InstrumentTypeToSvgPathConverter}}"
+								 Height="30" Margin="0,0,8,0"
+								 Grid.RowSpan="2"
+								 VerticalAlignment="Center" />
+
+							<TextBlock Text="{Binding DisplayName}" FontSize="16" Grid.Column="1" />
+							<TextBlock Text="{Binding FilePath}"
+									   FontSize="12"
+									   Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" />
+
+							<TextBlock Text="{Binding LastOpened, Converter={StaticResource DateTimeToStringConverter}, ConverterParameter='yyyy-MM-dd HH:mm'}"
+									   Grid.Column="2"  />
+
+						</Grid>
+					</DataTemplate>
+				</ListBox.ItemTemplate>
+				<ListBox.Styles>
+					<Style Selector="ListBoxItem:pointerover">
+						<Setter Property="Cursor" Value="Hand"/>
+					</Style>
+					<Style Selector="ListBox ListBoxItem:nth-child(2n)">
+						<Setter Property="Background" Value="{DynamicResource AlternateListItemBackground}"/>
+					</Style>
+				</ListBox.Styles>
+			</ListBox>
+		</StackPanel>
+		<StackPanel Grid.Column="1" Grid.Row="1" Margin="4">
+			<TextBlock Text="Templates" FontSize="20" Margin="0,4" />
+		</StackPanel>
+		
+	</Grid>
+</UserControl>

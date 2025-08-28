@@ -1,9 +1,11 @@
-﻿using SiGen.Data.Presets;
+﻿using SiGen.Data.Common;
+using SiGen.Data.Presets;
 
 namespace SiGen.Services
 {
     public interface IInstrumentValuesProvider
     {
+        InstrumentType InstrumentType { get; }
         int StandardStringCount { get; }
         IReadOnlyList<int> GetCommonStringCounts();
 

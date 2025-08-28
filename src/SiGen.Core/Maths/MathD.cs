@@ -91,6 +91,11 @@ namespace SiGen.Maths
             return x > max ? max : (x < min ? min : x);
         }
 
+        public static PreciseDouble Round(PreciseDouble pd)
+        {
+            return (PreciseDouble)Math.Round(pd.DoubleValue);
+        }
+
         public static bool EqualOrClose(this PreciseDouble n1, PreciseDouble n2)
         {
             return EqualOrClose(n1, n2, double.Epsilon);

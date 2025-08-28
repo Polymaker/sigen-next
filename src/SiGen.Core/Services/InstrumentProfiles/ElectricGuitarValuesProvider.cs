@@ -1,4 +1,6 @@
-﻿using SiGen.Data.Presets;
+﻿using SiGen.Data.Common;
+using SiGen.Data.Presets;
+using SiGen.Localization;
 using SiGen.Measuring;
 using System;
 using System.Collections.Generic;
@@ -10,12 +12,14 @@ namespace SiGen.Services.InstrumentProfiles
 {
     public class ElectricGuitarValuesProvider : GenericGuitarValuesProvider
     {
+        public override InstrumentType InstrumentType => InstrumentType.ElectricGuitar;
+
         public override IReadOnlyList<SpacingPreset> GetBridgeSpacingPresets()
         {
             return [
-                new SpacingPreset("Narrow   (10 mm)", Measure.Mm(10)),
-                new SpacingPreset("Standard (10.4 mm)", Measure.Mm(10.4)),
-                new SpacingPreset("Wide     (10.7 mm)", Measure.Mm(10.7)),
+                new SpacingPreset(Texts.Preset_Narrow, Measure.Mm(10)),
+                new SpacingPreset(Texts.Preset_Standard, Measure.Mm(10.4)),
+                new SpacingPreset(Texts.Preset_Wide, Measure.Mm(10.7)),
             ];
 
         }
@@ -23,18 +27,18 @@ namespace SiGen.Services.InstrumentProfiles
         public override IReadOnlyList<SpacingPreset> GetNutSpacingPresets()
         {
             return [
-                new SpacingPreset("Fender   (7 mm)", Measure.Mm(7)),
-                new SpacingPreset("Gibson   (7.1 mm)", Measure.Mm(7.1)),
-                new SpacingPreset("PRS      (6.98 mm)", Measure.Mm(6.98)),
+                new SpacingPreset("Fender", Measure.Mm(7)),
+                new SpacingPreset("Gibson", Measure.Mm(7.1)),
+                new SpacingPreset("PRS", Measure.Mm(6.98)),
             ];
         }
 
         public override IReadOnlyList<SpacingPreset> GetMarginPresets()
         {
             return [
-                new SpacingPreset("Fender   (3.4 mm)", Measure.Mm(3.4)),
-                new SpacingPreset("Gibson   (3.75 mm)", Measure.Mm(3.75)),
-                new SpacingPreset("PRS      (3.97 mm)", Measure.Mm(3.97)),
+                new SpacingPreset("Fender", Measure.Mm(3.4)),
+                new SpacingPreset("Gibson", Measure.Mm(3.75)),
+                new SpacingPreset("PRS", Measure.Mm(3.97)),
             ];
         }
 

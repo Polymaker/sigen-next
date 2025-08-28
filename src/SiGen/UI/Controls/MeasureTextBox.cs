@@ -131,8 +131,11 @@ namespace SiGen.UI.Controls
 
             if (MeasureParser.TryParse(Text ?? string.Empty, out var parsed, Value?.Unit))
             {
-                Value = parsed;
-                //Text = parsed.ToStringFormatted(); // e.g., 4 1/2"
+                var coerced = CoerceValue(this, parsed);
+                if (Value != coerced)
+                    Value = coerced;
+                else
+                    Text = Value?.ToStringFormatted() ?? string.Empty;
             }
             else
             {

@@ -184,7 +184,7 @@
     <value>Nombre de frettes</value>
   </data>
   <data name="Editor.ScaleLengthMode.Select" xml:space="preserve">
-    <value>Mode de diapason</value>
+    <value>Mode</value>
   </data>
   <data name="InstrumentType.ElectricGuitar" xml:space="preserve">
     <value>Guitare électrique</value>
@@ -195,7 +195,7 @@
   <data name="InstrumentType.ClassicalGuitar" xml:space="preserve">
     <value>Guitare classique</value>
   </data>
-  <data name="InstrumentType.BassGuitar" xml:space="preserve">
+  <data name="InstrumentType.ElectricBass" xml:space="preserve">
     <value>Basse électrique</value>
   </data>
   <data name="InstrumentType.AcousticBass" xml:space="preserve">
@@ -222,13 +222,80 @@
   <data name="Editor.NumberOfFrets.Tooltip" xml:space="preserve">
     <value>Spécifiez le nombre total de frettes. Réglez-le sur zéro pour les instruments sans frettes. Vous pouvez également définir le nombre de frettes par corde dans les paramètres avancés.</value>
   </data>
-  <data name="Editor.BassTrebleSkew" xml:space="preserve">
-    <value>Inclinaison</value>
-  </data>
   <data name="FretLabel" xml:space="preserve">
     <value>Frette</value>
   </data>
   <data name="StringGroupLabel" xml:space="preserve">
-    <value>Groupe de corde</value>
+    <value>Groupe de cordes</value>
+  </data>
+  <data name="StringSpacingEditorPanel.Header" xml:space="preserve">
+    <value>Disposition des cordes</value>
+  </data>
+  <data name="ScaleLengthEditorPanel.Header" xml:space="preserve">
+    <value>Configuration du diapason</value>
+  </data>
+  <data name="FingerboardEditorPanel.Header" xml:space="preserve">
+    <value>Marges de la touche</value>
+  </data>
+  <data name="StringSpacingEditorPanel.SpacingHeader" xml:space="preserve">
+    <value>Espacement</value>
+  </data>
+  <data name="StringSpacingEditorPanel.SpreadHeader" xml:space="preserve">
+    <value>Écart total</value>
+  </data>
+  <data name="StringSpacingEditorPanel.NutSpacing" xml:space="preserve">
+    <value>Espacement sillet</value>
+  </data>
+  <data name="StringSpacingEditorPanel.BridgeSpacing" xml:space="preserve">
+    <value>Esp. au chevalet</value>
+  </data>
+  <data name="StringSpacingEditorPanel.SpacingMode" xml:space="preserve">
+    <value>Méthode</value>
+  </data>
+  <data name="StringSpacingEditorPanel.CenterAlignment" xml:space="preserve">
+    <value>Centrage</value>
+  </data>
+  <data name="StringSpacingEditorPanel.ConfigureSpacingButton" xml:space="preserve">
+    <value>Configurer…</value>
+  </data>
+  <data name="ScaleLengthEditorPanel.BassTrebleSkew" xml:space="preserve">
+    <value>Inclinaison</value>
+  </data>
+  <data name="ScaleLengthEditorPanel.ScaleLengthMode" xml:space="preserve">
+    <value>Mode</value>
+  </data>
+  <data name="ScaleLengthEditorPanel.MultiScaleRatio" xml:space="preserve">
+    <value>Alignement</value>
+  </data>
+  <data name="InstrumentInfoEditorPanel.Header" xml:space="preserve">
+    <value>Info de l'instrument</value>
+  </data>
+  <data name="StringsFretsEditorPanel.Header" xml:space="preserve">
+    <value>Cordes et frettes</value>
+  </data>
+  <data name="StringsFretsEditorPanel.NumberOfFrets" xml:space="preserve">
+    <value>Nombre de frettes</value>
+  </data>
+  <data name="StringsFretsEditorPanel.NumberOfStrings" xml:space="preserve">
+    <value>Nombre de cordes</value>
+  </data>
+  <data name="HomePageView.Header" xml:space="preserve">
+    <value>Concevoir, personnaliser et créer des plans d'instruments</value>
+  </data>
+  <data name="HomePageView.WelcomText" xml:space="preserve">
+    <value>SiGen vous aide à concevoir et personnaliser avec précision des configurations d'instruments à cordes.
+Ouvrez un fichier récent pour continuer votre travail ou créez une nouvelle configuration à l'aide de l'un de nos modèles.</value>
+  </data>
+  <data name="InstrumentInfoEditorPanel.Handedness" xml:space="preserve">
+    <value>Orientation de l'instrument</value>
+  </data>
+  <data name="InstrumentInfoEditorPanel.InstrumentType" xml:space="preserve">
+    <value>Type d'instrument</value>
+  </data>
+  <data name="InstrumentInfoEditorPanel.LayoutName" xml:space="preserve">
+    <value>Nom du projet</value>
+  </data>
+  <data name="StringSpacingEditorPanel.SpacingPresetHeader" xml:space="preserve">
+    <value>Espacements communs</value>
   </data>
 </root>

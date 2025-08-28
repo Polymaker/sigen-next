@@ -2,80 +2,226 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="450"
+             mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="450" MinWidth="350"
              x:Class="SiGen.UI.EditorPanels.StringSpacingEditorPanel"
-			 xmlns:ctrl="using:SiGen.UI.Controls">
-	<Grid Margin="4">
-		<Grid.ColumnDefinitions>
-			<ColumnDefinition Width="*" MinWidth="120" />
-			<ColumnDefinition Width="1.5*" />
-			<ColumnDefinition Width="1.5*" />
-		</Grid.ColumnDefinitions>
+			 xmlns:vm="clr-namespace:SiGen.ViewModels.EditorPanels"
+			 x:DataType="vm:StringSpacingPanelViewModel"
+			 xmlns:ctrl="using:SiGen.UI.Controls"
+			 xmlns:lang="using:SiGen.Lang"
+			 xmlns:conv="clr-namespace:SiGen.Converters;assembly=SiGen"
+			 xmlns:materialIcons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia">
+	<UserControl.Resources>
+		<conv:MarkdownToInlinesConverter x:Key="MarkdownConverter" />
+		<conv:EqualsConverter x:Key="EqualsConverter" />
+		<conv:NotEqualsConverter x:Key="NotEqualsConverter" />
+		<conv:EnumValueConverter x:Key="EnumValueConverter" />
+	</UserControl.Resources>
 
-		<Grid.RowDefinitions>
-			<RowDefinition Height="auto" />
-			<RowDefinition Height="auto" />
-			<RowDefinition Height="auto" />
-			<RowDefinition Height="auto" />
-			<RowDefinition Height="10" />
-			<RowDefinition Height="auto" />
-			<RowDefinition Height="auto" />
-			<RowDefinition Height="auto" />
-			<RowDefinition Height="*" />
-		</Grid.RowDefinitions>
+	<UserControl.DataContext>
+		<vm:StringSpacingPanelViewModel />
+	</UserControl.DataContext>
+	
+	<StackPanel Margin="4">
+
+		<TextBlock Text="{x:Static lang:Resources.StringSpacingEditorPanel_Header}" Classes="PanelHeader" />
 		
-		<!-- Headers -->
-		<TextBlock Text="Spacing" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Center" />
-		<TextBlock Text="Spread" Grid.Row="0" Grid.Column="2" HorizontalAlignment="Center" />
+		<Grid ColumnDefinitions="128,*,*,auto"
+			  RowDefinitions="auto,*" Margin="0,0,0,4">
+			<TextBlock Text="{x:Static lang:Resources.StringSpacingEditorPanel_NutSpacing}" Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" Margin="4" />
+			
+			<TextBlock Text="{x:Static lang:Resources.StringSpacingEditorPanel_SpacingHeader}" 
+					   FontSize="12" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Center" Margin="4" />
+			<TextBlock Text="{x:Static lang:Resources.StringSpacingEditorPanel_SpreadHeader}"   FontSize="12" Grid.Row="0" Grid.Column="2" HorizontalAlignment="Center" Margin="4" />
 
-		<TextBlock Text="Nut Spacing" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" />
-		<ctrl:MeasureTextBox Grid.Row="1" Grid.Column="1" Margin="0,4,4,4"/>
-		<ctrl:MeasureTextBox Grid.Row="1" Grid.Column="2" Margin="4,4,0,4"/>
-		
-		<TextBlock Text="Method" Grid.Row="2" Grid.Column="0"
-				   HorizontalAlignment="Left" VerticalAlignment="Center" />
-		<ComboBox Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" 
-				  HorizontalAlignment="Stretch" Margin="0,4">
-			<ComboBoxItem>Proportional</ComboBoxItem>
-			<ComboBoxItem>Center-to-center</ComboBoxItem>
-		</ComboBox>
+			<ctrl:MeasureTextBox Value="{Binding NutSpacing, Mode=TwoWay}"
+							     Grid.Column="1" Grid.Row="1" Margin="4,0,4,0" MinHeight="0" Padding="4,6"
+					FontSize="13" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
+					IsVisible="{Binding NutSpacingMode, Converter={StaticResource NotEqualsConverter}, ConverterParameter=Manual}"/>
+			
+			<Button Content="Configure..." FontSize="12" 
+					HorizontalContentAlignment="Center"
+					IsVisible="{Binding NutSpacingMode, Converter={StaticResource EqualsConverter}, ConverterParameter=Manual}"
+					HorizontalAlignment="Stretch" Grid.Column="1" Grid.Row="1" Margin="4,0,4,0"/>
+			
+			<ctrl:MeasureTextBox Value="{Binding NutStringSpread, Mode=TwoWay}"
+								 Grid.Column="2" Grid.Row="1" Margin="4,0,4,0" MinHeight="0" Padding="4,6"
+								 FontSize="13" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
+								 IsReadOnly="{Binding NutSpacingMode, Converter={StaticResource EqualsConverter}, ConverterParameter=Manual}"/>
 
-		<TextBlock Text="Alignment" Grid.Row="3" Grid.Column="0" 
-				   HorizontalAlignment="Left" VerticalAlignment="Center" />
-		<ComboBox Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" 
-				  HorizontalAlignment="Stretch" Margin="0,4">
-			<ComboBoxItem>Outer Strings</ComboBoxItem>
-			<ComboBoxItem>MiddleStrings</ComboBoxItem>
-			<ComboBoxItem>Fingerboard</ComboBoxItem>
-			<ComboBoxItem>Symmetric Strings</ComboBoxItem>
-			<ComboBoxItem>Symmetric Fingerboard</ComboBoxItem>
-			<ComboBoxItem>Manual</ComboBoxItem>
-		</ComboBox>
-		
-		<Separator Grid.Row="4" Grid.ColumnSpan="3" Margin="4,8"/>
-		
-		<TextBlock Text="Bridge Spacing" Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" />
-		<ctrl:MeasureTextBox Grid.Row="5" Grid.Column="1" Margin="0,4,4,4"/>
-		<ctrl:MeasureTextBox Grid.Row="5" Grid.Column="2" Margin="4,4,0,4"/>
+			<Button Name="NutSpacingInfoButton" Grid.Column="3" Grid.Row="1"
+					Width="20" Height="20" Padding="0" Margin="4"
+					Background="Transparent"
+					BorderBrush="{DynamicResource SystemAccentColor}"
+					BorderThickness="1"
+					CornerRadius="10"
+					VerticalAlignment="Center">
+				<materialIcons:MaterialIcon
+					Kind="InformationSerifSymbol"
+					Foreground="{DynamicResource SystemAccentColor}" />
+				<Button.Styles>
+					<Style Selector="Button:pointerover:not(:pressed) /template/ ContentPresenter">
+						<Setter Property="Background" Value="#55999999"/>
+						<Setter Property="BorderBrush" Value="{DynamicResource SystemAccentColor}"/>
+					</Style>
+					<Style Selector="Button:pressed /template/ ContentPresenter">
+						<Setter Property="BorderBrush" Value="{DynamicResource SystemAccentColor}"/>
+					</Style>
+				</Button.Styles>
+			</Button>
+		</Grid>
 
-		<TextBlock Text="Method" Grid.Row="6" Grid.Column="0"
-				   HorizontalAlignment="Left" VerticalAlignment="Center" />
-		<ComboBox Grid.Row="6" Grid.Column="1" Grid.ColumnSpan="2"
-				  HorizontalAlignment="Stretch" Margin="0,4">
-			<ComboBoxItem>Proportional</ComboBoxItem>
-			<ComboBoxItem>Center-to-center</ComboBoxItem>
-		</ComboBox>
+		<ctrl:CustomFormField Label="{x:Static lang:Resources.StringSpacingEditorPanel_SpacingMode}" LabelWidth="120"
+			Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3">
+			<ctrl:CustomFormField.Input>
+				<ComboBox ItemsSource="{Binding StringSpacingModes}" 
+						  SelectedValue="{Binding NutSpacingMode, Mode=TwoWay}"
+					HorizontalAlignment="Stretch" >
+					<ComboBox.ItemTemplate>
+						<DataTemplate>
+							<TextBlock Text="{Binding ., Converter={StaticResource EnumValueConverter}}"  VerticalAlignment="Center" />
+						</DataTemplate>
+					</ComboBox.ItemTemplate>
+				</ComboBox>
+			</ctrl:CustomFormField.Input>
+			<ctrl:CustomFormField.Help>
+				<TextBlock TextWrapping="Wrap" Width="400"
+						   Inlines="{Binding Source={x:Static lang:Help.StringSpacingMode_Help}, Converter={StaticResource MarkdownConverter}}"/>
+			</ctrl:CustomFormField.Help>
+		</ctrl:CustomFormField>
 
-		<TextBlock Text="Alignment" Grid.Row="7" Grid.Column="0"
-				   HorizontalAlignment="Left" VerticalAlignment="Center" />
-		<ComboBox Grid.Row="7" Grid.Column="1" Grid.ColumnSpan="2"
-				  HorizontalAlignment="Stretch" Margin="0,4">
-			<ComboBoxItem>Outer Strings</ComboBoxItem>
-			<ComboBoxItem>MiddleStrings</ComboBoxItem>
-			<ComboBoxItem>Fingerboard</ComboBoxItem>
-			<ComboBoxItem>Symmetric Strings</ComboBoxItem>
-			<ComboBoxItem>Symmetric Fingerboard</ComboBoxItem>
-			<ComboBoxItem>Manual</ComboBoxItem>
-		</ComboBox>
-	</Grid>
+		<ctrl:CustomFormField Label="{x:Static lang:Resources.StringSpacingEditorPanel_CenterAlignment}" LabelWidth="120"
+			Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3">
+			<ctrl:CustomFormField.Input>
+				<DockPanel>
+
+					<ctrl:NumericTextBox x:Name="NutCenterAlignmentBox"
+									 MinimumValue="0" MaximumValue="1" Width="90" Margin="4,0,0,0"
+									 DockPanel.Dock="Right" Value="{Binding NutManualAlignment, Mode=TwoWay}"
+									 IsVisible="{Binding NutCenterAlignment, Converter={StaticResource EqualsConverter}, ConverterParameter=Manual}"
+									 VerticalAlignment="Center">
+						<FlyoutBase.AttachedFlyout>
+							<Flyout>
+								<Slider x:Name="NutAlignmentSlider"
+									Value="{Binding NutManualAlignment, Mode=TwoWay}" 
+										Minimum="0" Maximum="1" Width="150" />
+							</Flyout>
+						</FlyoutBase.AttachedFlyout>
+						<TextBox.InnerRightContent>
+							<Border>
+								<Button x:Name="ShowSliderButton" Padding="4" Margin="0,0,4,0">
+									<materialIcons:MaterialIcon Kind="Slider" IconSize="12" />
+								</Button>
+							</Border>
+						</TextBox.InnerRightContent>
+					</ctrl:NumericTextBox>
+					
+					<ComboBox ItemsSource="{Binding NutCenterAlignments}"
+							  SelectedValue="{Binding NutCenterAlignment, Mode=TwoWay}"
+				              HorizontalAlignment="Stretch" >
+						<ComboBox.ItemTemplate>
+							<DataTemplate>
+								<TextBlock Text="{Binding ., Converter={StaticResource EnumValueConverter}}"  VerticalAlignment="Center" />
+							</DataTemplate>
+						</ComboBox.ItemTemplate>
+					</ComboBox>
+				</DockPanel>
+			</ctrl:CustomFormField.Input>
+			<ctrl:CustomFormField.Help>
+				<TextBlock TextWrapping="Wrap" Width="400"
+						   Inlines="{Binding Source={x:Static lang:Help.LayoutCenterAlignment_Help}, Converter={StaticResource MarkdownConverter}}"/>
+
+			</ctrl:CustomFormField.Help>
+		</ctrl:CustomFormField>
+
+		<Separator Grid.Row="4" Grid.ColumnSpan="3" Margin="4,4"/>
+
+		<Grid ColumnDefinitions="128,*,*,auto"
+			  RowDefinitions="auto,*" Margin="0,0,0,4">
+			<TextBlock Text="{x:Static lang:Resources.StringSpacingEditorPanel_BridgeSpacing}" Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" Margin="4" />
+
+			<TextBlock Text="{x:Static lang:Resources.StringSpacingEditorPanel_SpacingHeader}" FontSize="12" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Center" Margin="4" />
+			<TextBlock Text="{x:Static lang:Resources.StringSpacingEditorPanel_SpreadHeader}"  FontSize="12" Grid.Row="0" Grid.Column="2" HorizontalAlignment="Center" Margin="4" />
+
+			<ctrl:MeasureTextBox Value="{Binding BridgeSpacing, Mode=TwoWay}" MinHeight="0" Padding="4,6"
+								 FontSize="13" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
+								 Grid.Column="1" Grid.Row="1" Margin="4,0,4,0"
+								 IsVisible="{Binding BridgeSpacingMode, Converter={StaticResource NotEqualsConverter}, ConverterParameter=Manual}"/>
+
+			<Button Content="Configure..." FontSize="12"
+					HorizontalContentAlignment="Center"
+					IsVisible="{Binding BridgeSpacingMode, Converter={StaticResource EqualsConverter}, ConverterParameter=Manual}"
+					HorizontalAlignment="Stretch" Grid.Column="1" Grid.Row="1" Margin="4,0,4,0"/>
+
+			<ctrl:MeasureTextBox Value="{Binding BridgeStringSpread, Mode=TwoWay}" MinHeight="0" Padding="4,6"
+								 FontSize="13" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
+								 Grid.Column="2" Grid.Row="1" Margin="4,0,4,0" IsReadOnly="{Binding BridgeSpacingMode, Converter={StaticResource EqualsConverter}, ConverterParameter=Manual}"/>
+
+			<Button Name="BridgeSpacingInfoButton" Grid.Column="3" Grid.Row="1"
+					Width="20" Height="20" Padding="0" Margin="4"
+					Background="Transparent"
+					BorderBrush="{DynamicResource SystemAccentColor}"
+					BorderThickness="1"
+					CornerRadius="10"
+					VerticalAlignment="Center">
+				<materialIcons:MaterialIcon
+					Kind="InformationSerifSymbol"
+					Foreground="{DynamicResource SystemAccentColor}" />
+				<Button.Styles>
+					<Style Selector="Button:pointerover:not(:pressed) /template/ ContentPresenter">
+						<Setter Property="Background" Value="#55999999"/>
+						<Setter Property="BorderBrush" Value="{DynamicResource SystemAccentColor}"/>
+					</Style>
+					<Style Selector="Button:pressed /template/ ContentPresenter">
+
+						<Setter Property="BorderBrush" Value="{DynamicResource SystemAccentColor}"/>
+					</Style>
+				</Button.Styles>
+			</Button>
+		</Grid>
+
+
+		<ctrl:CustomFormField 
+			Label="{x:Static lang:Resources.StringSpacingEditorPanel_SpacingMode}" 
+			LabelWidth="120" 
+			Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3">
+			<ctrl:CustomFormField.Input>
+				<ComboBox ItemsSource="{Binding StringSpacingModes}"
+							  SelectedValue="{Binding BridgeSpacingMode, Mode=TwoWay}"
+							  HorizontalAlignment="Stretch" >
+					<ComboBox.ItemTemplate>
+						<DataTemplate>
+							<TextBlock Text="{Binding ., Converter={StaticResource EnumValueConverter}}"  VerticalAlignment="Center" />
+						</DataTemplate>
+					</ComboBox.ItemTemplate>
+				</ComboBox>
+			</ctrl:CustomFormField.Input>
+			<ctrl:CustomFormField.Help>
+				<TextBlock TextWrapping="Wrap" Width="400"
+						   Inlines="{Binding Source={x:Static lang:Help.StringSpacingMode_Help}, Converter={StaticResource MarkdownConverter}}"/>
+			</ctrl:CustomFormField.Help>
+		</ctrl:CustomFormField>
+
+		<ctrl:CustomFormField 
+			Label="{x:Static lang:Resources.StringSpacingEditorPanel_CenterAlignment}" 
+			LabelWidth="120"
+			Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="3">
+			<ctrl:CustomFormField.Input>
+				<ComboBox ItemsSource="{Binding BridgeCenterAlignments}"
+						  SelectedValue="{Binding BridgeCenterAlignment, Mode=TwoWay}"
+				  HorizontalAlignment="Stretch" >
+					<ComboBox.ItemTemplate>
+						<DataTemplate>
+							<TextBlock Text="{Binding ., Converter={StaticResource EnumValueConverter}}"  VerticalAlignment="Center" />
+						</DataTemplate>
+					</ComboBox.ItemTemplate>
+				</ComboBox>
+			</ctrl:CustomFormField.Input>
+			<ctrl:CustomFormField.Help>
+				<TextBlock TextWrapping="Wrap" Width="400"
+						   Inlines="{Binding Source={x:Static lang:Help.LayoutCenterAlignment_Help}, Converter={StaticResource MarkdownConverter}}"/>
+
+			</ctrl:CustomFormField.Help>
+		</ctrl:CustomFormField>
+
+	</StackPanel>
 </UserControl>

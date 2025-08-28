@@ -1,4 +1,5 @@
-﻿using SiGen.Data.Presets;
+﻿using SiGen.Data.Common;
+using SiGen.Data.Presets;
 using SiGen.Localization;
 using SiGen.Measuring;
 using SiGen.Physics;
@@ -12,6 +13,8 @@ namespace SiGen.Services.InstrumentProfiles
 {
     public class BanjoValuesProvider : IInstrumentValuesProvider
     {
+        public InstrumentType InstrumentType => InstrumentType.Banjo;
+
         public int StandardStringCount => 5;
 
         public IReadOnlyList<int> GetCommonStringCounts()
@@ -22,27 +25,27 @@ namespace SiGen.Services.InstrumentProfiles
         public IReadOnlyList<SpacingPreset> GetNutSpacingPresets()
         {
             return [
-                new SpacingPreset("Narrow   (6.5 mm)", Measure.Mm(6.5)),
-                new SpacingPreset("Standard (7.0 mm)", Measure.Mm(7.0)),
-                new SpacingPreset("Wide     (7.5 mm)", Measure.Mm(7.5)),
+                new SpacingPreset(Texts.Preset_Narrow, Measure.Mm(6.5)),
+                new SpacingPreset(Texts.Preset_Standard, Measure.Mm(7.0)),
+                new SpacingPreset(Texts.Preset_Wide, Measure.Mm(7.5)),
             ];
         }
 
         public IReadOnlyList<SpacingPreset> GetBridgeSpacingPresets()
         {
             return [
-                new SpacingPreset("Narrow   (9.5 mm)", Measure.Mm(9.5)),
-                new SpacingPreset("Standard (10.0 mm)", Measure.Mm(10.0)),
-                new SpacingPreset("Wide     (10.5 mm)", Measure.Mm(10.5)),
+                new SpacingPreset(Texts.Preset_Narrow, Measure.Mm(9.5)),
+                new SpacingPreset(Texts.Preset_Standard, Measure.Mm(10.0)),
+                new SpacingPreset(Texts.Preset_Wide, Measure.Mm(10.5)),
             ];
         }
 
         public IReadOnlyList<SpacingPreset> GetMarginPresets()
         {
             return [
-                new SpacingPreset("Narrow   (3.0 mm)", Measure.Mm(3.0)),
-                new SpacingPreset("Standard (3.5 mm)", Measure.Mm(3.5)),
-                new SpacingPreset("Wide     (4.0 mm)", Measure.Mm(4.0)),
+                new SpacingPreset(Texts.Preset_Narrow, Measure.Mm(3.0)),
+                new SpacingPreset(Texts.Preset_Standard, Measure.Mm(3.5)),
+                new SpacingPreset(Texts.Preset_Wide, Measure.Mm(4.0)),
             ];
         }
 

@@ -1,0 +1,27 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" 
+             x:Class="SiGen.UI.Dialogs.ConfirmCloseDocumentView"
+			 xmlns:vm="using:SiGen.ViewModels.Dialogs"
+			 x:DataType="vm:SaveChangesDialogViewModel">
+	<Grid ColumnDefinitions="*,*,*" RowDefinitions="Auto,*" Margin="4" ColumnSpacing="4">
+		
+		<TextBlock Text="There are unsaved changes. Do you want to save them before closing?" 
+                   Grid.ColumnSpan="3"
+                   FontSize="14"
+                   Margin="4"
+                   TextWrapping="Wrap" MaxWidth="400"/>
+		
+		<Button Content="Yes" Command="{Binding SaveCommand}"
+				Grid.Column="0" Grid.Row="1"
+				HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"/>
+		<Button Content="Don't save" Command="{Binding DontSaveCommand}"
+				Grid.Column="1" Grid.Row="1"
+				HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"/>
+		<Button Content="Cancel" Command="{Binding CancelCommand}"
+				Grid.Column="2" Grid.Row="1"
+				HorizontalAlignment="Stretch" HorizontalContentAlignment="Center"/>
+	</Grid>
+</UserControl>

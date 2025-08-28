@@ -253,7 +253,7 @@ namespace SiGen.Layouts.Builders
             void ApplyAtEnd(FingerboardEnd end)
             {
                 bool symmetricFingerboard = Configuration.GetStringSpacing(end).CenterAlignment == LayoutCenterAlignment.SymmetricFingerboard;
-                bool compensateForStrings = Configuration.Margin.CompensateForStrings;
+                bool compensateForStrings = Configuration.Fingerboard.CompensateMarginsForStrings;
 
                 var posY = end == FingerboardEnd.Nut ?
                     MathD.Max(bassPath.Start.Y, trebPath.Start.Y) :
@@ -266,7 +266,7 @@ namespace SiGen.Layouts.Builders
                 {
                     var bassPerp = bassPath.GetEquation().GetPerpendicular(bassPath.Start);
 
-                    PreciseDouble totalMargin = Configuration.Margin.GetMargin(end, FingerboardSide.Bass).NormalizedValue;
+                    PreciseDouble totalMargin = Configuration.Fingerboard.GetMargin(end, FingerboardSide.Bass).NormalizedValue;
                     var stringWidth = Configuration.StringConfigurations[0]?.GetTotalWidth();
                     if (compensateForStrings && !Measure.IsNullOrEmpty(stringWidth))
                         totalMargin += stringWidth.NormalizedValue / 2d;
@@ -286,7 +286,7 @@ namespace SiGen.Layouts.Builders
                 {
                     var trebPerp = trebPath.GetEquation().GetPerpendicular(trebPath.Start);
 
-                    PreciseDouble totalMargin = Configuration.Margin.GetMargin(end, FingerboardSide.Treble).NormalizedValue;
+                    PreciseDouble totalMargin = Configuration.Fingerboard.GetMargin(end, FingerboardSide.Treble).NormalizedValue;
                     var stringWidth = Configuration.StringConfigurations[^1]?.GetTotalWidth();
                     if (compensateForStrings && !Measure.IsNullOrEmpty(stringWidth))
                         totalMargin += stringWidth!.NormalizedValue / 2d;
@@ -422,10 +422,13 @@ namespace SiGen.Layouts.Builders
                 positions = null;
                 return false;
             }
-            //either one distance for all strings or one for each gap (one less than the number of strings)
-            else if (spacingConfig.StringDistances.Count != 1 && 
-                spacingConfig.StringDistances.Count != Configuration.NumberOfStrings - 1
-            )
+            else if (spacingConfig.StringDistances.Count < 1 && spacingConfig.SpacingMode != StringSpacingMode.Manual) 
+            {
+                AddError(Texts.StringSpacingConfigInvalid, end);
+                positions = null;
+                return false;
+            }
+            else if (spacingConfig.SpacingMode == StringSpacingMode.Manual && spacingConfig.StringDistances.Count != Configuration.NumberOfStrings - 1)
             {
                 AddError(Texts.StringSpacingConfigInvalid, end);
                 positions = null;
@@ -436,7 +439,7 @@ namespace SiGen.Layouts.Builders
 
             var spacings = new List<Measure>();
 
-            if (spacingConfig.StringDistances!.Count == 1)
+            if (spacingConfig.SpacingMode != StringSpacingMode.Manual && spacingConfig.StringDistances!.Count >= 1/*spacingConfig.StringDistances!.Count == 1*/)
             {
                 if (spacingConfig.SpacingMode == StringSpacingMode.Proportional)
                 {
@@ -518,23 +521,42 @@ namespace SiGen.Layouts.Builders
                     }
                 case LayoutCenterAlignment.MiddleStrings:
                     {
-                        int idx1 = NumberOfStrings / 2;
-                        int idx2 = idx1 - NumberOfStrings % 2;
-                        var p1 = positions[idx2];
-                        var p2 = positions[idx1];
-                        centerOffset = p1 + (p2 - p1) / 2m;
+                        if (NumberOfStrings % 2 == 1)
+                        {
+                            int midIdx = NumberOfStrings / 2;
+                            centerOffset = positions[midIdx];
+                            break;
+                        }
+                        else
+                        {
+                            int idx1 = (int)Math.Floor((NumberOfStrings - 1) / 2d);
+                            int idx2 = (int)Math.Ceiling((NumberOfStrings - 1) / 2d);
+                            var p1 = positions[idx2];
+                            var p2 = positions[idx1];
+                            centerOffset = p1 + (p2 - p1) / 2m;
+                        }
+                        //    int idx1 = NumberOfStrings / 2;
+                        //int idx2 = idx1 - NumberOfStrings % 2;
+                        //var p1 = positions[idx2];
+                        //var p2 = positions[idx1];
+                        //centerOffset = p1 + (p2 - p1) / 2m;
                         break;
                     }
                 case LayoutCenterAlignment.Fingerboard:
                     {
-                        var hMargin = Configuration.Margin.GetMargin(end, FingerboardSide.Bass)
-                            + Configuration.Margin.GetMargin(end, FingerboardSide.Treble);
-                        if (Configuration.Margin.CompensateForStrings)
+                        var hMargin = Configuration.Fingerboard.GetMargin(end, FingerboardSide.Bass)
+                            + Configuration.Fingerboard.GetMargin(end, FingerboardSide.Treble);
+                        var halfWidth = positions[^1] / 2d;
+
+                        var leftPos = -Configuration.Fingerboard.GetMargin(end, FingerboardSide.Bass);
+                        var rightPos = positions[^1] + Configuration.Fingerboard.GetMargin(end, FingerboardSide.Treble);
+
+                        if (Configuration.Fingerboard.CompensateMarginsForStrings)
                         {
-                            hMargin += (Configuration.GetString(0)?.GetTotalWidth() ?? Measure.Zero) / 2m;
-                            hMargin += (Configuration.GetString(NumberOfStrings - 1)?.GetTotalWidth() ?? Measure.Zero) / 2m;
+                            leftPos -= (Configuration.GetString(0)?.GetTotalWidth() ?? Measure.Zero) / 2m;
+                            rightPos += (Configuration.GetString(NumberOfStrings - 1)?.GetTotalWidth() ?? Measure.Zero) / 2m;
                         }
-                        centerOffset = (positions[^1] + hMargin) / 2m;
+                        centerOffset = (rightPos + leftPos) / 2m;
                         break;
                     }
                 case LayoutCenterAlignment.Manual:

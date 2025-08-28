@@ -94,7 +94,7 @@
 	
 	<!-- Background="{DynamicResource BackgroundBrush}" -->
 		<Border  DataContext="{Binding RelativeSource={RelativeSource AncestorType=ctrl:StringCountControl}, Path=ViewModel}"
-			Padding="4">
+			Padding="4,0">
 
 			<StackPanel Orientation="Vertical" Spacing="8">
 

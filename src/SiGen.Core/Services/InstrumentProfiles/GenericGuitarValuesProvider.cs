@@ -1,4 +1,5 @@
-﻿using SiGen.Data.Presets;
+﻿using SiGen.Data.Common;
+using SiGen.Data.Presets;
 using SiGen.Localization;
 using SiGen.Physics;
 
@@ -7,6 +8,8 @@ namespace SiGen.Services.InstrumentProfiles
     public abstract class GenericGuitarValuesProvider : IInstrumentValuesProvider
     {
         public virtual int StandardStringCount => 6;
+
+        public abstract InstrumentType InstrumentType { get; }
 
         public virtual IReadOnlyList<int> GetCommonStringCounts()
         {

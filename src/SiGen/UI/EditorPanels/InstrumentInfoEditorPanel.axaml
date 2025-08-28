@@ -2,100 +2,104 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="450" MinWidth="250"
              x:Class="SiGen.UI.EditorPanels.InstrumentInfoEditorPanel"
              xmlns:vm="clr-namespace:SiGen.ViewModels.EditorPanels"
 			 xmlns:ctrl="clr-namespace:SiGen.UI.Controls"
 			 xmlns:materialIcons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
 			 x:DataType="vm:InstrumentInfoPanelViewModel"
 			 xmlns:lang="using:SiGen.Lang"
+			 xmlns:panels="using:SiGen.UI.EditorPanels"
+			 xmlns:conv="clr-namespace:SiGen.Converters;assembly=SiGen"
              >
 		
 	<UserControl.DataContext>
 		<vm:InstrumentInfoPanelViewModel />
 	</UserControl.DataContext>
-	<Grid>
-		<StackPanel Spacing="8" Margin="4">
+	<UserControl.Resources>
+		<conv:EnumValueConverter x:Key="EnumConverter" />
+		<conv:MarkdownToInlinesConverter x:Key="MarkdownConverter" />
+	</UserControl.Resources>
+	<StackPanel Spacing="0" Margin="4">
+		
+		<TextBlock Text="{x:Static lang:Resources.InstrumentInfoEditorPanel_Header}" Classes="PanelHeader" />
+		
+		<ctrl:CustomFormField Label="{x:Static lang:Resources.InstrumentInfoEditorPanel_LayoutName}"
+							  Orientation="Horizontal"
+						  LabelHorizontalAlignment="Left">
+			<ctrl:CustomFormField.Input>
+				<ctrl:TextBoxEx x:Name="LayoutNameBox" Text=""  
+								HorizontalAlignment="Stretch"/>
+			</ctrl:CustomFormField.Input>
+		</ctrl:CustomFormField>
 
-			<ctrl:CustomFormField Label="{x:Static lang:Resources.Editor_Handedness_Select}"
-									  Orientation="Vertical" LabelHorizontalAlignment="Center"
-							  
+		<ctrl:CustomFormField Label="{x:Static lang:Resources.InstrumentInfoEditorPanel_InstrumentType}"
+							  Orientation="Horizontal" 
+						  LabelHorizontalAlignment="Left">
+			<ctrl:CustomFormField.Input>
+				<ComboBox x:Name="InstrumentTypesCombo" HorizontalAlignment="Center" Width="130" Height="80">
+					<ComboBox.ItemTemplate >
+						<DataTemplate x:DataType="panels:InstrumentTypeItem">
+							<StackPanel Spacing="2">
+								<ctrl:SvgIcon SvgImage="{Binding ImagePath}" Height="50" />
+								<TextBlock
+									Text="{Binding InstrumentType, Converter={StaticResource EnumConverter}}"
+									FontSize="11" TextAlignment="Center"
+									TextWrapping="Wrap" />
+							</StackPanel>
+						</DataTemplate>
+					</ComboBox.ItemTemplate>
+					<ComboBox.Resources>
+						<Thickness x:Key="ComboBoxPadding">2,2,0,0</Thickness>
+					</ComboBox.Resources>
+				</ComboBox>
+			</ctrl:CustomFormField.Input>
+			<ctrl:CustomFormField.Help>
+				<TextBlock TextWrapping="Wrap" MaxWidth="400"
+						   Inlines="{Binding Source={x:Static lang:Help.InstrumentType_Help}, Converter={StaticResource MarkdownConverter}}"/>
+			</ctrl:CustomFormField.Help>
+		</ctrl:CustomFormField>
+
+		<ctrl:CustomFormField Label="{x:Static lang:Resources.InstrumentInfoEditorPanel_Handedness}"
+								  Orientation="Vertical" LabelHorizontalAlignment="Center"
 								  >
-				<ctrl:CustomFormField.Input>
-					<StackPanel Orientation="Horizontal" Spacing="4" HorizontalAlignment="Center">
+			<ctrl:CustomFormField.Input>
+				<StackPanel Orientation="Horizontal" Spacing="4" HorizontalAlignment="Center">
 
-						<ctrl:ToggleButtonEx CornerRadius="8" Width="80" ToggleOnClick="False"
-									  IsChecked="{Binding LeftHanded}"
-									  Click="LeftHandedButton_Click"
+					<ctrl:ToggleButtonEx CornerRadius="8" Width="80" ToggleOnClick="False"
+								  IsChecked="{Binding LeftHanded}"
+								  Click="LeftHandedButton_Click"
 							  >
-							<StackPanel Spacing="2">
-								<ctrl:SvgIcon SvgImage="/Assets/LeftHandedLayout.svg" Width="50" />
-								<TextBlock HorizontalAlignment="Center"
-										   FontSize="12"
-										   TextWrapping="Wrap"
-										   TextAlignment="Center"
-										   Text="{x:Static lang:Resources.Editor_Handedness_Left}"/>
-							</StackPanel>
-						</ctrl:ToggleButtonEx>
-						<ctrl:ToggleButtonEx CornerRadius="8" Width="80" ToggleOnClick="False"
-									  IsChecked="{Binding RightHanded}"
-											 Click="RightHandedButton_Click"
+						<StackPanel Spacing="2">
+							<ctrl:SvgIcon SvgImage="/Assets/Explorer.svg" Width="50">
+								<ctrl:SvgIcon.RenderTransform>
+									<ScaleTransform ScaleX="-1" />
+								</ctrl:SvgIcon.RenderTransform>
+							</ctrl:SvgIcon>
+							<TextBlock HorizontalAlignment="Center"
+									   FontSize="12"
+									   TextWrapping="Wrap"
+									   TextAlignment="Center"
+									   Text="{x:Static lang:Resources.Editor_Handedness_Left}"/>
+						</StackPanel>
+					</ctrl:ToggleButtonEx>
+					<ctrl:ToggleButtonEx CornerRadius="8" Width="80" ToggleOnClick="False"
+								  IsChecked="{Binding RightHanded}"
+										 Click="RightHandedButton_Click"
 									 >
-							<StackPanel Spacing="2">
-								<ctrl:SvgIcon SvgImage="/Assets/RightHandedLayout.svg" Width="50" />
-								<TextBlock HorizontalAlignment="Center"
-										   FontSize="12"
-										   TextWrapping="Wrap"
-										   TextAlignment="Center"
-										   Text="{x:Static lang:Resources.Editor_Handedness_Right}"/>
-							</StackPanel>
-						</ctrl:ToggleButtonEx>
+						<StackPanel Spacing="2">
+							<ctrl:SvgIcon SvgImage="/Assets/Explorer.svg" Width="50" />
+							<TextBlock HorizontalAlignment="Center"
+									   FontSize="12"
+									   TextWrapping="Wrap"
+									   TextAlignment="Center"
+									   Text="{x:Static lang:Resources.Editor_Handedness_Right}"/>
+						</StackPanel>
+					</ctrl:ToggleButtonEx>
 
 
-					</StackPanel>
-				</ctrl:CustomFormField.Input>
-
-				<ctrl:CustomFormField.Help>
-					<TextBlock
-						TextWrapping="Wrap" MaxWidth="400"
-						Text="{x:Static lang:Help.Handedness_Help}"/>
-				</ctrl:CustomFormField.Help>
-			</ctrl:CustomFormField>
-
-
-			<ctrl:CustomFormField Label="{x:Static lang:Resources.Editor_NumberOfStrings}"
-								  Orientation="Vertical"
-								  LabelHorizontalAlignment="Center"
-								  >
-				<ctrl:CustomFormField.Input>
-					<ctrl:StringCountControl x:Name="StringsEditor"
-											 MinWidth="250" MaxWidth="350"
-											 HorizontalAlignment="Stretch"
-									 VerticalAlignment="Top"
-									 StringCount="{Binding NumberOfStrings, Mode=TwoWay}"
-									 IsLeftHanded="{Binding LeftHanded}"/>
-				</ctrl:CustomFormField.Input>
-				<ctrl:CustomFormField.Help>
-					<TextBlock
-						TextWrapping="Wrap" MaxWidth="400"
-						Text="{x:Static lang:Help.NumberOfStrings_Help}"/>
-				</ctrl:CustomFormField.Help>
-			</ctrl:CustomFormField>
-
-
-			<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="8">
-				<Button ToolTip.Tip="{x:Static lang:Resources.StringsLabel}">
-					<ctrl:SvgIcon SvgImage="/Assets/Icons/StringIcon.svg" Width="24" />
-				</Button>
-				<Button ToolTip.Tip="Frets">
-					<ctrl:SvgIcon SvgImage="/Assets/Icons/FretIcon.svg" Width="24" />
-				</Button>
-				<Button ToolTip.Tip="Tuning">
-					<ctrl:SvgIcon SvgImage="/Assets/Icons/TuningIcon.svg" Width="24" />
-				</Button>
-			</StackPanel>
-
-
-		</StackPanel>
-	</Grid>
+				</StackPanel>
+			</ctrl:CustomFormField.Input>
+		</ctrl:CustomFormField>
+	</StackPanel>
 </UserControl>

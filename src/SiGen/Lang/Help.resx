@@ -112,6 +112,31 @@ Positive values angle the frets one way, negative values the other. Leave blank 
     <value>Set the total number of strings for your instrument.</value>
   </data>
   <data name="Handedness_Help" xml:space="preserve">
-    <value>Sélectionnez si la disposition de l'instrument est destinée à un joueur droitier ou gaucher.</value>
+    <value>Select whether the instrument layout is for a right-handed or left-handed player.</value>
+  </data>
+  <data name="StringSpacingMode_Help" xml:space="preserve">
+    <value>Choose how strings are spaced on the instrument:
+• **Proportional**: Strings are spaced so the free space between each string is equal, taking into account the thickness (gauge) of each string.
+• **Centered/Equal**: Strings are spaced so the distance from the center of one string to the center of the next is equal, regardless of string gauge.
+• **Manual**: String positions are set manually. The spacing mode is ignored, and you can place each string exactly where you want.</value>
+  </data>
+  <data name="LayoutCenterAlignment_Help" xml:space="preserve">
+    <value>Choose how the strings are laid out relative to the center line:
+• **Outer Strings**: Aligns the outermost strings equally from the center line.
+• **Middle Strings**: Aligns the middle string(s) to the center line.
+• **Fingerboard**: Centers by the edges of the fingerboard, which is usually the same as **Outer Strings** unless the bass and treble margins differ.
+• **Symmetric Strings**: (Multiscale only) Adjust the spacing so that the layout remain symmetric.
+• **Symmetric Fingerboard**: (Multiscale only) Adjust the spacing so that the layout remain symmetric when the bass and treble margins differ.
+• **Manual**: Lets you manually set the alignment using a value from 0 to 1. 0 aligns the bass side straight, 1 aligns the treble side straight, and values in between blend between the two.</value>
+  </data>
+  <data name="SingleScale_Presets_Title" xml:space="preserve">
+    <value>Here are some common scale length used :</value>
+  </data>
+  <data name="InstrumentType_Help" xml:space="preserve">
+    <value>This value determines which kind of instrument you are designing. 
+Selecting an instrument type enables info buttons next to certain fields, showing common values and suggestions specific to that instrument.</value>
+  </data>
+  <data name="ScaleLength_MultiScaleRatio" xml:space="preserve">
+    <value></value>
   </data>
 </root>

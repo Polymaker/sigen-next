@@ -2,7 +2,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             mc:Ignorable="d" d:DesignWidth="350" d:DesignHeight="300"
              x:Class="SiGen.UI.EditorPanels.ScaleLengthEditorPanel"
              xmlns:vm="clr-namespace:SiGen.ViewModels.EditorPanels"
 			 x:DataType="vm:ScaleLengthPanelViewModel"
@@ -17,26 +17,31 @@
 	</UserControl.DataContext>
 	<UserControl.Resources>
 		<conv:ScaleLengthModeToTextConverter x:Key="ScaleLengthModeToTextConverter" />
-		<conv:EnumTooltipConverter x:Key="TooltipConverter" />
+		<conv:EnumValueConverter x:Key="TooltipConverter" />
 		<conv:EqualsConverter x:Key="EqualsConverter" />
 		<conv:MarkdownToInlinesConverter x:Key="MarkdownConverter" />
 	</UserControl.Resources>
+	
 	<StackPanel Spacing="4" Margin="4">
 
-		<ctrl:CustomFormField Label="{x:Static lang:Resources.Editor_ScaleLengthMode_Select}"
+		<TextBlock Text="{x:Static lang:Resources.ScaleLengthEditorPanel_Header}" Classes="PanelHeader" />
+		
+		<ctrl:CustomFormField Label="{x:Static lang:Resources.ScaleLengthEditorPanel_ScaleLengthMode}"
 							  Orientation="Horizontal"
 							  HorizontalAlignment="Left"
+							  LabelWidth="110"
 							  >
 			<ctrl:CustomFormField.Input>
 				<ComboBox x:Name="ScaleLengthModeComboBox"
 				  ItemsSource="{Binding ScaleLengthModes}"
-				  SelectedItem="{Binding Mode}"
+				  SelectedItem="{Binding Mode}" FontSize="13" VerticalContentAlignment="Center"
 				  SelectionChanged="ScaleLengthModeComboBox_SelectionChanged"
-						  Width="150">
+						  Width="140">
 					<ComboBox.ItemTemplate>
 						<DataTemplate>
 							<TextBlock Text="{Binding ., Converter={StaticResource ScaleLengthModeToTextConverter}}"
-									   ToolTip.Tip="{Binding ., Converter={StaticResource TooltipConverter}}" VerticalAlignment="Center" />
+									   ToolTip.Tip="{Binding ., Converter={StaticResource TooltipConverter}}" 
+									    />
 						</DataTemplate>
 					</ComboBox.ItemTemplate>
 				</ComboBox>
@@ -63,74 +68,97 @@
 			<ctrl:CustomFormField.Input>
 				<ctrl:MeasureTextBox Value="{Binding SingleScale, Mode=TwoWay}"
 									 MinimumValue="10in" MaximumValue="40in"
-									 Width="120" Watermark="25.5in, 647mm" />
+									 Width="140" Watermark="25.5in, 647mm" />
 			</ctrl:CustomFormField.Input>
 		</ctrl:CustomFormField>
-		
-		<ctrl:CustomFormField Label="{x:Static lang:Resources.FingerboardSide_Bass}" 
-							  LabelWidth="110"
-							  HorizontalAlignment="Left"
+
+		<!--<Grid ColumnDefinitions="*,*" Width="300" HorizontalAlignment="Left" Margin="0,-8,0,0"
+			  IsVisible="{Binding Mode, Converter={StaticResource EqualsConverter}, ConverterParameter=Multiscale}"
+			  >
+			<ctrl:CustomFormField Label="{x:Static lang:Resources.FingerboardSide_Bass}" Grid.Column="0"
+							  LabelWidth="110" Orientation="Vertical"
+							  HorizontalAlignment="Center" LabelHorizontalAlignment="Center"
 							  IsVisible="{Binding Mode, Converter={StaticResource EqualsConverter}, ConverterParameter=Multiscale}"
 							  >
+				<ctrl:CustomFormField.Input>
+					<ctrl:MeasureTextBox Value="{Binding BassScale, Mode=TwoWay}"
+										 MinimumValue="10in" MaximumValue="40in"
+										 Width="120" Watermark="28in, 710mm" />
+				</ctrl:CustomFormField.Input>
+			</ctrl:CustomFormField>
+
+			<ctrl:CustomFormField Label="{x:Static lang:Resources.FingerboardSide_Treble}" Grid.Column="1"
+								  LabelWidth="110" Orientation="Vertical"
+								  HorizontalAlignment="Center" LabelHorizontalAlignment="Center"
+								  IsVisible="{Binding Mode, Converter={StaticResource EqualsConverter}, ConverterParameter=Multiscale}"
+							  >
+				<ctrl:CustomFormField.Input>
+					<ctrl:MeasureTextBox Value="{Binding TrebleScale, Mode=TwoWay}"
+										 MinimumValue="10in" MaximumValue="40in"
+										 Width="120" Watermark="24in, 610mm" />
+				</ctrl:CustomFormField.Input>
+			</ctrl:CustomFormField>
+		</Grid>-->
+		<ctrl:CustomFormField Label="{x:Static lang:Resources.FingerboardSide_Bass}" Grid.Column="0"
+									  LabelWidth="110"
+								  HorizontalAlignment="Left"
+									  IsVisible="{Binding Mode, Converter={StaticResource EqualsConverter}, ConverterParameter=Multiscale}"
+							  >
 			<ctrl:CustomFormField.Input>
-				<ctrl:MeasureTextBox Value="{Binding BassScale, Mode=TwoWay}" 
+				<ctrl:MeasureTextBox Value="{Binding BassScale, Mode=TwoWay}"
 									 MinimumValue="10in" MaximumValue="40in"
-									 Width="120" Watermark="28in, 710mm" />
+									 Width="140" Watermark="28in, 710mm" />
 			</ctrl:CustomFormField.Input>
 		</ctrl:CustomFormField>
-		
-		<ctrl:CustomFormField Label="{x:Static lang:Resources.FingerboardSide_Treble}" 
+
+		<ctrl:CustomFormField Label="{x:Static lang:Resources.FingerboardSide_Treble}" Grid.Column="1"
 							  LabelWidth="110"
-							  HorizontalAlignment="Left"
+						      HorizontalAlignment="Left"
 							  IsVisible="{Binding Mode, Converter={StaticResource EqualsConverter}, ConverterParameter=Multiscale}"
 							  >
 			<ctrl:CustomFormField.Input>
-				<ctrl:MeasureTextBox Value="{Binding TrebleScale, Mode=TwoWay}" 
+				<ctrl:MeasureTextBox Value="{Binding TrebleScale, Mode=TwoWay}"
 									 MinimumValue="10in" MaximumValue="40in"
-									 Width="120" Watermark="24in, 610mm" />
+									 Width="140" Watermark="24in, 610mm" />
 			</ctrl:CustomFormField.Input>
 		</ctrl:CustomFormField>
-		
-		<ctrl:CustomFormField Label="Alignement"
+
+
+		<ctrl:CustomFormField Label="{x:Static lang:Resources.ScaleLengthEditorPanel_MultiScaleRatio}"
 							  LabelWidth="110"
 							  HorizontalAlignment="Left"
 							  IsVisible="{Binding Mode, Converter={StaticResource EqualsConverter}, ConverterParameter=Multiscale}"
 							  >
 			<ctrl:CustomFormField.Input>
-				<Border BorderBrush="Red" BorderThickness="0">
-					<Grid Width="200">
-						<Grid.RowDefinitions>
-							<RowDefinition Height="*" />
-							<RowDefinition Height="*" />
-						</Grid.RowDefinitions>
-						<Grid.ColumnDefinitions>
-							<ColumnDefinition Width="*" />
-							<ColumnDefinition Width="*" />
-							<ColumnDefinition Width="*" />
-						</Grid.ColumnDefinitions>
-
-						<TextBlock Text="{x:Static loc:Texts.FingerboardEnd_Nut}"
-								   FontSize="11" Margin="0,0,0,-6"
-								   Grid.Row="0" Grid.Column="0"
-								   HorizontalAlignment="Left" />
-						<TextBlock Text="12 Fret"
-								   FontSize="11" Margin="0,0,0,-6"
-								   Grid.Row="0" Grid.Column="1"
-								   HorizontalAlignment="Center"/>
-						<TextBlock Text="{x:Static loc:Texts.FingerboardEnd_Bridge}"
-								   FontSize="11" Margin="0,0,0,-6"
-								   Grid.Row="0" Grid.Column="2"
-								   HorizontalAlignment="Right"/>
-						<Slider Minimum="0" Maximum="1" Grid.Row="1" Margin="0,-4,0,-12"
-								Grid.ColumnSpan="3" Value="{Binding MultiScaleRatio}"/>
-					</Grid>
-				</Border>
+				<ctrl:NumericTextBox 
+					Value="{Binding MultiScaleRatio, Mode=TwoWay}" 
+					MinimumValue="0" MaximumValue="1" Width="140" VerticalContentAlignment="Center"
+					TextAlignment="Left" FontSize="12">
+					<TextBox.InnerRightContent>
+						<ComboBox x:Name="FretAlignCbo"
+									  ItemsSource="{Binding MultiScaleRatioPresets}"
+									  SelectedValue="{Binding SelectedRatioPreset, Mode=TwoWay}"
+									  MinWidth="0" MinHeight="0" VerticalAlignment="Center"
+									  BorderThickness="0" 
+									  FontSize="12">
+							<ComboBox.ItemTemplate>
+								<DataTemplate>
+									<TextBlock TextAlignment="Left" VerticalAlignment="Center" Text="{Binding Label}" />
+								</DataTemplate>
+							</ComboBox.ItemTemplate>
+							<ComboBox.Resources>
+								<Thickness x:Key="ComboBoxPadding">0,0,-4,0</Thickness>
+							</ComboBox.Resources>
+						</ComboBox>
+					</TextBox.InnerRightContent>
+				</ctrl:NumericTextBox>
 			</ctrl:CustomFormField.Input>
 		</ctrl:CustomFormField>
 
-
-		<ItemsControl ItemsSource="{Binding PerStringScales}"
-					  IsVisible="{Binding Mode, Converter={StaticResource EqualsConverter}, ConverterParameter=PerString}">
+		<ItemsControl ItemsSource="{Binding PerStringScales}" MaxWidth="400"
+								  Margin="0,0,0,10" HorizontalAlignment="Center"
+							  IsVisible="{Binding Mode, Converter={StaticResource EqualsConverter}, ConverterParameter=PerString}"
+					      >
 			<ItemsControl.ItemsPanel>
 				<ItemsPanelTemplate>
 					<WrapPanel />
@@ -138,22 +166,56 @@
 			</ItemsControl.ItemsPanel>
 			<ItemsControl.ItemTemplate>
 				<DataTemplate>
-					<StackPanel Orientation="Vertical" Margin="4" Spacing="4">
-						<TextBlock Text="{Binding Label}"  HorizontalAlignment="Center" />
-						<ctrl:MeasureTextBox Value="{Binding Scale, Mode=TwoWay}" 
+					<StackPanel Orientation="Vertical" Margin="2,4" Spacing="4">
+						<TextBlock Text="{Binding Label}"  HorizontalAlignment="Center" FontSize="12" />
+						<ctrl:MeasureTextBox Value="{Binding Scale, Mode=TwoWay}"
 											 MinimumValue="10in" MaximumValue="40in"
 											 Watermark="Length"
-											 Width="80" />
-						<NumericUpDown Value="{Binding Ratio}" 
-									   Minimum="0" Maximum="1"
-									   ShowButtonSpinner="False"  />
+											 Width="60" MinHeight="0" FontSize="12"
+											 VerticalContentAlignment="Center" />
+						<ctrl:NumericTextBox Value="{Binding Ratio}"
+									   MinimumValue="0" MaximumValue="1"
+									   MinHeight="0" FontSize="12"
+									   VerticalContentAlignment="Center" Watermark="{Binding DefaultRatio}"  />
 						<!--<TextBox Text="{Binding Ratio}" TextAlignment="Right" />-->
 					</StackPanel>
 				</DataTemplate>
 			</ItemsControl.ItemTemplate>
 		</ItemsControl>
+		<!--<ScrollViewer HorizontalAlignment="Left" HorizontalScrollBarVisibility="Auto" MaxWidth="400" 
+					  IsVisible="{Binding Mode, Converter={StaticResource EqualsConverter}, ConverterParameter=PerString}" >
+			<ItemsControl ItemsSource="{Binding PerStringScales}"
+						  Margin="0,0,0,10" HorizontalAlignment="Center"
+					  IsVisible="{Binding Mode, Converter={StaticResource EqualsConverter}, ConverterParameter=PerString}"
+					      >
+				<ItemsControl.ItemsPanel>
+					<ItemsPanelTemplate>
+						<WrapPanel />
+					</ItemsPanelTemplate>
+				</ItemsControl.ItemsPanel>
+				<ItemsControl.ItemTemplate>
+					<DataTemplate>
+						<StackPanel Orientation="Vertical" Margin="2,4" Spacing="4">
+							<TextBlock Text="{Binding Label}"  HorizontalAlignment="Center" FontSize="12" />
+							<ctrl:MeasureTextBox Value="{Binding Scale, Mode=TwoWay}"
+												 MinimumValue="10in" MaximumValue="40in"
+												 Watermark="Length"
+												 Width="60" MinHeight="0" FontSize="12"
+												 VerticalContentAlignment="Center" />
+							<ctrl:NumericTextBox Value="{Binding Ratio}"
+										   MinimumValue="0" MaximumValue="1"
+										   MinHeight="0" FontSize="12"
+										   VerticalContentAlignment="Center" Watermark="{Binding DefaultRatio}"  />
+							-->
+		<!--<TextBox Text="{Binding Ratio}" TextAlignment="Right" />-->
+		<!--
+						</StackPanel>
+					</DataTemplate>
+				</ItemsControl.ItemTemplate>
+			</ItemsControl>
+		</ScrollViewer>-->
 
-		<ctrl:CustomFormField Label="{x:Static lang:Resources.Editor_BassTrebleSkew}"
+		<ctrl:CustomFormField Label="{x:Static lang:Resources.ScaleLengthEditorPanel_BassTrebleSkew}"
 							  LabelWidth="110"
 							  HorizontalAlignment="Left"
 							  >
@@ -161,7 +223,7 @@
 				<ctrl:MeasureTextBox x:Name="SkewMeasureBox"
 					Value="{Binding BassTrebleSkew, Mode=TwoWay}" 
 									 MinimumValue="-30mm" MaximumValue="30mm"
-									 Width="120" AllowEmpty="True" Watermark="0mm" />
+									 Width="140" AllowEmpty="True" Watermark="0mm" />
 			</ctrl:CustomFormField.Input>
 			<ctrl:CustomFormField.Help>
 				<TextBlock 
@@ -170,6 +232,7 @@
 			</ctrl:CustomFormField.Help>
 		</ctrl:CustomFormField>
 
-		
+
 	</StackPanel>
 </UserControl>
+

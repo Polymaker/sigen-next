@@ -16,6 +16,8 @@ namespace SiGen.ViewModels
         ///// </summary>
         //InstrumentLayoutConfiguration WorkingConfiguration { get; }
 
+        string? FilePath { get; }
+
         /// <summary>
         /// Gets the last valid (applied) configuration for the instrument layout.
         /// </summary>
@@ -29,7 +31,7 @@ namespace SiGen.ViewModels
         /// <summary>
         /// Gets the current generated layout (may be from working or stable config).
         /// </summary>
-        StringedInstrumentLayout? CurrentLayout { get; }
+        StringedInstrumentLayout? Layout { get; }
 
         /// <summary>
         /// Provides access to an optional <see cref="IInstrumentValuesProvider"/> instance,

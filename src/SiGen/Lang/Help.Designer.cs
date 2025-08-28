@@ -72,11 +72,35 @@ namespace SiGen.Lang {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Sélectionnez si la disposition de l&apos;instrument est destinée à un joueur droitier ou gaucher..
+        ///   Looks up a localized string similar to Select whether the instrument layout is for a right-handed or left-handed player..
         /// </summary>
         public static string Handedness_Help {
             get {
                 return ResourceManager.GetString("Handedness_Help", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This value determines which kind of instrument you are designing. 
+        ///Selecting an instrument type enables info buttons next to certain fields, showing common values and suggestions specific to that instrument..
+        /// </summary>
+        public static string InstrumentType_Help {
+            get {
+                return ResourceManager.GetString("InstrumentType_Help", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Choose how the strings are laid out relative to the center line:
+        ///• **Outer Strings**: Aligns the outermost strings equally from the center line.
+        ///• **Middle Strings**: Aligns the middle string(s) to the center line.
+        ///• **Fingerboard**: Centers by the edges of the fingerboard, which is usually the same as **Outer Strings** unless the bass and treble margins differ.
+        ///• **Symmetric Strings**: (Multiscale only) Adjust the spacing so that the layout remain symmetric.
+        ///• **Symmetric Fingerboard**: (Multiscale on [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string LayoutCenterAlignment_Help {
+            get {
+                return ResourceManager.GetString("LayoutCenterAlignment_Help", resourceCulture);
             }
         }
         
@@ -90,6 +114,15 @@ namespace SiGen.Lang {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string ScaleLength_MultiScaleRatio {
+            get {
+                return ResourceManager.GetString("ScaleLength_MultiScaleRatio", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Choose the scale length mode:
         ///• **Single**: A single scale length for all strings.
         ///• **Multiscale**: A separate scale length for treble and bass strings.
@@ -98,6 +131,27 @@ namespace SiGen.Lang {
         public static string ScaleLengthMode_Help {
             get {
                 return ResourceManager.GetString("ScaleLengthMode_Help", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Here are some common scale length used :.
+        /// </summary>
+        public static string SingleScale_Presets_Title {
+            get {
+                return ResourceManager.GetString("SingleScale_Presets_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Choose how strings are spaced on the instrument:
+        ///• **Proportional**: Strings are spaced so the free space between each string is equal, taking into account the thickness (gauge) of each string.
+        ///• **Centered/Equal**: Strings are spaced so the distance from the center of one string to the center of the next is equal, regardless of string gauge.
+        ///• **Manual**: String positions are set manually. The spacing mode is ignored, and you can place each string exactly where you want..
+        /// </summary>
+        public static string StringSpacingMode_Help {
+            get {
+                return ResourceManager.GetString("StringSpacingMode_Help", resourceCulture);
             }
         }
     }

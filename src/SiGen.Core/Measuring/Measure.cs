@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 
 namespace SiGen.Measuring
 {
+    //todo, change to an immutable struct
     [TypeConverter(typeof(MeasureTypeConverter))]
     public class Measure : IComparable, IComparable<Measure>
     {
@@ -297,6 +298,11 @@ namespace SiGen.Measuring
         public static Measure Abs(Measure value)
         {
             return FromNormalizedValue(value.Unit, MathD.Abs(value.NormalizedValue));
+        }
+
+        public static Measure Round(Measure value)
+        {
+            return new Measure(value.Unit, MathD.Round(value.Value));
         }
 
         public static Measure Max(Measure m1, params Measure[] values)

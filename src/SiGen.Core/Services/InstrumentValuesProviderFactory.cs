@@ -9,7 +9,7 @@ namespace SiGen.Services
 {
     public interface IInstrumentValuesProviderFactory
     {
-        IInstrumentValuesProvider CreateProvider(InstrumentType type);
+        IInstrumentValuesProvider? CreateProvider(InstrumentType type);
     }
 
     public class InstrumentValuesProviderFactory : IInstrumentValuesProviderFactory
@@ -23,7 +23,7 @@ namespace SiGen.Services
                 { InstrumentType.ElectricGuitar, () => new InstrumentProfiles.ElectricGuitarValuesProvider() },
                 { InstrumentType.AcousticGuitar, () => new InstrumentProfiles.AcousticGuitarValuesProvider() },
                 { InstrumentType.ClassicalGuitar, () => new InstrumentProfiles.ClassicalGuitarValuesProvider() },
-                { InstrumentType.BassGuitar, () => new InstrumentProfiles.ElectricBassGuitarValuesProvider() },
+                { InstrumentType.ElectricBass, () => new InstrumentProfiles.ElectricBassGuitarValuesProvider() },
                 { InstrumentType.AcousticBass, () => new InstrumentProfiles.AcousticBassValuesProvider() },
                 //{ InstrumentType.Mandolin, () => new InstrumentProfiles.MandolinValuesProvider() },
                 { InstrumentType.Banjo, () => new InstrumentProfiles.BanjoValuesProvider() },
@@ -31,12 +31,12 @@ namespace SiGen.Services
             };
         }
 
-        public IInstrumentValuesProvider CreateProvider(InstrumentType type)
+        public IInstrumentValuesProvider? CreateProvider(InstrumentType type)
         {
             if (_registry.TryGetValue(type, out var creator))
                 return creator();
-
-            throw new ArgumentException($"No values provider registered for instrument type '{type}'.");
+            return null;
+            //throw new ArgumentException($"No values provider registered for instrument type '{type}'.");
         }
     }
 }

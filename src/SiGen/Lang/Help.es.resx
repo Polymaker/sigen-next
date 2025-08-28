@@ -134,4 +134,13 @@ Los valores positivos inclinan los trastes hacia un lado, los negativos hacia el
   <data name="Handedness_Help" xml:space="preserve">
     <value>Seleccione si el diseño del instrumento es para un jugador diestro o zurdo.</value>
   </data>
+  <data name="InstrumentType_Help" xml:space="preserve">
+    <value>Este valor determina el tipo de instrumento que estás diseñando. Al seleccionar un tipo de instrumento, se activan botones de información junto a ciertos campos, que muestran valores comunes y sugerencias específicas para ese instrumento.</value>
+  </data>
+  <data name="StringSpacingMode_Help" xml:space="preserve">
+    <value>Elige cómo se espacian las cuerdas en el instrumento:
+• **Proporcional**: Las cuerdas se espacian de forma que el espacio libre entre ellas sea igual, teniendo en cuenta el grosor (calibre) de cada una.
+• **Centrado/Igual**: Las cuerdas se espacian de forma que la distancia entre el centro de una cuerda y el centro de la siguiente sea igual, independientemente del calibre de la cuerda.
+• **Manual**: La posición de las cuerdas se ajusta manualmente. El modo de espaciado se ignora y puedes colocar cada cuerda exactamente donde quieras.</value>
+  </data>
 </root>

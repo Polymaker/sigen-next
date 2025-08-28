@@ -198,4 +198,13 @@
   <data name="FeetAbbreviation" xml:space="preserve">
     <value>ft</value>
   </data>
+  <data name="Preset_Standard" xml:space="preserve">
+    <value>Standard</value>
+  </data>
+  <data name="Preset_Narrow" xml:space="preserve">
+    <value>Eng</value>
+  </data>
+  <data name="Preset_Wide" xml:space="preserve">
+    <value>Breit</value>
+  </data>
 </root>

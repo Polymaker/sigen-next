@@ -118,9 +118,6 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="SingleScaleNotConfigured" type="System.Resources.ResXNullRef, System.Windows.Forms">
-    <value />
-  </data>
   <data name="ScaleLengthSideNotConfigured" xml:space="preserve">
     <value>Le diapason pour le côté '{0}' n'est pas configuré.</value>
   </data>
@@ -219,5 +216,41 @@
   </data>
   <data name="FeetAbbreviation" xml:space="preserve">
     <value>pi</value>
+  </data>
+  <data name="StringSpacingMode.Proportional" xml:space="preserve">
+    <value>Proportionnel</value>
+  </data>
+  <data name="StringSpacingMode.CenterToCenter" xml:space="preserve">
+    <value>Centré / Égal</value>
+  </data>
+  <data name="StringSpacingMode.Manual" xml:space="preserve">
+    <value>Manuel</value>
+  </data>
+  <data name="LayoutCenterAlignment.OuterStrings" xml:space="preserve">
+    <value>Cordes extérieures</value>
+  </data>
+  <data name="LayoutCenterAlignment.MiddleStrings" xml:space="preserve">
+    <value>Cordes centrales</value>
+  </data>
+  <data name="LayoutCenterAlignment.Fingerboard" xml:space="preserve">
+    <value>Bords de la touche</value>
+  </data>
+  <data name="LayoutCenterAlignment.SymmetricStrings" xml:space="preserve">
+    <value>Cordes symétriques</value>
+  </data>
+  <data name="LayoutCenterAlignment.SymmetricFingerboard" xml:space="preserve">
+    <value>Touche symétrique</value>
+  </data>
+  <data name="LayoutCenterAlignment.Manual" xml:space="preserve">
+    <value>Manuel</value>
+  </data>
+  <data name="Preset_Narrow" xml:space="preserve">
+    <value>Étroit</value>
+  </data>
+  <data name="Preset_Wide" xml:space="preserve">
+    <value>Large</value>
+  </data>
+  <data name="Preset_Standard" xml:space="preserve">
+    <value>Standard</value>
   </data>
 </root>

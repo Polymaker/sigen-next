@@ -91,8 +91,6 @@ namespace SiGen.UI
         private double centerLineOffsetX = 0;
         private double centerLineOffsetY = 0;
 
-
-
         public void SetBluePrintBounds(RectangleM bounds)
         {
             double scale = LayoutViewer.LayoutViewerControl.CmScaleFactor;

@@ -1,0 +1,104 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="400" d:DesignHeight="300"
+             x:Class="SiGen.UI.EditorPanels.FingerboardEditorPanel"
+			 xmlns:vm="clr-namespace:SiGen.ViewModels.EditorPanels"
+			 x:DataType="vm:FingerboardPanelViewModel"
+			 xmlns:ctrl="using:SiGen.UI.Controls"
+			 xmlns:lang="using:SiGen.Lang"
+			 xmlns:conv="clr-namespace:SiGen.Converters;assembly=SiGen">
+	<UserControl.DataContext>
+		<vm:FingerboardPanelViewModel />
+	</UserControl.DataContext>
+
+	<UserControl.Resources>
+		<conv:OrConverter x:Key="OrConverter"/>
+		<conv:EqualsConverter x:Key="EqualsConverter" />
+	</UserControl.Resources>
+	
+	<StackPanel Spacing="4" Margin="4">
+		
+		<TextBlock Text="{x:Static lang:Resources.FingerboardEditorPanel_Header}" Classes="PanelHeader" />
+
+		<ctrl:CustomFormField Label="Définir les marges"
+							  Help="Indique si les marges doivent être compensées en fonction de la largeur des cordes.">
+			<ctrl:CustomFormField.Input>
+				<ComboBox ItemsSource="{Binding MarginModes}" SelectedValue="{Binding SelectedMarginMode, Mode=TwoWay}">
+
+				</ComboBox>
+			</ctrl:CustomFormField.Input>
+		</ctrl:CustomFormField>
+
+		<Grid ColumnDefinitions="Auto,*,*" RowDefinitions="Auto,*,*" 
+			  ColumnSpacing="4" RowSpacing="4"
+			  Margin="4,0" MaxWidth="300">
+			<TextBlock Text="Nut" Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" />
+			<TextBlock Text="Bridge" Grid.Column="0" Grid.Row="2" VerticalAlignment="Center" />
+
+
+			<TextBlock Text="Bass" Grid.Column="1" Grid.Row="0" TextAlignment="Center" />
+			<TextBlock Text="Treble" Grid.Column="2" Grid.Row="0" TextAlignment="Center" />
+
+			<ctrl:MeasureTextBox Grid.Column="1" Grid.Row="1" TextAlignment="Center"
+								 Value="{Binding NutBassMargin, Mode=TwoWay}" />
+			<ctrl:MeasureTextBox Grid.Column="2" Grid.Row="1" TextAlignment="Center"
+								 Value="{Binding NutTrebleMargin, Mode=TwoWay}">
+				<!--<ctrl:MeasureTextBox.IsReadOnly>
+					<MultiBinding Converter="{StaticResource OrConverter}">
+						<Binding Path="SelectedMarginMode" ConverterParameter="All" Converter="{StaticResource EqualsConverter}"/>
+						<Binding Path="SelectedMarginMode" ConverterParameter="NutBridge" Converter="{StaticResource EqualsConverter}"/>
+					</MultiBinding>
+				</ctrl:MeasureTextBox.IsReadOnly>-->
+				<ctrl:MeasureTextBox.IsEnabled>
+					<MultiBinding Converter="{StaticResource OrConverter}">
+						<Binding Path="SelectedMarginMode" ConverterParameter="Individual" Converter="{StaticResource EqualsConverter}"/>
+						<Binding Path="SelectedMarginMode" ConverterParameter="BassTreble" Converter="{StaticResource EqualsConverter}"/>
+					</MultiBinding>
+				</ctrl:MeasureTextBox.IsEnabled>
+			</ctrl:MeasureTextBox>
+
+			<ctrl:MeasureTextBox Grid.Column="1" Grid.Row="2" TextAlignment="Center"
+								 Value="{Binding BridgeBassMargin, Mode=TwoWay}">
+				<!--<ctrl:MeasureTextBox.IsReadOnly>
+					<MultiBinding Converter="{StaticResource OrConverter}">
+						<Binding Path="SelectedMarginMode" ConverterParameter="All" Converter="{StaticResource EqualsConverter}"/>
+						<Binding Path="SelectedMarginMode" ConverterParameter="BassTreble" Converter="{StaticResource EqualsConverter}"/>
+					</MultiBinding>
+				</ctrl:MeasureTextBox.IsReadOnly>-->
+				<ctrl:MeasureTextBox.IsEnabled>
+					<MultiBinding Converter="{StaticResource OrConverter}">
+						<Binding Path="SelectedMarginMode" ConverterParameter="Individual" Converter="{StaticResource EqualsConverter}"/>
+						<Binding Path="SelectedMarginMode" ConverterParameter="NutBridge" Converter="{StaticResource EqualsConverter}"/>
+					</MultiBinding>
+				</ctrl:MeasureTextBox.IsEnabled>
+			
+		</ctrl:MeasureTextBox>
+			<ctrl:MeasureTextBox Grid.Column="2" Grid.Row="2" TextAlignment="Center"
+								 Value="{Binding BridgeTrebleMargin, Mode=TwoWay}"
+								 IsEnabled="{Binding SelectedMarginMode, Converter={StaticResource EqualsConverter}, ConverterParameter=Individual}">
+				<!--<ctrl:MeasureTextBox.IsReadOnly>
+					<MultiBinding Converter="{StaticResource OrConverter}">
+						<Binding Path="SelectedMarginMode" ConverterParameter="All" Converter="{StaticResource EqualsConverter}"/>
+						<Binding Path="SelectedMarginMode" ConverterParameter="NutBridge" Converter="{StaticResource EqualsConverter}"/>
+						<Binding Path="SelectedMarginMode" ConverterParameter="BassTreble" Converter="{StaticResource EqualsConverter}"/>
+					</MultiBinding>
+				</ctrl:MeasureTextBox.IsReadOnly>-->
+			</ctrl:MeasureTextBox>
+		</Grid>
+
+		<ctrl:CustomFormField Label="Compenser les marges"
+							  Help="Indique si les marges doivent être compensées en fonction de la largeur des cordes.">
+			<ctrl:CustomFormField.Input>
+				<ToggleSwitch IsChecked="{Binding CompensateForStringThickness, Mode=TwoWay}" OnContent="Yes" OffContent="No" />
+			</ctrl:CustomFormField.Input>
+		</ctrl:CustomFormField>
+		
+		<ctrl:CustomFormField Label="Extension" Help="Length to continue the fingerboard after the last fret.">
+			<ctrl:CustomFormField.Input>
+				<ctrl:MeasureTextBox  Width="120" AllowEmpty="True" />
+			</ctrl:CustomFormField.Input>
+		</ctrl:CustomFormField>
+	</StackPanel>
+</UserControl>

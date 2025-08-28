@@ -172,7 +172,7 @@
     <value>Anzahl der Saiten</value>
   </data>
   <data name="Editor.ScaleLengthMode.Select" xml:space="preserve">
-    <value>Mensurlängenmodus</value>
+    <value>Modus</value>
   </data>
   <data name="InstrumentType.ElectricGuitar" xml:space="preserve">
     <value>E-Gitarre</value>
@@ -183,7 +183,7 @@
   <data name="InstrumentType.ClassicalGuitar" xml:space="preserve">
     <value>Konzertgitarre</value>
   </data>
-  <data name="InstrumentType.BassGuitar" xml:space="preserve">
+  <data name="InstrumentType.ElectricBass" xml:space="preserve">
     <value>E-Bass</value>
   </data>
   <data name="InstrumentType.AcousticBass" xml:space="preserve">
@@ -210,7 +210,86 @@
   <data name="Editor.NumberOfFrets" xml:space="preserve">
     <value>Anzahl der Bünde</value>
   </data>
-  <data name="Editor.BassTrebleSkew" xml:space="preserve">
+  <data name="StringSpacingEditorPanel.SpacingHeader" xml:space="preserve">
+    <value>Abstand</value>
+  </data>
+  <data name="StringSpacingEditorPanel.SpreadHeader" xml:space="preserve">
+    <value>Breite</value>
+  </data>
+  <data name="StringSpacingEditorPanel.NutSpacing" xml:space="preserve">
+    <value>Sattelabstand</value>
+  </data>
+  <data name="StringSpacingEditorPanel.BridgeSpacing" xml:space="preserve">
+    <value>Stegabstand</value>
+  </data>
+  <data name="StringSpacingEditorPanel.Header" xml:space="preserve">
+    <value>Saitenabstand und Anordnung</value>
+  </data>
+  <data name="StringSpacingEditorPanel.SpacingMode" xml:space="preserve">
+    <value>Methode</value>
+  </data>
+  <data name="StringSpacingEditorPanel.CenterAlignment" xml:space="preserve">
+    <value>Zentrierung</value>
+  </data>
+  <data name="StringSpacingEditorPanel.ConfigureSpacingButton" xml:space="preserve">
+    <value>Konfigurieren…</value>
+  </data>
+  <data name="StringGroupLabel" xml:space="preserve">
+    <value>Seilgruppe</value>
+  </data>
+  <data name="Length" xml:space="preserve">
+    <value>Länge</value>
+  </data>
+  <data name="ScaleLength" xml:space="preserve">
+    <value>Mensur</value>
+  </data>
+  <data name="FretLabel" xml:space="preserve">
+    <value>Bund</value>
+  </data>
+  <data name="ScaleLengthEditorPanel.BassTrebleSkew" xml:space="preserve">
     <value>Schrägstellung</value>
+  </data>
+  <data name="ScaleLengthEditorPanel.ScaleLengthMode" xml:space="preserve">
+    <value>Modus</value>
+  </data>
+  <data name="ScaleLengthEditorPanel.MultiScaleRatio" xml:space="preserve">
+    <value>Ausrichtung</value>
+  </data>
+  <data name="ScaleLengthEditorPanel.Header" xml:space="preserve">
+    <value>Mensurlänge-Konfiguration</value>
+  </data>
+  <data name="StringsFretsEditorPanel.Header" xml:space="preserve">
+    <value>Saiten und Bünde</value>
+  </data>
+  <data name="StringsFretsEditorPanel.NumberOfFrets" xml:space="preserve">
+    <value>Anzahl der Bünde</value>
+  </data>
+  <data name="StringsFretsEditorPanel.NumberOfStrings" xml:space="preserve">
+    <value>Anzahl der Saiten</value>
+  </data>
+  <data name="InstrumentInfoEditorPanel.Handedness" xml:space="preserve">
+    <value>Instrumentenausrichtung</value>
+  </data>
+  <data name="InstrumentInfoEditorPanel.InstrumentType" xml:space="preserve">
+    <value>Gerätetyp</value>
+  </data>
+  <data name="InstrumentInfoEditorPanel.LayoutName" xml:space="preserve">
+    <value>Projektname</value>
+  </data>
+  <data name="InstrumentInfoEditorPanel.Header" xml:space="preserve">
+    <value>Instrumenteninformationen</value>
+  </data>
+  <data name="HomePageView.Header" xml:space="preserve">
+    <value>Entwerfen, Anpassen und Erstellen von Instrumentenlayouts</value>
+  </data>
+  <data name="HomePageView.WelcomText" xml:space="preserve">
+    <value>SiGen unterstützt Sie bei der präzisen Gestaltung und Anpassung von Saiteninstrumentenlayouts.
+Öffnen Sie eine aktuelle Datei, um Ihre Arbeit fortzusetzen, oder beginnen Sie ein neues Layout mit einer unserer Vorlagen.</value>
+  </data>
+  <data name="FingerboardEditorPanel.Header" xml:space="preserve">
+    <value>Griffbrettränder</value>
+  </data>
+  <data name="StringSpacingEditorPanel.SpacingPresetHeader" xml:space="preserve">
+    <value>Gemeinsame Abstände</value>
   </data>
 </root>

@@ -172,7 +172,7 @@
     <value>Número de cuerdas</value>
   </data>
   <data name="Editor.ScaleLengthMode.Select" xml:space="preserve">
-    <value>Modo de longitud de escala</value>
+    <value>Modo</value>
   </data>
   <data name="InstrumentType.ElectricGuitar" xml:space="preserve">
     <value>Guitarra eléctrica</value>
@@ -183,7 +183,7 @@
   <data name="InstrumentType.ClassicalGuitar" xml:space="preserve">
     <value>Guitarra clásica</value>
   </data>
-  <data name="InstrumentType.BassGuitar" xml:space="preserve">
+  <data name="InstrumentType.ElectricBass" xml:space="preserve">
     <value>Bajo eléctrico</value>
   </data>
   <data name="InstrumentType.AcousticBass" xml:space="preserve">
@@ -210,7 +210,86 @@
   <data name="Editor.NumberOfFrets" xml:space="preserve">
     <value>Número de trastes</value>
   </data>
-  <data name="Editor.BassTrebleSkew" xml:space="preserve">
+  <data name="StringSpacingEditorPanel.SpacingHeader" xml:space="preserve">
+    <value>Espacio</value>
+  </data>
+  <data name="StringSpacingEditorPanel.SpreadHeader" xml:space="preserve">
+    <value>Separación</value>
+  </data>
+  <data name="StringSpacingEditorPanel.NutSpacing" xml:space="preserve">
+    <value>Esp. en la cejuela</value>
+  </data>
+  <data name="StringSpacingEditorPanel.BridgeSpacing" xml:space="preserve">
+    <value>Esp. en el puente</value>
+  </data>
+  <data name="StringSpacingEditorPanel.Header" xml:space="preserve">
+    <value>Arreglo de cuerdas</value>
+  </data>
+  <data name="StringSpacingEditorPanel.SpacingMode" xml:space="preserve">
+    <value>Método</value>
+  </data>
+  <data name="StringSpacingEditorPanel.CenterAlignment" xml:space="preserve">
+    <value>Centrado</value>
+  </data>
+  <data name="StringSpacingEditorPanel.ConfigureSpacingButton" xml:space="preserve">
+    <value>Configurar…</value>
+  </data>
+  <data name="StringGroupLabel" xml:space="preserve">
+    <value>Grupo de cuerdas</value>
+  </data>
+  <data name="Length" xml:space="preserve">
+    <value>Longitud</value>
+  </data>
+  <data name="ScaleLength" xml:space="preserve">
+    <value>Longitud de escala</value>
+  </data>
+  <data name="FretLabel" xml:space="preserve">
+    <value>Traste</value>
+  </data>
+  <data name="ScaleLengthEditorPanel.BassTrebleSkew" xml:space="preserve">
     <value>Inclinación</value>
+  </data>
+  <data name="ScaleLengthEditorPanel.ScaleLengthMode" xml:space="preserve">
+    <value>Modo</value>
+  </data>
+  <data name="ScaleLengthEditorPanel.MultiScaleRatio" xml:space="preserve">
+    <value>Alineación</value>
+  </data>
+  <data name="ScaleLengthEditorPanel.Header" xml:space="preserve">
+    <value>Configuración de la escala</value>
+  </data>
+  <data name="StringsFretsEditorPanel.Header" xml:space="preserve">
+    <value>Cuerdas y trastes</value>
+  </data>
+  <data name="StringsFretsEditorPanel.NumberOfFrets" xml:space="preserve">
+    <value>Número de trastes</value>
+  </data>
+  <data name="StringsFretsEditorPanel.NumberOfStrings" xml:space="preserve">
+    <value>Número de cuerdas</value>
+  </data>
+  <data name="InstrumentInfoEditorPanel.Handedness" xml:space="preserve">
+    <value>Orientación del instrumento</value>
+  </data>
+  <data name="InstrumentInfoEditorPanel.InstrumentType" xml:space="preserve">
+    <value>Tipo de instrumento</value>
+  </data>
+  <data name="InstrumentInfoEditorPanel.LayoutName" xml:space="preserve">
+    <value>Nombre del proyecto</value>
+  </data>
+  <data name="InstrumentInfoEditorPanel.Header" xml:space="preserve">
+    <value>Información del instrumento</value>
+  </data>
+  <data name="HomePageView.Header" xml:space="preserve">
+    <value>Diseñar, personalizar y crear diseños de instrumentos</value>
+  </data>
+  <data name="HomePageView.WelcomText" xml:space="preserve">
+    <value>SiGen te ayuda a diseñar y personalizar diseños de instrumentos de cuerda con precisión.
+Abre un archivo reciente para continuar tu trabajo o crea un nuevo diseño con una de nuestras plantillas.</value>
+  </data>
+  <data name="FingerboardEditorPanel.Header" xml:space="preserve">
+    <value>Márgenes del diapasón</value>
+  </data>
+  <data name="StringSpacingEditorPanel.SpacingPresetHeader" xml:space="preserve">
+    <value>Espaciamientos comunes</value>
   </data>
 </root>

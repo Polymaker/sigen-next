@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 
 namespace SiGen.ViewModels
 {
-    public partial class DocumentEditorViewModel : ViewModelBase
+    public interface IDocumentTabViewModel
     {
-
+        string Title { get; }
+        bool HasUnsavedChanges { get; }
+        string? TabToolTip { get; }
     }
 }

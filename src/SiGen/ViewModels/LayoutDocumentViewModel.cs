@@ -60,7 +60,7 @@ namespace SiGen.ViewModels
         //public MarginPanelViewModel MarginPanel { get; }
         // Add other panels as needed
 
-        public LayoutDocumentViewModel(IServiceProvider serviceProvider, IFileDialogService fileDialogService, IInstrumentValuesProviderFactory valuesProviderFactory = null)
+        public LayoutDocumentViewModel(IServiceProvider serviceProvider, IFileDialogService fileDialogService, IInstrumentValuesProviderFactory valuesProviderFactory)
         {
             this.valuesProviderFactory = valuesProviderFactory;
 
@@ -88,7 +88,7 @@ namespace SiGen.ViewModels
         protected override void OnPropertyChanged(PropertyChangedEventArgs e)
         {
             base.OnPropertyChanged(e);
-            if (e.PropertyName == nameof(CurrentLayout))
+            if (e.PropertyName == nameof(Layout))
             {
                 LayoutChanged?.Invoke(this, EventArgs.Empty);
             }
@@ -121,7 +121,7 @@ namespace SiGen.ViewModels
             var result = LayoutBuilder.Build(WorkingConfiguration);
             if (result.Success)
             {
-                CurrentLayout = result.Layout!;
+                Layout = result.Layout!;
             }
             else
             {
@@ -173,13 +173,13 @@ namespace SiGen.ViewModels
         private void NotifyNumberOfStringsChanged()
         {
             foreach (var panel in panelViewModels)
-                panel.OnNumberOfStringsChanged();
+                panel.NotifyNumberOfStringsChanged();
         }
 
         private void NotifyInstrumentTypeChanged()
         {
             foreach (var panel in panelViewModels)
-                panel.OnInstrumentTypeChanged();
+                panel.NotifyInstrumentTypeChanged();
         }
 
         protected void OnConfigurationChanged()
@@ -187,15 +187,6 @@ namespace SiGen.ViewModels
             RebuildLayout();
         }
 
-        public void ApplyChanges()
-        {
-            // Apply changes from working configuration to stable configuration
-            StableConfiguration = CloneConfiguration(WorkingConfiguration);
-            HasUnsavedChanges = false;
-            // Notify all panels that the configuration has changed
-            foreach (var panel in panelViewModels)
-                panel.LoadConfiguration(StableConfiguration);
-        }
 
         #endregion
 

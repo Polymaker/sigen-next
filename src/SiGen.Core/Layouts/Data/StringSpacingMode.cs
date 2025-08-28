@@ -9,6 +9,10 @@
         /// <summary>
         /// Equal distance from string center to center
         /// </summary>
-        CenterToCenter
+        CenterToCenter,
+        /// <summary>
+        /// Set the spacings manually
+        /// </summary>
+        Manual
     }
 }

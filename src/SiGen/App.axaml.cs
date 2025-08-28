@@ -28,7 +28,7 @@ public partial class App : Application
     {
         var collection = new ServiceCollection();
         collection.AddSiGenServices();
-        collection.AddSingleton<IFileDialogService, DummyFileDialogService>();
+        collection.AddSingleton<IDialogService, MockDialogService>();
         Services = collection.BuildServiceProvider();
     }
 
@@ -44,16 +44,14 @@ public partial class App : Application
         collection.AddSiGenServices();
 
 
-
-
         CultureInfo.CurrentUICulture = new CultureInfo("fr-CA");
-        //Lang.Resources.Culture = new CultureInfo("en-US");
+
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
             DisableAvaloniaDataAnnotationValidation();
             //collection.AddSingleton<IFileDialogService, DummyFileDialogService>();
             var mainWindow = new MainWindow();
-            collection.AddSingleton<IFileDialogService, DesktopFileDialogService>((sp) => new DesktopFileDialogService(mainWindow));
+            collection.AddSingleton<IDialogService, DesktopDialogService>(sp => new DesktopDialogService(mainWindow, sp));
             
             Services = collection.BuildServiceProvider();
             mainWindow.DataContext = Services.GetService<DesktopMainViewModel>();
@@ -61,12 +59,12 @@ public partial class App : Application
         }
         else if (ApplicationLifetime is ISingleViewApplicationLifetime singleViewPlatform)
         {
-            collection.AddSingleton<IFileDialogService, DummyFileDialogService>();
+            collection.AddSingleton<IDialogService, MockDialogService>();
 
             Services = collection.BuildServiceProvider();
             singleViewPlatform.MainView = new MobileMainView
             {
-                DataContext = Services.GetService<MainViewModel>() ?? new MainViewModel()
+                //DataContext = Services.GetService<MainViewModel>() ?? new MainViewModel()
             };
         }
 

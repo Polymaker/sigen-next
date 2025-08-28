@@ -2,12 +2,12 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="800"
+             mc:Ignorable="d" d:DesignWidth="1920" d:DesignHeight="800"
              x:Class="SiGen.Views.LayoutDocumentView"
 			 xmlns:vm="clr-namespace:SiGen.ViewModels"
 			 xmlns:lv="clr-namespace:SiGen.UI.LayoutViewer;assembly=SiGen"
 			 xmlns:editors="clr-namespace:SiGen.UI.EditorPanels;assembly=SiGen"
-			 x:DataType="vm:DocumentViewModel"
+			 x:DataType="vm:LayoutDocumentViewModel"
 			 >
 	<UserControl.Resources>
 
@@ -29,18 +29,53 @@
 		<Grid.RowDefinitions>
 			<RowDefinition Height="*" />
 			<RowDefinition Height="5" />
-			<RowDefinition Height="300" />
+			<RowDefinition Height="320" />
 		</Grid.RowDefinitions>
 	
 		<lv:LayoutViewerControl x:Name="Viewer" />
+		
 		<GridSplitter Grid.Row="1" Background="{DynamicResource GridSplitterBrush}" />
 		<Border Background="{DynamicResource BottomPanelBrush}" Grid.Row="2">
-			<ScrollViewer>
-				<StackPanel Orientation="Horizontal"  >
-					<editors:InstrumentInfoEditorPanel Width="300" />
-					<editors:ScaleLengthEditorPanel />
-					<editors:StringSpacingEditorPanel />
-				</StackPanel>
+			<ScrollViewer HorizontalScrollBarVisibility="Auto">
+				<!--<StackPanel Orientation="Horizontal" HorizontalAlignment="Left" x:Name="EditorPanelContainer" >
+					
+					<editors:InstrumentInfoEditorPanel x:Name="InfoPanel" Width="300" />
+
+					<Separator VerticalAlignment="Stretch" Height="200" HorizontalAlignment="Left" Width="1"/>
+
+					<editors:StringsFretsEditorPanel x:Name="StringsFretsPanel" />
+
+					<Separator VerticalAlignment="Stretch" Height="200" HorizontalAlignment="Left" Width="1"/>
+
+					<editors:ScaleLengthEditorPanel x:Name="ScaleLengthPanel" />
+					
+					<Separator VerticalAlignment="Stretch" Height="200" HorizontalAlignment="Left" Width="1"/>
+					
+					<editors:StringSpacingEditorPanel x:Name="SpacingPanel" />
+
+					<Separator VerticalAlignment="Stretch" Height="200" HorizontalAlignment="Left" Width="1"/>
+					
+					<editors:FingerboardEditorPanel x:Name="FingerboardPanel" />
+				</StackPanel>-->
+				<Grid ColumnDefinitions="2.5*,2,3*,2,2.8*,2,3.5*,2,2.5*">
+					<editors:InstrumentInfoEditorPanel x:Name="InfoPanel" Grid.Column="0" />
+
+					<Separator VerticalAlignment="Stretch" Grid.Column="1" Margin="1" Height="200" HorizontalAlignment="Left" Width="1"/>
+
+					<editors:StringsFretsEditorPanel x:Name="StringsFretsPanel" Grid.Column="2" />
+
+					<Separator VerticalAlignment="Stretch" Grid.Column="3" Margin="1" Height="200" HorizontalAlignment="Left" Width="1"/>
+
+					<editors:ScaleLengthEditorPanel x:Name="ScaleLengthPanel" Grid.Column="4" />
+
+					<Separator VerticalAlignment="Stretch" Grid.Column="5" Margin="1" Height="200" HorizontalAlignment="Left" Width="1"/>
+
+					<editors:StringSpacingEditorPanel x:Name="SpacingPanel" Grid.Column="6" />
+
+					<Separator VerticalAlignment="Stretch" Grid.Column="7" Margin="1" Height="200" HorizontalAlignment="Left" Width="1"/>
+
+					<editors:FingerboardEditorPanel x:Name="FingerboardPanel" Grid.Column="8" />
+				</Grid>
 			</ScrollViewer>
 		</Border>
 

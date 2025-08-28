@@ -1,0 +1,57 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="SiGen.UI.EditorPanels.StringsFretsEditorPanel"
+			 xmlns:vm="clr-namespace:SiGen.ViewModels.EditorPanels"
+			 x:DataType="vm:StringsFretsPanelViewModel"
+			 xmlns:ctrl="using:SiGen.UI.Controls"
+			 xmlns:lang="using:SiGen.Lang"
+			 xmlns:conv="clr-namespace:SiGen.Converters;assembly=SiGen">
+	<UserControl.DataContext>
+		<vm:StringsFretsPanelViewModel />
+	</UserControl.DataContext>
+	<StackPanel Spacing="4">
+		
+		<TextBlock Text="{x:Static lang:Resources.StringsFretsEditorPanel_Header}" Classes="PanelHeader"/>
+		
+		<ctrl:CustomFormField Label="{x:Static lang:Resources.StringsFretsEditorPanel_NumberOfStrings}"
+								  Orientation="Vertical"
+								  LabelHorizontalAlignment="Center"
+								  >
+			<ctrl:CustomFormField.Input>
+				<ctrl:StringCountControl x:Name="StringsEditor"
+										 MinWidth="250" MaxWidth="350"
+										 HorizontalAlignment="Stretch"
+								 VerticalAlignment="Top"
+								 StringCount="{Binding NumberOfStrings, Mode=TwoWay}"
+								 IsLeftHanded="{Binding LeftHanded}"/>
+			</ctrl:CustomFormField.Input>
+		</ctrl:CustomFormField>
+		<ctrl:CustomFormField Label="{x:Static lang:Resources.StringsFretsEditorPanel_NumberOfFrets}"
+								  Orientation="Vertical"
+								  LabelHorizontalAlignment="Center"
+								  >
+			<ctrl:CustomFormField.Input>
+				<ctrl:NumericTextBox Value="{Binding NumberOfFrets, Mode=TwoWay}" 
+									 MaxWidth="100" TextAlignment="Center"
+									 Padding="6"
+									 MinimumValue="0" MaximumValue="40" />
+			</ctrl:CustomFormField.Input>
+			
+		</ctrl:CustomFormField>
+		<TextBlock Text="Advanced" TextAlignment="Center" />
+		<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="8">
+			<Button ToolTip.Tip="{x:Static lang:Resources.StringsLabel}">
+				<ctrl:SvgIcon SvgImage="/Assets/Icons/StringIcon.svg" Width="24" />
+			</Button>
+			<Button ToolTip.Tip="Frets">
+				<ctrl:SvgIcon SvgImage="/Assets/Icons/FretIcon.svg" Width="24" />
+			</Button>
+			<Button ToolTip.Tip="Tuning">
+				<ctrl:SvgIcon SvgImage="/Assets/Icons/TuningIcon.svg" Width="24" />
+			</Button>
+		</StackPanel>
+	</StackPanel>
+</UserControl>

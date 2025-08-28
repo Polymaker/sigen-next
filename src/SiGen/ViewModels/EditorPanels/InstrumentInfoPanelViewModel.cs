@@ -1,7 +1,9 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using SiGen.Data.Common;
 using SiGen.Layouts.Configuration;
 using SiGen.Layouts.Data;
 using SiGen.Services;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -26,11 +28,14 @@ namespace SiGen.ViewModels.EditorPanels
 
         public bool RightHanded => !LeftHanded;
 
+        public Array InstrumentTypes => Enum.GetValues(typeof(InstrumentType));
+
         public InstrumentInfoPanelViewModel()
         {
+            
         }
 
-        public override void OnConfigurationChanged()
+        protected override void OnConfigurationChanged()
         {
             if (Configuration == null)
             {
@@ -51,18 +56,6 @@ namespace SiGen.ViewModels.EditorPanels
             removedTrebleStrings.Clear();
         }
 
-        public override void ApplyChanges()
-        {
-            if (Configuration == null) return;
-
-            Configuration.NumberOfStrings = NumberOfStrings;
-            Configuration.StringConfigurations = stringConfigurations.ToList();
-            Configuration.LeftHanded = LeftHanded;
-            Configuration.NumberOfFrets = NumberOfFrets;
-
-            base.ApplyChanges();
-        }
-
         protected override void OnPropertyChanged(PropertyChangedEventArgs e)
         {
             base.OnPropertyChanged(e);
@@ -70,28 +63,13 @@ namespace SiGen.ViewModels.EditorPanels
             if (e.PropertyName == nameof(LeftHanded))
             {
                 OnPropertyChanged(nameof(RightHanded));
-                LayoutDocumentContext.UpdateConfiguration("Change handedness", config => config.LeftHanded = LeftHanded);
+                UpdateConfiguration("Change handedness", config => config.LeftHanded = LeftHanded);
+            }  
+
+            if (e.PropertyName == nameof(InstrumentType) && InstrumentType.HasValue)
+            {
+                UpdateConfiguration("Change Instrument Type", config => config.InstrumentType = InstrumentType.Value);
             }
-                
-
-            if (e.PropertyName == nameof(InstrumentType))
-                RebuildSuggestions();
-        }
-
-
-        public override void OnInstrumentTypeChanged()
-        {
-            RebuildSuggestions();
-        }
-
-        private void RebuildSuggestions()
-        {
-            if (Configuration == null) return;
-
-            if (LayoutDocumentContext.InstrumentValuesProvider == null)
-                return;
-
-            var test = LayoutDocumentContext.InstrumentValuesProvider.GetScaleLengthPresets();
         }
 
         #region Add/Remove Strings
@@ -118,22 +96,20 @@ namespace SiGen.ViewModels.EditorPanels
                         stringConfigurations.Add(GetNewStringConfiguration(side)); // Add new string at the end
                 }
 
-                
-
-                LayoutDocumentContext.UpdateConfiguration("Add string", config =>
+                UpdateConfiguration("Add string", config =>
                 {
                     config.NumberOfStrings = stringConfigurations.Count;
                     config.StringConfigurations = stringConfigurations.ToList();
 
-                    if (Configuration!.NutSpacing.StringDistances.Count > 1)
+                    if (config.NutSpacing.StringDistances.Count > 1)
                     {
-                        var prev = side == FingerboardSide.Bass ? Configuration.NutSpacing.StringDistances[0] : Configuration.NutSpacing.StringDistances[^1];
-                        Configuration.NutSpacing.AddDistance(side, prev);
+                        var prev = side == FingerboardSide.Bass ? config.NutSpacing.StringDistances[0] : config.NutSpacing.StringDistances[^1];
+                        config.NutSpacing.AddDistance(side, prev);
                     }
-                    if (Configuration!.BridgeSpacing.StringDistances.Count > 1)
+                    if (config.BridgeSpacing.StringDistances.Count > 1)
                     {
-                        var prev = side == FingerboardSide.Bass ? Configuration.BridgeSpacing.StringDistances[0] : Configuration.BridgeSpacing.StringDistances[^1];
-                        Configuration.BridgeSpacing.AddDistance(side, prev);
+                        var prev = side == FingerboardSide.Bass ? config.BridgeSpacing.StringDistances[0] : config.BridgeSpacing.StringDistances[^1];
+                        config.BridgeSpacing.AddDistance(side, prev);
                     }
                 });
             }
@@ -217,23 +193,24 @@ namespace SiGen.ViewModels.EditorPanels
                     stringConfigurations.RemoveAt(stringConfigurations.Count - 1);
                 }
 
-                LayoutDocumentContext.UpdateConfiguration("Remove string", config =>
+                UpdateConfiguration("Remove string", config =>
                 {
                     config.NumberOfStrings = stringConfigurations.Count;
                     config.StringConfigurations = stringConfigurations.ToList();
 
-                    if (Configuration!.NutSpacing.StringDistances.Count > 1)
+                    if (config.NutSpacing.SpacingMode == StringSpacingMode.Manual &&
+                        config.NutSpacing.StringDistances.Count > 1)
                     {
-                        Configuration.NutSpacing.RemoveDistance(side);
+                        config.NutSpacing.RemoveDistance(side);
                     }
-                    if (Configuration!.BridgeSpacing.StringDistances.Count > 1)
+                    if (config.BridgeSpacing.SpacingMode == StringSpacingMode.Manual &&
+                        config.BridgeSpacing.StringDistances.Count > 1)
                     {
-                        Configuration.BridgeSpacing.RemoveDistance(side);
+                        config.BridgeSpacing.RemoveDistance(side);
                     }
                 });
             }
         }
-
 
         #endregion
 

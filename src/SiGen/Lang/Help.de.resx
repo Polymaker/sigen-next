@@ -134,4 +134,14 @@ Positive Werte versetzen die Bünde in eine Richtung, negative Werte in die ande
   <data name="Handedness_Help" xml:space="preserve">
     <value>Wählen Sie aus, ob das Instrumentenlayout für Rechts- oder Linkshänder gedacht ist.</value>
   </data>
+  <data name="InstrumentType_Help" xml:space="preserve">
+    <value>Dieser Wert bestimmt, welche Art von Instrument Sie entwerfen.
+Wenn Sie einen Instrumententyp auswählen, werden neben bestimmten Feldern Info-Schaltflächen angezeigt, die allgemeine Werte und Vorschläge speziell für dieses Instrument anzeigen.</value>
+  </data>
+  <data name="StringSpacingMode_Help" xml:space="preserve">
+    <value>Wählen Sie den Saitenabstand auf dem Instrument:
+• **Proportional**: Die Saiten werden so angeordnet, dass der Abstand zwischen den einzelnen Saiten unter Berücksichtigung ihrer Stärke (Stärke) gleich ist.
+• **Zentriert/Gleich**: Die Saiten werden so angeordnet, dass der Abstand zwischen den Mitten einer Saite und der Mitte der nächsten Saite unabhängig von der Saitenstärke gleich ist.
+• **Manuell**: Die Saitenpositionen werden manuell festgelegt. Der Abstandsmodus wird ignoriert, und Sie können jede Saite genau dort platzieren, wo Sie möchten.</value>
+  </data>
 </root>

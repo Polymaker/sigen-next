@@ -18,14 +18,31 @@ namespace SiGen.ViewModels
         {
             get
             {
-                var model = new DesktopMainViewModel(new DummyFileDialogService());
-                model.OpenDocuments.Add(new DocumentViewModel("Untitled", null, LayoutTemplates.CreateBassGuitarMultiscaleLayout())
+                var model = new DesktopMainViewModel(new MockDialogService(), new MockSettingsService());
+                model.OpenDocuments.Add(new LayoutDocumentViewModel("Untitled", null, LayoutTemplates.CreateBassGuitarMultiscaleLayout())
                 {
                     HasUnsavedChanges = true
                 });
-                model.OpenDocuments.Add(new DocumentViewModel("Layout 1", null, LayoutTemplates.CreateMandolinLayout()));
+                model.OpenDocuments.Add(new LayoutDocumentViewModel("Layout 1", null, LayoutTemplates.CreateMandolinLayout()));
                 model.SelectedDocument = model.OpenDocuments.FirstOrDefault();
                 return model;
+            }
+        }
+
+        public static HomePageViewModel HomePageViewModel
+        {
+            get
+            {
+                var model = new HomePageViewModel(new SettingsService(), new MockDocumentManager());
+                return model;
+            }
+        }
+
+        private class MockDocumentManager : IDocumentManager
+        {
+            public void OpenDocumentFile(string? filePath)
+            {
+                throw new NotImplementedException();
             }
         }
     }

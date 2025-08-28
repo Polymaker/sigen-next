@@ -14,6 +14,7 @@ namespace SiGen.Utilities
         public static InstrumentLayoutConfiguration CreateSingleScaleConfig()
         {
             var layoutConfig = new InstrumentLayoutConfiguration();
+            layoutConfig.InstrumentType = Data.Common.InstrumentType.ElectricGuitar;
             layoutConfig.NumberOfStrings = 6;
             layoutConfig.InitializeStringConfigs();
             ((SingleStringConfiguration)layoutConfig.StringConfigurations[0]).Gauge = SiGen.Measuring.Measure.In(0.046);
@@ -41,7 +42,7 @@ namespace SiGen.Utilities
             layoutConfig.ScaleLength.Mode = ScaleLengthMode.Single;
             layoutConfig.ScaleLength.SingleScale = SiGen.Measuring.Measure.In(25.5m);
 
-            layoutConfig.Margin.SetAll(SiGen.Measuring.Measure.Mm(3.25m));
+            layoutConfig.Fingerboard.SetAllMargins(SiGen.Measuring.Measure.Mm(3.25m));
 
             layoutConfig.NumberOfFrets = 24;
 
@@ -51,6 +52,7 @@ namespace SiGen.Utilities
         public static InstrumentLayoutConfiguration CreateBassGuitarMultiscaleLayout()
         {
             var layoutConfig = new InstrumentLayoutConfiguration();
+            layoutConfig.InstrumentType = Data.Common.InstrumentType.Custom;
             layoutConfig.NumberOfStrings = 7;
             layoutConfig.InitializeStringConfigs();
             ((SingleStringConfiguration)layoutConfig.StringConfigurations[0]).Gauge = SiGen.Measuring.Measure.In(0.046);
@@ -74,23 +76,20 @@ namespace SiGen.Utilities
             ((SingleStringConfiguration)layoutConfig.StringConfigurations[1]).Gauge = SiGen.Measuring.Measure.In(0.100);
 
             layoutConfig.NutSpacing.CenterAlignment = LayoutCenterAlignment.SymmetricFingerboard;
+            layoutConfig.BridgeSpacing.CenterAlignment = LayoutCenterAlignment.SymmetricFingerboard;
 
-            //layoutConfig.NutSpacing.CenterAlignment = LayoutCenterAlignment.Manual;
-            //layoutConfig.NutSpacing.AlignmentRatio = 1;
-            layoutConfig.NutSpacing.SpacingMode = StringSpacingMode.CenterToCenter;
+            layoutConfig.NutSpacing.SpacingMode = StringSpacingMode.Manual;
+            layoutConfig.BridgeSpacing.SpacingMode = StringSpacingMode.Manual;
             layoutConfig.NutSpacing.StringDistances.Add(SiGen.Measuring.Measure.Mm(9.2m));
             layoutConfig.BridgeSpacing.StringDistances.Add(SiGen.Measuring.Measure.Mm(18m));
             layoutConfig.NutSpacing.StringDistances.Add(SiGen.Measuring.Measure.Mm(8m));
             layoutConfig.BridgeSpacing.StringDistances.Add(SiGen.Measuring.Measure.Mm(14m));
+            
             for (int i = 0; i < 4; i++)
             {
                 layoutConfig.NutSpacing.StringDistances.Add(SiGen.Measuring.Measure.Mm(7.3m));
                 layoutConfig.BridgeSpacing.StringDistances.Add(SiGen.Measuring.Measure.Mm(10.5m));
             }
-
-            layoutConfig.BridgeSpacing.CenterAlignment = LayoutCenterAlignment.SymmetricFingerboard;
-            layoutConfig.BridgeSpacing.SpacingMode = StringSpacingMode.CenterToCenter;
-
 
             layoutConfig.ScaleLength.CalculationMethod = ScaleLengthCalculationMethod.AlongString;
             layoutConfig.ScaleLength.Mode = ScaleLengthMode.PerString;
@@ -105,17 +104,20 @@ namespace SiGen.Utilities
                 //layoutConfig.StringConfigurations[i].MultiScaleRatio = 1;
             }
             layoutConfig.ScaleLength.MultiScaleRatio = 0.5;
-            layoutConfig.Margin.SetAll(SiGen.Measuring.Measure.Mm(3.25m));
-            layoutConfig.Margin.CompensateForStrings = true;
+            layoutConfig.Fingerboard.SetAllMargins(SiGen.Measuring.Measure.Mm(3.25m));
+            layoutConfig.Fingerboard.CompensateMarginsForStrings = true;
             layoutConfig.NumberOfFrets = 24;
             layoutConfig.StringConfigurations[0].Frets ??= new FretConfiguration();
-            layoutConfig.StringConfigurations[0].Frets!.NumberOfFrets = 22;
+            layoutConfig.StringConfigurations[0].Frets!.NumberOfFrets = 21;
+            layoutConfig.StringConfigurations[1].Frets ??= new FretConfiguration();
+            layoutConfig.StringConfigurations[1].Frets!.NumberOfFrets = 21;
             return layoutConfig;
         }
 
         public static InstrumentLayoutConfiguration CreateMandolinLayout()
         {
             var layoutConfig = new InstrumentLayoutConfiguration();
+            layoutConfig.InstrumentType = Data.Common.InstrumentType.Mandolin;
             layoutConfig.NumberOfStrings = 4;
             layoutConfig.ScaleLength.Mode = ScaleLengthMode.Single;
             layoutConfig.ScaleLength.CalculationMethod = ScaleLengthCalculationMethod.AlongFingerboard;
@@ -129,24 +131,24 @@ namespace SiGen.Utilities
             layoutConfig.BridgeSpacing.SpacingMode = StringSpacingMode.CenterToCenter;
             layoutConfig.BridgeSpacing.CenterAlignment = LayoutCenterAlignment.OuterStrings;
             layoutConfig.BridgeSpacing.StringDistances.Add(SiGen.Measuring.Measure.Mm(10.5));
-            layoutConfig.Margin.SetAll(SiGen.Measuring.Measure.Mm(2.5d));
-            layoutConfig.Margin.CompensateForStrings = true;
+            layoutConfig.Fingerboard.SetAllMargins(SiGen.Measuring.Measure.Mm(2.5d));
+            layoutConfig.Fingerboard.CompensateMarginsForStrings = true;
 
             var gauges = new[] { 0.040, 0.026, 0.016, 0.011 };
             var spacings = new[]
             {
-            SiGen.Measuring.Measure.Mm(2d), // G
-            SiGen.Measuring.Measure.Mm(1.75d), // D
-            SiGen.Measuring.Measure.Mm(1.6d), // A
-            SiGen.Measuring.Measure.Mm(1.5d)  // E
-        };
-            var tunings = new[]
-            {
-            PitchInterval.FromNote(NoteName.G, 3), // G3
-            PitchInterval.FromNote(NoteName.D, 4), // D4
-            PitchInterval.FromNote(NoteName.A, 4), // A4
-            PitchInterval.FromNote(NoteName.E, 5)  // E5
-        };
+                SiGen.Measuring.Measure.Mm(2d), // G
+                SiGen.Measuring.Measure.Mm(1.75d), // D
+                SiGen.Measuring.Measure.Mm(1.6d), // A
+                SiGen.Measuring.Measure.Mm(1.5d)  // E
+            };
+                var tunings = new[]
+                {
+                PitchInterval.FromNote(NoteName.G, 3), // G3
+                PitchInterval.FromNote(NoteName.D, 4), // D4
+                PitchInterval.FromNote(NoteName.A, 4), // A4
+                PitchInterval.FromNote(NoteName.E, 5)  // E5
+            };
 
             for (int i = 0; i < layoutConfig.NumberOfStrings; i++)
             {
@@ -169,6 +171,39 @@ namespace SiGen.Utilities
             layoutConfig.StringConfigurations[3].Frets ??= new FretConfiguration();
             layoutConfig.StringConfigurations[3].Frets!.NumberOfFrets = 22;
             layoutConfig.InitializeStringConfigs();
+
+            return layoutConfig;
+        }
+
+        public static InstrumentLayoutConfiguration CreateBassLayout()
+        {
+            var provider = new Services.InstrumentValuesProviderFactory().CreateProvider(Data.Common.InstrumentType.ElectricBass)!;
+            var layoutConfig = new InstrumentLayoutConfiguration();
+            layoutConfig.InstrumentType = Data.Common.InstrumentType.ElectricBass;
+            layoutConfig.NumberOfStrings = 4;
+            layoutConfig.ScaleLength.Mode = ScaleLengthMode.Single;
+            layoutConfig.InitializeStringConfigs();
+            ((SingleStringConfiguration)layoutConfig.StringConfigurations[0]).Gauge = SiGen.Measuring.Measure.In(0.105);
+            ((SingleStringConfiguration)layoutConfig.StringConfigurations[0]).Tuning = PitchInterval.FromNote(NoteName.E, 1);
+            ((SingleStringConfiguration)layoutConfig.StringConfigurations[1]).Gauge = SiGen.Measuring.Measure.In(0.080);
+            ((SingleStringConfiguration)layoutConfig.StringConfigurations[1]).Tuning = PitchInterval.FromNote(NoteName.A, 1);
+            ((SingleStringConfiguration)layoutConfig.StringConfigurations[2]).Gauge = SiGen.Measuring.Measure.In(0.060);
+            ((SingleStringConfiguration)layoutConfig.StringConfigurations[2]).Tuning = PitchInterval.FromNote(NoteName.D, 2);
+            ((SingleStringConfiguration)layoutConfig.StringConfigurations[3]).Gauge = SiGen.Measuring.Measure.In(0.040);
+            ((SingleStringConfiguration)layoutConfig.StringConfigurations[3]).Tuning = PitchInterval.FromNote(NoteName.G, 2);
+            layoutConfig.ScaleLength.SingleScale = SiGen.Measuring.Measure.In(34);
+
+            layoutConfig.NumberOfFrets = 22;
+            layoutConfig.NutSpacing.SpacingMode = StringSpacingMode.Proportional;
+            layoutConfig.NutSpacing.CenterAlignment = LayoutCenterAlignment.OuterStrings;
+            layoutConfig.NutSpacing.StringDistances.Add(provider.GetNutSpacingPresets().ElementAt(1).Spacing);
+
+            layoutConfig.BridgeSpacing.SpacingMode = StringSpacingMode.CenterToCenter;
+            layoutConfig.BridgeSpacing.CenterAlignment = LayoutCenterAlignment.OuterStrings;
+            layoutConfig.BridgeSpacing.StringDistances.Add(provider.GetBridgeSpacingPresets().ElementAt(1).Spacing);
+
+            layoutConfig.Fingerboard.SetAllMargins(SiGen.Measuring.Measure.Mm(3.25m));
+            layoutConfig.Fingerboard.CompensateMarginsForStrings = true;
 
             return layoutConfig;
         }

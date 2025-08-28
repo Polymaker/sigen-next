@@ -1,28 +1,102 @@
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
+using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
+using Avalonia.VisualTree;
+using SiGen.Data.Common;
 using SiGen.Layouts.Data;
+using SiGen.ViewModels.EditorPanels;
 using System;
-
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
 namespace SiGen.UI.EditorPanels;
 
 public partial class InstrumentInfoEditorPanel : UserControl
 {
+    protected InstrumentInfoPanelViewModel? ViewModel => DataContext as InstrumentInfoPanelViewModel;
+
+    private List<InstrumentTypeItem> InstrumentTypeItems { get; }
+
+    private bool isSelectingInstrumentType;
+
     public InstrumentInfoEditorPanel()
     {
         InitializeComponent();
-        StringsEditor.StringCountChanged += StringsEditor_StringCountChanged;
+        InstrumentTypeItems = Enum.GetValues(typeof(InstrumentType))
+                           .Cast<InstrumentType>()
+                           .Select(it => new InstrumentTypeItem(it))
+                           .ToList();
+        InstrumentTypesCombo.SelectionChanged += InstrumentTypesCombo_SelectionChanged;
+        
+        
+    }
+
+    protected override void OnLoaded(RoutedEventArgs e)
+    {
+        base.OnLoaded(e);
+
+        InstrumentTypesCombo.ItemsSource = InstrumentTypeItems;
+
+        if (ViewModel != null)
+        {
+            isSelectingInstrumentType = true;
+            InstrumentTypesCombo.SelectedItem = InstrumentTypeItems.FirstOrDefault(i => i.InstrumentType == ViewModel.InstrumentType);
+            isSelectingInstrumentType = false;
+        }
+
+        var comboGrid = InstrumentTypesCombo.GetVisualDescendants().OfType<Grid>().FirstOrDefault();
+        if (comboGrid != null)
+        {
+            comboGrid.ColumnDefinitions[1].Width = new GridLength(20);
+        }
     }
 
     protected override void OnDataContextChanged(EventArgs e)
     {
         base.OnDataContextChanged(e);
-        //if (DataContext is ViewModels.EditorPanels.InstrumentInfoPanelViewModel viewModel && StringsEditor != null)
+        if (ViewModel != null && IsLoaded)
+        {
+            isSelectingInstrumentType = true;
+            InstrumentTypesCombo.SelectedItem = InstrumentTypeItems.FirstOrDefault(i => i.InstrumentType == ViewModel.InstrumentType);
+            isSelectingInstrumentType = false;
+        }
+    }
+
+    protected override void OnSizeChanged(SizeChangedEventArgs e)
+    {
+        base.OnSizeChanged(e);
+        //var parentGrid = this.GetVisualAncestors().FirstOrDefault(x => x is Grid) as Grid;
+        //if (parentGrid != null)
         //{
-        //    StringsEditor.IsLeftHanded = viewModel.LeftHanded;
+        //    int columnIndex = Grid.GetColumn(this);
+        //    var columnDefinition = parentGrid.ColumnDefinitions[columnIndex];
+
+        //    Trace.WriteLine($"Column.ActualWidth = {columnDefinition.ActualWidth}, LayoutNameBox.Width = {LayoutNameBox.Bounds.Width}, Diff = {columnDefinition.ActualWidth - LayoutNameBox.Bounds.Width}");
+        //    if (LayoutNameBox.MinWidth > 0)
+        //        Trace.WriteLine($"LayoutNameBox.MinWidth = {LayoutNameBox.MinWidth}");
+
+        //    if (columnDefinition.ActualWidth > 0)
+        //        LayoutNameBox.MaxWidth = columnDefinition.ActualWidth - 134;
+
         //}
     }
+
+    private void InstrumentTypesCombo_SelectionChanged(object? sender, SelectionChangedEventArgs e)
+    {
+        if (ViewModel != null && !isSelectingInstrumentType)
+        {
+            var selectedItem = InstrumentTypesCombo.SelectedItem as InstrumentTypeItem;
+            if (selectedItem != null)
+            {
+                ViewModel.InstrumentType = selectedItem.InstrumentType;
+            }
+        }
+
+    }
+
+    
 
     private void LeftHandedButton_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
     {
@@ -42,26 +116,15 @@ public partial class InstrumentInfoEditorPanel : UserControl
         }
     }
 
-    private void StringsEditor_StringCountChanged(object? sender, Controls.StringCountChangedEventArgs e)
-    {
-        if (DataContext is ViewModels.EditorPanels.InstrumentInfoPanelViewModel viewModel)
-        {
+    
+}
 
-            switch (e.ChangeType)
-            {
-                case Controls.StringCountChangeType.AddedTreble:
-                    viewModel.AddString(FingerboardSide.Treble);
-                    break;
-                case Controls.StringCountChangeType.RemovedTreble:
-                    viewModel.RemoveString(FingerboardSide.Treble);
-                    break;
-                case Controls.StringCountChangeType.AddedBass:
-                    viewModel.AddString(FingerboardSide.Bass);
-                    break;
-                case Controls.StringCountChangeType.RemovedBass:
-                    viewModel.RemoveString(FingerboardSide.Bass);
-                    break;
-            }
-        }
+public class InstrumentTypeItem
+{
+    public InstrumentType InstrumentType { get; }
+    public string ImagePath => "/Assets/Icons/InstrumentType_" + InstrumentType.ToString() + ".svg";
+    public InstrumentTypeItem(InstrumentType instrumentType)
+    {
+        InstrumentType = instrumentType;
     }
 }

@@ -10,6 +10,7 @@
 
   <PropertyGroup>
     <ApplicationManifest>app.manifest</ApplicationManifest>
+	<ApplicationIcon>..\SiGen\Assets\SiGen.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>

@@ -31,8 +31,8 @@ namespace SiGen.Layouts.Builders
         {
             var @string = Layout.GetStringElement(side);
 
-            var nutMargin = Configuration.Margin.GetMargin(Data.FingerboardEnd.Nut, side);
-            var bridgeMargin = Configuration.Margin.GetMargin(Data.FingerboardEnd.Bridge, side);
+            var nutMargin = Configuration.Fingerboard.GetMargin(Data.FingerboardEnd.Nut, side);
+            var bridgeMargin = Configuration.Fingerboard.GetMargin(Data.FingerboardEnd.Bridge, side);
 
             var startPt = @string.StartPoint;
             var endPt = @string.BridgePoint;
@@ -45,7 +45,7 @@ namespace SiGen.Layouts.Builders
             {
                 PreciseDouble offset = 0;
                 var stringWidth = Configuration.StringConfigurations[0].GetTotalWidth();
-                if (Configuration.Margin.CompensateForStrings && !Measure.IsNullOrEmpty(stringWidth))
+                if (Configuration.Fingerboard.CompensateMarginsForStrings && !Measure.IsNullOrEmpty(stringWidth))
                     offset = stringWidth.NormalizedValue / 2d;
                 startPt -= PointM.FromVector(nutPerpLine.Vector * (nutMargin.NormalizedValue + offset));
                 endPt -= PointM.FromVector(bridgePerpLine.Vector * (bridgeMargin.NormalizedValue + offset));
@@ -54,7 +54,7 @@ namespace SiGen.Layouts.Builders
             {
                 PreciseDouble offset = 0;
                 var stringWidth = Configuration.StringConfigurations[^1].GetTotalWidth();
-                if (Configuration.Margin.CompensateForStrings && !Measure.IsNullOrEmpty(stringWidth))
+                if (Configuration.Fingerboard.CompensateMarginsForStrings && !Measure.IsNullOrEmpty(stringWidth))
                     offset = stringWidth.NormalizedValue / 2d;
                 startPt += PointM.FromVector(nutPerpLine.Vector * (nutMargin.NormalizedValue + offset));
                 endPt += PointM.FromVector(bridgePerpLine.Vector * (bridgeMargin.NormalizedValue + offset));

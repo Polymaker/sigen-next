@@ -42,6 +42,9 @@ namespace SiGen.ViewModels.EditorPanels
 
         public ObservableCollection<AlignmentRatioPreset> MultiScaleRatioPresets { get; } = new ();
 
+        [ObservableProperty]
+        private AlignmentRatioPreset? selectedRatioPreset;
+
         public Array ScaleLengthModes => Enum.GetValues(typeof(ScaleLengthMode));
 
         //public ScaleLengthPanelViewModel(InstrumentLayoutConfiguration config) : base(config)
@@ -68,7 +71,9 @@ namespace SiGen.ViewModels.EditorPanels
         //    BassTrebleSkew = null;
         //}
 
-        public override void OnConfigurationChanged()
+        private bool isChangingDefaultRatio = false;
+
+        protected override void OnConfigurationChanged()
         {
             base.OnConfigurationChanged();
             if (Configuration == null)
@@ -81,6 +86,9 @@ namespace SiGen.ViewModels.EditorPanels
             MultiScaleRatio = Configuration.ScaleLength.MultiScaleRatio ?? 0.5; // Default to 50% if not set
             UpdateIndividualScaleLengths();
             RebuildMultiScaleRatioPresets();
+            
+            SelectedRatioPreset = MultiScaleRatioPresets
+                .FirstOrDefault(x => Math.Abs(x.Ratio - MultiScaleRatio) < 0.01); // Find the closest preset
         }
 
         protected override void OnPropertyChanged(PropertyChangedEventArgs e)
@@ -91,7 +99,7 @@ namespace SiGen.ViewModels.EditorPanels
 
             if (e.PropertyName == nameof(BassTrebleSkew))
             {
-                LayoutDocumentContext.UpdateConfiguration("BassTrebleSkew", config =>
+                UpdateConfiguration("BassTrebleSkew", config =>
                 {
                     config.ScaleLength.BassTrebleSkew = BassTrebleSkew;
                 });
@@ -103,7 +111,7 @@ namespace SiGen.ViewModels.EditorPanels
                 if (Mode == ScaleLengthMode.Multiscale && (Measure.IsNullOrEmpty(TrebleScale) || Measure.IsNullOrEmpty(BassScale))) return;
                 if (Mode == ScaleLengthMode.PerString && (PerStringScales.Any(x => Measure.IsNullOrEmpty(x.Scale)))) return;
 
-                LayoutDocumentContext.UpdateConfiguration("ScaleLengthMode", config =>
+                UpdateConfiguration("ScaleLengthMode", config =>
                 {
                     config.ScaleLength.Mode = Mode;
                     if (Mode == ScaleLengthMode.Multiscale)
@@ -113,7 +121,7 @@ namespace SiGen.ViewModels.EditorPanels
 
             if (e.PropertyName == nameof(SingleScale) && Mode == ScaleLengthMode.Single)
             {
-                LayoutDocumentContext.UpdateConfiguration("SingleScale", config =>
+                UpdateConfiguration("SingleScale", config =>
                 {
                     if (config.ScaleLength.Mode != ScaleLengthMode.Single)
                         config.ScaleLength.Mode = Mode;
@@ -124,7 +132,7 @@ namespace SiGen.ViewModels.EditorPanels
             if ((e.PropertyName == nameof(BassScale) || e.PropertyName == nameof(TrebleScale) )
                 && Mode == ScaleLengthMode.Multiscale && BassScale != null && TrebleScale != null)
             {
-                LayoutDocumentContext.UpdateConfiguration(e.PropertyName, config =>
+                UpdateConfiguration(e.PropertyName, config =>
                 {
                     if (config.ScaleLength.Mode != ScaleLengthMode.Multiscale)
                         config.ScaleLength.Mode = Mode;
@@ -133,12 +141,24 @@ namespace SiGen.ViewModels.EditorPanels
                 });
             }
 
-            if (e.PropertyName == nameof(MultiScaleRatio) && Mode == ScaleLengthMode.Multiscale)
+            if (e.PropertyName == nameof(MultiScaleRatio)/* && Mode == ScaleLengthMode.Multiscale*/)
             {
-                LayoutDocumentContext.UpdateConfiguration("MultiScaleRatio", config =>
+                SelectedRatioPreset = MultiScaleRatioPresets.FirstOrDefault(x => Math.Abs(x.Ratio - MultiScaleRatio) < 0.001); // Find the closest preset
+                isChangingDefaultRatio = true;
+                foreach (var scale in PerStringScales.ToArray())
+                    scale.SetDefaultRatio(MultiScaleRatio);
+                isChangingDefaultRatio = false;
+                UpdateConfiguration("MultiScaleRatio", config =>
                 {
                     config.ScaleLength.MultiScaleRatio = MultiScaleRatio;
                 });
+            }
+            if (e.PropertyName == nameof(SelectedRatioPreset))
+            {
+                if (SelectedRatioPreset != null)
+                {
+                    MultiScaleRatio = Math.Round(SelectedRatioPreset.Ratio * 1000) / 1000d;
+                }
             }
 
 
@@ -146,7 +166,7 @@ namespace SiGen.ViewModels.EditorPanels
             //    NotifyLayoutPropertiesChanged();
         }
 
-        public override void OnNumberOfStringsChanged()
+        protected override void OnNumberOfStringsChanged()
         {
             base.OnNumberOfStringsChanged();
 
@@ -174,7 +194,7 @@ namespace SiGen.ViewModels.EditorPanels
                 var stringConfig = Configuration.GetString(i);
                 if (stringConfig != null && stringConfig.ScaleLength != null)
                     scaleLengths[i] = stringConfig.ScaleLength;
-                var model = new StringScaleViewModel(i + 1, scaleLengths[i], stringConfig?.MultiScaleRatio ?? 0.5);
+                var model = new StringScaleViewModel(i + 1, scaleLengths[i], stringConfig?.MultiScaleRatio);
                 model.PropertyChanged += StringScaleLength_PropertyChanged;
                 PerStringScales.Add(model);
             }
@@ -196,15 +216,15 @@ namespace SiGen.ViewModels.EditorPanels
                 string fretLabel = i == 0 ? SiGen.Localization.Texts.FingerboardEnd_Nut : $"{Lang.Resources.FretLabel} {i}";
                 MultiScaleRatioPresets.Add(new AlignmentRatioPreset(fretRatio, fretLabel));
             }
-            
+            MultiScaleRatioPresets.Add(new AlignmentRatioPreset(1d, SiGen.Localization.Texts.FingerboardEnd_Bridge));
         }
 
         private void StringScaleLength_PropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
-            if (sender is not StringScaleViewModel scaleViewModel || Configuration == null)
+            if (sender is not StringScaleViewModel scaleViewModel || Configuration == null || isChangingDefaultRatio)
                 return;
 
-            LayoutDocumentContext.UpdateConfiguration("StringScaleLength", config =>
+            UpdateConfiguration("StringScaleLength", config =>
             {
                 var strConfig = config.GetString(scaleViewModel.StringNumber - 1);
                 if (strConfig != null)
@@ -213,60 +233,6 @@ namespace SiGen.ViewModels.EditorPanels
                     strConfig.ScaleLength = scaleViewModel.Scale;
                 }
             });
-            //NotifyLayoutPropertiesChanged();
-        }
-
-        public override void ApplyChanges()
-        {
-            if (Configuration == null)
-                return;
-
-            Configuration.ScaleLength.CalculationMethod = CalculationMethod;
-            Configuration.ScaleLength.Mode = Mode;
-            Configuration.ScaleLength.SingleScale = SingleScale;
-            Configuration.ScaleLength.TrebleScale = TrebleScale;
-            Configuration.ScaleLength.BassScale = BassScale;
-            Configuration.ScaleLength.MultiScaleRatio = MultiScaleRatio;
-            Configuration.ScaleLength.BassTrebleSkew = BassTrebleSkew;
-
-            if (Mode == ScaleLengthMode.PerString)
-            {
-                // Update individual scale lengths in the configuration
-                for (int i = 0; i < Configuration.NumberOfStrings; i++)
-                {
-                    var stringConfig = Configuration.GetString(i);
-                    if (stringConfig != null && i < PerStringScales.Count)
-                    {
-                        stringConfig.ScaleLength = PerStringScales[i].Scale;
-                    }
-                }
-            }
-
-            base.ApplyChanges();
-        }
-
-        protected override bool CanApplyChanges()
-        {
-            if (Mode == ScaleLengthMode.PerString)
-            {
-                // Ensure all individual scale lengths are set
-                if (!PerStringScales.All(x => x.Scale != null && !x.Scale.IsEmpty && x.Scale.Value > 0))
-                    return false;
-            }
-            else if (Mode == ScaleLengthMode.Single)
-            {
-                // Ensure single scale length is set
-                if (SingleScale == null || SingleScale.Value <= 0)
-                    return false;
-            }
-            else if (Mode == ScaleLengthMode.Multiscale)
-            {
-                // Ensure both treble and bass scales are set
-                if ((TrebleScale == null || TrebleScale.Value <= 0) ||
-                    (BassScale == null || BassScale.Value <= 0))
-                    return false;
-            }
-            return base.CanApplyChanges();
         }
     }
 
@@ -276,14 +242,22 @@ namespace SiGen.ViewModels.EditorPanels
         [ObservableProperty]
         private Measure? scale;
         [ObservableProperty]
-        private double ratio;
+        private double? ratio;
         public string Label => $"{Lang.Resources.StringLabel} {StringNumber}";
 
-        public StringScaleViewModel(int stringNumber, Measure? scale, double ratio)
+        [ObservableProperty]
+        private double defaultRatio = 0.5;
+
+        public StringScaleViewModel(int stringNumber, Measure? scale, double? ratio)
         {
             StringNumber = stringNumber;
             this.scale = scale;
             this.ratio = ratio;
+        }
+
+        public void SetDefaultRatio(double ratio)
+        {
+            DefaultRatio = ratio;
         }
     }
 }

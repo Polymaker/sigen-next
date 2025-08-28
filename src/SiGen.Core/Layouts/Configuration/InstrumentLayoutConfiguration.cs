@@ -33,10 +33,9 @@ namespace SiGen.Layouts.Configuration
         /// contents.</remarks>
         public List<BaseStringConfiguration> StringConfigurations { get; set; } = null!;
 
-        /// <summary>
-        /// Gets or sets the configuration settings for margin values.
-        /// </summary>
-        public MarginConfiguration Margin { get; set; } = null!;
+        
+        public FingerboardConfiguration Fingerboard { get; set; } = null!;
+
 
         /// <summary>
         /// Gets or sets the string spacing configuration for the nut of the instrument.
@@ -71,7 +70,7 @@ namespace SiGen.Layouts.Configuration
         public InstrumentLayoutConfiguration()
         {
             StringConfigurations = new List<BaseStringConfiguration>();
-            Margin = new MarginConfiguration();
+            Fingerboard = new FingerboardConfiguration();
             NutSpacing = new StringSpacingConfiguration();
             BridgeSpacing = new StringSpacingConfiguration();
             ScaleLength = new ScaleLengthConfiguration();
@@ -114,8 +113,6 @@ namespace SiGen.Layouts.Configuration
                 if (@string.Frets?.NumberOfFrets != null)
                     numberOfFrets = Math.Max(numberOfFrets, @string.Frets.NumberOfFrets.Value);
             }
-            if (NumberOfFrets.HasValue)
-                return NumberOfFrets.Value;
 
             return numberOfFrets; 
         }

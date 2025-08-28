@@ -74,7 +74,11 @@ namespace SiGen.UI.LayoutViewer.Overlays
                     .OrderByDescending(x => x.TrebleStringIndex)
                     .FirstOrDefault();
 
-                if (bassSegment?.FretShape != null)
+                bool bassHasFirstString = bassSegment != null && bassSegment.ContainsString(0);
+                bool bassHasLastString = bassSegment != null && bassSegment.ContainsString(Layout.NumberOfStrings - 1);
+                if (bassSegment != null && bassSegment.FretShape != null && 
+                    (bassHasFirstString || (!bassHasLastString && (bassSegment.TrebleStringIndex - bassSegment.BassStringIndex) + 1 < Layout.NumberOfStrings))
+                    )
                 {
                     var fretPos = bassSegment.FretShape.GetFirstPoint();
 
