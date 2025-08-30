@@ -17,6 +17,8 @@ namespace SiGen.Paths
             return null;
         }
 
+        public abstract bool Intersects(LinearPath line, out VectorD intersection);
+
         public abstract void FlipHorizontal();
     }
 }

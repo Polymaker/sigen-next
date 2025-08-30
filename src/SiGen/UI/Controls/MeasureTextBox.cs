@@ -68,9 +68,9 @@ namespace SiGen.UI.Controls
             var max = (sender as MeasureTextBox)?.MaximumValue;
             var coerced = value;
 
-            if (min is not null && coerced.CompareTo(min) < 0)
+            if (min is not null && coerced.HasValue && coerced.Value.CompareTo(min) < 0)
                 coerced = min;
-            if (max is not null && coerced.CompareTo(max) > 0)
+            if (max is not null && coerced.HasValue && coerced.Value.CompareTo(max) > 0)
                 coerced = max;
 
             return coerced; 
@@ -83,7 +83,7 @@ namespace SiGen.UI.Controls
             {
                 if (Value is not null)
                 {
-                    Text = Value.ToStringFormatted();
+                    Text = Value.Value.ToStringFormatted();
                 }
                 else
                 {
@@ -113,7 +113,7 @@ namespace SiGen.UI.Controls
         private void OnGotFocus(object? sender, GotFocusEventArgs e)
         {
             if (Value is not null)
-                Text = Value.ToStringFormatted(); 
+                Text = Value.Value.ToStringFormatted(); 
         }
 
         private void OnLostFocus(object? sender, RoutedEventArgs e)

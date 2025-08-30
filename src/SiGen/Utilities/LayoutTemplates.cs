@@ -43,7 +43,8 @@ namespace SiGen.Utilities
             layoutConfig.ScaleLength.SingleScale = SiGen.Measuring.Measure.In(25.5m);
 
             layoutConfig.Fingerboard.SetAllMargins(SiGen.Measuring.Measure.Mm(3.25m));
-
+            layoutConfig.Fingerboard.CompensateMarginsForStrings = true;
+            layoutConfig.Fingerboard.ExtensionAfterLastFret = Measuring.Measure.Mm(10);
             layoutConfig.NumberOfFrets = 24;
 
             return layoutConfig;
@@ -106,6 +107,7 @@ namespace SiGen.Utilities
             layoutConfig.ScaleLength.MultiScaleRatio = 0.5;
             layoutConfig.Fingerboard.SetAllMargins(SiGen.Measuring.Measure.Mm(3.25m));
             layoutConfig.Fingerboard.CompensateMarginsForStrings = true;
+            layoutConfig.Fingerboard.ExtensionAfterLastFret = Measuring.Measure.Mm(12);
             layoutConfig.NumberOfFrets = 24;
             layoutConfig.StringConfigurations[0].Frets ??= new FretConfiguration();
             layoutConfig.StringConfigurations[0].Frets!.NumberOfFrets = 21;
@@ -142,8 +144,8 @@ namespace SiGen.Utilities
                 SiGen.Measuring.Measure.Mm(1.6d), // A
                 SiGen.Measuring.Measure.Mm(1.5d)  // E
             };
-                var tunings = new[]
-                {
+            var tunings = new[]
+            {
                 PitchInterval.FromNote(NoteName.G, 3), // G3
                 PitchInterval.FromNote(NoteName.D, 4), // D4
                 PitchInterval.FromNote(NoteName.A, 4), // A4

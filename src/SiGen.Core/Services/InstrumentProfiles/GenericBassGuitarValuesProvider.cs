@@ -11,9 +11,14 @@ namespace SiGen.Services.InstrumentProfiles
 
         public abstract InstrumentType InstrumentType { get; }
 
-        public virtual IReadOnlyList<int> GetCommonStringCounts()
+        public virtual IReadOnlyList<int> GetCommonStringsCount()
         {
-            return [4, 5, 6];
+            return [4, 5];
+        }
+
+        public virtual IReadOnlyList<int> GetCommonFretsCount()
+        {
+            return [20, 22, 24];
         }
 
         public abstract IReadOnlyList<SpacingPreset> GetBridgeSpacingPresets();
@@ -51,7 +56,6 @@ namespace SiGen.Services.InstrumentProfiles
                     PitchInterval.FromNote(NoteName.D, 2),
                     PitchInterval.FromNote(NoteName.G, 2),
                 ]),
-
 
                 //6 strings
                 new TuningPreset($"{Texts.Tuning_Standard} {Texts.NoteName_B}",

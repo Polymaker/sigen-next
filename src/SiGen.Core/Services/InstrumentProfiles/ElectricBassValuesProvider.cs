@@ -5,9 +5,14 @@ using SiGen.Localization;
 
 namespace SiGen.Services.InstrumentProfiles
 {
-    public class ElectricBassGuitarValuesProvider : GenericBassGuitarValuesProvider
+    public class ElectricBassValuesProvider : GenericBassGuitarValuesProvider
     {
         public override InstrumentType InstrumentType => InstrumentType.ElectricBass;
+
+        public override IReadOnlyList<int> GetCommonStringsCount()
+        {
+            return [4, 5, 6];
+        }
 
         public override IReadOnlyList<SpacingPreset> GetNutSpacingPresets()
         {

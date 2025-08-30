@@ -7,17 +7,40 @@ namespace SiGen.Serialization
 {
     public class MeasureConverter : JsonConverter<Measure>
     {
+        //public override Measure? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        //{
+        //    var str = reader.GetString();
+        //    if (MeasureParser.TryParse(str, out var measure))
+        //        return measure.Value;
+        //    return null;
+        //}
+        public override Measure Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        {
+            var str = reader.GetString();
+            if (MeasureParser.TryParse(str, out var measure))
+                return measure.Value;
+            throw new JsonException($"Invalid measure value: '{str}'");
+        }
+        public override void Write(Utf8JsonWriter writer, Measure value, JsonSerializerOptions options)
+        {
+            writer.WriteStringValue(value.ToStringFormatted(CultureInfo.InvariantCulture, true));
+        }
+    }
+
+    public class NullableMeasureConverter : JsonConverter<Measure?>
+    {
         public override Measure? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
             var str = reader.GetString();
             if (MeasureParser.TryParse(str, out var measure))
-                return measure;
+                return measure.Value;
             return null;
         }
 
-        public override void Write(Utf8JsonWriter writer, Measure value, JsonSerializerOptions options)
+        public override void Write(Utf8JsonWriter writer, Measure? value, JsonSerializerOptions options)
         {
-            writer.WriteStringValue(value.ToStringFormatted(CultureInfo.InvariantCulture, true));
+            if (value.HasValue)
+                writer.WriteStringValue(value.Value.ToStringFormatted(CultureInfo.InvariantCulture, true));
         }
     }
 }

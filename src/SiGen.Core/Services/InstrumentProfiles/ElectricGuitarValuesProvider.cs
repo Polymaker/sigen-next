@@ -14,6 +14,16 @@ namespace SiGen.Services.InstrumentProfiles
     {
         public override InstrumentType InstrumentType => InstrumentType.ElectricGuitar;
 
+        public override IReadOnlyList<int> GetCommonFretsCount()
+        {
+            return [21, 22, 24];
+        }
+
+        public override IReadOnlyList<int> GetCommonStringsCount()
+        {
+            return [6, 7, 8];
+        }
+
         public override IReadOnlyList<SpacingPreset> GetBridgeSpacingPresets()
         {
             return [

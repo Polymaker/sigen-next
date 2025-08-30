@@ -87,7 +87,7 @@ namespace SiGen.UI.Controls
         public NumericTextBox()
         {
             this.LostFocus += OnLostFocus;
-            this.KeyDown += OnKeyDown;
+            //this.KeyDown += OnKeyDown;
         }
 
         protected override void OnTextInput(TextInputEventArgs e)
@@ -97,13 +97,33 @@ namespace SiGen.UI.Controls
             StartCommitTimer();
         }
 
-        private void OnKeyDown(object? sender, KeyEventArgs e)
+
+        //private void OnKeyDown(object? sender, KeyEventArgs e)
+        //{
+        //    if (e.Key == Key.Back) 
+        //    {
+        //        _isEditing = true;
+        //        StartCommitTimer();
+        //    }
+        //    if (e.Key == Key.Enter)
+        //    {
+        //        CommitText();
+        //        e.Handled = true;
+        //    }
+        //}
+        protected override void OnKeyDown(KeyEventArgs e)
         {
+            if (e.Key == Key.Back)
+            {
+                _isEditing = true;
+                StartCommitTimer();
+            }
             if (e.Key == Key.Enter)
             {
                 CommitText();
                 e.Handled = true;
             }
+            base.OnKeyDown(e);
         }
 
         private void OnLostFocus(object? sender, Avalonia.Interactivity.RoutedEventArgs e)

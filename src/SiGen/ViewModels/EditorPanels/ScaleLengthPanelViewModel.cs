@@ -192,9 +192,10 @@ namespace SiGen.ViewModels.EditorPanels
             for (int i = 0; i < Configuration.NumberOfStrings; i++)
             {
                 var stringConfig = Configuration.GetString(i);
-                if (stringConfig != null && stringConfig.ScaleLength != null)
-                    scaleLengths[i] = stringConfig.ScaleLength;
+                if (stringConfig != null && !Measure.IsNullOrEmpty(stringConfig.ScaleLength))
+                    scaleLengths[i] = stringConfig.ScaleLength.Value;
                 var model = new StringScaleViewModel(i + 1, scaleLengths[i], stringConfig?.MultiScaleRatio);
+                model.DefaultRatio = Configuration.ScaleLength.MultiScaleRatio ?? 0.5;
                 model.PropertyChanged += StringScaleLength_PropertyChanged;
                 PerStringScales.Add(model);
             }

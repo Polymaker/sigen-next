@@ -153,7 +153,7 @@ namespace SiGen.ViewModels.EditorPanels
                     currConfig.Gauge = prevConfig.Gauge;
                     if (!Measuring.Measure.IsNullOrEmpty(prevConfig.Gauge))
                     {
-                        var newGauge = prevConfig.Gauge * (side == FingerboardSide.Bass ? 1.15 : 0.85);
+                        var newGauge = prevConfig.Gauge.Value * (side == FingerboardSide.Bass ? 1.15 : 0.85);
                         currConfig.Gauge = Measuring.Measure.Min(Measuring.Measure.Max(newGauge, Measuring.Measure.In(0.007)), Measuring.Measure.In(0.15));
                     }
                 }

@@ -28,22 +28,11 @@ namespace SiGen.Layouts.Builders
             Messages = new List<ValidationMessage>();
         }
 
-        //private T GetBuilder<T>() where T : LayoutBuilderBase
-        //{
-        //    return (T)Activator.CreateInstance(typeof(T), Layout, Configuration)!;
-        //}
-
-        //private void ExecuteBuilder<T>() where T : LayoutBuilderBase
-        //{
-        //    var builder = GetBuilder<T>();
-        //    builder.BuildLayoutCore();
-        //    Messages.AddRange(builder.Messages);
-        //}
-
-        private bool ExecuteBuilder(Type builderType)
+        private bool ExecuteBuilder(Type builderType, int pass)
         {
             var builder = (LayoutBuilderBase)Activator.CreateInstance(builderType, Layout, Configuration)!;
-            bool success = builder.BuildLayout();
+            
+            bool success = builder.ExecuteBuilder(pass);
             Messages.AddRange(builder.Messages);
             return success;
         }
@@ -54,17 +43,20 @@ namespace SiGen.Layouts.Builders
             Layout.Configuration = configuration;
             Layout.Elements.Clear();
 
-            var builderTypes = new Type[] {
-                typeof(LayoutStringsBuilder),
-                typeof(FingerBoardEdgesBuilder),
-                typeof(FretsBuilder)
+            var builderPasses = new (Type builderType, int pass)[]
+            {
+                (typeof(LayoutStringsBuilder), 1), // First pass of strings to create all the strings paths
+                (typeof(FingerBoardEdgesBuilder), 1), // First pass of fingerboard edges to create the edges paths for fret calculation
+                (typeof(FretsBuilder), 1),
+                (typeof(FingerBoardEdgesBuilder), 2), //Finish the fingerboard shape
+                (typeof(LayoutStringsBuilder), 2) 
             };
 
-            foreach (var builderType in builderTypes)
+            foreach (var builderPass in builderPasses)
             {
                 try
                 {
-                    Success |= ExecuteBuilder(builderType);
+                    Success |= ExecuteBuilder(builderPass.builderType, builderPass.pass);
 
                     if (!Success) break;
                 }
@@ -76,9 +68,6 @@ namespace SiGen.Layouts.Builders
                 }
             }
 
-            if (Success)
-                BuildStringGroups();
-
             if (Success && configuration.LeftHanded)
             {
                 foreach (var element in Layout.Elements)
@@ -89,34 +78,6 @@ namespace SiGen.Layouts.Builders
                 Layout.CalculateBounds();
 
             return new LayoutBuildResult(Success, Layout, Messages.ToList());
-        }
-
-        private void BuildStringGroups()
-        {
-            for (int i = 0; i < Configuration.NumberOfStrings; i++)
-            {
-                if (Configuration.StringConfigurations[i] is StringGroupConfiguration group)
-                {
-                    var offsetX = group.GetTotalSpacing() * -0.5d;
-                    var stringElem = Layout.GetStringElement(i);
-                    Layout.Elements.Remove(stringElem);
-                    for (int j = 0; j < group.StringCount; j++)
-                    {
-                        var path = (LinearPath)stringElem.Path.Clone();
-                        path.Offset(new VectorD(offsetX.NormalizedValue, 0));
-
-                        var newString = new StringElement(i, j, path)
-                        {
-                            NutPoint = stringElem.NutPoint + new PointM(offsetX, Measure.Zero),
-                            BridgePoint = stringElem.BridgePoint + new PointM(offsetX, Measure.Zero),
-                            StartPoint = stringElem.StartPoint + new PointM(offsetX, Measure.Zero)
-                        };
-                        Layout.AddElement(newString);
-
-                        offsetX += group.Spacing ?? Measure.Mm(1.5);
-                    }
-                }
-            }
         }
 
         public static LayoutBuildResult Build(InstrumentLayoutConfiguration configuration)

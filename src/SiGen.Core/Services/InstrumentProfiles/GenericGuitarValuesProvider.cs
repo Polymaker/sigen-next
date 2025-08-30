@@ -11,9 +11,14 @@ namespace SiGen.Services.InstrumentProfiles
 
         public abstract InstrumentType InstrumentType { get; }
 
-        public virtual IReadOnlyList<int> GetCommonStringCounts()
+        public virtual IReadOnlyList<int> GetCommonStringsCount()
         {
-            return [6, 7, 8];
+            return [6];
+        }
+
+        public virtual IReadOnlyList<int> GetCommonFretsCount()
+        {
+            return [19, 20, 21, 22, 24];
         }
 
         public abstract IReadOnlyList<SpacingPreset> GetBridgeSpacingPresets();
@@ -107,5 +112,6 @@ namespace SiGen.Services.InstrumentProfiles
             ];
         }
 
+        
     }
 }

@@ -23,11 +23,16 @@ namespace SiGen.Layouts.Builders
             Messages = new List<ValidationMessage>();
         }
 
-        public abstract void BuildLayoutCore();
+        protected abstract void ExecuteFirstPass();
 
-        public virtual bool BuildLayout()
+        protected virtual void ExecuteSecondPass() { }
+
+        public bool ExecuteBuilder(int pass)
         {
-            BuildLayoutCore();
+            if (pass == 1)
+                ExecuteFirstPass();
+            else if (pass == 2)
+                ExecuteSecondPass();
             return !Messages.Any(x => x.Type == ValidationMessageType.Error);
         }
 

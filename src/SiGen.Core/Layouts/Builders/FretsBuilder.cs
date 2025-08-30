@@ -16,7 +16,7 @@ namespace SiGen.Layouts.Builders
         {
         }
 
-        public override void BuildLayoutCore()
+        protected override void ExecuteFirstPass()
         {
             if (!HasManualFretPositions())
                 GenerateEqualTemperamentFrets();
@@ -45,15 +45,18 @@ namespace SiGen.Layouts.Builders
                 var nutFretElem = fretElems.FirstOrDefault(x => x.HasFingerboardSide(side) && x.IsNut);
                 var bridgeFretElem = fretElems.FirstOrDefault(x => x.HasFingerboardSide(side) && x.IsBridge);
                 var edgeElem = Layout.GetFingerboardEdge(side);
+                var edgePath = edgeElem.Path as LinearPath;
+                if (edgePath == null) return;
+
                 if (nutFretElem?.FretShape != null)
                 {
-                    edgeElem.Path.Start = side == FingerboardSide.Bass ?
+                    edgePath.Start = side == FingerboardSide.Bass ?
                         nutFretElem.FretShape.GetFirstPoint() :
                         nutFretElem.FretShape.GetLastPoint();
                 }
                 if (bridgeFretElem?.FretShape != null)
                 {
-                    edgeElem.Path.End = side == FingerboardSide.Bass ?
+                    edgePath.End = side == FingerboardSide.Bass ?
                         bridgeFretElem.FretShape.GetFirstPoint() :
                         bridgeFretElem.FretShape.GetLastPoint();
                 }
@@ -325,13 +328,13 @@ namespace SiGen.Layouts.Builders
             LinearPath? trebSideEdge = null;
 
             if (firstPt.StringIndex == 0)
-                bassSideEdge = Layout.GetFingerboardEdge(FingerboardSide.Bass).Path;
+                bassSideEdge = Layout.GetFingerboardEdge(FingerboardSide.Bass).Path as LinearPath;
             else
                 bassSideEdge = Layout.GetStringMedian(firstPt.StringIndex - 1).Path;
 
 
             if (lastPt.StringIndex == Configuration.NumberOfStrings - 1)
-                trebSideEdge = Layout.GetFingerboardEdge(FingerboardSide.Treble).Path;
+                trebSideEdge = Layout.GetFingerboardEdge(FingerboardSide.Treble).Path as LinearPath;
             else
                 trebSideEdge = Layout.GetStringMedian(lastPt.StringIndex).Path;
 

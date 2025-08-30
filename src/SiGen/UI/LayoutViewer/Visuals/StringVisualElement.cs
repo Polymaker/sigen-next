@@ -61,7 +61,7 @@ namespace SiGen.UI.LayoutViewer.Visuals
             Children.Clear();
             var stringClipGeometry = GetStringClip();
             var stringGauge = Element.GetGauge();
-            double stringThicknessPx = !Measuring.Measure.IsNullOrEmpty(stringGauge) ? stringGauge.ToPixels() : 1;
+            double stringThicknessPx = !Measuring.Measure.IsNullOrEmpty(stringGauge) ? stringGauge.Value.ToPixels() : 1;
             var perpendicularLine = Element.Path.GetEquation().GetPerpendicular(Element.Path.Start);
             var highlightStart = (Element.Path.Start - perpendicularLine.Vector * (stringThicknessPx / CmScaleFactor) * 0.5d).ToAvalonia();
             var highlightEnd = (Element.Path.Start + perpendicularLine.Vector * (stringThicknessPx / CmScaleFactor) * 0.5d).ToAvalonia();
@@ -331,7 +331,7 @@ namespace SiGen.UI.LayoutViewer.Visuals
             if (selectionHighlight == null)
                 return;
             var stringGauge = Element.GetGauge();
-            double stringThicknessPx = !Measuring.Measure.IsNullOrEmpty(stringGauge) ? stringGauge.ToPixels() : 1;
+            double stringThicknessPx = !Measuring.Measure.IsNullOrEmpty(stringGauge) ? stringGauge.Value.ToPixels() : 1;
             selectionHighlight.StrokeThickness = stringThicknessPx + 12 / newZoom;
         }
 

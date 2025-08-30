@@ -99,6 +99,11 @@ namespace SiGen.Paths
             return Intersects(this, line, out intersection, allowOutside);
         }
 
+        public override bool Intersects(LinearPath line, out VectorD intersection)
+        {
+            return Intersects(this, line, out intersection, false);
+        }
+
         public LineD GetEquation() => LineD.FromPoints(Start, End);
 
         public VectorD GetPointForX(PreciseDouble x)

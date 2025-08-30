@@ -22,7 +22,7 @@
 		<conv:MarkdownToInlinesConverter x:Key="MarkdownConverter" />
 	</UserControl.Resources>
 	
-	<StackPanel Spacing="4" Margin="4">
+	<StackPanel  Margin="4">
 
 		<TextBlock Text="{x:Static lang:Resources.ScaleLengthEditorPanel_Header}" Classes="PanelHeader" />
 		
@@ -156,8 +156,8 @@
 		</ctrl:CustomFormField>
 
 		<ItemsControl ItemsSource="{Binding PerStringScales}" MaxWidth="400"
-								  Margin="0,0,0,10" HorizontalAlignment="Center"
-							  IsVisible="{Binding Mode, Converter={StaticResource EqualsConverter}, ConverterParameter=PerString}"
+					  HorizontalAlignment="Center"
+					  IsVisible="{Binding Mode, Converter={StaticResource EqualsConverter}, ConverterParameter=PerString}"
 					      >
 			<ItemsControl.ItemsPanel>
 				<ItemsPanelTemplate>

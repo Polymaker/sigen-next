@@ -268,7 +268,7 @@ public partial class LayoutViewerControl : UserControl, ILayoutViewerContext
 
     private const double ZoomFactorStep = 1.1;
     private Point _lastMousePosition;
-    private bool _isPanning;
+    
     public bool IsZoomToFit { get; private set; } = true;
     private bool isZooming = false;
     private double minimumZoom = 0.5;
@@ -419,87 +419,6 @@ public partial class LayoutViewerControl : UserControl, ILayoutViewerContext
 
     #endregion
 
-    #region Mouse / Touch Handling
-
-    public void Canvas_PointerPressed(object? sender, PointerPressedEventArgs e)
-    {
-        StopFling();
-
-        var point = e.GetCurrentPoint(RenderCanvas);
-        if (point.Pointer.Type != PointerType.Mouse || point.Properties.IsLeftButtonPressed)
-        {
-            _lastMousePosition = e.GetPosition(this);
-            _isPanning = true;
-            RenderCanvas.Cursor = new Cursor(StandardCursorType.Hand);
-        }
-    }
-
-    public void Canvas_PointerMoved(object? sender, PointerEventArgs e)
-    {
-        if (_isPanning)
-        {
-            var currentPosition = e.GetPosition(this);
-
-            AddPositionToFlingHistory(currentPosition);
-
-            var delta = currentPosition - _lastMousePosition;
-            Translation += delta;
-            _lastMousePosition = currentPosition;
-        }
-    }
-
-    public void Canvas_PointerReleased(object? sender, PointerReleasedEventArgs e)
-    {
-        if (_isPanning)
-        {
-            _isPanning = false;
-            RenderCanvas.Cursor = new Cursor(StandardCursorType.Arrow);
-
-            var velocity = CalculateFlingVelocity();
-
-            if (velocity.Length > MinimumFlingVelocity)
-                StartFling(velocity);
-        }
-    }
-
-    public void Canvas_OnPointerWheel(object? sender, PointerWheelEventArgs e)
-    {
-        StopFling();
-
-        double factor = e.Delta.Y > 0 ? ZoomFactorStep : 1 / ZoomFactorStep;
-        ZoomAtPoint(e.GetPosition(this), factor);
-    }
-
-    private double lastPinchScale = 1.0;
-
-    private void Canvas_PinchGesture(object? sender, PinchEventArgs e)
-    {
-        // e.Scale gives the scale delta since last event
-        var center = e.ScaleOrigin;
-        var scaleFactor = e.Scale;
-        double scaleDelta = scaleFactor - lastPinchScale;
-
-        if (Math.Abs(scaleDelta) < 0.01)
-            return; // Ignore very small scale changes
-
-        Trace.WriteLine($"e.Scale = {e.Scale} delta = {scaleDelta}");
-        bool isZoomingIn = scaleDelta > 0;
-        scaleDelta = isZoomingIn ? (scaleDelta + 1d) : 1d / (Math.Abs(scaleDelta) + 1d);
-        
-       
-
-        lastPinchScale = e.Scale;
-        
-        ZoomAtPoint(center, scaleDelta);
-    }
-
-    private void Canvas_PinchGestureEnded(object? sender, PinchEndedEventArgs e)
-    {
-        lastPinchScale = 1;
-    }
-
-    #endregion
-
     #region Translation Handling
 
     private Rect translationBounds = new Rect();
@@ -510,6 +429,7 @@ public partial class LayoutViewerControl : UserControl, ILayoutViewerContext
     private const double MinimumFlingVelocity = 20; // px/sec
     private const int FlingTimeStepMs = 16; // ~60fps
     private Vector _flingVelocity;
+    private bool _isPanning;
 
     private void CalculateTranslationBounds()
     {
@@ -611,57 +531,7 @@ public partial class LayoutViewerControl : UserControl, ILayoutViewerContext
         if (Layout?.Bounds == null)
             return;
 
-        //var layoutBoundsPx = GetAdjustedLayoutBounds() * Zoom;
-        //var viewerSize = Bounds;
-
-        //double layoutWidth = layoutBoundsPx.Width;
-        //double layoutHeight = layoutBoundsPx.Height;
-        //double viewWidth = viewerSize.Width;
-        //double viewHeight = viewerSize.Height;
-
-        //double minX, maxX, minY, maxY;
-
-        ////todo: ease the transition between the two modes
-
-        //// X axis
-        //if (layoutWidth <= viewWidth)
-        //{
-        //    minX = (viewWidth - layoutWidth * 0.8d) * -0.5d;
-        //    maxX = -minX;
-        //}
-        //else
-        //{
-        //    double visibleView = viewWidth * 0.75;
-        //    minX = (layoutWidth + viewWidth) * -0.5d + visibleView;
-        //    maxX = -minX;
-        //}
-
-        //// Y axis
-        //if (layoutHeight <= viewHeight)
-        //{
-        //    minY = (viewHeight - layoutHeight * 0.8d) * -0.5d;
-        //    maxY = -minY;
-        //}
-        //else
-        //{
-        //    double visibleView = viewHeight * 0.75d;
-        //    minY = (layoutHeight + viewHeight) * -0.5d + visibleView;
-        //    maxY = -minY;
-        //}
-
-        //var newTranslation = new Point(
-        //    Math.Clamp(_translateTransform.X + delta.X, translationBounds.Left, translationBounds.Right),
-        //    Math.Clamp(_translateTransform.Y + delta.Y, translationBounds.Top, translationBounds.Bottom)
-        //);
-
         Translation = ClampTranslation(Translation + delta);
-
-        //if (newTranslation.X != _translateTransform.X || newTranslation.Y != _translateTransform.Y)
-        //{
-        //    _translateTransform.X = newTranslation.X;
-        //    _translateTransform.Y = newTranslation.Y;
-        //    OnTranslationChanged();
-        //}
     }
 
     protected void OnTranslationChanged()
@@ -730,6 +600,170 @@ public partial class LayoutViewerControl : UserControl, ILayoutViewerContext
 
     #endregion
 
+    #region Mouse / Touch Handling
+
+    private enum PanSource
+    {
+        Touch,
+        LeftClick,
+        MiddleClick,
+        Spacebar
+    }
+    private PanSource? _currentPanSource = null;
+
+    public void Canvas_PointerPressed(object? sender, PointerPressedEventArgs e)
+    {
+        var point = e.GetCurrentPoint(RenderCanvas);
+        bool isPanningButton = point.Pointer.Type != PointerType.Mouse || (point.Properties.IsLeftButtonPressed || point.Properties.IsMiddleButtonPressed);
+
+        if (isPanningButton)
+            StopFling();
+
+        
+        if (!_isPanning && isPanningButton && _currentPanSource == null)
+        {
+            if (point.Pointer.Type != PointerType.Mouse)
+                _currentPanSource = PanSource.Touch;
+            else
+                _currentPanSource = point.Properties.IsLeftButtonPressed ? PanSource.LeftClick : PanSource.MiddleClick;
+
+            _lastMousePosition = e.GetPosition(this);
+            RenderCanvas.Cursor = new Cursor(StandardCursorType.SizeAll);
+        }
+    }
+
+    protected override void OnKeyDown(KeyEventArgs e)
+    {
+        
+        if (e.Key == Key.Space && !_isPanning)
+        {
+            StopFling();
+            //var mousePos = MouseDevice.Instance.GetPosition(this);
+            _lastMousePosition = new Point();
+            _currentPanSource = PanSource.Spacebar;
+            RenderCanvas.Cursor = new Cursor(StandardCursorType.SizeAll);
+            e.Handled = true;
+        }
+
+        base.OnKeyDown(e);
+    }
+
+    protected override void OnKeyUp(KeyEventArgs e)
+    {
+        if (e.Key == Key.Space && _currentPanSource == PanSource.Spacebar)
+        {
+            
+            _currentPanSource = null;
+            RenderCanvas.Cursor = new Cursor(StandardCursorType.Arrow);
+            e.Handled = true;
+            
+            if (_isPanning)
+            {
+                var velocity = CalculateFlingVelocity();
+                _isPanning = false;
+                if (velocity.Length > MinimumFlingVelocity)
+                    StartFling(velocity);
+            }
+            
+        }
+        base.OnKeyUp(e);
+    }
+
+    public void Canvas_PointerMoved(object? sender, PointerEventArgs e)
+    {
+        if (_currentPanSource != null)
+        {
+            var currentPosition = e.GetPosition(this);
+
+            if (!_isPanning)
+            {
+                _isPanning = true;
+                _lastMousePosition = currentPosition;
+                //if (_currentPanSource == PanSource.Spacebar)
+                //    e.Pointer.Capture(LayoutGrid);
+                return;
+            }
+            
+            AddPositionToFlingHistory(currentPosition);
+
+            var delta = currentPosition - _lastMousePosition;
+            Translation += delta;
+            _lastMousePosition = currentPosition;
+        }
+
+    }
+
+    private bool MatchPanSource(PointerReleasedEventArgs eventArgs)
+    {
+        if (_currentPanSource == PanSource.Touch)
+            return true;
+        else if (_currentPanSource == PanSource.LeftClick)
+            return eventArgs.InitialPressMouseButton == MouseButton.Left;
+        else if (_currentPanSource == PanSource.MiddleClick)
+            return eventArgs.InitialPressMouseButton == MouseButton.Middle;
+
+        return false;
+    }
+
+    public void Canvas_PointerReleased(object? sender, PointerReleasedEventArgs e)
+    {
+        if (_isPanning && MatchPanSource(e))
+        {
+            _isPanning = false;
+            _currentPanSource = null;
+            RenderCanvas.Cursor = new Cursor(StandardCursorType.Arrow);
+
+            var velocity = CalculateFlingVelocity();
+
+            if (velocity.Length > MinimumFlingVelocity)
+                StartFling(velocity);
+        }
+        else if (_currentPanSource != null && MatchPanSource(e))
+        {
+            _currentPanSource = null;
+            RenderCanvas.Cursor = new Cursor(StandardCursorType.Arrow);
+        }
+    }
+
+    public void Canvas_OnPointerWheel(object? sender, PointerWheelEventArgs e)
+    {
+        StopFling();
+
+        double factor = e.Delta.Y > 0 ? ZoomFactorStep : 1 / ZoomFactorStep;
+        ZoomAtPoint(e.GetPosition(this), factor);
+    }
+
+    private double lastPinchScale = 1.0;
+
+    private void Canvas_PinchGesture(object? sender, PinchEventArgs e)
+    {
+        // e.Scale gives the scale delta since last event
+        var center = e.ScaleOrigin;
+        var scaleFactor = e.Scale;
+        double scaleDelta = scaleFactor - lastPinchScale;
+
+        if (Math.Abs(scaleDelta) < 0.01)
+            return; // Ignore very small scale changes
+
+        Trace.WriteLine($"e.Scale = {e.Scale} delta = {scaleDelta}");
+        bool isZoomingIn = scaleDelta > 0;
+        scaleDelta = isZoomingIn ? (scaleDelta + 1d) : 1d / (Math.Abs(scaleDelta) + 1d);
+        
+       
+
+        lastPinchScale = e.Scale;
+        
+        ZoomAtPoint(center, scaleDelta);
+    }
+
+    private void Canvas_PinchGestureEnded(object? sender, PinchEndedEventArgs e)
+    {
+        lastPinchScale = 1;
+    }
+
+    #endregion
+
+   
     #region Visuals Elements
 
     internal const double CmScaleFactor = 37.7952755906; // 1 cm in pixels at 96 DPI
@@ -748,15 +782,15 @@ public partial class LayoutViewerControl : UserControl, ILayoutViewerContext
 
         GenerateOverlays();
 
-        foreach (var median in Layout.Elements.OfType<StringMedianElement>())
-            RenderCanvas.Children.Add(new StringMedianVisualElement(median, RenderSettings));
+        foreach (var median in Layout.Elements.OfType<GuideLineElement>())
+            RenderCanvas.Children.Add(new GuideLineVisualElement(median, RenderSettings));
 
         RenderCanvas.Children.Add(new FretRendererControl(this));
         //foreach (var fretSegment in Layout.Elements.OfType<FretSegmentElement>())
         //    RenderCanvas.Children.Add(new FretSegmentVisual(fretSegment, RenderSettings)); 
 
-        foreach (var edge in Layout.Elements.OfType<FingerboardSideElement>())
-            RenderCanvas.Children.Add(new FingerboardSideVisualElement(edge, RenderSettings));
+        foreach (var edge in Layout.Elements.OfType<FingerboardEdgeElement>())
+            RenderCanvas.Children.Add(new FingerboardEdgeVisualElement(edge, RenderSettings));
 
         foreach (var @string in Layout.Strings)
             RenderCanvas.Children.Add(new StringVisualElement(@string, RenderSettings));

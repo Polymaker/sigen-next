@@ -13,7 +13,7 @@ namespace SiGen.Measuring
 {
     //todo, change to an immutable struct
     [TypeConverter(typeof(MeasureTypeConverter))]
-    public class Measure : IComparable, IComparable<Measure>
+    public struct Measure : IComparable, IComparable<Measure>
     {
         private PreciseDouble? _CachedValue;
         private PreciseDouble _NormalizedValue;
@@ -22,24 +22,27 @@ namespace SiGen.Measuring
         public LengthUnit Unit
         {
             get => _Unit;
-            set
-            {
-                if (_Unit != value)
-                {
-                    _Unit = value;
-                    _CachedValue = null;
-                }
-            }
+            //set
+            //{
+            //    if (_Unit != value)
+            //    {
+            //        _Unit = value;
+            //        _CachedValue = null;
+            //    }
+            //}
         }
 
+        /// <summary>
+        /// The measure in CM
+        /// </summary>
         public PreciseDouble NormalizedValue
         {
             get => _NormalizedValue;
-            set
-            {
-                _NormalizedValue = value;
-                _CachedValue = null;
-            }
+            //set
+            //{
+            //    _NormalizedValue = value;
+            //    _CachedValue = null;
+            //}
         }
 
         public PreciseDouble Value
@@ -55,17 +58,17 @@ namespace SiGen.Measuring
                 _CachedValue = ConvertFromNormalizedValue(NormalizedValue, Unit);
                 return _CachedValue.Value;
             }
-            set
-            {
-                _NormalizedValue = ConvertToNormalizedValue(value, Unit);
-                _CachedValue = value;
-            }
+            //set
+            //{
+            //    _NormalizedValue = ConvertToNormalizedValue(value, Unit);
+            //    _CachedValue = value;
+            //}
         }
 
         public PreciseDouble this[LengthUnit unit]
         {
             get => ConvertFromNormalizedValue(_NormalizedValue, unit);
-            set => _NormalizedValue = ConvertToNormalizedValue(value, unit);
+            //set => _NormalizedValue = ConvertToNormalizedValue(value, unit);
         }
 
         public bool IsEmpty => _NormalizedValue.IsEmpty;
@@ -73,7 +76,7 @@ namespace SiGen.Measuring
         public static Measure Zero => new(LengthUnit.Cm, 0);
         public static Measure Empty => new Measure();
 
-        private Measure() 
+        public Measure() 
         {
             _NormalizedValue = PreciseDouble.Empty;
         }
@@ -172,6 +175,11 @@ namespace SiGen.Measuring
             return m1.NormalizedValue <= m2.NormalizedValue;
         }
 
+        public int CompareTo(Measure other)
+        {
+            return CompareTo(other as Measure?);
+        }
+
         public int CompareTo(Measure? other)
         {
             if (other == null)
@@ -185,7 +193,7 @@ namespace SiGen.Measuring
                 return 0;
             if (!IsEmpty)
                 return 1;
-            if (!other.IsEmpty)
+            if (!other.Value.IsEmpty)
                 return -1;
             return 0;
         }
@@ -323,7 +331,7 @@ namespace SiGen.Measuring
 
         public static bool IsNullOrEmpty([NotNullWhen(false)] Measure? measure)
         {
-            return measure == null || measure.IsEmpty;
+            return !measure.HasValue || measure.Value.IsEmpty;
         }
 
         public override string ToString()
@@ -348,6 +356,8 @@ namespace SiGen.Measuring
 
             return string.Format(culture, "{0:0.####}{1}", Value, unitText);
         }
+
+        
     }
 
     public enum LengthUnit

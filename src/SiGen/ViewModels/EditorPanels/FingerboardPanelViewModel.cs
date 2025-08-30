@@ -31,6 +31,9 @@ namespace SiGen.ViewModels.EditorPanels
         [ObservableProperty]
         private bool compensateForStringThickness;
 
+        [ObservableProperty]
+        private Measure? fingerboardExtension;
+
         protected override void OnConfigurationChanged()
         {
             base.OnConfigurationChanged();
@@ -43,6 +46,7 @@ namespace SiGen.ViewModels.EditorPanels
             BridgeTrebleMargin = Configuration.Fingerboard.BridgeTrebleMargin;
             BridgeBassMargin = Configuration.Fingerboard.BridgeBassMargin;
             CompensateForStringThickness = Configuration.Fingerboard.CompensateMarginsForStrings;
+            FingerboardExtension = Configuration.Fingerboard.ExtensionAfterLastFret;
         }
 
 
@@ -74,6 +78,15 @@ namespace SiGen.ViewModels.EditorPanels
             UpdateConfiguration("Margins", config =>
             {
                 config.Fingerboard.CompensateMarginsForStrings = value;
+            });
+        }
+
+        partial void OnFingerboardExtensionChanged(Measure? value)
+        {
+            if (IsLoading) return;
+            UpdateConfiguration("Fingerboard Extension", config =>
+            {
+                config.Fingerboard.ExtensionAfterLastFret = value;
             });
         }
 

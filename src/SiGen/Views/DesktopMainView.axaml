@@ -52,11 +52,11 @@
 		<DockPanel>
 			<Menu DockPanel.Dock="Top" Background="{DynamicResource MenuBackground}">
 				<MenuItem Header="_File">
-					<MenuItem Header="_Open..." Command="{Binding OpenCommand}" />
-					<MenuItem Header="_Home Page" Command="{Binding OpenHomeCommand}" />
+					<MenuItem Header="_Open..." Command="{Binding OpenCommand}" HotKey="Ctrl+O" />
+					<MenuItem Header="_Home Page" Command="{Binding OpenHomeCommand}"  />
 					<Separator/>
-					<MenuItem Header="_Save..." Command="{Binding SaveCommand}" />
-					<MenuItem Header="_Save As..." Command="{Binding SaveAsCommand}" />
+					<MenuItem Header="_Save..." Command="{Binding SaveCommand}" HotKey="Ctrl+S"/>
+					<MenuItem Header="_Save As..." Command="{Binding SaveAsCommand}" HotKey="Ctrl+S" />
 					<Separator/>
 					<MenuItem Header="Recent files" x:Name="RecentFilesMenu" ItemsSource="{Binding RecentFiles}">
 						<MenuItem.ItemTemplate>

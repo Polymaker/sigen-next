@@ -84,5 +84,22 @@ namespace SiGen.Paths
                 3 * omt * MathD.Pow(t, 2f) * ControlPoints[2] +
                 MathD.Pow(t, 3f) * ControlPoints[3];
         }
+
+        public override bool Intersects(LinearPath line, out VectorD intersection)
+        {
+            const int sampleCount = 50;
+            VectorD prev = Interpolate(0);
+            for (int i = 1; i <= sampleCount; i++)
+            {
+                double t = i / (double)sampleCount;
+                VectorD curr = Interpolate(t);
+                var segment = new LinearPath(prev, curr);
+                if (LinearPath.Intersects(segment, line, out intersection))
+                    return true;
+                prev = curr;
+            }
+            intersection = VectorD.Empty;
+            return false;
+        }
     }
 }

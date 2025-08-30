@@ -23,9 +23,9 @@ namespace SiGen.Services
                 { InstrumentType.ElectricGuitar, () => new InstrumentProfiles.ElectricGuitarValuesProvider() },
                 { InstrumentType.AcousticGuitar, () => new InstrumentProfiles.AcousticGuitarValuesProvider() },
                 { InstrumentType.ClassicalGuitar, () => new InstrumentProfiles.ClassicalGuitarValuesProvider() },
-                { InstrumentType.ElectricBass, () => new InstrumentProfiles.ElectricBassGuitarValuesProvider() },
+                { InstrumentType.ElectricBass, () => new InstrumentProfiles.ElectricBassValuesProvider() },
                 { InstrumentType.AcousticBass, () => new InstrumentProfiles.AcousticBassValuesProvider() },
-                //{ InstrumentType.Mandolin, () => new InstrumentProfiles.MandolinValuesProvider() },
+                { InstrumentType.Mandolin, () => new InstrumentProfiles.MandolinValuesProvider() },
                 { InstrumentType.Banjo, () => new InstrumentProfiles.BanjoValuesProvider() },
                 //{ InstrumentType.Ukulele, () => new InstrumentProfiles.UkuleleValuesProvider() },
             };

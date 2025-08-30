@@ -97,7 +97,7 @@
 		
 		<ctrl:CustomFormField Label="Extension" Help="Length to continue the fingerboard after the last fret.">
 			<ctrl:CustomFormField.Input>
-				<ctrl:MeasureTextBox  Width="120" AllowEmpty="True" />
+				<ctrl:MeasureTextBox Value="{Binding FingerboardExtension, Mode=TwoWay}" MinimumValue="0mm" MaximumValue="30mm" Width="120" AllowEmpty="True" />
 			</ctrl:CustomFormField.Input>
 		</ctrl:CustomFormField>
 	</StackPanel>

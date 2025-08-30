@@ -83,14 +83,14 @@ namespace SiGen.Layouts.Elements
             if (side == FingerboardSide.Bass)
             {
                 if (firstPt.StringIndex == 0)
-                    return Layout.GetFingerboardEdge(FingerboardSide.Bass).Path;
+                    return Layout.GetFingerboardEdge(FingerboardSide.Bass).Path as LinearPath;
                 else
                     return Layout.GetStringMedian(firstPt.StringIndex - 1).Path;
             }
             else
             {
                 if (lastPt.StringIndex == Layout.NumberOfStrings - 1)
-                    return Layout.GetFingerboardEdge(FingerboardSide.Treble).Path;
+                    return Layout.GetFingerboardEdge(FingerboardSide.Treble).Path as LinearPath;
                 else
                     return Layout.GetStringMedian(lastPt.StringIndex).Path;
             }

@@ -8,11 +8,11 @@ using SiGen.Utilities;
 
 namespace SiGen.UI.LayoutViewer.Visuals
 {
-    public class StringMedianVisualElement : VisualElementBase<StringMedianElement>
+    public class GuideLineVisualElement : VisualElementBase<GuideLineElement>
     {
         private Line? _line;
 
-        public StringMedianVisualElement(StringMedianElement element, ThemeRenderSettings theme)
+        public GuideLineVisualElement(GuideLineElement element, ThemeRenderSettings theme)
             : base(element, theme)
         {
             

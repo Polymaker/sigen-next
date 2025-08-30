@@ -17,9 +17,14 @@ namespace SiGen.Services.InstrumentProfiles
 
         public int StandardStringCount => 5;
 
-        public IReadOnlyList<int> GetCommonStringCounts()
+        public IReadOnlyList<int> GetCommonStringsCount()
         {
             return [4,5,6];
+        }
+
+        public IReadOnlyList<int> GetCommonFretsCount()
+        {
+            return [19, 22];
         }
 
         public IReadOnlyList<SpacingPreset> GetNutSpacingPresets()
@@ -52,8 +57,9 @@ namespace SiGen.Services.InstrumentProfiles
         public IReadOnlyList<ScaleLengthPreset> GetScaleLengthPresets()
         {
             return [
-                new ScaleLengthPreset("Standard", Measure.In(26.25)),
                 new ScaleLengthPreset("Short", Measure.In(25.5)),
+                new ScaleLengthPreset(Texts.Preset_Standard, Measure.In(26.25)),
+                
             ];
         }
 

@@ -49,6 +49,11 @@ namespace SiGen.UI
             AffectsRender<LayoutGridControl>(UnitModeProperty, ZoomProperty, LayoutBoundsProperty);
         }
 
+        public LayoutGridControl()
+        {
+            Focusable = true;
+        }
+
         private Rect blueprintGridRect = new Rect();
 
         public virtual void UpdateTheme(ThemeRenderSettings theme)

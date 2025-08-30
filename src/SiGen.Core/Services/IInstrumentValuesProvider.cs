@@ -7,8 +7,8 @@ namespace SiGen.Services
     {
         InstrumentType InstrumentType { get; }
         int StandardStringCount { get; }
-        IReadOnlyList<int> GetCommonStringCounts();
-
+        IReadOnlyList<int> GetCommonStringsCount();
+        IReadOnlyList<int> GetCommonFretsCount();
         IReadOnlyList<ScaleLengthPreset> GetScaleLengthPresets();
         IReadOnlyList<TuningPreset> GetTuningPresets();
         IReadOnlyList<SpacingPreset> GetNutSpacingPresets();

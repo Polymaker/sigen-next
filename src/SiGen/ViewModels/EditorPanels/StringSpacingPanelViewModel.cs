@@ -118,7 +118,7 @@ namespace SiGen.ViewModels.EditorPanels
                 {
                     for (int i = NutStringDistances.Count; i < config.NumberOfStrings - 1; i++)
                     {
-                        var distance = NutStringDistances.LastOrDefault() ?? Measure.Cm(1);
+                        var distance = NutStringDistances.LastOrDefaultNullable() ?? Measure.Cm(1);
                         NutStringDistances.Add(distance);
                     }
                     config.NutSpacing.StringDistances = NutStringDistances.ToList();
@@ -135,7 +135,7 @@ namespace SiGen.ViewModels.EditorPanels
             });
         }
 
-        partial void OnNutSpacingChanged(Measure? oldValue, Measure newValue)
+        partial void OnNutSpacingChanged(Measure oldValue, Measure newValue)
         {
             if (Configuration?.NutSpacing?.SpacingMode != StringSpacingMode.Manual)
             {
@@ -198,7 +198,7 @@ namespace SiGen.ViewModels.EditorPanels
                 {
                     for (int i = BridgeStringDistances.Count; i < config.NumberOfStrings - 1; i++)
                     {
-                        var distance = BridgeStringDistances.LastOrDefault() ?? Measure.Cm(1);
+                        var distance = BridgeStringDistances.LastOrDefaultNullable() ?? Measure.Cm(1);
                         BridgeStringDistances.Add(distance);
                     }
                     config.BridgeSpacing.StringDistances = BridgeStringDistances.ToList();
@@ -215,7 +215,7 @@ namespace SiGen.ViewModels.EditorPanels
             });
         }
 
-        partial void OnBridgeSpacingChanged(Measure? oldValue, Measure newValue)
+        partial void OnBridgeSpacingChanged(Measure oldValue, Measure newValue)
         {
             if (Configuration?.BridgeSpacing?.SpacingMode != StringSpacingMode.Manual)
             {
@@ -364,7 +364,7 @@ namespace SiGen.ViewModels.EditorPanels
 
             if (Configuration.NutSpacing.SpacingMode != StringSpacingMode.Manual)
             {
-                NutSpacing = Configuration.NutSpacing.StringDistances.FirstOrDefault() ?? Measure.Zero;
+                NutSpacing = Configuration.NutSpacing.StringDistances.FirstOrDefaultNullable() ?? Measure.Zero;
             }
 
             bool isSymmetric = Configuration.ScaleLength.Mode == ScaleLengthMode.Single && Measure.IsNullOrEmpty(Configuration.ScaleLength.BassTrebleSkew);
@@ -376,7 +376,7 @@ namespace SiGen.ViewModels.EditorPanels
 
             if (Configuration.BridgeSpacing.SpacingMode != StringSpacingMode.Manual)
             {
-                BridgeSpacing = Configuration.BridgeSpacing.StringDistances.FirstOrDefault() ?? Measure.Zero;
+                BridgeSpacing = Configuration.BridgeSpacing.StringDistances.FirstOrDefaultNullable() ?? Measure.Zero;
             }
 
             bool bridgeHasSymmetricMargins = Configuration.Fingerboard.BridgeBassMargin == Configuration.Fingerboard.BridgeTrebleMargin && !Configuration.Fingerboard.CompensateMarginsForStrings;

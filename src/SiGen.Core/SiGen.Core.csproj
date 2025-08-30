@@ -32,8 +32,8 @@
     </EmbeddedResource>
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Utilities\" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="netDxf" />
+	</ItemGroup>
 
 </Project>

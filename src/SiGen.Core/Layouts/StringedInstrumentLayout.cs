@@ -36,9 +36,9 @@ namespace SiGen.Layouts
 
         #region Get Element Helpers
 
-        public FingerboardSideElement GetFingerboardEdge(FingerboardSide side)
+        public FingerboardEdgeElement GetFingerboardEdge(FingerboardSide side)
         {
-            return Elements.OfType<FingerboardSideElement>().First(x => x.Side == side);
+            return Elements.OfType<FingerboardEdgeElement>().First(x => x.Side == side);
         }
 
         public StringMedianElement GetStringMedian(int medianIndex)
@@ -55,6 +55,16 @@ namespace SiGen.Layouts
         {
             int index = side == FingerboardSide.Bass ? (0 + offset) : ((Configuration?.NumberOfStrings ?? Strings.Count()) - 1 - offset);
             return Elements.OfType<StringElement>().First(x => x.StringIndex == index);
+        }
+
+        public IEnumerable<FretSegmentElement> GetFretSegments()
+        {
+            return Elements.OfType<FretSegmentElement>();
+        }
+
+        public IEnumerable<StringElement> GetStrings()
+        {
+            return Elements.OfType<StringElement>();
         }
 
         #endregion

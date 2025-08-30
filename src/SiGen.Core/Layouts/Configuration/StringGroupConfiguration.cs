@@ -27,19 +27,19 @@ namespace SiGen.Layouts.Configuration
         public Measure GetTotalSpacing()
         {
             var spacing = Measure.IsNullOrEmpty(Spacing) ? Measure.Mm(1.5) : Spacing;
-            return spacing * (StringCount - 1);
+            return spacing.Value * (StringCount - 1);
         }
 
         public override Measure? GetTotalWidth()
         {
             Measure measure = Measure.Zero;
-            var spacing = Measure.IsNullOrEmpty(Spacing) ? Measure.Mm(1.5) : Spacing; 
+            var spacing = Measure.IsNullOrEmpty(Spacing) ? Measure.Mm(1.5) : Spacing.Value; 
             measure += spacing * (StringCount - 1);
 
             foreach (var str in Strings)
             {
                 if (!Measure.IsNullOrEmpty(str.Gauge))
-                    measure += str.Gauge;
+                    measure += str.Gauge.Value;
             }
 
             return measure;

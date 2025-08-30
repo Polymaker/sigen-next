@@ -18,7 +18,9 @@ namespace SiGen.Measuring
         public override object? ConvertFrom(ITypeDescriptorContext? context, CultureInfo? culture, object value)
         {
             if (value is string str && MeasureParser.TryParse(str, out var measure))
-                return measure;
+                return measure.Value;
+            if (value as string == "0")
+                return Measure.Zero;
             return base.ConvertFrom(context, culture, value);
         }
     }

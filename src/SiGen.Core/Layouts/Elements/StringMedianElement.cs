@@ -8,24 +8,16 @@ using System.Threading.Tasks;
 
 namespace SiGen.Layouts.Elements
 {
-    public class StringMedianElement : LayoutElement
+    public class StringMedianElement : GuideLineElement
     {
         public int MedianIndex { get; }
-
-        public LinearPath Path { get; }
 
         public int BassStringIndex => MedianIndex;
         public int TrebleStringIndex => MedianIndex + 1;
 
-        public StringMedianElement(int medianIndex, LinearPath path)
+        public StringMedianElement(int medianIndex, LinearPath path) : base(path)
         {
             MedianIndex = medianIndex;
-            Path = path;
-        }
-
-        protected override void FlipHorizontalCore()
-        {
-            Path.FlipHorizontal();
         }
     }
 }

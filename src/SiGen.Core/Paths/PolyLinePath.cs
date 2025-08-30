@@ -52,25 +52,76 @@ namespace SiGen.Paths
 
         public override PathBase? Extend(PreciseDouble amount)
         {
+            if (Points.Count < 2 || amount.IsEmpty || amount.DoubleValue == 0)
+                return new PolyLinePath(new List<VectorD>(Points));
+
+            var newPoints = new List<VectorD>(Points);
+            var absAmount = MathD.Abs(amount);
+
             if (amount > 0)
             {
-                var startLine = LineD.FromPoints(Points[0], Points[1]);
-                var startDirection = (Points[0] - Points[1]).Normalized;
-                var startPerp = startLine.GetPerpendicular(Points[0] + (startDirection * amount));
+                // Extend at start
+                var startDir = (Points[0] - Points[1]).Normalized;
+                var newStart = Points[0] + startDir * absAmount;
+                newPoints.Insert(0, newStart);
 
-                if (!startLine.Intersects(startPerp, out var inter1))
-                    return null;
+                // Extend at end
+                var endDir = (Points[^1] - Points[^2]).Normalized;
+                var newEnd = Points[^1] + endDir * absAmount;
+                newPoints.Add(newEnd);
+            }
+            else if (amount < 0)
+            {
+                // Trim at start
+                var trimAmount = absAmount;
+                int startIdx = 0;
+                while (startIdx < newPoints.Count - 1)
+                {
+                    var segLen = VectorD.Distance(newPoints[startIdx], newPoints[startIdx + 1]);
+                    if (trimAmount < segLen)
+                        break;
+                    trimAmount -= segLen;
+                    startIdx++;
+                }
+                if (startIdx < newPoints.Count - 1)
+                {
+                    var dir = (newPoints[startIdx + 1] - newPoints[startIdx]).Normalized;
+                    newPoints[startIdx] = newPoints[startIdx] + dir * trimAmount;
+                }
+                newPoints = newPoints.Skip(startIdx).ToList();
 
-                var endLine = LineD.FromPoints(Points[^2], Points[^1]);
-                var endDirection = (Points[^1] - Points[^2]).Normalized;
-                var endPerp = endLine.GetPerpendicular(Points[^1] + (endDirection * amount));
-
-                if (!endLine.Intersects(endPerp, out var inter2))
-                    return null;
-
+                // Trim at end
+                trimAmount = absAmount;
+                int endIdx = newPoints.Count - 1;
+                while (endIdx > 0)
+                {
+                    var segLen = VectorD.Distance(newPoints[endIdx], newPoints[endIdx - 1]);
+                    if (trimAmount < segLen)
+                        break;
+                    trimAmount -= segLen;
+                    endIdx--;
+                }
+                if (endIdx > 0)
+                {
+                    var dir = (newPoints[endIdx - 1] - newPoints[endIdx]).Normalized;
+                    newPoints[endIdx] = newPoints[endIdx] + dir * trimAmount;
+                }
+                newPoints = newPoints.Take(endIdx + 1).ToList();
             }
 
-            return null;
+            return newPoints.Count >= 2 ? new PolyLinePath(newPoints) : null;
+        }
+
+        public override bool Intersects(LinearPath line, out VectorD intersection)
+        {
+            for (int i = 0; i < Points.Count - 1; i++)
+            {
+                var segment = new LinearPath(Points[i], Points[i + 1]);
+                if (LinearPath.Intersects(segment, line, out intersection))
+                    return true;
+            }
+            intersection = VectorD.Empty;
+            return false;
         }
     }
 }

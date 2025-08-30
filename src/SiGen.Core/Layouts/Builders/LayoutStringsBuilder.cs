@@ -16,7 +16,7 @@ namespace SiGen.Layouts.Builders
         {
         }
 
-        public override void BuildLayoutCore()
+        protected override void ExecuteFirstPass()
         {
             if (NumberOfStrings == 1)
             {
@@ -32,7 +32,7 @@ namespace SiGen.Layouts.Builders
                     return;
                 }
 
-                Layout.AddElement(CreateStringElement(0, Measure.Zero, Measure.Zero, Configuration.ScaleLength.SingleScale));
+                Layout.AddElement(CreateStringElement(0, Measure.Zero, Measure.Zero, Configuration.ScaleLength.SingleScale.Value));
                 return;
             }
 
@@ -122,6 +122,34 @@ namespace SiGen.Layouts.Builders
 
         }
 
+        protected override void ExecuteSecondPass()
+        {
+            for (int i = 0; i < Configuration.NumberOfStrings; i++)
+            {
+                if (Configuration.StringConfigurations[i] is StringGroupConfiguration group)
+                {
+                    var offsetX = group.GetTotalSpacing() * -0.5d;
+                    var stringElem = Layout.GetStringElement(i);
+                    Layout.Elements.Remove(stringElem);
+                    for (int j = 0; j < group.StringCount; j++)
+                    {
+                        var path = (LinearPath)stringElem.Path.Clone();
+                        path.Offset(new VectorD(offsetX.NormalizedValue, 0));
+
+                        var newString = new StringElement(i, j, path)
+                        {
+                            NutPoint = stringElem.NutPoint + new PointM(offsetX, Measure.Zero),
+                            BridgePoint = stringElem.BridgePoint + new PointM(offsetX, Measure.Zero),
+                            StartPoint = stringElem.StartPoint + new PointM(offsetX, Measure.Zero)
+                        };
+                        Layout.AddElement(newString);
+
+                        offsetX += group.Spacing ?? Measure.Mm(1.5);
+                    }
+                }
+            }
+        }
+
         private LinearPath[] CreateStringsPaths()
         {
             if(!GetStringPositions(FingerboardEnd.Nut, out var nutPositions))
@@ -152,13 +180,13 @@ namespace SiGen.Layouts.Builders
             //if we wish the string to be exaclty the length specified we need to calculate the base of the triangle
             if (Configuration.ScaleLength.CalculationMethod == lengthCalculationMethod)
             {
-                bassScaleLength = AdjustScaleLengthForTaper(bassScaleLength, nutPositions[0], bridgePositions[0]);
-                trebScaleLength = AdjustScaleLengthForTaper(trebScaleLength, nutPositions[^1], bridgePositions[^1]);
+                bassScaleLength = AdjustScaleLengthForTaper(bassScaleLength.Value, nutPositions[0], bridgePositions[0]);
+                trebScaleLength = AdjustScaleLengthForTaper(trebScaleLength.Value, nutPositions[^1], bridgePositions[^1]);
             }
 
             LinearPath[] stringPaths = new LinearPath[NumberOfStrings];
-            var bassStrPath = stringPaths[0] = CreateStringPath(nutPositions[0], bridgePositions[0], bassScaleLength);
-            var trebStrPath = stringPaths[^1] = CreateStringPath(nutPositions[^1], bridgePositions[^1], trebScaleLength);
+            var bassStrPath = stringPaths[0] = CreateStringPath(nutPositions[0], bridgePositions[0], bassScaleLength.Value);
+            var trebStrPath = stringPaths[^1] = CreateStringPath(nutPositions[^1], bridgePositions[^1], trebScaleLength.Value);
 
             //if (Configuration.NutSpacing.CenterAlignment == LayoutCenterAlignment.SymmetricStrings ||
             //    Configuration.NutSpacing.CenterAlignment == LayoutCenterAlignment.SymmetricFingerboard)
@@ -184,8 +212,8 @@ namespace SiGen.Layouts.Builders
                     {
                         var scaleLength = GetStringConfig(i)!.ScaleLength!;
                         if (Configuration.ScaleLength.CalculationMethod == lengthCalculationMethod)
-                            scaleLength = AdjustScaleLengthForTaper(scaleLength, nutPositions[i], bridgePositions[i]);
-                        stringPaths[i] = CreateStringPath(nutPositions[i], bridgePositions[i], scaleLength);
+                            scaleLength = AdjustScaleLengthForTaper(scaleLength.Value, nutPositions[i], bridgePositions[i]);
+                        stringPaths[i] = CreateStringPath(nutPositions[i], bridgePositions[i], scaleLength.Value);
                     }
                 }
                 else
@@ -232,7 +260,7 @@ namespace SiGen.Layouts.Builders
             var maxX = MathD.Abs(MathD.Max(stringPaths[^1].Start.X, stringPaths[^1].End.X));
             var minX = MathD.Abs(MathD.Min(stringPaths[0].Start.X, stringPaths[0].End.X));
             maxX = MathD.Max(minX, maxX);
-            var skewAmount = Configuration.ScaleLength.BassTrebleSkew.NormalizedValue;
+            var skewAmount = Configuration.ScaleLength.BassTrebleSkew.Value.NormalizedValue;
             VectorD skewVector(VectorD vec)
             {
                 var yAmount = MathD.Map(-maxX, maxX, skewAmount * 0.5, skewAmount * -0.5, vec.X);
@@ -269,7 +297,7 @@ namespace SiGen.Layouts.Builders
                     PreciseDouble totalMargin = Configuration.Fingerboard.GetMargin(end, FingerboardSide.Bass).NormalizedValue;
                     var stringWidth = Configuration.StringConfigurations[0]?.GetTotalWidth();
                     if (compensateForStrings && !Measure.IsNullOrEmpty(stringWidth))
-                        totalMargin += stringWidth.NormalizedValue / 2d;
+                        totalMargin += stringWidth.Value.NormalizedValue / 2d;
 
                     var marginOffset = bassPerp.Vector * totalMargin;
                     var edgeLine = LineD.FromPoints(bassPath.Start - marginOffset, bassPath.End - marginOffset);
@@ -289,7 +317,7 @@ namespace SiGen.Layouts.Builders
                     PreciseDouble totalMargin = Configuration.Fingerboard.GetMargin(end, FingerboardSide.Treble).NormalizedValue;
                     var stringWidth = Configuration.StringConfigurations[^1]?.GetTotalWidth();
                     if (compensateForStrings && !Measure.IsNullOrEmpty(stringWidth))
-                        totalMargin += stringWidth!.NormalizedValue / 2d;
+                        totalMargin += stringWidth.Value.NormalizedValue / 2d;
 
                     var marginOffset = trebPerp.Vector * totalMargin;
                     var edgeLine = LineD.FromPoints(trebPath.Start + marginOffset, trebPath.End + marginOffset);
@@ -462,7 +490,7 @@ namespace SiGen.Layouts.Builders
                         if (Measure.IsNullOrEmpty(gauge2))
                             gauge2 = Measure.Cm(0);
 
-                        var gaugeOffset = (gauge1 + gauge2) / 2m;
+                        var gaugeOffset = (gauge1.Value + gauge2.Value) / 2m;
                         spacings.Add(gaugeOffset);
                         totalSpreadAdj -= gaugeOffset;
                     }

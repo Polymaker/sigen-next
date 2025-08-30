@@ -1,6 +1,7 @@
 ﻿using Avalonia.Styling;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using SiGen.Export;
 using SiGen.Layouts.Configuration;
 using SiGen.Serialization;
 using SiGen.Services;
@@ -50,8 +51,18 @@ namespace SiGen.ViewModels
             TestCommand = new RelayCommand(() =>
             {
                 // For testing purposes only
-
-                App.Current!.RequestedThemeVariant = ThemeVariant.Light;
+                //App.Current!.RequestedThemeVariant = ThemeVariant.Light;
+                if (SelectedDocument is LayoutDocumentViewModel layoutDoc)
+                {
+                    var exporter = new DxfLayoutExporter(new DxfExportOptions
+                    {
+                        ExportFrets = true,
+                        ExportStrings = true,
+                        ExportCenterLine = true,
+                        ExportFingerboard = true
+                    }, layoutDoc.Layout!);
+                    exporter.ExportLayout("D:\\Programming\\C#\\sigen-next\\tests\\" + layoutDoc.Title + ".dxf");
+                }
             });
             OpenHomeCommand = new RelayCommand(OpenHomePage);
             OpenFileCommand = new RelayCommand<string>(OpenDocumentFile);
@@ -127,6 +138,7 @@ namespace SiGen.ViewModels
                 var options = new JsonSerializerOptions();
                 options.WriteIndented = true;
                 options.Converters.Add(new MeasureConverter());
+                options.Converters.Add(new NullableMeasureConverter());
                 options.Converters.Add(new BaseStringConfigurationConverter());
                 using var stream = System.IO.File.Create(filePath);
                 JsonSerializer.Serialize(stream, document.Configuration, options);
@@ -196,12 +208,16 @@ namespace SiGen.ViewModels
                 var options = new JsonSerializerOptions();
                 options.WriteIndented = true;
                 options.Converters.Add(new MeasureConverter());
+                options.Converters.Add(new NullableMeasureConverter());
                 options.Converters.Add(new BaseStringConfigurationConverter());
                 config = JsonSerializer.Deserialize<InstrumentLayoutConfiguration>(
                     System.IO.File.ReadAllText(filePath), options);
 
             }
-            catch { }
+            catch //(Exception ex)
+            {
+                //todo: show error message
+            }
 
             if (config == null) return;
 
@@ -234,10 +250,14 @@ namespace SiGen.ViewModels
         {
             if (document == null)
                 throw new ArgumentNullException(nameof(document));
+
             if (OpenDocuments.Contains(document))
             {
                 if (document is LayoutDocumentViewModel layoutDocument && document.HasUnsavedChanges)
                 {
+                    if (SelectedDocument != document)
+                        SelectedDocument = document;
+
                     var result = await dialogService.ShowSaveChangesAsync(document.Title);
                     if (result == SaveChangesResult.Cancel)
                         return;
