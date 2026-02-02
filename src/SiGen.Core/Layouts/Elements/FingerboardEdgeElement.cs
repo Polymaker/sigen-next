@@ -9,12 +9,14 @@ namespace SiGen.Layouts
     {
         public PathBase Path { get; set; }
         public FingerboardSide? Side { get; set; }
+        public int? BesideStringIndex { get; set; }
         public bool IsSide => Side.HasValue;
 
-        public FingerboardEdgeElement(PathBase path, FingerboardSide? side)
+        public FingerboardEdgeElement(PathBase path, FingerboardSide? side, int? besideStringIndex = null)
         {
             Path = path;
             Side = side;
+            BesideStringIndex = besideStringIndex;
         }
 
         protected override void FlipHorizontalCore()

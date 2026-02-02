@@ -4,6 +4,7 @@ using SiGen.Layouts.Elements;
 using SiGen.Maths;
 using SiGen.Measuring;
 using SiGen.Paths;
+using System.Diagnostics;
 
 namespace SiGen.Layouts.Builders
 {
@@ -22,15 +23,58 @@ namespace SiGen.Layouts.Builders
             Layout.AddElement(bassEdge);
             Layout.AddElement(trebEdge);
 
-
-            //var vertLine = new LineD(0, bassEdge.Path.Start.Y);
-            //if (trebEdge.Path.GetEquation().Intersects(vertLine, out var bassIntersection))
+            //if (bassEdge.Path is LinearPath && trebEdge.Path is LinearPath)
             //{
-            //    var center = (bassEdge.Path.Start + bassIntersection) / 2d;
+            //    var vertLine = new LineD(0, (bassEdge.Path as LinearPath)!.Start.Y);
+            //    if ((trebEdge.Path as LinearPath)!.GetEquation().Intersects(vertLine, out var bassIntersection))
+            //    {
+            //        var center = ((bassEdge.Path as LinearPath)!.Start + bassIntersection) / 2d;
+            //        Trace.WriteLine($"Nut center: {center}");
+            //    }
             //}
+           
         }
 
         protected override void ExecuteSecondPass()
+        {
+            CreateFingerboardExtensionLine();
+
+            //var points = new List<VectorD>();
+            //int maxFrets = Configuration.GetMaxFrets();
+
+            //Measure nutBassMargin = Configuration.Fingerboard.GetMargin(Data.FingerboardEnd.Nut, FingerboardSide.Bass);
+            //Measure bridgeBassMargin = Configuration.Fingerboard.GetMargin(Data.FingerboardEnd.Bridge, FingerboardSide.Bass);
+
+            //nutBassMargin += Configuration.StringConfigurations[0].GetHalfWidth(FingerboardSide.Bass, Configuration.Fingerboard.CompensateMarginsForStrings);
+            //bridgeBassMargin += Configuration.StringConfigurations[0].GetHalfWidth(FingerboardSide.Bass, Configuration.Fingerboard.CompensateMarginsForStrings);
+            //int lastBassStringIndex = -1;
+            //for (int i = 0; i <= maxFrets; i++)
+            //{
+            //    var fretSeg = Layout.GetFretSegments().Where(x => x.ContainsFret(i) && (lastBassStringIndex < 0 || x.ContainsString(lastBassStringIndex)))
+            //        .OrderBy(x => x.BassStringIndex).FirstOrDefault();
+            //    if (fretSeg != null && (fretSeg.BassStringIndex > 0 || fretSeg.ContainsString(lastBassStringIndex)))
+            //    {
+            //        var fretPt = fretSeg.GetFretPoint(fretSeg.BassStringIndex)!;
+            //        var pos = fretPt.Position.ToVector();
+            //        var ratio = 1d / fretPt.Interval.Ratio;
+            //        var adjustedMargin = MathD.Map(1, 0, nutBassMargin.NormalizedValue, bridgeBassMargin.NormalizedValue, ratio);
+            //        pos.X -= adjustedMargin;
+            //        //MathD.Map(0, 1, nutBassMargin)
+            //        points.Add(pos);
+            //        lastBassStringIndex = fretSeg.BassStringIndex;
+
+            //        if (fretSeg.BassStringIndex == 0) break;
+            //    }
+            //}
+
+            //if (points.Count >= 2 )
+            //{
+            //    var line = new PolyLinePath(points);
+            //    Layout.AddElement(new FingerboardEdgeElement(line, null));
+            //}
+        }
+
+        private void CreateFingerboardExtensionLine()
         {
             var points = new List<VectorD>();
 
@@ -70,8 +114,6 @@ namespace SiGen.Layouts.Builders
                     points.Add(inter + stringElem.Path.Direction * extension);
                 }
 
-                
-
                 if (i == NumberOfStrings - 1)
                 {
                     var trebEdgePath = (LinearPath)Layout.GetFingerboardEdge(FingerboardSide.Treble).Path;
@@ -91,7 +133,7 @@ namespace SiGen.Layouts.Builders
                         //nextMedianPoint = inter2;
                     }
                 }
-                    
+
             }
 
             if (points.Count >= 2 && extension > 0)
@@ -117,25 +159,20 @@ namespace SiGen.Layouts.Builders
 
             if (side == FingerboardSide.Bass)
             {
-                PreciseDouble offset = 0;
-                var stringWidth = Configuration.StringConfigurations[0].GetTotalWidth();
-                if (Configuration.Fingerboard.CompensateMarginsForStrings && !Measure.IsNullOrEmpty(stringWidth))
-                    offset = stringWidth.Value.NormalizedValue / 2d;
+                PreciseDouble offset = Configuration.StringConfigurations[0].GetHalfWidth(side, Configuration.Fingerboard.CompensateMarginsForStrings).NormalizedValue;
+
                 startPt -= PointM.FromVector(nutPerpLine.Vector * (nutMargin.NormalizedValue + offset));
                 endPt -= PointM.FromVector(bridgePerpLine.Vector * (bridgeMargin.NormalizedValue + offset));
             }
             else
             {
-                PreciseDouble offset = 0;
-                var stringWidth = Configuration.StringConfigurations[^1].GetTotalWidth();
-                if (Configuration.Fingerboard.CompensateMarginsForStrings && !Measure.IsNullOrEmpty(stringWidth))
-                    offset = stringWidth.Value.NormalizedValue / 2d;
+                PreciseDouble offset = Configuration.StringConfigurations[^1].GetHalfWidth(side, Configuration.Fingerboard.CompensateMarginsForStrings).NormalizedValue;
                 startPt += PointM.FromVector(nutPerpLine.Vector * (nutMargin.NormalizedValue + offset));
                 endPt += PointM.FromVector(bridgePerpLine.Vector * (bridgeMargin.NormalizedValue + offset));
             }
-
+            int stringIndex = side == FingerboardSide.Bass ? 0 : NumberOfStrings - 1;
             var edgePath = new Paths.LinearPath(startPt.ToVector(), endPt.ToVector());
-            return new FingerboardEdgeElement(edgePath, side);
+            return new FingerboardEdgeElement(edgePath, side, stringIndex);
         }
     }
 }

@@ -141,13 +141,13 @@ Les valeurs positives inclinent les frettes d'un côté, les valeurs négatives 
 • **Manuel** : La position des cordes est définie manuellement. Le mode d'espacement est ignoré et vous pouvez placer chaque corde exactement où vous le souhaitez.</value>
   </data>
   <data name="LayoutCenterAlignment_Help" xml:space="preserve">
-    <value>Choisissez la disposition des cordes par rapport à la ligne centrale :
-• **Cordes extérieures** : aligne les cordes extérieures de manière égale par rapport à la ligne centrale.
-• **Cordes médianes** : aligne la ou les cordes médianes sur la ligne centrale.
-• **Touche** : centre le manche par les bords de la touche, généralement identique à **Cordes extérieures**, sauf si les marges des graves et des aigus diffèrent.
-• **Cordes symétriques** : (Multi-échelles uniquement) ajuste l’espacement pour que la disposition reste symétrique.
-• **Touche symétrique** : (Multi-échelles uniquement) ajuste l’espacement pour que la disposition reste symétrique lorsque les marges des graves et des aigus diffèrent.
-• **Manuel** : permet de définir manuellement l’alignement à l’aide d’une valeur comprise entre 0 et 1. 0 aligne le côté grave droit, 1 aligne le côté aigu droit, et les valeurs intermédiaires fusionnent les deux.</value>
+    <value>Choisissez comment les cordes sont positionnées par rapport à la ligne centrale :
+• **Cordes extérieures** : Centre les cordes extérieures de manière équidistante de la ligne centrale.
+• **Cordes médianes** : Aligne la ou les cordes médianes sur la ligne centrale.
+• **Touche** : Centre par les bords de la touche (identique aux Cordes extérieures quand les marges sont égales).
+• **Cordes symétriques** : *(Multidiapason uniquement)* Ajuste l'espacement pour maintenir un agencement symétrique au sillet et au chevalet.
+• **Touche symétrique** : *(Multidiapason uniquement)* Comme Cordes symétriques, mais tient compte des marges graves/aigus différentes.
+• **Manuel** : Définit l'alignement manuellement (0 = côté grave aligné, 1 = côté aigu aligné, 0,5 = centré).</value>
   </data>
   <data name="SingleScale_Presets_Title" xml:space="preserve">
     <value>Voici quelques longueurs de diapason courantes utilisées :</value>
@@ -155,5 +155,10 @@ Les valeurs positives inclinent les frettes d'un côté, les valeurs négatives 
   <data name="InstrumentType_Help" xml:space="preserve">
     <value>Cette valeur détermine le type d'instrument que vous concevez.
 La sélection d'un type d'instrument active des boutons d'information à côté de certains champs, affichant des valeurs communes et des suggestions spécifiques à cet instrument.</value>
+  </data>
+  <data name="ScaleLength_MultiScaleRatio" xml:space="preserve">
+    <value>Contrôle quelle frette est droite (perpendiculaire à la ligne centrale) sur un instrument multi-échelle.
+Entrez une valeur de 0 à 100 ou sélectionnez une frette à aligner dans le menu déroulant.
+Les valeurs élevées font "pointer" les frettes vers le chevalet, les valeurs faibles vers le sillet.</value>
   </data>
 </root>

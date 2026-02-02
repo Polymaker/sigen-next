@@ -1,6 +1,8 @@
 ﻿using netDxf.Entities;
 using SiGen.Data.Common;
 using SiGen.Data.Presets;
+using SiGen.Layouts.Configuration;
+using SiGen.Layouts.Configuration.Builders;
 using SiGen.Localization;
 using SiGen.Measuring;
 using SiGen.Physics;
@@ -17,7 +19,6 @@ namespace SiGen.Services.InstrumentProfiles
         public InstrumentType InstrumentType => InstrumentType.Mandolin;
 
         public int StandardStringCount => 4; // 4 courses of 2 strings each
-
         
         public IReadOnlyList<int> GetCommonStringsCount()
         {
@@ -81,6 +82,48 @@ namespace SiGen.Services.InstrumentProfiles
             ];
         }
 
-        
+        public InstrumentLayoutConfiguration GetDefaultConfiguration()
+        {
+            var builder = new LayoutConfigurationBuilder();
+
+            builder.WithMargins(Measure.Mm(2), true)
+                   .WithInstrumentType(InstrumentType.Mandolin)
+                   .WithNumberOfFrets(19)
+                   .WithScaleLength(Measure.In(14))
+                   .WithNutSpacing(Measure.Mm(7.5), centerAlignment: Layouts.Data.LayoutCenterAlignment.Fingerboard)
+                   .WithBridgeSpacing(Measure.Mm(10.5))
+                   .AddStringCourse(c =>
+                        c.WithSpacing(Measure.Mm(2))
+                        .AddString(new NoteAndOctave(NoteName.G, 3), Measure.In(0.040))
+                        .AddString(new NoteAndOctave(NoteName.G, 3), Measure.In(0.040))
+                   )
+                   .AddStringCourse(c =>
+                        c.WithSpacing(Measure.Mm(1.75))
+                        .AddString(new NoteAndOctave(NoteName.D, 4), Measure.In(0.026))
+                        .AddString(new NoteAndOctave(NoteName.D, 4), Measure.In(0.026))
+                        .WithNumberOfFrets(20)
+                   )
+                   .AddStringCourse(c =>
+                        c.WithSpacing(Measure.Mm(1.6))
+                        .AddString(new NoteAndOctave(NoteName.A, 4), Measure.In(0.015))
+                        .AddString(new NoteAndOctave(NoteName.A, 4), Measure.In(0.015))
+                        .WithNumberOfFrets(22)
+                   )
+                   .AddStringCourse(c =>
+                        c.WithSpacing(Measure.Mm(1.5))
+                        .AddString(new NoteAndOctave(NoteName.E, 5), Measure.In(0.011))
+                        .AddString(new NoteAndOctave(NoteName.E, 5), Measure.In(0.011))
+                        .WithNumberOfFrets(22)
+                   )
+                   ;
+            return builder.Build();
+        }
+
+        public IReadOnlyList<LayoutTemplate> GetLayoutTemplates()
+        {
+            return [
+                new LayoutTemplate("F5", GetDefaultConfiguration()),
+            ];
+        }
     }
 }

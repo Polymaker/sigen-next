@@ -1,6 +1,10 @@
 using Avalonia.Controls;
 using Avalonia.Platform.Storage;
+using SiGen.Layouts.Configuration;
+using SiGen.Layouts.Data;
+using SiGen.Measuring;
 using SiGen.UI.Dialogs;
+using SiGen.ViewModels;
 using SiGen.ViewModels.Dialogs;
 using System;
 using System.Collections.Generic;
@@ -63,6 +67,27 @@ namespace SiGen.Services
             //return result;
         }
 
+
+        #region Editor Dialogs
+
+        public async Task<List<Measure>?> ShowCustomStringDialog(InstrumentLayoutConfiguration layoutConfiguration, FingerboardEnd end)
+        {
+            var viewModel = new CustomStringSpacingDialogViewModel(layoutConfiguration, end);
+            var dialogControl = new CustomStringSpacingView();
+            return await ShowDialogAsync(dialogControl, viewModel);
+            //return Task.CompletedTask;
+        }
+
+        public async Task ShowTuningDialog(ILayoutDocumentContext context)
+        {
+            var viewModel = new TuningDialogModel(context);
+            var dialogControl = new EditTuningView();
+            await ShowDialogAsync(dialogControl, viewModel);
+
+        }
+
+        #endregion
+
         #region Open / Save
 
         public async Task<string?> ShowSaveFileDialogAsync(string? title = null, string? defaultFileName = null, IEnumerable<FileDialogFilter>? filters = null)
@@ -107,7 +132,9 @@ namespace SiGen.Services
 
             return files.FirstOrDefault()?.Path.LocalPath;
         }
+
+        #endregion
     }
 
-    #endregion
+
 }

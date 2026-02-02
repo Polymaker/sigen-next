@@ -1,7 +1,8 @@
 ﻿using SiGen.Data.Common;
 using SiGen.Data.Presets;
-using SiGen.Measuring;
+using SiGen.Layouts.Configuration;
 using SiGen.Localization;
+using SiGen.Measuring;
 
 namespace SiGen.Services.InstrumentProfiles
 {
@@ -41,6 +42,20 @@ namespace SiGen.Services.InstrumentProfiles
             return [
                 new ScaleLengthPreset("Standard", Measure.In(25.6)),
                 new ScaleLengthPreset("Short", Measure.In(24.8))
+            ];
+        }
+
+        public override InstrumentLayoutConfiguration GetDefaultConfiguration()
+        {
+
+            return GetSingleScaleConfiguration(Measure.In(25.6), Measure.Mm(8.0), Measure.Mm(11.0), Measure.Mm(4), 19);
+        }
+
+        public override IReadOnlyList<LayoutTemplate> GetLayoutTemplates()
+        {
+            return [
+                new LayoutTemplate(Texts.Preset_Standard, GetSingleScaleConfiguration(Measure.In(25.6), Measure.Mm(8.0), Measure.Mm(11.0), Measure.Mm(4), 19)),
+                new LayoutTemplate("Modern", GetSingleScaleConfiguration(Measure.In(25.6), Measure.Mm(9.0), Measure.Mm(12.0), Measure.Mm(4), 19)),
             ];
         }
     }

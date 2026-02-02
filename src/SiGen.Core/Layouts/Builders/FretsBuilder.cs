@@ -70,7 +70,7 @@ namespace SiGen.Layouts.Builders
                 var median = Layout.GetStringMedian(i);
                 var bassStr = Layout.GetStringElement(median.BassStringIndex);
                 var trebStr = Layout.GetStringElement(median.TrebleStringIndex);
-                median.Path.Start = (bassStr.NutPoint + trebStr.NutPoint).ToVector() / 2d;
+                //median.Path.Start = (bassStr.NutPoint + trebStr.NutPoint).ToVector() / 2d;
             }
         }
 
@@ -277,45 +277,70 @@ namespace SiGen.Layouts.Builders
 
             for (int i = 0;  i < partialNutSegments.Count; i++)
             {
-                var segment = partialNutSegments[i];
+                var currentSegment = partialNutSegments[i];
 
-                bool isNut = false;
+                
                 int firstNutIndex = 0;
 
-                for (int j = 0; j < segment.Count; j++)
+                bool isNut = false; // segment.FretPoints[0].IsNut;
+
+                void createNutSegment(int firstIndex, int lastIndex)
                 {
-                    if (isNut && !segment.FretPoints[j].IsNut)
-                    {
-                        var newSegment = new FretSegment();
-                        if (firstNutIndex > 0)
-                            newSegment.AddPoint(segment.FretPoints[firstNutIndex - 1].Clone());
-                        newSegment.FretPoints.AddRange(segment.FretPoints.Skip(firstNutIndex));
-                        segment.FretPoints.RemoveRange(firstNutIndex, segment.Count - firstNutIndex);
-                        if (newSegment.IsPartialNut())
-                            partialNutSegments.Add(newSegment);
-                        segments.Add(newSegment);
-                        break;
-                    }
+                    var nutSegment = new FretSegment();
+                    if (firstIndex > 0)
+                        nutSegment.FretPoints.Add(currentSegment.FretPoints[firstIndex - 1].Clone());
+                    nutSegment.FretPoints.AddRange(currentSegment.FretPoints.Skip(firstIndex).Take(lastIndex - firstNutIndex + 1));
+                    if (lastIndex + 1 < currentSegment.Count)
+                        nutSegment.FretPoints.Add(currentSegment.FretPoints[lastIndex + 1].Clone());
+                    segments.Add(nutSegment);
+                }
 
-                    if (segment.FretPoints[j].IsReference) continue;
+                for (int j = 0; j < currentSegment.Count; j++)
+                {
+                    if (currentSegment.FretPoints[j].IsReference) continue;
 
-                    if (segment.FretPoints[j].IsNut)
+                    if (!isNut && currentSegment.FretPoints[j].IsNut)
                     {
                         isNut = true;
                         firstNutIndex = j;
+                        continue;
+                    }
+
+                    if (isNut && !currentSegment.FretPoints[j].IsNut)
+                    {
+                        isNut = false;
+                        int lastNutIndex = j - 1;
+                        createNutSegment(firstNutIndex, lastNutIndex);
+
+                        if (j + 1 < currentSegment.Count)
+                        {
+                            var remainingSegment = new FretSegment();
+                            remainingSegment.FretPoints.Add(currentSegment.FretPoints[j - 1].Clone());
+                            remainingSegment.FretPoints.AddRange(currentSegment.FretPoints.Skip(j));
+                            segments.Add(remainingSegment);
+                            if (remainingSegment.IsPartialNut())
+                                partialNutSegments.Insert(j + 1, remainingSegment);
+                        }
+                        currentSegment.FretPoints[firstNutIndex] = currentSegment.FretPoints[firstNutIndex].Clone();
+                        currentSegment.FretPoints.RemoveRange(firstNutIndex + 1, currentSegment.Count - firstNutIndex - 1);
+
+                        if (currentSegment.FretPoints.All(y => y.IsReference))
+                            segments.Remove(currentSegment);
+
+                        break;
                     }
                 }
 
                 if (isNut)
                 {
-                    var newSegment = new FretSegment();
-                    if (firstNutIndex > 0)
-                        newSegment.AddPoint(segment.FretPoints[firstNutIndex - 1].Clone());
-                    newSegment.FretPoints.AddRange(segment.FretPoints.Skip(firstNutIndex));
-                    segment.FretPoints.RemoveRange(firstNutIndex, segment.Count - firstNutIndex);
-                    segments.Add(newSegment);
+                    createNutSegment(firstNutIndex, currentSegment.Count - 1);
+                    currentSegment.FretPoints[firstNutIndex] = currentSegment.FretPoints[firstNutIndex].Clone();
+                    currentSegment.FretPoints.RemoveRange(firstNutIndex + 1, currentSegment.Count - firstNutIndex - 1);
+                    if (currentSegment.FretPoints.All(y => y.IsReference))
+                        segments.Remove(currentSegment);
                 }
             }
+
         }
 
         private PathBase CreateSegmentPath(FretSegment segment)
@@ -328,13 +353,16 @@ namespace SiGen.Layouts.Builders
             LinearPath? trebSideEdge = null;
 
             if (firstPt.StringIndex == 0)
-                bassSideEdge = Layout.GetFingerboardEdge(FingerboardSide.Bass).Path as LinearPath;
+                bassSideEdge = (LinearPath)Layout.GetFingerboardEdge(FingerboardSide.Bass).Path;
             else
+            {
                 bassSideEdge = Layout.GetStringMedian(firstPt.StringIndex - 1).Path;
-
+                //todo: only if there is no other strings before
+                //bassSideEdge = GetFingerboardEdgeLineFromString(firstPt.StringIndex, FingerboardSide.Bass);
+            }
 
             if (lastPt.StringIndex == Configuration.NumberOfStrings - 1)
-                trebSideEdge = Layout.GetFingerboardEdge(FingerboardSide.Treble).Path as LinearPath;
+                trebSideEdge = (LinearPath)Layout.GetFingerboardEdge(FingerboardSide.Treble).Path;
             else
                 trebSideEdge = Layout.GetStringMedian(lastPt.StringIndex).Path;
 
@@ -359,10 +387,43 @@ namespace SiGen.Layouts.Builders
 
             if (ShouldFretBeStraight(vectorPoints, 5))
             {
+                if (segment.FretPoints[0].FretIndex == 0)
+                {
+                    Trace.WriteLine($"Nut p0: {vectorPoints.First().X} p1: {vectorPoints.Last().X}");
+                }
                 return new LinearPath(vectorPoints.First(), vectorPoints.Last());
             }
 
             return new PolyLinePath(vectorPoints);
+        }
+
+        private LinearPath GetFingerboardEdgeLineFromString(int stringIndex, FingerboardSide side)
+        {
+            var stringElem = Layout.GetStringElement(stringIndex);
+            var stringPath = (LinearPath)stringElem.Path.Clone();
+
+            var nutMargin = Configuration.Fingerboard.GetMargin(Data.FingerboardEnd.Nut, side);
+            var bridgeMargin = Configuration.Fingerboard.GetMargin(Data.FingerboardEnd.Bridge, side);
+            nutMargin += Configuration.StringConfigurations[stringIndex].GetHalfWidth(side, Configuration.Fingerboard.CompensateMarginsForStrings);
+            bridgeMargin += Configuration.StringConfigurations[stringIndex].GetHalfWidth(side, Configuration.Fingerboard.CompensateMarginsForStrings);
+
+            var start = stringPath.Start;
+            var end = stringPath.End;
+            if (side == FingerboardSide.Bass)
+            {
+                start.X -= nutMargin.NormalizedValue;
+                end.X -= bridgeMargin.NormalizedValue;
+            }
+            else
+            {
+                start.X += nutMargin.NormalizedValue;
+                end.X += bridgeMargin.NormalizedValue;
+            }
+
+            stringPath.Start = start;
+            stringPath.End = end;   
+
+            return stringPath;
         }
 
         public static bool ShouldFretBeStraight(List<VectorD> fretPositions, double maxDeviation)

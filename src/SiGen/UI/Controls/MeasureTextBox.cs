@@ -2,9 +2,11 @@
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
+using SiGen.Converters;
 using SiGen.Measuring;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -27,18 +29,21 @@ namespace SiGen.UI.Controls
 
         protected override Type StyleKeyOverride => typeof(TextBox);
 
+        [TypeConverter(typeof(MeasureTypeConverter))]
         public Measure? Value
         {
             get => GetValue(ValueProperty);
             set => SetValue(ValueProperty, value);
         }
 
+        [TypeConverter(typeof(MeasureTypeConverter))]
         public Measure? MinimumValue
         {
             get => GetValue(MinimumValueProperty);
             set => SetValue(MinimumValueProperty, value);
         }
 
+        [TypeConverter(typeof(MeasureTypeConverter))]
         public Measure? MaximumValue
         {
             get => GetValue(MaximumValueProperty);

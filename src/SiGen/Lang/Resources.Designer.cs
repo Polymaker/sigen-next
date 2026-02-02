@@ -88,20 +88,29 @@ namespace SiGen.Lang {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Instrument Type.
+        ///   Looks up a localized string similar to Single.
         /// </summary>
-        public static string Editor_InstrumentType {
+        public static string Editor_MarginMode_All {
             get {
-                return ResourceManager.GetString("Editor.InstrumentType", resourceCulture);
+                return ResourceManager.GetString("Editor.MarginMode.All", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Choose the instrument type (e.g., Electric Guitar, Bass, Banjo). This affects default values and available options..
+        ///   Looks up a localized string similar to Bass &amp; Treble.
         /// </summary>
-        public static string Editor_InstrumentType_Tooltip {
+        public static string Editor_MarginMode_BassTreble {
             get {
-                return ResourceManager.GetString("Editor.InstrumentType.Tooltip", resourceCulture);
+                return ResourceManager.GetString("Editor.MarginMode.BassTreble", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nut &amp; Bridge.
+        /// </summary>
+        public static string Editor_MarginMode_NutBridge {
+            get {
+                return ResourceManager.GetString("Editor.MarginMode.NutBridge", resourceCulture);
             }
         }
         
@@ -129,15 +138,6 @@ namespace SiGen.Lang {
         public static string Editor_NumberOfStrings {
             get {
                 return ResourceManager.GetString("Editor.NumberOfStrings", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Set the total number of strings for your instrument..
-        /// </summary>
-        public static string Editor_NumberOfStrings_Tooltip {
-            get {
-                return ResourceManager.GetString("Editor.NumberOfStrings.Tooltip", resourceCulture);
             }
         }
         
@@ -210,6 +210,24 @@ namespace SiGen.Lang {
         public static string FingerboardEditorPanel_Header {
             get {
                 return ResourceManager.GetString("FingerboardEditorPanel.Header", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Bridge.
+        /// </summary>
+        public static string FingerboardEnd_Bridge {
+            get {
+                return ResourceManager.GetString("FingerboardEnd.Bridge", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nut.
+        /// </summary>
+        public static string FingerboardEnd_Nut {
+            get {
+                return ResourceManager.GetString("FingerboardEnd.Nut", resourceCulture);
             }
         }
         
@@ -481,6 +499,15 @@ namespace SiGen.Lang {
         public static string StringCountControl_RemoveTrebleTooltip {
             get {
                 return ResourceManager.GetString("StringCountControl_RemoveTrebleTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to String course.
+        /// </summary>
+        public static string StringCourseLabel {
+            get {
+                return ResourceManager.GetString("StringCourseLabel", resourceCulture);
             }
         }
         

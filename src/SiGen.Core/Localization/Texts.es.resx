@@ -207,4 +207,7 @@
   <data name="Preset_Narrow" xml:space="preserve">
     <value>Angosto</value>
   </data>
+  <data name="Preset_Strings" xml:space="preserve">
+    <value>Cuerdas</value>
+  </data>
 </root>

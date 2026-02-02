@@ -1,12 +1,16 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using Microsoft.Extensions.DependencyInjection;
 using SiGen.Data.Common;
 using SiGen.Layouts.Configuration;
 using SiGen.Layouts.Data;
+using SiGen.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace SiGen.ViewModels.EditorPanels
 {
@@ -20,7 +24,14 @@ namespace SiGen.ViewModels.EditorPanels
 
         public bool LeftHanded { get; private set; }
 
-        private List<BaseStringConfiguration> stringConfigurations = new();
+        public List<BaseStringConfiguration> StringConfigurations { get; private set; } = new();
+
+        public ICommand EditTuningCommand { get; }
+
+        public StringsFretsPanelViewModel()
+        {
+            EditTuningCommand = new RelayCommand(EditTuning);
+        }
 
         protected override void OnConfigurationChanged()
         {
@@ -41,8 +52,8 @@ namespace SiGen.ViewModels.EditorPanels
             if (Configuration.StringConfigurations.Count == 0)
                 Configuration.InitializeStringConfigs();
 
-            stringConfigurations = Configuration.StringConfigurations.ToList();
-
+            StringConfigurations = Configuration.StringConfigurations.ToList();
+            OnPropertyChanged(nameof(StringConfigurations));
             removedBassStrings.Clear();
             removedTrebleStrings.Clear();
         }
@@ -62,27 +73,27 @@ namespace SiGen.ViewModels.EditorPanels
 
         public void AddString(FingerboardSide side)
         {
-            if (stringConfigurations.Count < 20) // Assuming max 20 strings
+            if (StringConfigurations.Count < 20) // Assuming max 20 strings
             {
                 if (side == FingerboardSide.Bass)
                 {
                     if (removedBassStrings.Count > 0)
-                        stringConfigurations.Insert(0, removedBassStrings.Pop());
+                        StringConfigurations.Insert(0, removedBassStrings.Pop());
                     else
-                        stringConfigurations.Insert(0, GetNewStringConfiguration(side)); // Add new string at the beginning
+                        StringConfigurations.Insert(0, GetNewStringConfiguration(side)); // Add new string at the beginning
                 }
                 else if (side == FingerboardSide.Treble)
                 {
                     if (removedTrebleStrings.Count > 0)
-                        stringConfigurations.Add(removedTrebleStrings.Pop());
+                        StringConfigurations.Add(removedTrebleStrings.Pop());
                     else
-                        stringConfigurations.Add(GetNewStringConfiguration(side)); // Add new string at the end
+                        StringConfigurations.Add(GetNewStringConfiguration(side)); // Add new string at the end
                 }
-
+                
                 UpdateConfiguration("Add string", config =>
                 {
-                    config.NumberOfStrings = stringConfigurations.Count;
-                    config.StringConfigurations = stringConfigurations.ToList();
+                    config.NumberOfStrings = StringConfigurations.Count;
+                    config.StringConfigurations = StringConfigurations.ToList();
 
                     if (config.NutSpacing.StringDistances.Count > 1)
                     {
@@ -95,14 +106,16 @@ namespace SiGen.ViewModels.EditorPanels
                         config.BridgeSpacing.AddDistance(side, prev);
                     }
                 });
+
+                OnPropertyChanged(nameof(StringConfigurations));
             }
         }
 
         protected BaseStringConfiguration GetNewStringConfiguration(FingerboardSide side)
         {
             var previousString = side == FingerboardSide.Bass
-                ? (stringConfigurations.Count > 0 ? stringConfigurations[0] : null)
-                : (stringConfigurations.Count > 0 ? stringConfigurations[^1] : null);
+                ? (StringConfigurations.Count > 0 ? StringConfigurations[0] : null)
+                : (StringConfigurations.Count > 0 ? StringConfigurations[^1] : null);
 
             // Create a new StringConfiguration with default values
             BaseStringConfiguration newStringConfig = previousString is StringGroupConfiguration ?
@@ -116,12 +129,12 @@ namespace SiGen.ViewModels.EditorPanels
                 newStringConfig.Frets = previousString.Frets; //todo: clone object to break reference
 
                 if (Configuration!.ScaleLength.Mode == ScaleLengthMode.PerString &&
-                    stringConfigurations.Count > 1 &&
+                    StringConfigurations.Count > 1 &&
                     !Measuring.Measure.IsNullOrEmpty(previousString.ScaleLength))
                 {
                     var secondPrevious = side == FingerboardSide.Bass
-                        ? (stringConfigurations.Count > 0 ? stringConfigurations[1] : null)
-                        : (stringConfigurations.Count > 0 ? stringConfigurations[^2] : null);
+                        ? (StringConfigurations.Count > 0 ? StringConfigurations[1] : null)
+                        : (StringConfigurations.Count > 0 ? StringConfigurations[^2] : null);
 
                     if (secondPrevious != null && !Measuring.Measure.IsNullOrEmpty(secondPrevious.ScaleLength))
                     {
@@ -161,25 +174,25 @@ namespace SiGen.ViewModels.EditorPanels
 
         public void RemoveString(FingerboardSide side)
         {
-            if (stringConfigurations.Count > 1) // Assuming at least 1 string
+            if (StringConfigurations.Count > 1) // Assuming at least 1 string
             {
                 if (side == FingerboardSide.Bass)
                 {
                     //stringConfigurations 
-                    removedBassStrings.Push(stringConfigurations[0]);
-                    stringConfigurations.RemoveAt(0); // Remove first string
+                    removedBassStrings.Push(StringConfigurations[0]);
+                    StringConfigurations.RemoveAt(0); // Remove first string
                 }
                 else if (side == FingerboardSide.Treble)
                 {
                     // Remove last string
-                    removedTrebleStrings.Push(stringConfigurations[^1]);
-                    stringConfigurations.RemoveAt(stringConfigurations.Count - 1);
+                    removedTrebleStrings.Push(StringConfigurations[^1]);
+                    StringConfigurations.RemoveAt(StringConfigurations.Count - 1);
                 }
 
                 UpdateConfiguration("Remove string", config =>
                 {
-                    config.NumberOfStrings = stringConfigurations.Count;
-                    config.StringConfigurations = stringConfigurations.ToList();
+                    config.NumberOfStrings = StringConfigurations.Count;
+                    config.StringConfigurations = StringConfigurations.ToList();
 
                     if (config.NutSpacing.SpacingMode == StringSpacingMode.Manual &&
                         config.NutSpacing.StringDistances.Count > 1)
@@ -192,9 +205,17 @@ namespace SiGen.ViewModels.EditorPanels
                         config.BridgeSpacing.RemoveDistance(side);
                     }
                 });
+
+                OnPropertyChanged(nameof(StringConfigurations));
             }
         }
 
         #endregion
+    
+        public async void EditTuning()
+        {
+            var dialogSvc = (App.Current as App)!.Services.GetService<IDialogService>()!; //TODO, switch access to DI
+            await dialogSvc.ShowTuningDialog(LayoutDocumentContext);
+        }
     }
 }

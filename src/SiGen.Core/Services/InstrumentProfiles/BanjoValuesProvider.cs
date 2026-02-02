@@ -1,5 +1,7 @@
 ﻿using SiGen.Data.Common;
 using SiGen.Data.Presets;
+using SiGen.Layouts.Configuration;
+using SiGen.Layouts.Configuration.Builders;
 using SiGen.Localization;
 using SiGen.Measuring;
 using SiGen.Physics;
@@ -57,7 +59,7 @@ namespace SiGen.Services.InstrumentProfiles
         public IReadOnlyList<ScaleLengthPreset> GetScaleLengthPresets()
         {
             return [
-                new ScaleLengthPreset("Short", Measure.In(25.5)),
+                new ScaleLengthPreset("Tenor", Measure.In(23)),
                 new ScaleLengthPreset(Texts.Preset_Standard, Measure.In(26.25)),
                 
             ];
@@ -98,6 +100,46 @@ namespace SiGen.Services.InstrumentProfiles
                     PitchInterval.FromNote(NoteName.B, 3),
                     PitchInterval.FromNote(NoteName.D, 4),
                 ]),
+            ];
+        }
+
+        public InstrumentLayoutConfiguration GetDefaultConfiguration()
+        {
+            return new LayoutConfigurationBuilder()
+                .WithInstrumentType(InstrumentType.Banjo)
+                .WithNumberOfFrets(22)
+                .AddSingleString(cfg => cfg.WithGauge(Measure.In(0.010)).WithTuning(new NoteAndOctave(NoteName.G, 4)).WithStartingFret(5))
+                .AddSingleString(cfg => cfg.WithGauge(Measure.In(0.023)).WithTuning(new NoteAndOctave(NoteName.D, 3)))
+                .AddSingleString(cfg => cfg.WithGauge(Measure.In(0.016)).WithTuning(new NoteAndOctave(NoteName.G, 3)))
+                .AddSingleString(cfg => cfg.WithGauge(Measure.In(0.012)).WithTuning(new NoteAndOctave(NoteName.B, 3)))
+                .AddSingleString(cfg => cfg.WithGauge(Measure.In(0.010)).WithTuning(new NoteAndOctave(NoteName.D, 4)))
+                .WithScaleLength(Measure.In(26.25))
+                .WithNutSpacing(Measure.Mm(6))
+                .WithBridgeSpacing(Measure.Mm(10.5))
+                .WithMargins(Measure.Mm(3))
+                .Build();
+        }
+
+        public IReadOnlyList<LayoutTemplate> GetLayoutTemplates()
+        {
+            var fiveStringBanjo = GetDefaultConfiguration();
+
+            var fourStringBanjo = new LayoutConfigurationBuilder()
+                .WithInstrumentType(InstrumentType.Banjo)
+                .WithNumberOfFrets(19)
+                .AddSingleString(cfg => cfg.WithGauge(Measure.In(0.036)).WithTuning(new NoteAndOctave(NoteName.C, 3)))
+                .AddSingleString(cfg => cfg.WithGauge(Measure.In(0.026)).WithTuning(new NoteAndOctave(NoteName.G, 3)))
+                .AddSingleString(cfg => cfg.WithGauge(Measure.In(0.016)).WithTuning(new NoteAndOctave(NoteName.D, 4)))
+                .AddSingleString(cfg => cfg.WithGauge(Measure.In(0.010)).WithTuning(new NoteAndOctave(NoteName.A, 4)))
+                .WithScaleLength(Measure.In(23))
+                .WithNutSpacing(Measure.Mm(6.5))
+                .WithBridgeSpacing(Measure.Mm(11))
+                .WithMargins(Measure.Mm(3))
+                .Build();
+
+            return [
+                new LayoutTemplate($"5 {Texts.Preset_Strings}", fiveStringBanjo),
+                new LayoutTemplate($"4 {Texts.Preset_Strings} Tenor", fourStringBanjo)
             ];
         }
     }

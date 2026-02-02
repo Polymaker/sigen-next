@@ -19,10 +19,10 @@ public partial class DialogHostWindow : Window
     {
         var contentPresenter = this.FindControl<ContentPresenter>("DialogContent")!;
         contentPresenter.Content = dialogControl;
-        contentPresenter.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
+        this.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
 
-        Width = contentPresenter.DesiredSize.Width;
-        Height = contentPresenter.DesiredSize.Height; 
+        //Width = this.DesiredSize.Width;
+        //Height = this.DesiredSize.Height; 
 
         DataContext = viewModel;
         Title = viewModel.Title;

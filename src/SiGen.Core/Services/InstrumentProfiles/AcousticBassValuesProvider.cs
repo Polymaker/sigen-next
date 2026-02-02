@@ -1,5 +1,6 @@
 ﻿using SiGen.Data.Common;
 using SiGen.Data.Presets;
+using SiGen.Layouts.Configuration;
 
 namespace SiGen.Services.InstrumentProfiles
 {
@@ -29,6 +30,11 @@ namespace SiGen.Services.InstrumentProfiles
                 new ScaleLengthPreset("Short Scale", SiGen.Measuring.Measure.In(30)),
                 new ScaleLengthPreset("Standard", SiGen.Measuring.Measure.In(34)),
             ];
+        }
+
+        public override InstrumentLayoutConfiguration GetDefaultConfiguration()
+        {
+            throw new NotImplementedException();
         }
     }
 }

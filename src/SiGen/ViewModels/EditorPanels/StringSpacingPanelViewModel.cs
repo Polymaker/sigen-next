@@ -1,7 +1,10 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using Microsoft.Extensions.DependencyInjection;
 using SiGen.Layouts.Configuration;
 using SiGen.Layouts.Data;
 using SiGen.Measuring;
+using SiGen.Services;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -79,9 +82,16 @@ namespace SiGen.ViewModels.EditorPanels
 
         #endregion
 
+        public RelayCommand<FingerboardEnd> EditCustomSpacingCommand { get; }
+
         public Array StringSpacingModes => Enum.GetValues(typeof(StringSpacingMode));
 
         public bool IsEditingBySlider { get; set; }
+
+        public StringSpacingPanelViewModel()
+        {
+            EditCustomSpacingCommand = new RelayCommand<FingerboardEnd>(EditCustomSpacing);
+        }
 
         protected override void OnInitialize()
         {
@@ -105,6 +115,18 @@ namespace SiGen.ViewModels.EditorPanels
         partial void OnNutSpacingChanged(Measure value)
         {
             OnPropertyChanged(nameof(NutStringSpread));
+            if (Configuration?.NutSpacing?.SpacingMode != StringSpacingMode.Manual)
+            {
+                UpdateConfiguration("Nut Spacing", config =>
+                {
+                    if (config.NutSpacing.StringDistances.Count == 0)
+                        config.NutSpacing.StringDistances.Add(value);
+                    else
+                        config.NutSpacing.StringDistances[0] = value;
+                });
+
+                RebuildCenterAlignmentLists();
+            }
         }
 
         partial void OnNutSpacingModeChanged(StringSpacingMode oldValue, StringSpacingMode newValue)
@@ -133,20 +155,6 @@ namespace SiGen.ViewModels.EditorPanels
                     config.NutSpacing.StringDistances.Add(NutSpacing);
                 }
             });
-        }
-
-        partial void OnNutSpacingChanged(Measure oldValue, Measure newValue)
-        {
-            if (Configuration?.NutSpacing?.SpacingMode != StringSpacingMode.Manual)
-            {
-                UpdateConfiguration("Nut Spacing", config =>
-                {
-                    if (config.NutSpacing.StringDistances.Count == 0)
-                        config.NutSpacing.StringDistances.Add(newValue);
-                    else
-                        config.NutSpacing.StringDistances[0] = newValue;
-                });
-            }
         }
 
         partial void OnNutCenterAlignmentChanged(LayoutCenterAlignment value)
@@ -185,6 +193,19 @@ namespace SiGen.ViewModels.EditorPanels
         partial void OnBridgeSpacingChanged(Measure value)
         {
             OnPropertyChanged(nameof(BridgeStringSpread));
+
+            if (Configuration?.BridgeSpacing?.SpacingMode != StringSpacingMode.Manual)
+            {
+                UpdateConfiguration("Bridge Spacing", config =>
+                {
+                    if (config.BridgeSpacing.StringDistances.Count == 0)
+                        config.BridgeSpacing.StringDistances.Add(value);
+                    else
+                        config.BridgeSpacing.StringDistances[0] = value;
+                });
+
+                RebuildCenterAlignmentLists();
+            }
         }
 
         partial void OnBridgeSpacingModeChanged(StringSpacingMode oldValue, StringSpacingMode newValue)
@@ -213,20 +234,6 @@ namespace SiGen.ViewModels.EditorPanels
                     config.BridgeSpacing.StringDistances.Add(BridgeSpacing);
                 }
             });
-        }
-
-        partial void OnBridgeSpacingChanged(Measure oldValue, Measure newValue)
-        {
-            if (Configuration?.BridgeSpacing?.SpacingMode != StringSpacingMode.Manual)
-            {
-                UpdateConfiguration("Bridge Spacing", config =>
-                {
-                    if (config.BridgeSpacing.StringDistances.Count == 0)
-                        config.BridgeSpacing.StringDistances.Add(newValue);
-                    else
-                        config.BridgeSpacing.StringDistances[0] = newValue;
-                });
-            }
         }
 
         partial void OnBridgeCenterAlignmentChanged(LayoutCenterAlignment value)
@@ -260,97 +267,51 @@ namespace SiGen.ViewModels.EditorPanels
 
         #endregion
 
+        protected async void EditCustomSpacing(FingerboardEnd fingerboardEnd)
+        {
+            var dialogSvc = (App.Current as App)!.Services.GetService<IDialogService>()!; //TODO, switch access to DI
+            
+            var newDistances = await dialogSvc.ShowCustomStringDialog(Configuration!, fingerboardEnd);
+            if (newDistances != null)
+            {
+                
+                var distances = fingerboardEnd == FingerboardEnd.Nut ? NutStringDistances : BridgeStringDistances;
+                distances.Clear();
+                foreach (var value in newDistances)
+                    distances.Add(value);
+
+                UpdateConfiguration("Update Spacing", (config) =>
+                {
+                    var spacingCfg = config.GetStringSpacing(fingerboardEnd);
+                    spacingCfg.StringDistances = distances.ToList();
+                });
+
+                if (fingerboardEnd == FingerboardEnd.Nut)
+                    OnPropertyChanged(nameof(NutStringSpread));
+                else
+                    OnPropertyChanged(nameof(BridgeStringSpread));
+            }
+        }
+
         private Measure GetTotalStringSpread(FingerboardEnd end, StringSpacingMode mode)
         {
-            if (mode != StringSpacingMode.Manual)
-                return end == FingerboardEnd.Nut ? NutSpacing * (NumberOfStrings - 1) : BridgeSpacing * (NumberOfStrings - 1);
-
             var distances = end == FingerboardEnd.Nut ? NutStringDistances : BridgeStringDistances;
+
+            if (mode != StringSpacingMode.Manual || distances.Count == 1)
+                return end == FingerboardEnd.Nut ? NutSpacing * (NumberOfStrings - 1) : BridgeSpacing * (NumberOfStrings - 1);
 
             if (distances.Count < NumberOfStrings - 1)
                 return Measure.Zero;
 
-            var total = Measure.Mm(0);
+            var total = Measure.Mm(0.0);
             for (int i = 0; i < NumberOfStrings - 1; i++)
                 total += distances[i];
 
-            return total;
+            return Measure.Round(total, 0.0001);
         }
 
         private static readonly LayoutCenterAlignment[] OrderedAlignments =
             Enum.GetValues(typeof(LayoutCenterAlignment)).Cast<LayoutCenterAlignment>().ToArray();
-
-        private void UpdateNutCenterAlignments(bool isSymmetric, bool nutHasSymmetricMargins)
-        {
-            var allowed = new List<LayoutCenterAlignment>();
-            foreach (var alignment in OrderedAlignments)
-            {
-                //todo: allow manual only if nut total spread is less than the bridge 
-                if (alignment == LayoutCenterAlignment.Manual)
-                    continue; // Add at the end
-                if (isSymmetric && (alignment == LayoutCenterAlignment.SymmetricStrings || alignment == LayoutCenterAlignment.SymmetricFingerboard))
-                    continue;
-                if (!isSymmetric && nutHasSymmetricMargins && alignment == LayoutCenterAlignment.SymmetricFingerboard)
-                    continue;
-                if (nutHasSymmetricMargins && alignment == LayoutCenterAlignment.Fingerboard)
-                    continue;
-                allowed.Add(alignment);
-            }
-            allowed.Add(LayoutCenterAlignment.Manual);
-            // Ensure selected value is valid BEFORE updating the collection
-            if (!allowed.Contains(NutCenterAlignment))
-            {
-                if (NutCenterAlignment == LayoutCenterAlignment.SymmetricStrings)
-                    NutCenterAlignment = LayoutCenterAlignment.OuterStrings;
-                else if (NutCenterAlignment == LayoutCenterAlignment.SymmetricFingerboard)
-                    NutCenterAlignment = LayoutCenterAlignment.Fingerboard;
-                else if (NutCenterAlignment == LayoutCenterAlignment.Fingerboard)
-                    NutCenterAlignment = LayoutCenterAlignment.OuterStrings;
-                else
-                    NutCenterAlignment = allowed.First();
-            }
-            var currentValue = NutCenterAlignment;
-            NutCenterAlignments = new ObservableCollection<LayoutCenterAlignment>(allowed);
-            OnPropertyChanged(nameof(NutCenterAlignments));
-            NutCenterAlignment = currentValue;
-        }
-
-        private void UpdateBridgeCenterAlignments(bool isSymmetric, bool bridgeHasSymmetricMargins)
-        {
-            var allowed = new List<LayoutCenterAlignment>();
-            foreach (var alignment in OrderedAlignments)
-            {
-                //todo: allow manual only if bridge total spread is less than the nut (rare but possible) 
-                if (alignment == LayoutCenterAlignment.Manual)
-                    continue; // Add at the end
-                if (isSymmetric && (alignment == LayoutCenterAlignment.SymmetricStrings || alignment == LayoutCenterAlignment.SymmetricFingerboard))
-                    continue;
-                if (!isSymmetric && bridgeHasSymmetricMargins && alignment == LayoutCenterAlignment.SymmetricFingerboard)
-                    continue;
-                if (bridgeHasSymmetricMargins && alignment == LayoutCenterAlignment.Fingerboard)
-                    continue;
-                allowed.Add(alignment);
-            }
-            allowed.Add(LayoutCenterAlignment.Manual);
-
-            // Ensure selected value is valid BEFORE updating the collection
-            if (!allowed.Contains(BridgeCenterAlignment))
-            {
-                if (BridgeCenterAlignment == LayoutCenterAlignment.SymmetricStrings)
-                    BridgeCenterAlignment = LayoutCenterAlignment.OuterStrings;
-                else if (BridgeCenterAlignment == LayoutCenterAlignment.SymmetricFingerboard)
-                    BridgeCenterAlignment = LayoutCenterAlignment.Fingerboard;
-                else if (BridgeCenterAlignment == LayoutCenterAlignment.Fingerboard)
-                    BridgeCenterAlignment = LayoutCenterAlignment.OuterStrings;
-                else
-                    BridgeCenterAlignment = allowed.First();
-            }
-
-            var currentValue = BridgeCenterAlignment;
-            BridgeCenterAlignments = new ObservableCollection<LayoutCenterAlignment>(allowed);
-            OnPropertyChanged(nameof(BridgeCenterAlignments));
-            BridgeCenterAlignment = currentValue;
-        }
 
         protected override void OnConfigurationChanged()
         {
@@ -367,20 +328,103 @@ namespace SiGen.ViewModels.EditorPanels
                 NutSpacing = Configuration.NutSpacing.StringDistances.FirstOrDefaultNullable() ?? Measure.Zero;
             }
 
-            bool isSymmetric = Configuration.ScaleLength.Mode == ScaleLengthMode.Single && Measure.IsNullOrEmpty(Configuration.ScaleLength.BassTrebleSkew);
-            bool nutHasSymmetricMargins = Configuration.Fingerboard.NutBassMargin == Configuration.Fingerboard.NutTrebleMargin && !Configuration.Fingerboard.CompensateMarginsForStrings;
-            UpdateNutCenterAlignments(isSymmetric, nutHasSymmetricMargins);
-
             BridgeCenterAlignment = Configuration.BridgeSpacing.CenterAlignment;
             BridgeSpacingMode = Configuration.BridgeSpacing.SpacingMode;
+            BridgeManualAlignment = Configuration.BridgeSpacing.AlignmentRatio ?? 0;
 
             if (Configuration.BridgeSpacing.SpacingMode != StringSpacingMode.Manual)
             {
                 BridgeSpacing = Configuration.BridgeSpacing.StringDistances.FirstOrDefaultNullable() ?? Measure.Zero;
             }
 
+            RebuildCenterAlignmentLists();
+        }
+
+        private void RebuildCenterAlignmentLists()
+        {
+            if (Configuration == null) return;
+
+            bool isSymmetric = Configuration.ScaleLength.Mode == ScaleLengthMode.Single && Measure.IsNullOrEmpty(Configuration.ScaleLength.BassTrebleSkew);
+
+            bool nutHasSymmetricMargins = Configuration.Fingerboard.NutBassMargin == Configuration.Fingerboard.NutTrebleMargin && !Configuration.Fingerboard.CompensateMarginsForStrings;
             bool bridgeHasSymmetricMargins = Configuration.Fingerboard.BridgeBassMargin == Configuration.Fingerboard.BridgeTrebleMargin && !Configuration.Fingerboard.CompensateMarginsForStrings;
+            
+            UpdateNutCenterAlignments(isSymmetric, nutHasSymmetricMargins);
             UpdateBridgeCenterAlignments(isSymmetric, bridgeHasSymmetricMargins);
         }
+
+        private void UpdateNutCenterAlignments(bool isSymmetric, bool nutHasSymmetricMargins)
+        {
+            var allowed = new List<LayoutCenterAlignment>();
+            foreach (var alignment in OrderedAlignments)
+            {
+                //todo: allow manual only if nut total spread is less than the bridge 
+                if (alignment == LayoutCenterAlignment.Manual && NutStringSpread >= BridgeStringSpread)
+                    continue; // Add at the end
+                if (isSymmetric && (alignment == LayoutCenterAlignment.SymmetricStrings || alignment == LayoutCenterAlignment.SymmetricFingerboard))
+                    continue;
+                if (!isSymmetric && nutHasSymmetricMargins && alignment == LayoutCenterAlignment.SymmetricFingerboard)
+                    continue;
+                if (nutHasSymmetricMargins && alignment == LayoutCenterAlignment.Fingerboard)
+                    continue;
+                allowed.Add(alignment);
+            }
+
+            LayoutCenterAlignment adjustedValue = NutCenterAlignment;
+            if (!allowed.Contains(NutCenterAlignment))
+            {
+                if (NutCenterAlignment == LayoutCenterAlignment.SymmetricStrings)
+                    adjustedValue = LayoutCenterAlignment.OuterStrings;
+                else if (NutCenterAlignment == LayoutCenterAlignment.SymmetricFingerboard)
+                    adjustedValue = LayoutCenterAlignment.Fingerboard;
+                else if (NutCenterAlignment == LayoutCenterAlignment.Fingerboard)
+                    adjustedValue = LayoutCenterAlignment.OuterStrings;
+                else
+                    adjustedValue = allowed.First();
+            }
+            NutCenterAlignment = adjustedValue;
+            NutCenterAlignments = new ObservableCollection<LayoutCenterAlignment>(allowed);
+            OnPropertyChanged(nameof(NutCenterAlignments));
+            if (adjustedValue != NutCenterAlignment)
+                NutCenterAlignment = adjustedValue;
+        }
+
+        private void UpdateBridgeCenterAlignments(bool isSymmetric, bool bridgeHasSymmetricMargins)
+        {
+            var allowed = new List<LayoutCenterAlignment>();
+            foreach (var alignment in OrderedAlignments)
+            {
+                //todo: allow manual only if bridge total spread is less than the nut (rare but possible) 
+                if (alignment == LayoutCenterAlignment.Manual && NutStringSpread <= BridgeStringSpread)
+                    continue; // Add at the end
+                if (isSymmetric && (alignment == LayoutCenterAlignment.SymmetricStrings || alignment == LayoutCenterAlignment.SymmetricFingerboard))
+                    continue;
+                if (!isSymmetric && bridgeHasSymmetricMargins && alignment == LayoutCenterAlignment.SymmetricFingerboard)
+                    continue;
+                if (bridgeHasSymmetricMargins && alignment == LayoutCenterAlignment.Fingerboard)
+                    continue;
+                allowed.Add(alignment);
+            }
+
+            var adjustedValue = BridgeCenterAlignment;
+            // Ensure selected value is valid BEFORE updating the collection
+            if (!allowed.Contains(BridgeCenterAlignment))
+            {
+                if (BridgeCenterAlignment == LayoutCenterAlignment.SymmetricStrings)
+                    adjustedValue = LayoutCenterAlignment.OuterStrings;
+                else if (BridgeCenterAlignment == LayoutCenterAlignment.SymmetricFingerboard)
+                    adjustedValue = LayoutCenterAlignment.Fingerboard;
+                else if (BridgeCenterAlignment == LayoutCenterAlignment.Fingerboard)
+                    adjustedValue = LayoutCenterAlignment.OuterStrings;
+                else
+                    adjustedValue = allowed.First();
+            }
+            BridgeCenterAlignment = adjustedValue;
+            BridgeCenterAlignments = new ObservableCollection<LayoutCenterAlignment>(allowed);
+            OnPropertyChanged(nameof(BridgeCenterAlignments));
+            if (adjustedValue != BridgeCenterAlignment)
+                BridgeCenterAlignment = adjustedValue;
+        }
+
     }
 }

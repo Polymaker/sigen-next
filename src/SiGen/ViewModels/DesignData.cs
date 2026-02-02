@@ -1,4 +1,5 @@
-﻿using SiGen.Services;
+﻿using SiGen.Layouts.Configuration;
+using SiGen.Services;
 using SiGen.UI.Controls;
 using SiGen.Utilities;
 using System;
@@ -11,14 +12,13 @@ namespace SiGen.ViewModels
 {
     public static class DesignData
     {
-        public static StringCountViewModel StringControlViewModel { get; } =
-            new StringCountViewModel(new StringCountControl { StringCount = 6, IsLeftHanded = false });
 
         public static DesktopMainViewModel DesktopMainViewModel
         {
             get
             {
-                var model = new DesktopMainViewModel(new MockDialogService(), new MockSettingsService());
+                var dialogSvc = new MockDialogService();
+                var model = new DesktopMainViewModel(dialogSvc, new MockSettingsService(), new LayoutDocumentModelFactory(dialogSvc));
                 model.OpenDocuments.Add(new LayoutDocumentViewModel("Untitled", null, LayoutTemplates.CreateBassGuitarMultiscaleLayout())
                 {
                     HasUnsavedChanges = true
@@ -41,6 +41,11 @@ namespace SiGen.ViewModels
         private class MockDocumentManager : IDocumentManager
         {
             public void OpenDocumentFile(string? filePath)
+            {
+                throw new NotImplementedException();
+            }
+
+            public void OpenLayoutConfiguration(string documentName, InstrumentLayoutConfiguration configuration)
             {
                 throw new NotImplementedException();
             }

@@ -116,21 +116,13 @@ namespace SiGen.Layouts.Configuration
 
             return numberOfFrets; 
         }
-    }
 
-    public enum ScaleLengthMode
-    {
-        /// <summary>
-        /// A single scale length for all strings.
-        /// </summary>
-        Single,
-        /// <summary>
-        /// A separate scale length for treble and bass strings.
-        /// </summary>
-        Multiscale,
-        /// <summary>
-        /// A separate scale length for each string.
-        /// </summary>
-        PerString
+        public static InstrumentLayoutConfiguration Duplicate(InstrumentLayoutConfiguration source)
+        {
+            var options = SiGen.Serialization.SiGenJsonOptions.Default;
+            var json = System.Text.Json.JsonSerializer.Serialize(source, options);
+            return System.Text.Json.JsonSerializer.Deserialize<InstrumentLayoutConfiguration>(json, options)
+                   ?? throw new InvalidOperationException("Failed to duplicate configuration.");
+        }
     }
 }

@@ -5,9 +5,11 @@ using Avalonia.Controls.Shapes;
 using Avalonia.Media;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using SiGen.Layouts.Configuration;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 
 namespace SiGen.UI.Controls;
 
@@ -25,9 +27,13 @@ public partial class StringCountControl : UserControl
     public static readonly StyledProperty<bool> IsLeftHandedProperty =
         AvaloniaProperty.Register<StringCountControl, bool>(nameof(IsLeftHanded), false);
 
+    public static readonly StyledProperty<ICollection<BaseStringConfiguration>> StringConfigurationsProperty =
+        AvaloniaProperty.Register<StringCountControl, ICollection<BaseStringConfiguration>>(nameof(StringConfigurations));
+
 
     public static readonly StyledProperty<StringCountViewModel> ViewModelProperty =
         AvaloniaProperty.Register<StringCountControl, StringCountViewModel>(nameof(ViewModel));
+
     private StackPanel? _stringDotsPanel;
     //private StringCountViewModel _viewModel;
 
@@ -37,12 +43,23 @@ public partial class StringCountControl : UserControl
         set => SetValue(ViewModelProperty, value);
     }
 
+    public ICollection<BaseStringConfiguration> StringConfigurations
+    {
+        get => GetValue(StringConfigurationsProperty);
+        set => SetValue(StringConfigurationsProperty, value);
+    }
+
     public StringCountControl()
     {
         InitializeComponent();
         ViewModel = new StringCountViewModel(this);
         //DataContext = _viewModel;
-
+        StringConfigurations = [
+            new SingleStringConfiguration(),
+            new SingleStringConfiguration(),
+            new SingleStringConfiguration(),
+            new SingleStringConfiguration()
+        ];
         // Subscribe to property changes
         PropertyChanged += OnPropertyChanged;
     }
@@ -53,23 +70,29 @@ public partial class StringCountControl : UserControl
         _stringDotsPanel = this.FindControl<StackPanel>("StringDotsPanel");
         UpdateStringDots();
     }
+
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
         base.OnPropertyChanged(change);
     }
+
     private void OnPropertyChanged(object? sender, AvaloniaPropertyChangedEventArgs e)
     {
-        if (e.Property == StringCountProperty || e.Property == IsLeftHandedProperty)
+        if (e.Property == StringConfigurationsProperty || e.Property == IsLeftHandedProperty)
         {
             UpdateStringDots();
             ViewModel.NotifyPropertiesChanged();
         }
     }
 
-    public int StringCount
+    public int StringCount => StringConfigurations.Count;
+
+    public int TotalStringCount
     {
-        get => GetValue(StringCountProperty);
-        set => SetValue(StringCountProperty, value);
+        get
+        {
+            return StringConfigurations.Sum(x => x is StringGroupConfiguration sg ? sg.StringCount : 1);
+        }
     }
 
     public int MinStringCount
@@ -101,8 +124,8 @@ public partial class StringCountControl : UserControl
         if (_stringDotsPanel == null) return;
 
         _stringDotsPanel.Children.Clear();
-
-        double dotWidth = 12;
+        var hasStringCourses = StringConfigurations.Any(s => s is StringGroupConfiguration);
+        double dotWidth = hasStringCourses ? 16 : 14;
         double dotMargin = _stringDotsPanel.Spacing;
         double totalDotWidth = dotWidth + dotMargin;
 
@@ -140,6 +163,7 @@ public partial class StringCountControl : UserControl
                 // If even, show one less dot to keep balance
                 dotsToShow--;
             }
+
             int skipped = StringCount - (dotsToShow - 1);
 
             // Always show first dot
@@ -180,7 +204,7 @@ public partial class StringCountControl : UserControl
             _stringDotsPanel.Children.Add(lastDot);
         }
 
-        Ellipse CreateDot(int i)
+        Control CreateDot(int i)
         {
             var dot = new Ellipse
             {
@@ -188,7 +212,7 @@ public partial class StringCountControl : UserControl
                 Height = dotWidth,
                 //Margin = new Thickness(dotMargin),
             };
-
+            
             // Color coding: first and last strings get special colors
             if (i == 0)
             {
@@ -215,18 +239,36 @@ public partial class StringCountControl : UserControl
             //     i == StringCount - 1 ? "Treble side (highest pitch)" :
             //     $"{Lang.Resources.StringLabel} {i + 1}");
 
-            ToolTip.SetTip(dot, $"{Lang.Resources.StringLabel} {i + 1}");
+            
 
+            if (StringConfigurations.ElementAt(i) is StringGroupConfiguration group)
+            {
+                var dotContainer = new Panel();
+                dotContainer.Children.Add(dot);
+                dotContainer.Children.Add(new TextBlock
+                {
+                    Text = $"{group.StringCount}",
+                    FontSize = 10,
+                    VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center,
+                    HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Stretch,
+                    TextAlignment = TextAlignment.Center,
+                    
+                });
+                ToolTip.SetTip(dotContainer, $"{Lang.Resources.StringCourseLabel} {i + 1}");
+                return dotContainer;
+            }
+            ToolTip.SetTip(dot, $"{Lang.Resources.StringLabel} {i + 1}");
             return dot;
         }
     }
 
     // Event for notifying parent about string count changes
-    public event EventHandler<StringCountChangedEventArgs>? StringCountChanged;
+    public event EventHandler<AddRemoveStringEventArgs>? StringCountChanged;
 
     internal void OnStringCountChanged(StringCountChangeType changeType)
     {
-        StringCountChanged?.Invoke(this, new StringCountChangedEventArgs(StringCount, changeType, IsLeftHanded));
+        StringCountChanged?.Invoke(this, new AddRemoveStringEventArgs(changeType));
+        UpdateStringDots();
     }
 }
 
@@ -245,7 +287,7 @@ public partial class StringCountViewModel : ObservableObject
     public bool CanAddTrebleString => _control.StringCount < _control.MaxStringCount;
     public bool CanRemoveTrebleString => _control.StringCount > _control.MinStringCount;
 
-    public string StringCountText => _control.StringCount > 1 ? $"{_control.StringCount} {Lang.Resources.StringsLabel}" : $"{_control.StringCount} {Lang.Resources.StringLabel}";
+    public string StringCountText => _control.TotalStringCount > 1 ? $"{_control.TotalStringCount} {Lang.Resources.StringsLabel}" : $"{_control.TotalStringCount} {Lang.Resources.StringLabel}";
 
     public int BassButtonsColumn => _control.IsLeftHanded ? 2 : 0;
     public int TrebleButtonsColumn => _control.IsLeftHanded ? 0 : 2;
@@ -253,7 +295,7 @@ public partial class StringCountViewModel : ObservableObject
     [RelayCommand(CanExecute = nameof(CanAddBassString))]
     private void AddBassString()
     {
-        _control.StringCount++;
+        //_control.StringCount++;
         _control.OnStringCountChanged(StringCountChangeType.AddedBass);
         NotifyPropertiesChanged();
     }
@@ -261,7 +303,7 @@ public partial class StringCountViewModel : ObservableObject
     [RelayCommand(CanExecute = nameof(CanRemoveBassString))]
     private void RemoveBassString()
     {
-        _control.StringCount--;
+        //_control.StringCount--;
         _control.OnStringCountChanged(StringCountChangeType.RemovedBass);
         NotifyPropertiesChanged();
     }
@@ -269,7 +311,7 @@ public partial class StringCountViewModel : ObservableObject
     [RelayCommand(CanExecute = nameof(CanAddTrebleString))]
     private void AddTrebleString()
     {
-        _control.StringCount++;
+        //_control.StringCount++;
         _control.OnStringCountChanged(StringCountChangeType.AddedTreble);
         NotifyPropertiesChanged();
     }
@@ -277,7 +319,7 @@ public partial class StringCountViewModel : ObservableObject
     [RelayCommand(CanExecute = nameof(CanRemoveTrebleString))]
     private void RemoveTrebleString()
     {
-        _control.StringCount--;
+        //_control.StringCount--;
         _control.OnStringCountChanged(StringCountChangeType.RemovedTreble);
         NotifyPropertiesChanged();
     }
@@ -309,16 +351,12 @@ public enum StringCountChangeType
     RemovedTreble
 }
 
-public class StringCountChangedEventArgs : EventArgs
+public class AddRemoveStringEventArgs : EventArgs
 {
-    public int NewStringCount { get; }
     public StringCountChangeType ChangeType { get; }
-    public bool IsLeftHanded { get; }
 
-    public StringCountChangedEventArgs(int newStringCount, StringCountChangeType changeType, bool isLeftHanded)
+    public AddRemoveStringEventArgs(StringCountChangeType changeType)
     {
-        NewStringCount = newStringCount;
         ChangeType = changeType;
-        IsLeftHanded = isLeftHanded;
     }
 }

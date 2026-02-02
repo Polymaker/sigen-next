@@ -38,5 +38,10 @@ namespace SiGen.Services
             return null;
             //throw new ArgumentException($"No values provider registered for instrument type '{type}'.");
         }
+
+        public IEnumerable<IInstrumentValuesProvider> GetValuesProviders()
+        {
+            return _registry.Values.Select(creator => creator());
+        }
     }
 }

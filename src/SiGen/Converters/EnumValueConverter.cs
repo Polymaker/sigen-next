@@ -41,6 +41,16 @@ namespace SiGen.Converters
                 string key = $"LayoutCenterAlignment.{centerAlignment}";
                 return Texts.ResourceManager.GetString(key, Texts.Culture) ?? key;
             }
+            else if (value is MarginMode marginMode)
+            {
+                //if (parameter as string == "Tooltip")
+                //{
+                //    string key = $"Editor.StringSpacingMode.{spacingMode}.Tooltip";
+                //    return Lang.Resources.ResourceManager.GetString(key, Lang.Resources.Culture) ?? key;
+                //}
+                string key = $"Editor.MarginMode.{marginMode}";
+                return Lang.Resources.ResourceManager.GetString(key, Texts.Culture) ?? key;
+            }
             else if (value is InstrumentType instrument)
             {
                 string key = $"InstrumentType.{instrument}";

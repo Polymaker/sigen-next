@@ -1,13 +1,32 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using System.Threading.Tasks;
+using System.Windows.Input;
 
 namespace SiGen.ViewModels.Dialogs
 {
-    public abstract class DialogViewModelBase<TResult> : ObservableObject//, IDialogViewModel<TResult>
+    public interface IDialogViewModel
+    {
+        string Title { get; }
+        bool ShowTitleBar { get; set; }
+        ICommand CancelCommand { get; }
+    }
+
+    public abstract partial class DialogViewModelBase<TResult> : ObservableObject, IDialogViewModel//, IDialogViewModel<TResult>
     {
         private TaskCompletionSource<TResult?>? _completionSource;
 
         public abstract string Title { get; }
+
+        [ObservableProperty]
+        private bool showTitleBar;
+
+        public ICommand CancelCommand { get; }
+
+        public DialogViewModelBase()
+        {
+            CancelCommand = new RelayCommand(CancelDialog, CanClose);
+        }
 
         // Set the completion source (like assigning a promise)
         public void SetCompletionSource(TaskCompletionSource<TResult?> completionSource)
@@ -46,7 +65,22 @@ namespace SiGen.ViewModels.Dialogs
     // For dialogs that don't return a specific result (just success/cancel)
     public abstract class DialogViewModelBase : DialogViewModelBase<bool>
     {
+        //public override string Title => "Test";
+
+        //public DialogViewModelBase()
+        //{
+        //}
+
         protected void Complete() => CompleteDialog(true);
         protected void Cancel() => CompleteDialog(false);
+    }
+
+    public class MockDialogViewModel : IDialogViewModel
+    {
+        public string Title => string.Empty;
+
+        public bool ShowTitleBar { get; set; } = true;
+
+        public ICommand CancelCommand { get; } = new RelayCommand(() => { });
     }
 }

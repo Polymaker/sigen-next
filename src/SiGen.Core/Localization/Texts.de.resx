@@ -207,4 +207,7 @@
   <data name="Preset_Wide" xml:space="preserve">
     <value>Breit</value>
   </data>
+  <data name="Preset_Strings" xml:space="preserve">
+    <value>Saiten</value>
+  </data>
 </root>

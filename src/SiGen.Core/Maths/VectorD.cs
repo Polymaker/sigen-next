@@ -35,21 +35,21 @@ namespace SiGen.Maths
         /// <value>A vector whose two elements are equal to one (that is, it returns the vector <c>(1,1)</c>.</value>
         public static VectorD One
         {
-            get => new VectorD(1.0m);
+            get => new VectorD(1.0);
         }
 
         /// <summary>Gets the vector (1,0).</summary>
         /// <value>The vector <c>(1,0)</c>.</value>
         public static VectorD UnitX
         {
-            get => new VectorD(1.0m, 0.0m);
+            get => new VectorD(1.0, 0.0);
         }
 
         /// <summary>Gets the vector (0,1).</summary>
         /// <value>The vector <c>(0,1)</c>.</value>
         public static VectorD UnitY
         {
-            get => new VectorD(0.0m, 1.0m);
+            get => new VectorD(0.0, 1.0);
         }
 
         public static VectorD Empty
@@ -194,7 +194,7 @@ namespace SiGen.Maths
         public static PreciseDouble Distance(VectorD value1, VectorD value2)
         {
             PreciseDouble distanceSquared = DistanceSquared(value1, value2);
-            return (PreciseDouble)Math.Sqrt((double)distanceSquared);
+            return MathD.Sqrt(distanceSquared);
         }
 
         /// <summary>Returns the Euclidean distance squared between two specified points.</summary>
@@ -342,8 +342,8 @@ namespace SiGen.Maths
         public static VectorD SquareRoot(VectorD value)
         {
             return new VectorD(
-                (PreciseDouble)Math.Sqrt((double)value.X),
-                (PreciseDouble)Math.Sqrt((double)value.Y)
+                MathD.Sqrt(value.X),
+                MathD.Sqrt(value.Y)
             );
         }
 

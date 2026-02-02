@@ -232,4 +232,10 @@
   <data name="Preset_Wide" xml:space="preserve">
     <value>Wide</value>
   </data>
+  <data name="Preset_Default" xml:space="preserve">
+    <value>Default</value>
+  </data>
+  <data name="Preset_Strings" xml:space="preserve">
+    <value>Strings</value>
+  </data>
 </root>

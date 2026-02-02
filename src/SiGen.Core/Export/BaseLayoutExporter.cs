@@ -64,7 +64,7 @@ namespace SiGen.Export
                     continue;
 
                 var shape = fretElement.FretShape;
-                if (Options.ExtendFrets && !Measure.IsNullOrEmpty(Options.FretExtensionAmount))
+                if (!(fretElement.IsBridge || fretElement.IsNut) && Options.ExtendFrets && !Measure.IsNullOrEmpty(Options.FretExtensionAmount))
                 {
                     shape = shape.Extend(Options.FretExtensionAmount.Value.NormalizedValue) ?? fretElement.FretShape;
                 }

@@ -1,4 +1,8 @@
-﻿using SiGen.ViewModels.Dialogs;
+﻿using SiGen.Layouts.Configuration;
+using SiGen.Layouts.Data;
+using SiGen.Measuring;
+using SiGen.ViewModels;
+using SiGen.ViewModels.Dialogs;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -25,6 +29,16 @@ namespace SiGen.Services
         }
 
         public Task<SaveChangesResult> ShowSaveChangesAsync(string documentName)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<List<Measure>?> ShowCustomStringDialog(InstrumentLayoutConfiguration layoutConfiguration, FingerboardEnd end)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task ShowTuningDialog(ILayoutDocumentContext context)
         {
             throw new NotImplementedException();
         }

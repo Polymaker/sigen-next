@@ -230,7 +230,7 @@
     <value>Cordes extérieures</value>
   </data>
   <data name="LayoutCenterAlignment.MiddleStrings" xml:space="preserve">
-    <value>Cordes centrales</value>
+    <value>Cordes médianes</value>
   </data>
   <data name="LayoutCenterAlignment.Fingerboard" xml:space="preserve">
     <value>Bords de la touche</value>
@@ -252,5 +252,11 @@
   </data>
   <data name="Preset_Standard" xml:space="preserve">
     <value>Standard</value>
+  </data>
+  <data name="Preset_Default" xml:space="preserve">
+    <value>Défaut</value>
+  </data>
+  <data name="Preset_Strings" xml:space="preserve">
+    <value>Cordes</value>
   </data>
 </root>

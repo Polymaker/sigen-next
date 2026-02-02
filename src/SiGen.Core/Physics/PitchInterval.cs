@@ -18,12 +18,20 @@ namespace SiGen.Physics
             Ratio = ratio;
         }
 
-        public (NoteName, int) ToNote()
+        //public (NoteName, int) ToNote()
+        //{
+        //    int totalSemitones = (int)Math.Round(Cents / 100);
+        //    int octave = totalSemitones / 12;
+        //    NoteName note = (NoteName)(totalSemitones % 12);
+        //    return (note, octave);
+        //}
+
+        public NoteAndOctave ToNote()
         {
             int totalSemitones = (int)Math.Round(Cents / 100);
             int octave = totalSemitones / 12;
             NoteName note = (NoteName)(totalSemitones % 12);
-            return (note, octave);
+            return new(note, octave);
         }
 
         public static PitchInterval FromCents(double cents)
@@ -50,6 +58,12 @@ namespace SiGen.Physics
         {
             return From12TET((int)note, octave);
         }
+
+        public static PitchInterval FromNote(NoteAndOctave note)
+        {
+            return FromCents((((int)note.Note + (note.Octave * 12)) * 100) + note.CentOffset);
+        }
+
 
         #region Comparison operators
 

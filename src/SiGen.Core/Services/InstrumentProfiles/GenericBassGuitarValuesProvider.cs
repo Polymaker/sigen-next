@@ -1,5 +1,6 @@
 ﻿using SiGen.Data.Common;
 using SiGen.Data.Presets;
+using SiGen.Layouts.Configuration;
 using SiGen.Localization;
 using SiGen.Physics;
 
@@ -57,6 +58,15 @@ namespace SiGen.Services.InstrumentProfiles
                     PitchInterval.FromNote(NoteName.G, 2),
                 ]),
 
+                new TuningPreset($"{Texts.Tuning_Drop} {Texts.NoteName_A}",
+                [
+                    PitchInterval.FromNote(NoteName.A, 0),
+                    PitchInterval.FromNote(NoteName.E, 1),
+                    PitchInterval.FromNote(NoteName.A, 1),
+                    PitchInterval.FromNote(NoteName.D, 2),
+                    PitchInterval.FromNote(NoteName.G, 2),
+                ]),
+
                 //6 strings
                 new TuningPreset($"{Texts.Tuning_Standard} {Texts.NoteName_B}",
                 [
@@ -68,9 +78,23 @@ namespace SiGen.Services.InstrumentProfiles
                     PitchInterval.FromNote(NoteName.C, 3),
                 ]),
 
+                new TuningPreset($"{Texts.Tuning_Standard} {Texts.NoteName_B} (Alt)",
+                [
+                    PitchInterval.FromNote(NoteName.B, 0),
+                    PitchInterval.FromNote(NoteName.E, 1),
+                    PitchInterval.FromNote(NoteName.A, 1),
+                    PitchInterval.FromNote(NoteName.D, 2),
+                    PitchInterval.FromNote(NoteName.Gb, 2),
+                    PitchInterval.FromNote(NoteName.B, 2),
+                ]),
             ];
         }
 
-        
+        public abstract InstrumentLayoutConfiguration GetDefaultConfiguration();
+
+        public virtual IReadOnlyList<LayoutTemplate> GetLayoutTemplates()
+        {
+            return [];
+        }
     }
 }

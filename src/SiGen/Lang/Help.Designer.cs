@@ -91,12 +91,12 @@ namespace SiGen.Lang {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Choose how the strings are laid out relative to the center line:
-        ///• **Outer Strings**: Aligns the outermost strings equally from the center line.
+        ///   Looks up a localized string similar to Choose how the strings are positioned relative to the center line:
+        ///• **Outer Strings**: Centers the outermost strings equally from the center line.
         ///• **Middle Strings**: Aligns the middle string(s) to the center line.
-        ///• **Fingerboard**: Centers by the edges of the fingerboard, which is usually the same as **Outer Strings** unless the bass and treble margins differ.
-        ///• **Symmetric Strings**: (Multiscale only) Adjust the spacing so that the layout remain symmetric.
-        ///• **Symmetric Fingerboard**: (Multiscale on [rest of string was truncated]&quot;;.
+        ///• **Fingerboard**: Centers by the fingerboard edges (same as Outer Strings when margins are equal).
+        ///• **Symmetric Strings**: *(Multiscale only)* Adjusts spacing to maintain symmetric layout at both nut and bridge.
+        ///• **Symmetric Fingerboard**: *(Multiscale only)* Like Symmetric Strings, bu [rest of string was truncated]&quot;;.
         /// </summary>
         public static string LayoutCenterAlignment_Help {
             get {
@@ -114,7 +114,9 @@ namespace SiGen.Lang {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to Controls which fret is straight (perpendicular to centerline) on a multiscale instrument.
+        ///Enter any value from 0-100 or select a fret to align from the dropdown.
+        ///Higher values make frets &quot;point&quot; more toward the bridge, lower values toward the nut..
         /// </summary>
         public static string ScaleLength_MultiScaleRatio {
             get {

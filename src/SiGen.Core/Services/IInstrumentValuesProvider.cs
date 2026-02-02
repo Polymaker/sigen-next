@@ -1,5 +1,6 @@
 ﻿using SiGen.Data.Common;
 using SiGen.Data.Presets;
+using SiGen.Layouts.Configuration;
 
 namespace SiGen.Services
 {
@@ -15,5 +16,8 @@ namespace SiGen.Services
         IReadOnlyList<SpacingPreset> GetBridgeSpacingPresets();
         IReadOnlyList<SpacingPreset> GetMarginPresets();
 
+        InstrumentLayoutConfiguration GetDefaultConfiguration();
+
+        IReadOnlyList<LayoutTemplate> GetLayoutTemplates();
     }
 }

@@ -1,7 +1,11 @@
 ﻿using SiGen.Data.Common;
 using SiGen.Data.Presets;
-using SiGen.Measuring;
+using SiGen.Layouts.Configuration;
+using SiGen.Layouts.Configuration.Builders;
+using SiGen.Layouts.Data;
 using SiGen.Localization;
+using SiGen.Measuring;
+using SiGen.Physics;
 
 namespace SiGen.Services.InstrumentProfiles
 {
@@ -49,6 +53,56 @@ namespace SiGen.Services.InstrumentProfiles
                 new ScaleLengthPreset("Medium Scale", SiGen.Measuring.Measure.In(32)),
                 new ScaleLengthPreset("Long Scale", SiGen.Measuring.Measure.In(34)),
                 new ScaleLengthPreset("Extra Long Scale", SiGen.Measuring.Measure.In(36)),
+            ];
+        }
+
+        public override InstrumentLayoutConfiguration GetDefaultConfiguration()
+        {
+            return new LayoutConfigurationBuilder()
+                .WithInstrumentType(InstrumentType.ElectricBass)
+                .WithNumberOfFrets(21)
+                .AddSingleString(gauge: Measure.In(0.105), tuning: new NoteAndOctave(NoteName.E, 1))
+                .AddSingleString(gauge: Measure.In(0.085), tuning: new NoteAndOctave(NoteName.A, 1))
+                .AddSingleString(gauge: Measure.In(0.065), tuning: new NoteAndOctave(NoteName.D, 2))
+                .AddSingleString(gauge: Measure.In(0.045), tuning: new NoteAndOctave(NoteName.G, 2))
+                .WithScaleLength(Measure.In(34))
+                .WithNutSpacing(Measure.Mm(8))
+                .WithBridgeSpacing(Measure.Mm(18))
+                .WithMargins(Measure.Mm(4))
+                .Build();
+        }
+
+        private LayoutConfigurationBuilder GetBaseLayoutBuilder()
+        {
+            return new LayoutConfigurationBuilder()
+                .WithInstrumentType(InstrumentType.ElectricBass)
+                .WithNumberOfFrets(21)
+                .AddSingleString(cfg => cfg.WithGauge(Measure.In(0.105)).WithTuning(new NoteAndOctave(NoteName.E, 1)))
+                .AddSingleString(cfg => cfg.WithGauge(Measure.In(0.085)).WithTuning(new NoteAndOctave(NoteName.A, 1)))
+                .AddSingleString(cfg => cfg.WithGauge(Measure.In(0.065)).WithTuning(new NoteAndOctave(NoteName.D, 2)))
+                .AddSingleString(cfg => cfg.WithGauge(Measure.In(0.045)).WithTuning(new NoteAndOctave(NoteName.G, 2)))
+                .WithScaleLength(Measure.In(34))
+                .WithNutSpacing(Measure.Mm(8))
+                .WithBridgeSpacing(Measure.Mm(18))
+                .WithMargins(Measure.Mm(4));
+        } 
+
+        public override IReadOnlyList<LayoutTemplate> GetLayoutTemplates()
+        {
+            var fiveStringConfig = GetBaseLayoutBuilder()
+                .AddSingleString(gauge: Measure.In(0.130), tuning: new NoteAndOctave(NoteName.B, 0), side: FingerboardSide.Bass)
+                .Build();
+
+            var sixStringConfig = GetBaseLayoutBuilder()
+                .WithNutSpacing(Measure.Mm(9))
+                .WithBridgeSpacing(Measure.Mm(19))
+                .AddSingleString(gauge: Measure.In(0.130), tuning: new NoteAndOctave(NoteName.B, 0), side: FingerboardSide.Bass)
+                .AddSingleString(gauge: Measure.In(0.032), tuning: new NoteAndOctave(NoteName.C, 3), side: FingerboardSide.Treble)
+                .Build();
+            return [
+                new LayoutTemplate(Texts.Preset_Standard, GetDefaultConfiguration()),
+                new LayoutTemplate($"5 {Texts.Preset_Strings}", fiveStringConfig),
+                new LayoutTemplate($"6 {Texts.Preset_Strings}", sixStringConfig),
             ];
         }
     }

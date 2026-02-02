@@ -16,6 +16,7 @@
 	<UserControl.Resources>
 		<conv:OrConverter x:Key="OrConverter"/>
 		<conv:EqualsConverter x:Key="EqualsConverter" />
+		<conv:EnumValueConverter x:Key="EnumValueConverter" />
 	</UserControl.Resources>
 	
 	<StackPanel Spacing="4" Margin="4">
@@ -26,7 +27,11 @@
 							  Help="Indique si les marges doivent être compensées en fonction de la largeur des cordes.">
 			<ctrl:CustomFormField.Input>
 				<ComboBox ItemsSource="{Binding MarginModes}" SelectedValue="{Binding SelectedMarginMode, Mode=TwoWay}">
-
+					<ComboBox.ItemTemplate>
+						<DataTemplate>
+							<TextBlock Text="{Binding ., Converter={StaticResource EnumValueConverter}}"  VerticalAlignment="Center" />
+						</DataTemplate>
+					</ComboBox.ItemTemplate>
 				</ComboBox>
 			</ctrl:CustomFormField.Input>
 		</ctrl:CustomFormField>
@@ -34,12 +39,12 @@
 		<Grid ColumnDefinitions="Auto,*,*" RowDefinitions="Auto,*,*" 
 			  ColumnSpacing="4" RowSpacing="4"
 			  Margin="4,0" MaxWidth="300">
-			<TextBlock Text="Nut" Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" />
-			<TextBlock Text="Bridge" Grid.Column="0" Grid.Row="2" VerticalAlignment="Center" />
+			<TextBlock Text="{x:Static lang:Resources.FingerboardEnd_Nut}" Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" Margin="0,0,4,0" />
+			<TextBlock Text="{x:Static lang:Resources.FingerboardEnd_Bridge}" Grid.Column="0" Grid.Row="2" VerticalAlignment="Center" Margin="0,0,4,0" />
 
 
-			<TextBlock Text="Bass" Grid.Column="1" Grid.Row="0" TextAlignment="Center" />
-			<TextBlock Text="Treble" Grid.Column="2" Grid.Row="0" TextAlignment="Center" />
+			<TextBlock Text="{x:Static lang:Resources.FingerboardSide_Bass}" Grid.Column="1" Grid.Row="0" TextAlignment="Center" />
+			<TextBlock Text="{x:Static lang:Resources.FingerboardSide_Treble}" Grid.Column="2" Grid.Row="0" TextAlignment="Center" />
 
 			<ctrl:MeasureTextBox Grid.Column="1" Grid.Row="1" TextAlignment="Center"
 								 Value="{Binding NutBassMargin, Mode=TwoWay}" />

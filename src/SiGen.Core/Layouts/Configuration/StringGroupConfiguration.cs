@@ -1,4 +1,5 @@
-﻿using SiGen.Measuring;
+﻿using SiGen.Layouts.Data;
+using SiGen.Measuring;
 using System.Text.Json.Serialization;
 
 namespace SiGen.Layouts.Configuration
@@ -43,6 +44,33 @@ namespace SiGen.Layouts.Configuration
             }
 
             return measure;
+        }
+
+        public override Measure GetTotalWidth2(bool includeGauge)
+        {
+            var spacing = GetTotalSpacing();
+            if (includeGauge)
+            {
+                if (Strings[0].Gauge.HasValue)
+                    spacing += Strings[0].Gauge!.Value / 2d;
+
+                if (Strings[^1].Gauge.HasValue)
+                    spacing += Strings[^1].Gauge!.Value / 2d;
+            }
+            return spacing;
+        }
+
+        public override Measure GetHalfWidth(FingerboardSide side, bool includeGauge)
+        {
+            if (!includeGauge)
+                return GetTotalSpacing() / 2m;
+
+            var half = GetTotalSpacing() / 2m;
+            if (side == FingerboardSide.Bass && Strings[0].Gauge.HasValue)
+                half += Strings[0].Gauge!.Value / 2m;
+            else if (side == FingerboardSide.Treble && Strings[^1].Gauge.HasValue)
+                half += Strings[^1].Gauge!.Value / 2m;
+            return half;
         }
     }
 }

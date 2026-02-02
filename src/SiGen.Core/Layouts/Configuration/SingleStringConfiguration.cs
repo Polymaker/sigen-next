@@ -1,4 +1,5 @@
-﻿using SiGen.Measuring;
+﻿using SiGen.Layouts.Data;
+using SiGen.Measuring;
 using SiGen.Physics;
 using System;
 using System.Collections.Generic;
@@ -31,7 +32,7 @@ namespace SiGen.Layouts.Configuration
         }
 
         [JsonIgnore]
-        public PitchInterval? Tuning
+        public NoteAndOctave? Tuning
         {
             get => Properties?.Tuning;
             set
@@ -46,5 +47,17 @@ namespace SiGen.Layouts.Configuration
             return Gauge;
         }
 
+        public override Measure GetTotalWidth2(bool includeGauge)
+        {
+            return includeGauge ? (Gauge.HasValue ? Gauge.Value : Measure.Zero) : Measure.Zero;
+        }
+
+        public override Measure GetHalfWidth(FingerboardSide side, bool includeGauge)
+        {
+            if (!includeGauge || !Gauge.HasValue)
+                return Measure.Zero;
+
+            return Gauge.Value / 2d;
+        }
     }
 }

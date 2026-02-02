@@ -261,7 +261,6 @@ public partial class LayoutViewerControl : UserControl, ILayoutViewerContext
         {
             Zoom = ClampZoom(Zoom); // Ensure zoom is within bounds
         }
-            
     }
 
     #region Zoom Handling
@@ -373,10 +372,9 @@ public partial class LayoutViewerControl : UserControl, ILayoutViewerContext
             );
         }
 
-        minimumZoom = fitToViewZoom * 0.95;
+        minimumZoom = Math.Max(fitToViewZoom * 0.95, 0.15);
         maximumZoom = 10;
     }
-
 
     private double ClampZoom(double value)
     {
@@ -609,6 +607,7 @@ public partial class LayoutViewerControl : UserControl, ILayoutViewerContext
         MiddleClick,
         Spacebar
     }
+
     private PanSource? _currentPanSource = null;
 
     public void Canvas_PointerPressed(object? sender, PointerPressedEventArgs e)
@@ -763,7 +762,6 @@ public partial class LayoutViewerControl : UserControl, ILayoutViewerContext
 
     #endregion
 
-   
     #region Visuals Elements
 
     internal const double CmScaleFactor = 37.7952755906; // 1 cm in pixels at 96 DPI

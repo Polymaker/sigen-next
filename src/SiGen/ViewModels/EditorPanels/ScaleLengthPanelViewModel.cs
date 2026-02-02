@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using SiGen.Layouts.Configuration;
 using SiGen.Layouts.Data;
+using SiGen.Maths;
 using SiGen.Measuring;
 using SiGen.Physics;
 using System;
@@ -91,11 +92,35 @@ namespace SiGen.ViewModels.EditorPanels
                 .FirstOrDefault(x => Math.Abs(x.Ratio - MultiScaleRatio) < 0.01); // Find the closest preset
         }
 
+        partial void OnModeChanged(ScaleLengthMode oldValue, ScaleLengthMode newValue)
+        {
+            if (newValue == ScaleLengthMode.PerString)
+            {
+                UpdateIndividualScaleLengths(false);
+                for (int i = 0; i < PerStringScales.Count; i++)
+                {
+                    if (PerStringScales[i].Scale  == null)
+                    {
+                        if (oldValue == ScaleLengthMode.Single) {
+                            PerStringScales[i].Scale = Configuration?.ScaleLength.SingleScale;
+                        }
+                        else if (Configuration?.ScaleLength.BassScale != null &&
+                            Configuration?.ScaleLength.TrebleScale != null)
+                        {
+                            var scaleLength = MathD.Map(0, PerStringScales.Count - 1,
+                                Configuration.ScaleLength.BassScale.Value.NormalizedValue,
+                                Configuration.ScaleLength.TrebleScale.Value.NormalizedValue,
+                                i);
+                            PerStringScales[i].Scale = Measure.Round(Measure.FromNormalizedValue(LengthUnit.In, scaleLength), 0.05d);
+                        }
+                    }
+                }
+            }
+        }
+
         protected override void OnPropertyChanged(PropertyChangedEventArgs e)
         {
             base.OnPropertyChanged(e);
-            if (e.PropertyName == nameof(Mode) && Mode == ScaleLengthMode.PerString)
-                UpdateIndividualScaleLengths(false);
 
             if (e.PropertyName == nameof(BassTrebleSkew))
             {
@@ -187,7 +212,7 @@ namespace SiGen.ViewModels.EditorPanels
 
             PerStringScales.Clear();
             // Update the individual scale lengths based on the current configuration
-            var scaleLengths = new Measure[Configuration.NumberOfStrings];
+            var scaleLengths = new Measure?[Configuration.NumberOfStrings];
 
             for (int i = 0; i < Configuration.NumberOfStrings; i++)
             {

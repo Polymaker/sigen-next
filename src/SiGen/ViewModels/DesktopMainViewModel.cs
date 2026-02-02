@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using SiGen.Export;
 using SiGen.Layouts.Configuration;
+using SiGen.Measuring;
 using SiGen.Serialization;
 using SiGen.Services;
 using SiGen.Settings;
@@ -23,6 +24,7 @@ namespace SiGen.ViewModels
     {
         private readonly IDialogService dialogService;
         private readonly ISettingsService settingsService;
+        private readonly LayoutDocumentModelFactory documentFactory;
 
         //public ICommand NewCommand { get; }
         public ICommand OpenHomeCommand { get; }
@@ -40,10 +42,11 @@ namespace SiGen.ViewModels
         [ObservableProperty]
         private IDocumentTabViewModel? selectedDocument;
 
-        public DesktopMainViewModel(IDialogService dialogService, ISettingsService settingsService)
+        public DesktopMainViewModel(IDialogService dialogService, ISettingsService settingsService, LayoutDocumentModelFactory documentFactory)
         {
             this.dialogService = dialogService;
             this.settingsService = settingsService;
+            this.documentFactory = documentFactory;
             SaveCommand = new RelayCommand(OnSave, CanSave);
             SaveAsCommand = new RelayCommand(OnSaveAs, CanSave);
             OpenCommand = new RelayCommand(OnOpen);
@@ -54,15 +57,26 @@ namespace SiGen.ViewModels
                 //App.Current!.RequestedThemeVariant = ThemeVariant.Light;
                 if (SelectedDocument is LayoutDocumentViewModel layoutDoc)
                 {
-                    var exporter = new DxfLayoutExporter(new DxfExportOptions
+                    //var exporter = new DxfLayoutExporter(new DxfExportOptions
+                    //{
+                    //    ExportFrets = true,
+                    //    ExportStrings = true,
+                    //    ExportCenterLine = true,
+                    //    ExportFingerboard = true,
+                    //    UseStringThickness = true
+                    //}, layoutDoc.Layout!);
+                    //exporter.ExportLayout("D:\\Programming\\C#\\sigen-next\\tests\\" + layoutDoc.Title + ".dxf");
+                    var exporter = new SvgLayoutExporter(new SvgExportOptions
                     {
                         ExportFrets = true,
                         ExportStrings = true,
                         ExportCenterLine = true,
-                        ExportFingerboard = true
+                        ExportFingerboard = true,
+                        UseStringThickness = true,
                     }, layoutDoc.Layout!);
-                    exporter.ExportLayout("D:\\Programming\\C#\\sigen-next\\tests\\" + layoutDoc.Title + ".dxf");
+                    exporter.ExportLayout("D:\\Programming\\C#\\sigen-next\\tests\\" + layoutDoc.Title + ".svg");
                 }
+                //OpenDocument(new LayoutDocumentViewModel("Test Layout", null, LayoutTemplates.CreateSingleScaleConfig()));
             });
             OpenHomeCommand = new RelayCommand(OpenHomePage);
             OpenFileCommand = new RelayCommand<string>(OpenDocumentFile);
@@ -135,15 +149,11 @@ namespace SiGen.ViewModels
         {
             try
             {
-                var options = new JsonSerializerOptions();
-                options.WriteIndented = true;
-                options.Converters.Add(new MeasureConverter());
-                options.Converters.Add(new NullableMeasureConverter());
-                options.Converters.Add(new BaseStringConfigurationConverter());
                 using var stream = System.IO.File.Create(filePath);
-                JsonSerializer.Serialize(stream, document.Configuration, options);
+                JsonSerializer.Serialize(stream, document.Configuration, SiGenJsonOptions.Default);
                 document.Title = System.IO.Path.GetFileNameWithoutExtension(filePath);
                 document.HasUnsavedChanges = false;
+                document.FilePath = filePath;
             }
             catch
             {
@@ -205,13 +215,8 @@ namespace SiGen.ViewModels
 
             try
             {
-                var options = new JsonSerializerOptions();
-                options.WriteIndented = true;
-                options.Converters.Add(new MeasureConverter());
-                options.Converters.Add(new NullableMeasureConverter());
-                options.Converters.Add(new BaseStringConfigurationConverter());
                 config = JsonSerializer.Deserialize<InstrumentLayoutConfiguration>(
-                    System.IO.File.ReadAllText(filePath), options);
+                    System.IO.File.ReadAllText(filePath), SiGenJsonOptions.Default);
 
             }
             catch //(Exception ex)
@@ -222,10 +227,7 @@ namespace SiGen.ViewModels
             if (config == null) return;
 
 
-            var document = new LayoutDocumentViewModel(
-                System.IO.Path.GetFileNameWithoutExtension(filePath),
-                filePath,
-                config);
+            var document = documentFactory.CreateViewModel(filePath, config);
 
             settingsService.AddRecentFile(document);
             OpenDocuments.Add(document);
@@ -243,6 +245,16 @@ namespace SiGen.ViewModels
             {
                 OpenDocuments.Add(document);
             }
+            SelectedDocument = document;
+        }
+
+        public void OpenLayoutConfiguration(string documentName, InstrumentLayoutConfiguration configuration)
+        {
+            var document = new LayoutDocumentViewModel(
+                documentName,
+                null,
+                configuration);
+            OpenDocuments.Add(document);
             SelectedDocument = document;
         }
 
@@ -289,6 +301,8 @@ namespace SiGen.ViewModels
             RecentFiles.AddRange(settingsService.Settings.RecentFiles.Take(10).Select((f, i) => new RecentFileMenuModel(i + 1, f, OpenDocumentFile)));
             OnPropertyChanged(nameof(RecentFiles));
         }
+
+        
 
         #endregion
     }

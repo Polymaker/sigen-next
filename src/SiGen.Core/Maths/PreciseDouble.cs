@@ -9,15 +9,17 @@ namespace SiGen.Maths
 {
     public struct PreciseDouble : IComparable<PreciseDouble>
     {
+        internal static bool DISABLE_DECIMALS = true;
+
         private readonly decimal? _decValue;
         private readonly double? _dblValue;
-        public readonly decimal DecimalValue => _decValue ?? 0;
+        public readonly decimal DecimalValue => DISABLE_DECIMALS ? (decimal)_dblValue!.Value : (_decValue ?? 0);
 
         public readonly double DoubleValue => _dblValue ?? (double)DecimalValue;
 
         public readonly bool IsEmpty => /*_decValue == null && */_dblValue != null && (double.IsNaN(_dblValue.Value) || _dblValue == double.NaN);
 
-        public readonly bool IsSpecialValue => _dblValue != null;
+        public readonly bool IsSpecialValue => _dblValue != null && (!DISABLE_DECIMALS || IsSpecialDoubleValue(_dblValue.Value));
 
         public static readonly PreciseDouble Empty = new PreciseDouble(null, double.NaN);
 
@@ -35,13 +37,21 @@ namespace SiGen.Maths
 
         public PreciseDouble(decimal value)
         {
-            _decValue = value;
-            _dblValue = null;
+            if (DISABLE_DECIMALS)
+            {
+                _decValue = null;
+                _dblValue = (double)value;
+            }
+            else
+            {
+                _decValue = value;
+                _dblValue = null;
+            }
         }
 
         public PreciseDouble(double value)
         {
-            if (IsSpecialDoubleValue(value))
+            if (IsSpecialDoubleValue(value) || DISABLE_DECIMALS)
             {
                 _dblValue = value;
                 _decValue = null;
@@ -59,7 +69,7 @@ namespace SiGen.Maths
         {
             if (obj is PreciseDouble pd)
             {
-                if (IsSpecialValue || pd.IsSpecialValue)
+                if (IsSpecialValue || pd.IsSpecialValue || DISABLE_DECIMALS)
                     return DoubleValue == pd.DoubleValue;
                 return DecimalValue == pd.DecimalValue;
             }
@@ -68,6 +78,7 @@ namespace SiGen.Maths
 
         public override int GetHashCode()
         {
+            if (IsSpecialValue || DISABLE_DECIMALS) return _dblValue.GetHashCode();
             return _decValue.GetHashCode();
         }
 
@@ -140,6 +151,9 @@ namespace SiGen.Maths
 
         public static PreciseDouble Add(PreciseDouble a, PreciseDouble b)
         {
+            if (DISABLE_DECIMALS)
+                return new PreciseDouble(a.DoubleValue + b.DoubleValue);
+
             try
             {
                 return new PreciseDouble(a.DecimalValue + b.DecimalValue);
@@ -152,6 +166,9 @@ namespace SiGen.Maths
 
         public static PreciseDouble Substract(PreciseDouble a, PreciseDouble b)
         {
+            if (DISABLE_DECIMALS)
+                return new PreciseDouble(a.DoubleValue - b.DoubleValue);
+
             try
             {
                 return new PreciseDouble(a.DecimalValue - b.DecimalValue);
@@ -164,6 +181,9 @@ namespace SiGen.Maths
 
         public static PreciseDouble Multiply(PreciseDouble a, PreciseDouble b)
         {
+            if (DISABLE_DECIMALS)
+                return new PreciseDouble(a.DoubleValue * b.DoubleValue);
+
             try
             {
                 return new PreciseDouble(a.DecimalValue * b.DecimalValue);
@@ -176,6 +196,9 @@ namespace SiGen.Maths
 
         public static PreciseDouble Divide(PreciseDouble a, PreciseDouble b)
         {
+            if (DISABLE_DECIMALS)
+                return new PreciseDouble(a.DoubleValue / b.DoubleValue);
+
             try
             {
                 return new PreciseDouble(a.DecimalValue / b.DecimalValue);

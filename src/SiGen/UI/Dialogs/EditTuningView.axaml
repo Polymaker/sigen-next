@@ -1,0 +1,28 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             xmlns:vm="using:SiGen.ViewModels.Dialogs"
+             x:DataType="vm:TuningDialogModel"
+             x:Class="SiGen.EditTuningView">
+    <UserControl.DataContext>
+		<vm:TuningDialogModel/>
+    </UserControl.DataContext>
+  <Grid RowDefinitions="*,*">
+	  <ComboBox ItemsSource="{Binding TuningPresets}">
+		  <ComboBox.ItemTemplate>
+			<DataTemplate>
+				<TextBlock Text="{Binding Name}"  VerticalAlignment="Center" />
+			</DataTemplate>
+		</ComboBox.ItemTemplate>
+      </ComboBox>
+      <ItemsControl Grid.Row="1" ItemsSource="{Binding Strings}">
+		  <ItemsControl.ItemTemplate>
+			  <DataTemplate>
+				  <Label Content="{Binding Tuning}" />
+              </DataTemplate>
+          </ItemsControl.ItemTemplate>
+      </ItemsControl>
+  </Grid>
+</UserControl>

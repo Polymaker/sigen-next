@@ -144,4 +144,18 @@ Wenn Sie einen Instrumententyp auswählen, werden neben bestimmten Feldern Info-
 • **Zentriert/Gleich**: Die Saiten werden so angeordnet, dass der Abstand zwischen den Mitten einer Saite und der Mitte der nächsten Saite unabhängig von der Saitenstärke gleich ist.
 • **Manuell**: Die Saitenpositionen werden manuell festgelegt. Der Abstandsmodus wird ignoriert, und Sie können jede Saite genau dort platzieren, wo Sie möchten.</value>
   </data>
+  <data name="ScaleLength_MultiScaleRatio" xml:space="preserve">
+    <value>Bestimmt, welcher Bund gerade (senkrecht zur Mittellinie) bei einem Multiscale-Instrument ist.
+Geben Sie einen Wert von 0-100 ein oder wählen Sie einen Bund zum Ausrichten aus dem Dropdown-Menü.
+Höhere Werte lassen Bünde mehr Richtung Steg "zeigen", niedrigere Werte Richtung Sattel.</value>
+  </data>
+  <data name="LayoutCenterAlignment_Help" xml:space="preserve">
+    <value>Wählen Sie, wie die Saiten relativ zur Mittellinie positioniert werden:
+• **Äußere Saiten**: Zentriert die äußersten Saiten gleichmäßig von der Mittellinie.
+• **Mittlere Saiten**: Richtet die mittlere(n) Saite(n) an der Mittellinie aus.
+• **Griffbrett**: Zentriert an den Griffbretträndern (gleich wie Äußere Saiten bei gleichen Rändern).
+• **Symmetrische Saiten**: *(Nur Multiscale)* Passt Abstand an, um symmetrisches Layout an Sattel und Steg zu erhalten.
+• **Symmetrisches Griffbrett**: *(Nur Multiscale)* Wie Symmetrische Saiten, aber berücksichtigt unterschiedliche Bass-/Diskantränder.
+• **Manuell**: Ausrichtung manuell festlegen (0 = Bassseite ausgerichtet, 1 = Diskantseite ausgerichtet, 0,5 = zentriert).</value>
+  </data>
 </root>

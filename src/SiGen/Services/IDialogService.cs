@@ -1,3 +1,7 @@
+using SiGen.Layouts.Configuration;
+using SiGen.Layouts.Data;
+using SiGen.Measuring;
+using SiGen.ViewModels;
 using SiGen.ViewModels.Dialogs;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -21,5 +25,8 @@ namespace SiGen.Services
 
         // For opening files
         Task<string?> ShowOpenFileDialogAsync(string? title = null, IEnumerable<FileDialogFilter>? filters = null);
+
+        Task<List<Measure>?> ShowCustomStringDialog(InstrumentLayoutConfiguration layoutConfiguration, FingerboardEnd end);
+        Task ShowTuningDialog(ILayoutDocumentContext context);
     }
 }

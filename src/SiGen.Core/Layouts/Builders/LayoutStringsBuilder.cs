@@ -5,6 +5,7 @@ using SiGen.Localization;
 using SiGen.Maths;
 using SiGen.Measuring;
 using SiGen.Paths;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 
 namespace SiGen.Layouts.Builders
@@ -136,12 +137,14 @@ namespace SiGen.Layouts.Builders
                         var path = (LinearPath)stringElem.Path.Clone();
                         path.Offset(new VectorD(offsetX.NormalizedValue, 0));
 
+                        
                         var newString = new StringElement(i, j, path)
                         {
                             NutPoint = stringElem.NutPoint + new PointM(offsetX, Measure.Zero),
                             BridgePoint = stringElem.BridgePoint + new PointM(offsetX, Measure.Zero),
                             StartPoint = stringElem.StartPoint + new PointM(offsetX, Measure.Zero)
                         };
+                        Trace.WriteLine($"Course {i} string {j} nut pox X: {newString.NutPoint.X}");
                         Layout.AddElement(newString);
 
                         offsetX += group.Spacing ?? Measure.Mm(1.5);
@@ -295,7 +298,7 @@ namespace SiGen.Layouts.Builders
                     var bassPerp = bassPath.GetEquation().GetPerpendicular(bassPath.Start);
 
                     PreciseDouble totalMargin = Configuration.Fingerboard.GetMargin(end, FingerboardSide.Bass).NormalizedValue;
-                    var stringWidth = Configuration.StringConfigurations[0]?.GetTotalWidth();
+                    var stringWidth = Configuration.StringConfigurations[0]?.GetTotalWidth2(Configuration.Fingerboard.CompensateMarginsForStrings);
                     if (compensateForStrings && !Measure.IsNullOrEmpty(stringWidth))
                         totalMargin += stringWidth.Value.NormalizedValue / 2d;
 
@@ -315,7 +318,7 @@ namespace SiGen.Layouts.Builders
                     var trebPerp = trebPath.GetEquation().GetPerpendicular(trebPath.Start);
 
                     PreciseDouble totalMargin = Configuration.Fingerboard.GetMargin(end, FingerboardSide.Treble).NormalizedValue;
-                    var stringWidth = Configuration.StringConfigurations[^1]?.GetTotalWidth();
+                    var stringWidth = Configuration.StringConfigurations[^1]?.GetTotalWidth2(Configuration.Fingerboard.CompensateMarginsForStrings);
                     if (compensateForStrings && !Measure.IsNullOrEmpty(stringWidth))
                         totalMargin += stringWidth.Value.NormalizedValue / 2d;
 
@@ -544,7 +547,9 @@ namespace SiGen.Layouts.Builders
                 case LayoutCenterAlignment.SymmetricStrings:
                 case LayoutCenterAlignment.OuterStrings:
                     {
-                        centerOffset = positions[^1] / 2m;
+                        var leftPos = -Configuration.StringConfigurations[0].GetHalfWidth(FingerboardSide.Bass, false);
+                        var rightPos = positions[^1] + Configuration.StringConfigurations[^1].GetHalfWidth(FingerboardSide.Treble, false);
+                        centerOffset = (rightPos + leftPos) / 2m;
                         break;
                     }
                 case LayoutCenterAlignment.MiddleStrings:
@@ -563,27 +568,14 @@ namespace SiGen.Layouts.Builders
                             var p2 = positions[idx1];
                             centerOffset = p1 + (p2 - p1) / 2m;
                         }
-                        //    int idx1 = NumberOfStrings / 2;
-                        //int idx2 = idx1 - NumberOfStrings % 2;
-                        //var p1 = positions[idx2];
-                        //var p2 = positions[idx1];
-                        //centerOffset = p1 + (p2 - p1) / 2m;
                         break;
                     }
                 case LayoutCenterAlignment.Fingerboard:
                     {
-                        var hMargin = Configuration.Fingerboard.GetMargin(end, FingerboardSide.Bass)
-                            + Configuration.Fingerboard.GetMargin(end, FingerboardSide.Treble);
-                        var halfWidth = positions[^1] / 2d;
-
                         var leftPos = -Configuration.Fingerboard.GetMargin(end, FingerboardSide.Bass);
                         var rightPos = positions[^1] + Configuration.Fingerboard.GetMargin(end, FingerboardSide.Treble);
-
-                        if (Configuration.Fingerboard.CompensateMarginsForStrings)
-                        {
-                            leftPos -= (Configuration.GetString(0)?.GetTotalWidth() ?? Measure.Zero) / 2m;
-                            rightPos += (Configuration.GetString(NumberOfStrings - 1)?.GetTotalWidth() ?? Measure.Zero) / 2m;
-                        }
+                        leftPos -= Configuration.StringConfigurations[0].GetHalfWidth(FingerboardSide.Bass, Configuration.Fingerboard.CompensateMarginsForStrings);
+                        rightPos += Configuration.StringConfigurations[^1].GetHalfWidth(FingerboardSide.Treble, Configuration.Fingerboard.CompensateMarginsForStrings);
                         centerOffset = (rightPos + leftPos) / 2m;
                         break;
                     }
@@ -604,19 +596,9 @@ namespace SiGen.Layouts.Builders
                     } 
                     else
                     {
-                        centerOffset = nutSpread / 2d;
-                        //if (nutSpread > bridgeSpread && spacingConfig.AlignmentRatio.HasValue)
-                        //{
-                        //    var spreadDiff = nutSpread - bridgeSpread;
-                        //    centerOffset = spreadDiff * spacingConfig.AlignmentRatio.Value;
-                        //}
-                            
+                        centerOffset = nutSpread / 2m;
                     }
                     break;
-                //case LayoutCenterAlignment.Symmetric:
-                //    var oppositeEnd = end == FingerboardEnd.Nut ? FingerboardEnd.Bridge : FingerboardEnd.Nut;
-                    
-                //    break;
             }
 
             for (int i = 0; i < positions.Length; i++)

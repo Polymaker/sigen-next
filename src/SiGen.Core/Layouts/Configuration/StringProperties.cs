@@ -19,7 +19,7 @@ namespace SiGen.Layouts.Configuration
         /// Optional. Only used for fret compensation calculation.
         /// </remarks>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public PitchInterval? Tuning { get; set; }
+        public NoteAndOctave? Tuning { get; set; }
 
         //not used yet, will be used to grab material information from DB if not present in the configuration
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

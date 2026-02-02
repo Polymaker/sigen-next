@@ -126,7 +126,7 @@ namespace SiGen.UI.LayoutViewer.Visuals
             {
                 var textBlock = new TextBlock();
                 textBlock.Inlines = new InlineCollection();
-                textBlock.Inlines!.Add(new Run($"{Lang.Resources.StringGroupLabel} {Element.StringIndex + 1}"));
+                textBlock.Inlines!.Add(new Run($"{Lang.Resources.StringCourseLabel} {Element.StringIndex + 1}"));
                 textBlock.Inlines.Add(new LineBreak());
                 textBlock.Inlines.Add(new Run($"{Lang.Resources.StringLabel} {Element.GroupIndex.Value + 1}"));
                 ToolTip.SetTip(this, textBlock);

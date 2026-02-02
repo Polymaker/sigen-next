@@ -8,6 +8,7 @@ namespace SiGen.Maths
 {
     public static class MathD
     {
+        // Basic math
         public static PreciseDouble Abs(PreciseDouble value)
         {
             if (value < 0)
@@ -29,7 +30,7 @@ namespace SiGen.Maths
         {
             PreciseDouble maxVal = a;
             for (int i = 0; i < b.Length; i++)
-                maxVal = Max(a, b[i]);
+                maxVal = Max(maxVal, b[i]);
             return maxVal;
         }
 
@@ -37,23 +38,36 @@ namespace SiGen.Maths
         {
             PreciseDouble minVal = a;
             for (int i = 0; i < b.Length; i++)
-                minVal = Min(a, b[i]);
+                minVal = Min(minVal, b[i]);
             return minVal;
         }
 
-        public static PreciseDouble Cos(PreciseDouble value)
+        // Rounding
+        public static PreciseDouble Round(PreciseDouble pd)
         {
-            return Math.Cos(value.DoubleValue);
+            return (PreciseDouble)Math.Round(pd.DoubleValue);
+        }
+
+        // Trigonometry
+        public static PreciseDouble Cos(PreciseDouble pd)
+        {
+            if (pd.IsSpecialValue || PreciseDouble.DISABLE_DECIMALS)
+                return (PreciseDouble)Math.Cos(pd.DoubleValue);
+            return DecimalMath.Cos(pd.DecimalValue);
         }
 
         public static PreciseDouble Sin(PreciseDouble pd)
         {
-            return (PreciseDouble)Math.Sin(pd.DoubleValue);
+            if (pd.IsSpecialValue || PreciseDouble.DISABLE_DECIMALS)
+                return (PreciseDouble)Math.Sin(pd.DoubleValue);
+            return DecimalMath.Sin(pd.DecimalValue);
         }
 
         public static PreciseDouble Sqrt(PreciseDouble pd)
         {
-            return (PreciseDouble)Math.Sqrt(pd.DoubleValue);
+            if (pd.IsSpecialValue || PreciseDouble.DISABLE_DECIMALS)
+                return (PreciseDouble)Math.Sqrt(pd.DoubleValue);
+            return DecimalMath.Sqrt(pd.DecimalValue);
         }
 
         public static PreciseDouble Acos(PreciseDouble pd)
@@ -63,24 +77,35 @@ namespace SiGen.Maths
 
         public static PreciseDouble Atan(PreciseDouble pd)
         {
-            return (PreciseDouble)Math.Atan(pd.DoubleValue);
+            if (pd.IsSpecialValue || PreciseDouble.DISABLE_DECIMALS)
+                return (PreciseDouble)Math.Atan(pd.DoubleValue);
+            return DecimalMath.Atan(pd.DecimalValue);
+            //return (PreciseDouble)Math.Atan(pd.DoubleValue);
         }
 
         public static PreciseDouble Asin(PreciseDouble pd)
         {
-            return (PreciseDouble)Math.Asin(pd.DoubleValue);
+            if (pd.IsSpecialValue || PreciseDouble.DISABLE_DECIMALS)
+                return (PreciseDouble)Math.Asin(pd.DoubleValue);
+            return DecimalMath.Asin(pd.DecimalValue);
+            //return (PreciseDouble)Math.Asin(pd.DoubleValue);
         }
 
         public static PreciseDouble Atan2(PreciseDouble y, PreciseDouble x)
         {
-            return (PreciseDouble)Math.Atan2(y.DoubleValue, x.DoubleValue);
+            if (x.IsSpecialValue || y.IsSpecialValue || PreciseDouble.DISABLE_DECIMALS)
+                return (PreciseDouble)Math.Atan2(y.DoubleValue, x.DoubleValue);
+            return DecimalMath.Atan2(y.DecimalValue, x.DecimalValue);
         }
 
         public static PreciseDouble Pow(PreciseDouble x, PreciseDouble y)
         {
-            return Math.Pow(x.DoubleValue, y.DoubleValue);
+            if (x.IsSpecialValue || y.IsSpecialValue || PreciseDouble.DISABLE_DECIMALS)
+                return Math.Pow(x.DoubleValue, y.DoubleValue);
+            return DecimalMath.Power(x.DecimalValue, y.DecimalValue);
         }
 
+        // Clamping
         public static PreciseDouble Clamp(PreciseDouble x)
         {
             return x > 1d ? 1d : (x < 0 ? 0d : x);
@@ -91,11 +116,7 @@ namespace SiGen.Maths
             return x > max ? max : (x < min ? min : x);
         }
 
-        public static PreciseDouble Round(PreciseDouble pd)
-        {
-            return (PreciseDouble)Math.Round(pd.DoubleValue);
-        }
-
+        // Comparison
         public static bool EqualOrClose(this PreciseDouble n1, PreciseDouble n2)
         {
             return EqualOrClose(n1, n2, double.Epsilon);
@@ -106,11 +127,11 @@ namespace SiGen.Maths
             return Abs(n1 - n2) <= tolerence;
         }
 
-        public static PreciseDouble Lerp(PreciseDouble start, PreciseDouble end, PreciseDouble t)
+        // Interpolation
+        public static PreciseDouble Lerp(PreciseDouble start, PreciseDouble end, PreciseDouble t, bool clamp = true)
         {
-            // Ensure t is clamped between 0 and 1
-            t = Max(0.0, Min(1.0, t));
-
+            if (clamp)
+                t = Max(0.0, Min(1.0, t));
             // Perform linear interpolation
             return start + (end - start) * t;
         }
@@ -120,12 +141,11 @@ namespace SiGen.Maths
             return (v - a) / (b - a);
         }
 
-        public static PreciseDouble Map(PreciseDouble iMin, PreciseDouble iMax, PreciseDouble oMin, PreciseDouble oMax, PreciseDouble v)
+        // Mapping
+        public static PreciseDouble Map(PreciseDouble iMin, PreciseDouble iMax, PreciseDouble oMin, PreciseDouble oMax, PreciseDouble v, bool clamp = true)
         {
             PreciseDouble t = InvLerp(iMin, iMax, v);
-            return Lerp(oMin, oMax, t);
+            return Lerp(oMin, oMax, t, clamp);
         }
-
-        
     }
 }

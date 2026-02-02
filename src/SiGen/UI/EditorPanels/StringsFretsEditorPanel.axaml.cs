@@ -13,7 +13,7 @@ public partial class StringsFretsEditorPanel : UserControl
         StringsEditor.StringCountChanged += StringsEditor_StringCountChanged;
     }
 
-    private void StringsEditor_StringCountChanged(object? sender, Controls.StringCountChangedEventArgs e)
+    private void StringsEditor_StringCountChanged(object? sender, Controls.AddRemoveStringEventArgs e)
     {
         if (DataContext is ViewModels.EditorPanels.StringsFretsPanelViewModel viewModel)
         {

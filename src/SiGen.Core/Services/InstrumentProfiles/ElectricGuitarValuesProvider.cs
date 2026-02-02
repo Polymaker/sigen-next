@@ -1,7 +1,10 @@
 ﻿using SiGen.Data.Common;
 using SiGen.Data.Presets;
+using SiGen.Layouts.Configuration;
+using SiGen.Layouts.Data;
 using SiGen.Localization;
 using SiGen.Measuring;
+using SiGen.Physics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -60,6 +63,59 @@ namespace SiGen.Services.InstrumentProfiles
                 new ScaleLengthPreset("PRS", Measure.In(25.0)),
                 new ScaleLengthPreset("Fender/Ibanez", Measure.In(25.5)),
                 new ScaleLengthPreset("Baritone", Measure.In(27.0)),
+            ];
+        }
+
+        public override InstrumentLayoutConfiguration GetDefaultConfiguration()
+        {
+            return GetSingleScaleConfiguration(Measure.In(25.5), Measure.Mm(7), Measure.Mm(9.67), Measure.Mm(3), 24);
+        }
+
+        public override IReadOnlyList<LayoutTemplate> GetLayoutTemplates()
+        {
+            var sevenStringsConfig = GetSingleScaleConfiguration(Measure.In(25.5), Measure.Mm(7), Measure.Mm(9.67), Measure.Mm(3), 24);
+            sevenStringsConfig.NumberOfStrings = 7;
+            sevenStringsConfig.StringConfigurations.Insert(0, new SingleStringConfiguration
+            {
+                Tuning = new NoteAndOctave(NoteName.B, 1),
+                Gauge = Measure.In(0.054)
+            });
+
+            var eightStringsConfig = GetSingleScaleConfiguration(Measure.In(27), Measure.Mm(7), Measure.Mm(9.4), Measure.Mm(3), 24);
+            eightStringsConfig.NumberOfStrings = 8;
+            eightStringsConfig.Fingerboard.CompensateMarginsForStrings = true;
+            eightStringsConfig.StringConfigurations.Insert(0, new SingleStringConfiguration
+            {
+                Tuning = new NoteAndOctave(NoteName.Gb, 1),
+                Gauge = Measure.In(0.060)
+            });
+            eightStringsConfig.StringConfigurations.Insert(1, new SingleStringConfiguration
+            {
+                Tuning = new NoteAndOctave(NoteName.B, 1),
+                Gauge = Measure.In(0.054)
+            });
+
+            var multiScaleConfig = GetSingleScaleConfiguration(Measure.In(25.5), Measure.Mm(7), Measure.Mm(9.67), Measure.Mm(3), 24);
+            multiScaleConfig.NumberOfStrings = 7;
+            multiScaleConfig.StringConfigurations.Insert(0, new SingleStringConfiguration
+            {
+                Tuning = new NoteAndOctave(NoteName.B, 1),
+                Gauge = Measure.In(0.054)
+            });
+
+            multiScaleConfig.ScaleLength.Mode = ScaleLengthMode.Multiscale;
+            multiScaleConfig.ScaleLength.CalculationMethod = ScaleLengthCalculationMethod.AlongString;
+            multiScaleConfig.ScaleLength.BassScale = Measure.In(27);
+            multiScaleConfig.ScaleLength.TrebleScale = Measure.In(25.5);
+            multiScaleConfig.Fingerboard.CompensateMarginsForStrings = true;
+            return [
+                new LayoutTemplate("Fender", 
+                    GetSingleScaleConfiguration(Measure.In(25.5), Measure.Mm(7), Measure.Mm(10.5), Measure.Mm(3.5), 22)),
+                new LayoutTemplate("Gibson",
+                    GetSingleScaleConfiguration(Measure.In(24.75), Measure.Mm(7.1), Measure.Mm(10.4), Measure.Mm(4), 22)),
+                new LayoutTemplate($"7 {Texts.Preset_Strings}", sevenStringsConfig),
+                new LayoutTemplate($"8 {Texts.Preset_Strings}", eightStringsConfig),
+                new LayoutTemplate($"{Texts.ScaleLengthMode_Multiscale} 7 {Texts.Preset_Strings}", multiScaleConfig),
             ];
         }
     }

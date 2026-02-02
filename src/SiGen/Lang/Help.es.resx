@@ -143,4 +143,18 @@ Los valores positivos inclinan los trastes hacia un lado, los negativos hacia el
 • **Centrado/Igual**: Las cuerdas se espacian de forma que la distancia entre el centro de una cuerda y el centro de la siguiente sea igual, independientemente del calibre de la cuerda.
 • **Manual**: La posición de las cuerdas se ajusta manualmente. El modo de espaciado se ignora y puedes colocar cada cuerda exactamente donde quieras.</value>
   </data>
+  <data name="ScaleLength_MultiScaleRatio" xml:space="preserve">
+    <value>Controla qué traste está recto (perpendicular a la línea central) en un instrumento multiescala.
+Introduce un valor de 0 a 100 o selecciona un traste para alinear desde el menú desplegable.
+Valores altos hacen que los trastes "apunten" hacia el puente, valores bajos hacia la cejuela.</value>
+  </data>
+  <data name="LayoutCenterAlignment_Help" xml:space="preserve">
+    <value>Elige cómo se posicionan las cuerdas con respecto a la línea central:
+• **Cuerdas exteriores**: Centra las cuerdas exteriores equidistantes de la línea central.
+• **Cuerdas centrales**: Alinea la(s) cuerda(s) central(es) con la línea central.
+• **Diapasón**: Centra por los bordes del diapasón (igual que Cuerdas exteriores cuando los márgenes son iguales).
+• **Cuerdas simétricas**: *(Solo multiescala)* Ajusta el espaciado para mantener distribución simétrica en cejuela y puente.
+• **Diapasón simétrico**: *(Solo multiescala)* Como Cuerdas simétricas, pero considera márgenes graves/agudos diferentes.
+• **Manual**: Establece la alineación manualmente (0 = lado grave alineado, 1 = lado agudo alineado, 0,5 = centrado).</value>
+  </data>
 </root>

@@ -72,5 +72,14 @@ namespace SiGen.Layouts.Configuration
             else if (side == FingerboardSide.Treble && StringDistances.Count > 0)
                 StringDistances.RemoveAt(StringDistances.Count - 1);
         }
+
+        public Measure GetDistance(int index)
+        {
+            if (StringDistances.Count == 1)
+                return StringDistances[0];
+            else if(index < StringDistances.Count)
+                return StringDistances[index];
+            throw new ArgumentOutOfRangeException();
+        }
     }
 }

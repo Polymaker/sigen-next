@@ -36,6 +36,7 @@ namespace SiGen.ViewModels.EditorPanels
 
         public void AssignContext(ILayoutDocumentContext context)
         {
+
             //if (LayoutDocumentContext != null)
             //    throw new InvalidOperationException("This panel is already assigned to a document context.");
             LayoutDocumentContext = context ?? throw new ArgumentNullException(nameof(context));

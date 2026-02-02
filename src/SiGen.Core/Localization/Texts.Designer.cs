@@ -277,6 +277,15 @@ namespace SiGen.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Default.
+        /// </summary>
+        public static string Preset_Default {
+            get {
+                return ResourceManager.GetString("Preset_Default", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Narrow.
         /// </summary>
         public static string Preset_Narrow {
@@ -291,6 +300,15 @@ namespace SiGen.Localization {
         public static string Preset_Standard {
             get {
                 return ResourceManager.GetString("Preset_Standard", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Strings.
+        /// </summary>
+        public static string Preset_Strings {
+            get {
+                return ResourceManager.GetString("Preset_Strings", resourceCulture);
             }
         }
         

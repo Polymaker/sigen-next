@@ -41,6 +41,11 @@ namespace SiGen.Layouts.Elements
             return Segment.ContainsString(index);
         }
 
+        public bool ContainsFret(int fretIndex)
+        {
+            return Segment.FretPoints.Any(x => !x.IsReference && x.FretIndex == fretIndex);
+        }
+
         public bool HasFingerboardSide(FingerboardSide side)
         {
             if (side == FingerboardSide.Bass)

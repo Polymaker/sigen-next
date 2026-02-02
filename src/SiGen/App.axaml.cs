@@ -3,8 +3,10 @@ using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Data.Core;
 using Avalonia.Data.Core.Plugins;
 using Avalonia.Markup.Xaml;
+using Avalonia.Utilities;
 using Microsoft.Extensions.DependencyInjection;
 using SiGen.DependencyInjection;
+using SiGen.Measuring;
 using SiGen.Services;
 using SiGen.ViewModels;
 using SiGen.Views;
@@ -44,7 +46,7 @@ public partial class App : Application
         collection.AddSiGenServices();
 
 
-        CultureInfo.CurrentUICulture = new CultureInfo("fr-CA");
+        CultureInfo.CurrentUICulture = new CultureInfo("en-CA");
 
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
@@ -52,7 +54,7 @@ public partial class App : Application
             //collection.AddSingleton<IFileDialogService, DummyFileDialogService>();
             var mainWindow = new MainWindow();
             collection.AddSingleton<IDialogService, DesktopDialogService>(sp => new DesktopDialogService(mainWindow, sp));
-            
+            collection.AddSingleton<LayoutDocumentModelFactory>();
             Services = collection.BuildServiceProvider();
             mainWindow.DataContext = Services.GetService<DesktopMainViewModel>();
             desktop.MainWindow = mainWindow;
@@ -60,7 +62,7 @@ public partial class App : Application
         else if (ApplicationLifetime is ISingleViewApplicationLifetime singleViewPlatform)
         {
             collection.AddSingleton<IDialogService, MockDialogService>();
-
+            collection.AddSingleton<LayoutDocumentModelFactory>();
             Services = collection.BuildServiceProvider();
             singleViewPlatform.MainView = new MobileMainView
             {

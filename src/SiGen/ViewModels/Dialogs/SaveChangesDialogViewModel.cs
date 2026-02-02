@@ -11,7 +11,7 @@ namespace SiGen.ViewModels.Dialogs
 
         public ICommand SaveCommand { get; }
         public ICommand DontSaveCommand { get; }
-        public ICommand CancelCommand { get; }
+        //public ICommand CancelCommand { get; }
 
         public SaveChangesDialogViewModel(string documentName = "Untitled Document")
         {
@@ -20,7 +20,8 @@ namespace SiGen.ViewModels.Dialogs
 
             SaveCommand = new RelayCommand(OnSave);
             DontSaveCommand = new RelayCommand(OnDontSave);
-            CancelCommand = new RelayCommand(OnCancel);
+            ShowTitleBar = false;
+            //CancelCommand = new RelayCommand(OnCancel);
         }
 
         private void OnSave()
@@ -33,7 +34,12 @@ namespace SiGen.ViewModels.Dialogs
             CompleteDialog(SaveChangesResult.DontSave);
         }
 
-        private void OnCancel()
+        //private void OnCancel()
+        //{
+        //    CompleteDialog(SaveChangesResult.Cancel);
+        //}
+
+        public override void CancelDialog()
         {
             CompleteDialog(SaveChangesResult.Cancel);
         }

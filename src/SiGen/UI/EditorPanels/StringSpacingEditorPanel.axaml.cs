@@ -29,6 +29,7 @@ public partial class StringSpacingEditorPanel : UserControl
         base.OnLoaded(e);
 
         RebuildPresetFlyouts();
+        UpdateSpreadMinMax();
         //var nutSliderFlyout = FlyoutBase.GetAttachedFlyout(NutCenterAlignmentBox);
         //if (nutSliderFlyout != null)
         //    nutSliderFlyout.Closed += NutSliderFlyout_Closed;
@@ -43,6 +44,7 @@ public partial class StringSpacingEditorPanel : UserControl
         {
             _attachedViewModel.InstrumentTypeChanged -= ViewModel_InstrumentTypeChanged;
             _attachedViewModel.PropertyChanged -= ViewModel_PropertyChanged;
+            _attachedViewModel.NumberOfStringsChanged -= ViewModel_NumberOfStringsChanged;
             _attachedViewModel = null;
         }
 
@@ -50,13 +52,31 @@ public partial class StringSpacingEditorPanel : UserControl
         {
             viewModel.InstrumentTypeChanged += ViewModel_InstrumentTypeChanged;
             viewModel.PropertyChanged += ViewModel_PropertyChanged;
+            viewModel.NumberOfStringsChanged += ViewModel_NumberOfStringsChanged;
             _attachedViewModel = viewModel;
-            if (IsLoaded)
+            if (IsLoaded) 
+            {
                 RebuildPresetFlyouts();
+                UpdateSpreadMinMax();
+            }
+
         }
     }
 
-    
+    private void ViewModel_NumberOfStringsChanged(object? sender, EventArgs e)
+    {
+        UpdateSpreadMinMax();
+    }
+
+    private void UpdateSpreadMinMax()
+    {
+        if (ViewModel == null) return;
+
+        NutStringSpreadBox.MinimumValue = Measuring.Measure.Mm(2) * (ViewModel.NumberOfStrings - 1);
+        NutStringSpreadBox.MaximumValue = Measuring.Measure.Mm(25) * (ViewModel.NumberOfStrings - 1);
+        BridgeStringSpreadBox.MinimumValue = Measuring.Measure.Mm(2) * (ViewModel.NumberOfStrings - 1);
+        BridgeStringSpreadBox.MaximumValue = Measuring.Measure.Mm(25) * (ViewModel.NumberOfStrings - 1);
+    }
 
     //private void NutSliderFlyout_Closed(object? sender, System.EventArgs e)
     //{
@@ -90,6 +110,11 @@ public partial class StringSpacingEditorPanel : UserControl
         {
             BridgeSpacingInfoButton.IsVisible = BridgeSpacingInfoButton.Flyout != null && ViewModel!.BridgeSpacingMode != Layouts.Data.StringSpacingMode.Manual;
         }
+        else if (e.PropertyName == nameof(ViewModel.BridgeSpacingMode))
+        {
+            BridgeSpacingInfoButton.IsVisible = BridgeSpacingInfoButton.Flyout != null && ViewModel!.BridgeSpacingMode != Layouts.Data.StringSpacingMode.Manual;
+        }
+        //NutStringSpreadBox
     }
 
     #region Info loading

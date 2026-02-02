@@ -292,4 +292,22 @@ Abre un archivo reciente para continuar tu trabajo o crea un nuevo diseño con u
   <data name="StringSpacingEditorPanel.SpacingPresetHeader" xml:space="preserve">
     <value>Espaciamientos comunes</value>
   </data>
+  <data name="StringCourseLabel" xml:space="preserve">
+    <value>Orden</value>
+  </data>
+  <data name="FingerboardEnd.Nut" xml:space="preserve">
+    <value>Cejuela</value>
+  </data>
+  <data name="FingerboardEnd.Bridge" xml:space="preserve">
+    <value>Puente</value>
+  </data>
+  <data name="Editor.MarginMode.NutBridge" xml:space="preserve">
+    <value>Cejuela y Puente</value>
+  </data>
+  <data name="Editor.MarginMode.BassTreble" xml:space="preserve">
+    <value>Najo y Agudos</value>
+  </data>
+  <data name="Editor.MarginMode.All" xml:space="preserve">
+    <value>Única</value>
+  </data>
 </root>

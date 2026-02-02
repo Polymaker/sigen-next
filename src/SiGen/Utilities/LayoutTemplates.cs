@@ -18,17 +18,17 @@ namespace SiGen.Utilities
             layoutConfig.NumberOfStrings = 6;
             layoutConfig.InitializeStringConfigs();
             ((SingleStringConfiguration)layoutConfig.StringConfigurations[0]).Gauge = SiGen.Measuring.Measure.In(0.046);
-            ((SingleStringConfiguration)layoutConfig.StringConfigurations[0]).Tuning = PitchInterval.FromNote(NoteName.E, 2);
+            ((SingleStringConfiguration)layoutConfig.StringConfigurations[0]).Tuning = new NoteAndOctave(NoteName.E, 2);
             ((SingleStringConfiguration)layoutConfig.StringConfigurations[1]).Gauge = SiGen.Measuring.Measure.In(0.036);
-            ((SingleStringConfiguration)layoutConfig.StringConfigurations[1]).Tuning = PitchInterval.FromNote(NoteName.A, 2);
+            ((SingleStringConfiguration)layoutConfig.StringConfigurations[1]).Tuning = new NoteAndOctave(NoteName.A, 2);
             ((SingleStringConfiguration)layoutConfig.StringConfigurations[2]).Gauge = SiGen.Measuring.Measure.In(0.026);
-            ((SingleStringConfiguration)layoutConfig.StringConfigurations[2]).Tuning = PitchInterval.FromNote(NoteName.D, 3);
+            ((SingleStringConfiguration)layoutConfig.StringConfigurations[2]).Tuning = new NoteAndOctave(NoteName.D, 3);
             ((SingleStringConfiguration)layoutConfig.StringConfigurations[3]).Gauge = SiGen.Measuring.Measure.In(0.017);
-            ((SingleStringConfiguration)layoutConfig.StringConfigurations[3]).Tuning = PitchInterval.FromNote(NoteName.G, 3);
+            ((SingleStringConfiguration)layoutConfig.StringConfigurations[3]).Tuning = new NoteAndOctave(NoteName.G, 3);
             ((SingleStringConfiguration)layoutConfig.StringConfigurations[4]).Gauge = SiGen.Measuring.Measure.In(0.013);
-            ((SingleStringConfiguration)layoutConfig.StringConfigurations[4]).Tuning = PitchInterval.FromNote(NoteName.B, 3);
+            ((SingleStringConfiguration)layoutConfig.StringConfigurations[4]).Tuning = new NoteAndOctave(NoteName.B, 3);
             ((SingleStringConfiguration)layoutConfig.StringConfigurations[5]).Gauge = SiGen.Measuring.Measure.In(0.01);
-            ((SingleStringConfiguration)layoutConfig.StringConfigurations[5]).Tuning = PitchInterval.FromNote(NoteName.E, 4);
+            ((SingleStringConfiguration)layoutConfig.StringConfigurations[5]).Tuning = new NoteAndOctave(NoteName.E, 4);
 
             layoutConfig.NutSpacing.CenterAlignment = LayoutCenterAlignment.OuterStrings;
             layoutConfig.NutSpacing.SpacingMode = StringSpacingMode.Proportional;
@@ -56,25 +56,21 @@ namespace SiGen.Utilities
             layoutConfig.InstrumentType = Data.Common.InstrumentType.Custom;
             layoutConfig.NumberOfStrings = 7;
             layoutConfig.InitializeStringConfigs();
-            ((SingleStringConfiguration)layoutConfig.StringConfigurations[0]).Gauge = SiGen.Measuring.Measure.In(0.046);
-            ((SingleStringConfiguration)layoutConfig.StringConfigurations[0]).Tuning = PitchInterval.FromNote(NoteName.E, 2);
-            ((SingleStringConfiguration)layoutConfig.StringConfigurations[1]).Gauge = SiGen.Measuring.Measure.In(0.036);
-            ((SingleStringConfiguration)layoutConfig.StringConfigurations[1]).Tuning = PitchInterval.FromNote(NoteName.A, 2);
-            ((SingleStringConfiguration)layoutConfig.StringConfigurations[2]).Gauge = SiGen.Measuring.Measure.In(0.026);
-            ((SingleStringConfiguration)layoutConfig.StringConfigurations[2]).Tuning = PitchInterval.FromNote(NoteName.D, 3);
-            ((SingleStringConfiguration)layoutConfig.StringConfigurations[3]).Gauge = SiGen.Measuring.Measure.In(0.017);
-            ((SingleStringConfiguration)layoutConfig.StringConfigurations[3]).Tuning = PitchInterval.FromNote(NoteName.G, 3);
-            ((SingleStringConfiguration)layoutConfig.StringConfigurations[4]).Gauge = SiGen.Measuring.Measure.In(0.013);
-            ((SingleStringConfiguration)layoutConfig.StringConfigurations[4]).Tuning = PitchInterval.FromNote(NoteName.B, 3);
-            ((SingleStringConfiguration)layoutConfig.StringConfigurations[5]).Gauge = SiGen.Measuring.Measure.In(0.01);
-            ((SingleStringConfiguration)layoutConfig.StringConfigurations[5]).Tuning = PitchInterval.FromNote(NoteName.E, 4);
-            for (int i = layoutConfig.NumberOfStrings - 1; i > 1; i--)
-            {
-                ((SingleStringConfiguration)layoutConfig.StringConfigurations[i]).Gauge = ((SingleStringConfiguration)layoutConfig.StringConfigurations[i - 2]).Gauge;
-                ((SingleStringConfiguration)layoutConfig.StringConfigurations[i]).Tuning = ((SingleStringConfiguration)layoutConfig.StringConfigurations[i - 2]).Tuning;
-            }
-            ((SingleStringConfiguration)layoutConfig.StringConfigurations[0]).Gauge = SiGen.Measuring.Measure.In(0.130);
-            ((SingleStringConfiguration)layoutConfig.StringConfigurations[1]).Gauge = SiGen.Measuring.Measure.In(0.100);
+            ((SingleStringConfiguration)layoutConfig.StringConfigurations[0]).Gauge = SiGen.Measuring.Measure.In(0.105);
+            ((SingleStringConfiguration)layoutConfig.StringConfigurations[0]).Tuning = new NoteAndOctave(NoteName.E, 1);
+            ((SingleStringConfiguration)layoutConfig.StringConfigurations[1]).Gauge = SiGen.Measuring.Measure.In(0.080);
+            ((SingleStringConfiguration)layoutConfig.StringConfigurations[1]).Tuning = new NoteAndOctave(NoteName.A, 1);
+            ((SingleStringConfiguration)layoutConfig.StringConfigurations[2]).Gauge = SiGen.Measuring.Measure.In(0.046);
+            ((SingleStringConfiguration)layoutConfig.StringConfigurations[2]).Tuning = new NoteAndOctave(NoteName.E, 2);
+            ((SingleStringConfiguration)layoutConfig.StringConfigurations[3]).Gauge = SiGen.Measuring.Measure.In(0.036);
+            ((SingleStringConfiguration)layoutConfig.StringConfigurations[3]).Tuning = new NoteAndOctave(NoteName.A, 2);
+            ((SingleStringConfiguration)layoutConfig.StringConfigurations[4]).Gauge = SiGen.Measuring.Measure.In(0.026);
+            ((SingleStringConfiguration)layoutConfig.StringConfigurations[4]).Tuning = new NoteAndOctave(NoteName.D, 3);
+            ((SingleStringConfiguration)layoutConfig.StringConfigurations[5]).Gauge = SiGen.Measuring.Measure.In(0.017);
+            ((SingleStringConfiguration)layoutConfig.StringConfigurations[5]).Tuning = new NoteAndOctave(NoteName.G, 3);
+            ((SingleStringConfiguration)layoutConfig.StringConfigurations[6]).Gauge = SiGen.Measuring.Measure.In(0.013);
+            ((SingleStringConfiguration)layoutConfig.StringConfigurations[6]).Tuning = new NoteAndOctave(NoteName.B, 3);
+
 
             layoutConfig.NutSpacing.CenterAlignment = LayoutCenterAlignment.SymmetricFingerboard;
             layoutConfig.BridgeSpacing.CenterAlignment = LayoutCenterAlignment.SymmetricFingerboard;
@@ -146,10 +142,10 @@ namespace SiGen.Utilities
             };
             var tunings = new[]
             {
-                PitchInterval.FromNote(NoteName.G, 3), // G3
-                PitchInterval.FromNote(NoteName.D, 4), // D4
-                PitchInterval.FromNote(NoteName.A, 4), // A4
-                PitchInterval.FromNote(NoteName.E, 5)  // E5
+                new NoteAndOctave(NoteName.G, 3), // G3
+                new NoteAndOctave(NoteName.D, 4), // D4
+                new NoteAndOctave(NoteName.A, 4), // A4
+                new NoteAndOctave(NoteName.E, 5)  // E5
             };
 
             for (int i = 0; i < layoutConfig.NumberOfStrings; i++)
@@ -186,13 +182,13 @@ namespace SiGen.Utilities
             layoutConfig.ScaleLength.Mode = ScaleLengthMode.Single;
             layoutConfig.InitializeStringConfigs();
             ((SingleStringConfiguration)layoutConfig.StringConfigurations[0]).Gauge = SiGen.Measuring.Measure.In(0.105);
-            ((SingleStringConfiguration)layoutConfig.StringConfigurations[0]).Tuning = PitchInterval.FromNote(NoteName.E, 1);
+            ((SingleStringConfiguration)layoutConfig.StringConfigurations[0]).Tuning = new NoteAndOctave(NoteName.E, 1);
             ((SingleStringConfiguration)layoutConfig.StringConfigurations[1]).Gauge = SiGen.Measuring.Measure.In(0.080);
-            ((SingleStringConfiguration)layoutConfig.StringConfigurations[1]).Tuning = PitchInterval.FromNote(NoteName.A, 1);
+            ((SingleStringConfiguration)layoutConfig.StringConfigurations[1]).Tuning = new NoteAndOctave(NoteName.A, 1);
             ((SingleStringConfiguration)layoutConfig.StringConfigurations[2]).Gauge = SiGen.Measuring.Measure.In(0.060);
-            ((SingleStringConfiguration)layoutConfig.StringConfigurations[2]).Tuning = PitchInterval.FromNote(NoteName.D, 2);
+            ((SingleStringConfiguration)layoutConfig.StringConfigurations[2]).Tuning = new NoteAndOctave(NoteName.D, 2);
             ((SingleStringConfiguration)layoutConfig.StringConfigurations[3]).Gauge = SiGen.Measuring.Measure.In(0.040);
-            ((SingleStringConfiguration)layoutConfig.StringConfigurations[3]).Tuning = PitchInterval.FromNote(NoteName.G, 2);
+            ((SingleStringConfiguration)layoutConfig.StringConfigurations[3]).Tuning = new NoteAndOctave(NoteName.G, 2);
             layoutConfig.ScaleLength.SingleScale = SiGen.Measuring.Measure.In(34);
 
             layoutConfig.NumberOfFrets = 22;

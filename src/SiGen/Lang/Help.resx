@@ -121,13 +121,13 @@ Positive values angle the frets one way, negative values the other. Leave blank 
 • **Manual**: String positions are set manually. The spacing mode is ignored, and you can place each string exactly where you want.</value>
   </data>
   <data name="LayoutCenterAlignment_Help" xml:space="preserve">
-    <value>Choose how the strings are laid out relative to the center line:
-• **Outer Strings**: Aligns the outermost strings equally from the center line.
+    <value>Choose how the strings are positioned relative to the center line:
+• **Outer Strings**: Centers the outermost strings equally from the center line.
 • **Middle Strings**: Aligns the middle string(s) to the center line.
-• **Fingerboard**: Centers by the edges of the fingerboard, which is usually the same as **Outer Strings** unless the bass and treble margins differ.
-• **Symmetric Strings**: (Multiscale only) Adjust the spacing so that the layout remain symmetric.
-• **Symmetric Fingerboard**: (Multiscale only) Adjust the spacing so that the layout remain symmetric when the bass and treble margins differ.
-• **Manual**: Lets you manually set the alignment using a value from 0 to 1. 0 aligns the bass side straight, 1 aligns the treble side straight, and values in between blend between the two.</value>
+• **Fingerboard**: Centers by the fingerboard edges (same as Outer Strings when margins are equal).
+• **Symmetric Strings**: *(Multiscale only)* Adjusts spacing to maintain symmetric layout at both nut and bridge.
+• **Symmetric Fingerboard**: *(Multiscale only)* Like Symmetric Strings, but accounts for different bass/treble margins.
+• **Manual**: Set alignment manually (0 = bass side aligned, 1 = treble side aligned, 0.5 = centered).</value>
   </data>
   <data name="SingleScale_Presets_Title" xml:space="preserve">
     <value>Here are some common scale length used :</value>
@@ -137,6 +137,8 @@ Positive values angle the frets one way, negative values the other. Leave blank 
 Selecting an instrument type enables info buttons next to certain fields, showing common values and suggestions specific to that instrument.</value>
   </data>
   <data name="ScaleLength_MultiScaleRatio" xml:space="preserve">
-    <value></value>
+    <value>Controls which fret is straight (perpendicular to centerline) on a multiscale instrument.
+Enter any value from 0-100 or select a fret to align from the dropdown.
+Higher values make frets "point" more toward the bridge, lower values toward the nut.</value>
   </data>
 </root>

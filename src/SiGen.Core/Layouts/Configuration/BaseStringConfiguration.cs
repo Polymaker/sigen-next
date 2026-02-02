@@ -1,4 +1,6 @@
-﻿using SiGen.Measuring;
+﻿using SiGen.Layouts.Data;
+using SiGen.Measuring;
+using SiGen.Physics;
 using System.Text.Json.Serialization;
 
 namespace SiGen.Layouts.Configuration
@@ -33,5 +35,31 @@ namespace SiGen.Layouts.Configuration
         /// </summary>
         /// <returns></returns>
         public abstract Measure? GetTotalWidth();
+
+        public abstract Measure GetTotalWidth2(bool includeGauge);
+
+        public void SetGauge(Measure? gauge)
+        {
+            if (this is SingleStringConfiguration ssc)
+                ssc.Gauge = gauge;
+            else if (this is StringGroupConfiguration sgc)
+            {
+                foreach (var str in sgc.Strings)
+                    str.Gauge = gauge;
+            }
+        }
+
+        public void SetTuning(NoteAndOctave? tuning)
+        {
+            if (this is SingleStringConfiguration ssc)
+                ssc.Tuning = tuning;
+            else if (this is StringGroupConfiguration sgc)
+            {
+                foreach (var str in sgc.Strings)
+                    str.Tuning = tuning;
+            }
+        }
+
+        public abstract Measure GetHalfWidth(FingerboardSide side, bool includeGauge);
     }
 }

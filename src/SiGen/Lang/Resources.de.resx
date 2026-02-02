@@ -292,4 +292,22 @@
   <data name="StringSpacingEditorPanel.SpacingPresetHeader" xml:space="preserve">
     <value>Gemeinsame Abstände</value>
   </data>
+  <data name="StringCourseLabel" xml:space="preserve">
+    <value>Chorsaite</value>
+  </data>
+  <data name="FingerboardEnd.Nut" xml:space="preserve">
+    <value>Sattel</value>
+  </data>
+  <data name="FingerboardEnd.Bridge" xml:space="preserve">
+    <value>Steg</value>
+  </data>
+  <data name="Editor.MarginMode.NutBridge" xml:space="preserve">
+    <value>Sattel und Steg</value>
+  </data>
+  <data name="Editor.MarginMode.BassTreble" xml:space="preserve">
+    <value>Bass und Diskant</value>
+  </data>
+  <data name="Editor.MarginMode.All" xml:space="preserve">
+    <value>Einzeln</value>
+  </data>
 </root>

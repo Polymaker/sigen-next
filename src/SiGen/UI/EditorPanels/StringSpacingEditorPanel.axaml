@@ -9,6 +9,7 @@
 			 xmlns:ctrl="using:SiGen.UI.Controls"
 			 xmlns:lang="using:SiGen.Lang"
 			 xmlns:conv="clr-namespace:SiGen.Converters;assembly=SiGen"
+			 xmlns:layoutData="clr-namespace:SiGen.Layouts.Data;assembly=SiGen.Core"
 			 xmlns:materialIcons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia">
 	<UserControl.Resources>
 		<conv:MarkdownToInlinesConverter x:Key="MarkdownConverter" />
@@ -33,17 +34,19 @@
 					   FontSize="12" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Center" Margin="4" />
 			<TextBlock Text="{x:Static lang:Resources.StringSpacingEditorPanel_SpreadHeader}"   FontSize="12" Grid.Row="0" Grid.Column="2" HorizontalAlignment="Center" Margin="4" />
 
-			<ctrl:MeasureTextBox Value="{Binding NutSpacing, Mode=TwoWay}"
+			<ctrl:MeasureTextBox Value="{Binding NutSpacing, Mode=TwoWay}" MinimumValue="2mm" MaximumValue="20mm"
 							     Grid.Column="1" Grid.Row="1" Margin="4,0,4,0" MinHeight="0" Padding="4,6"
 					FontSize="13" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
 					IsVisible="{Binding NutSpacingMode, Converter={StaticResource NotEqualsConverter}, ConverterParameter=Manual}"/>
 			
 			<Button Content="Configure..." FontSize="12" 
 					HorizontalContentAlignment="Center"
+					Command="{Binding EditCustomSpacingCommand}"
+					CommandParameter="{x:Static layoutData:FingerboardEnd.Nut}"
 					IsVisible="{Binding NutSpacingMode, Converter={StaticResource EqualsConverter}, ConverterParameter=Manual}"
 					HorizontalAlignment="Stretch" Grid.Column="1" Grid.Row="1" Margin="4,0,4,0"/>
 			
-			<ctrl:MeasureTextBox Value="{Binding NutStringSpread, Mode=TwoWay}"
+			<ctrl:MeasureTextBox Value="{Binding NutStringSpread, Mode=TwoWay}" x:Name="NutStringSpreadBox"
 								 Grid.Column="2" Grid.Row="1" Margin="4,0,4,0" MinHeight="0" Padding="4,6"
 								 FontSize="13" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
 								 IsReadOnly="{Binding NutSpacingMode, Converter={StaticResource EqualsConverter}, ConverterParameter=Manual}"/>
@@ -84,7 +87,7 @@
 				</ComboBox>
 			</ctrl:CustomFormField.Input>
 			<ctrl:CustomFormField.Help>
-				<TextBlock TextWrapping="Wrap" Width="400"
+				<TextBlock TextWrapping="Wrap" Width="500"
 						   Inlines="{Binding Source={x:Static lang:Help.StringSpacingMode_Help}, Converter={StaticResource MarkdownConverter}}"/>
 			</ctrl:CustomFormField.Help>
 		</ctrl:CustomFormField>
@@ -127,7 +130,7 @@
 				</DockPanel>
 			</ctrl:CustomFormField.Input>
 			<ctrl:CustomFormField.Help>
-				<TextBlock TextWrapping="Wrap" Width="400"
+				<TextBlock TextWrapping="Wrap" Width="500"
 						   Inlines="{Binding Source={x:Static lang:Help.LayoutCenterAlignment_Help}, Converter={StaticResource MarkdownConverter}}"/>
 
 			</ctrl:CustomFormField.Help>
@@ -142,17 +145,22 @@
 			<TextBlock Text="{x:Static lang:Resources.StringSpacingEditorPanel_SpacingHeader}" FontSize="12" Grid.Row="0" Grid.Column="1" HorizontalAlignment="Center" Margin="4" />
 			<TextBlock Text="{x:Static lang:Resources.StringSpacingEditorPanel_SpreadHeader}"  FontSize="12" Grid.Row="0" Grid.Column="2" HorizontalAlignment="Center" Margin="4" />
 
-			<ctrl:MeasureTextBox Value="{Binding BridgeSpacing, Mode=TwoWay}" MinHeight="0" Padding="4,6"
-								 FontSize="13" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
-								 Grid.Column="1" Grid.Row="1" Margin="4,0,4,0"
+			<ctrl:MeasureTextBox Value="{Binding BridgeSpacing, Mode=TwoWay}" 
+								 MinimumValue="2mm" MaximumValue="30mm"
+								 MinHeight="0" Padding="4,6" Margin="4,0,4,0"
+								 FontSize="13" Grid.Column="1" Grid.Row="1"
+								 VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
 								 IsVisible="{Binding BridgeSpacingMode, Converter={StaticResource NotEqualsConverter}, ConverterParameter=Manual}"/>
 
 			<Button Content="Configure..." FontSize="12"
 					HorizontalContentAlignment="Center"
+					Command="{Binding EditCustomSpacingCommand}"
+					CommandParameter="{x:Static layoutData:FingerboardEnd.Bridge}"
 					IsVisible="{Binding BridgeSpacingMode, Converter={StaticResource EqualsConverter}, ConverterParameter=Manual}"
 					HorizontalAlignment="Stretch" Grid.Column="1" Grid.Row="1" Margin="4,0,4,0"/>
 
-			<ctrl:MeasureTextBox Value="{Binding BridgeStringSpread, Mode=TwoWay}" MinHeight="0" Padding="4,6"
+			<ctrl:MeasureTextBox Value="{Binding BridgeStringSpread, Mode=TwoWay}" x:Name="BridgeStringSpreadBox"
+								 MinHeight="0" Padding="4,6"
 								 FontSize="13" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
 								 Grid.Column="2" Grid.Row="1" Margin="4,0,4,0" IsReadOnly="{Binding BridgeSpacingMode, Converter={StaticResource EqualsConverter}, ConverterParameter=Manual}"/>
 
@@ -196,7 +204,7 @@
 				</ComboBox>
 			</ctrl:CustomFormField.Input>
 			<ctrl:CustomFormField.Help>
-				<TextBlock TextWrapping="Wrap" Width="400"
+				<TextBlock TextWrapping="Wrap" Width="500"
 						   Inlines="{Binding Source={x:Static lang:Help.StringSpacingMode_Help}, Converter={StaticResource MarkdownConverter}}"/>
 			</ctrl:CustomFormField.Help>
 		</ctrl:CustomFormField>
@@ -217,7 +225,7 @@
 				</ComboBox>
 			</ctrl:CustomFormField.Input>
 			<ctrl:CustomFormField.Help>
-				<TextBlock TextWrapping="Wrap" Width="400"
+				<TextBlock TextWrapping="Wrap" Width="500"
 						   Inlines="{Binding Source={x:Static lang:Help.LayoutCenterAlignment_Help}, Converter={StaticResource MarkdownConverter}}"/>
 
 			</ctrl:CustomFormField.Help>

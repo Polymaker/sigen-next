@@ -28,6 +28,8 @@
 					<SolidColorBrush x:Key="PanelHeaderForeground">#DFDFDF</SolidColorBrush>
 				</ResourceDictionary>
 			</ResourceDictionary.ThemeDictionaries>
+
+			<x:Double x:Key="FlyoutThemeMaxWidth">1000</x:Double>
 		</ResourceDictionary>
 		
 	</Application.Resources>

@@ -277,7 +277,7 @@ namespace SiGen.Measuring
             return unit switch
             {
                 LengthUnit.Cm => value,
-                LengthUnit.Mm => value / 0.1m,
+                LengthUnit.Mm => value * 10.0,
                 LengthUnit.In => value / 2.54m,
                 LengthUnit.Ft => value / (2.54m * 12m),
                 _ => value
@@ -311,6 +311,16 @@ namespace SiGen.Measuring
         public static Measure Round(Measure value)
         {
             return new Measure(value.Unit, MathD.Round(value.Value));
+        }
+
+        public static Measure Round(Measure value, PreciseDouble step)
+        {
+            return new Measure(value.Unit, MathD.Round(value.Value / step) * step);
+        }
+
+        public static Measure Round(Measure value, PreciseDouble step, LengthUnit unit)
+        {
+            return new Measure(unit, MathD.Round(value[unit] / step) * step);
         }
 
         public static Measure Max(Measure m1, params Measure[] values)
@@ -354,7 +364,7 @@ namespace SiGen.Measuring
                 _ => $"{Unit}" // Fallback for any other unit
             };
 
-            return string.Format(culture, "{0:0.####}{1}", Value, unitText);
+            return string.Format(culture, "{0:0.####}{1}", Value.DoubleValue, unitText);
         }
 
         
