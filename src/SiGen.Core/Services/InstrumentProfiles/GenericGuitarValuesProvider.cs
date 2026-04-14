@@ -210,17 +210,17 @@ namespace SiGen.Services.InstrumentProfiles
 
             config.NutSpacing.CenterAlignment = LayoutCenterAlignment.Fingerboard;
             config.NutSpacing.SpacingMode = StringSpacingMode.Proportional;
-            config.NutSpacing.StringDistances.Add(SiGen.Measuring.Measure.Mm(7.3m));
+            config.NutSpacing.StringDistances.Add(SiGen.Measuring.Measure.Mm(7.3));
 
             config.BridgeSpacing.CenterAlignment = LayoutCenterAlignment.OuterStrings;
             config.BridgeSpacing.SpacingMode = StringSpacingMode.CenterToCenter;
-            config.BridgeSpacing.StringDistances.Add(SiGen.Measuring.Measure.Mm(10.5m));
+            config.BridgeSpacing.StringDistances.Add(SiGen.Measuring.Measure.Mm(10.5));
 
             config.ScaleLength.CalculationMethod = ScaleLengthCalculationMethod.AlongFingerboard;
             config.ScaleLength.Mode = ScaleLengthMode.Single;
-            config.ScaleLength.SingleScale = SiGen.Measuring.Measure.In(25.5m);
+            config.ScaleLength.SingleScale = SiGen.Measuring.Measure.In(25.5);
 
-            config.Fingerboard.SetAllMargins(SiGen.Measuring.Measure.Mm(3.25m));
+            config.Fingerboard.SetAllMargins(SiGen.Measuring.Measure.Mm(3.25));
             config.Fingerboard.CompensateMarginsForStrings = true;
             config.Fingerboard.ExtensionAfterLastFret = Measuring.Measure.Mm(10);
 

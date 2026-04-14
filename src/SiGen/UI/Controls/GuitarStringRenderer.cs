@@ -121,7 +121,7 @@ namespace SiGen.UI.Controls
             if (!Gauge.HasValue) return;
 
 
-            double totalGaugePx = DPI * Gauge.Value[LengthUnit.In].DoubleValue;
+            double totalGaugePx = DPI * Gauge.Value[LengthUnit.In];
             double wrapThicknessPx = totalGaugePx * WRAP_RATIO;
 
             double circumference = Math.PI * totalGaugePx;
@@ -164,7 +164,7 @@ namespace SiGen.UI.Controls
 
         private void RenderPlainString(DrawingContext context, double offsetX)
         {
-            double totalGaugePx = DPI * Gauge!.Value[LengthUnit.In].DoubleValue;
+            double totalGaugePx = DPI * Gauge!.Value[LengthUnit.In];
             var metallicBrush = CreateMetallicBrush(Material ?? StringMaterialType.SteelPlain);
             var rect = new Rect(offsetX, (Bounds.Height - totalGaugePx) / 2.0, Bounds.Width - offsetX, totalGaugePx);
             context.FillRectangle(metallicBrush, rect);
@@ -206,7 +206,7 @@ namespace SiGen.UI.Controls
         {
             // The core wire diameter is usually small, roughly 0.012" - 0.016"
             double coreWireThickness = 0.014 * DPI;
-            double stringSizePx = Gauge!.Value[LengthUnit.In].DoubleValue * DPI;
+            double stringSizePx = Gauge!.Value[LengthUnit.In] * DPI;
             bool isWound = IsWoundString(Material!.Value);
             if (isWound)
                 coreWireThickness = Math.Min(stringSizePx * 0.4, UseBassBallEnd ? 0.03 * DPI : 0.02 * DPI);

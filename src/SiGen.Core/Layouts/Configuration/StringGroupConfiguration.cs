@@ -65,13 +65,13 @@ namespace SiGen.Layouts.Configuration
         public override Measure GetHalfWidth(FingerboardSide side, bool includeGauge)
         {
             if (!includeGauge)
-                return GetTotalSpacing() / 2m;
+                return GetTotalSpacing() / 2d;
 
-            var half = GetTotalSpacing() / 2m;
+            var half = GetTotalSpacing() / 2d;
             if (side == FingerboardSide.Bass && Strings[0].Gauge.HasValue)
-                half += Strings[0].Gauge!.Value / 2m;
+                half += Strings[0].Gauge!.Value / 2d;
             else if (side == FingerboardSide.Treble && Strings[^1].Gauge.HasValue)
-                half += Strings[^1].Gauge!.Value / 2m;
+                half += Strings[^1].Gauge!.Value / 2d;
             return half;
         }
     }

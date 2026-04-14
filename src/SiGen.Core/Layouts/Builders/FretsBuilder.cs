@@ -56,7 +56,7 @@ namespace SiGen.Layouts.Builders
 
             var segments = new List<FretSegment>();
 
-            decimal fretBreakAngleThreshold = 10; //todo: put this setting in the configuration
+            double fretBreakAngleThreshold = 10; //todo: put this setting in the configuration
 
             while (queue.Count > 0)
             {
@@ -86,7 +86,7 @@ namespace SiGen.Layouts.Builders
                     if (currentSegment.Count >= 2)
                     {
                         var lastLine = currentSegment.GetLineFromLastTwoPoints();
-                        var angleRelativeToLastSegment = MathD.Abs(LinearPath.GetAngleBetweenLines(lastLine, candidateSegmentLine));
+                        var angleRelativeToLastSegment = Math.Abs(LinearPath.GetAngleBetweenLines(lastLine, candidateSegmentLine));
                         //If the angle between consecutive segments exceeds fretBreakAngleThreshold, a new segment is started to avoid sharp bends.
                         if (angleRelativeToLastSegment > fretBreakAngleThreshold)
                             break;
@@ -122,8 +122,8 @@ namespace SiGen.Layouts.Builders
 
             return candidatePoints
                 .Where(p => !processed.Contains(p))
-                .Where(p => MathD.Abs(p.Position.ToVector().Y - currentPos.Y) <= toleranceCm)
-                .MinBy(p => MathD.Abs(p.Position.ToVector().Y - currentPos.Y));
+                .Where(p => Math.Abs(p.Position.ToVector().Y - currentPos.Y) <= toleranceCm)
+                .MinBy(p => Math.Abs(p.Position.ToVector().Y - currentPos.Y));
         }
 
         private FretPoint? FindFannedMatch(FretPoint currentPoint, FretSegment currentSegment, List<FretPoint> candidatePoints, HashSet<FretPoint> processed)
@@ -364,7 +364,7 @@ namespace SiGen.Layouts.Builders
         /// If exceeded, a new segment is started to avoid sharp bends.
         /// </param>
         /// <returns>A list of fret segments for rendering and layout.</returns>
-        private List<FretSegment> CreateFretSegments(List<FretPoint> fretPoints, decimal minFretStringAngle, decimal fretBreakAngleThreshold)
+        private List<FretSegment> CreateFretSegments(List<FretPoint> fretPoints, double minFretStringAngle, double fretBreakAngleThreshold)
         {
             var segments = new List<FretSegment>();
 
@@ -398,7 +398,7 @@ namespace SiGen.Layouts.Builders
                 //When evaluating a candidate segment, calculate the angle between the segment and the string.
                 var candidateSegmentLine = new LinearPath(currentPoint.Position.ToVector(), nextPoint.Position.ToVector());
                 var segmentString = Layout.GetStringElement(currentPoint.StringIndex); //the string that the segment is on
-                var angleRelativeToString = MathD.Abs(LinearPath.GetAngleBetweenLines(segmentString.Path, candidateSegmentLine));
+                var angleRelativeToString = Math.Abs(LinearPath.GetAngleBetweenLines(segmentString.Path, candidateSegmentLine));
 
                 //If the angle is less than minFretStringAngle, the segment is too slanted and a new segment is started.
                 bool shouldBreak = angleRelativeToString < minFretStringAngle;
@@ -406,7 +406,7 @@ namespace SiGen.Layouts.Builders
                 if (currentSegment.Count >= 2)
                 {
                     var lastLine = currentSegment.GetLineFromLastTwoPoints();
-                    var angleRelativeToLastSegment = MathD.Abs(LinearPath.GetAngleBetweenLines(lastLine, candidateSegmentLine));
+                    var angleRelativeToLastSegment = Math.Abs(LinearPath.GetAngleBetweenLines(lastLine, candidateSegmentLine));
                     //If the angle between consecutive segments exceeds fretBreakAngleThreshold, a new segment is started to avoid sharp bends.
                     if (angleRelativeToLastSegment > fretBreakAngleThreshold)
                         shouldBreak = true;
@@ -647,7 +647,7 @@ namespace SiGen.Layouts.Builders
             foreach (var point in fretPositions)
             {
                 // Area-based perpendicular distance to the line (cross-product method)
-                var distance = MathD.Abs((dy * (point.X - start.X) - dx * (point.Y - start.Y)) / MathD.Sqrt(lengthSquared));
+                var distance = Math.Abs((dy * (point.X - start.X) - dx * (point.Y - start.Y)) / Math.Sqrt(lengthSquared));
                 if (distance > maxDeviation)
                     return false;
             }

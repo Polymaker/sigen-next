@@ -6,13 +6,13 @@ namespace SiGen.Paths
     {
         public abstract void Offset(VectorD offset);
 
-        public void Offset(PreciseDouble x, PreciseDouble y)
+        public void Offset(double x, double y)
             => Offset(new VectorD(x, y));
 
         public abstract VectorD GetFirstPoint();
         public abstract VectorD GetLastPoint();
 
-        public virtual PathBase? Extend(PreciseDouble amount)
+        public virtual PathBase? Extend(double amount)
         {
             return null;
         }

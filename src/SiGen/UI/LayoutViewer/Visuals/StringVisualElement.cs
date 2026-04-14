@@ -259,9 +259,9 @@ namespace SiGen.UI.LayoutViewer.Visuals
         /// <summary>
         /// Converts a string's normal vector to a rotation angle in degrees.
         /// </summary>
-        public static PreciseDouble GetRotationAngleFromNormal(VectorD normal)
+        public static double GetRotationAngleFromNormal(VectorD normal)
         {
-            var angleRadians = MathD.Atan2(normal.Y, normal.X);
+            var angleRadians = Math.Atan2(normal.Y, normal.X);
             var angleDegrees = angleRadians * 180.0 / Math.PI;
             return angleDegrees;
         }

@@ -21,7 +21,7 @@ namespace SiGen.Measuring
             Y = y;
         }
 
-        public PointM(PreciseDouble x, PreciseDouble y, LengthUnit unit)
+        public PointM(double x, double y, LengthUnit unit)
         {
             X = new Measure(unit, x);
             Y = new Measure(unit, y);
@@ -50,7 +50,7 @@ namespace SiGen.Measuring
             return new PointM(a.X - b.X, a.Y - b.Y);
         }
 
-        public static PointM operator *(PointM a, decimal b)
+        public static PointM operator *(PointM a, double b)
         {
             return new PointM(a.X * b, a.Y * b);
         }
@@ -60,17 +60,17 @@ namespace SiGen.Measuring
             return new PointM(a.X * b.X, a.Y * b.Y);
         }
 
-        public static PointM operator *(decimal a, PointM b)
+        public static PointM operator *(double a, PointM b)
         {
             return new PointM(b.X * a, b.Y * a);
         }
 
-        public static PointM operator /(PointM a, decimal b)
+        public static PointM operator /(PointM a, double b)
         {
             return new PointM(a.X * b, a.Y * b);
         }
 
-        public static PointM operator /(decimal a, PointM b)
+        public static PointM operator /(double a, PointM b)
         {
             return new PointM(b.X / a, b.Y / a);
         }
@@ -80,8 +80,8 @@ namespace SiGen.Measuring
         public static PointM FromVector(VectorD vector, LengthUnit unit = LengthUnit.Cm)
         {
             return new PointM(
-                Measure.FromNormalizedValue(unit, (decimal)vector.X),
-                Measure.FromNormalizedValue(unit, (decimal)vector.Y));
+                Measure.FromNormalizedValue(unit, vector.X),
+                Measure.FromNormalizedValue(unit, vector.Y));
         }
     }
 }

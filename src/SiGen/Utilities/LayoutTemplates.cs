@@ -32,17 +32,17 @@ namespace SiGen.Utilities
 
             layoutConfig.NutSpacing.CenterAlignment = LayoutCenterAlignment.OuterStrings;
             layoutConfig.NutSpacing.SpacingMode = StringSpacingMode.Proportional;
-            layoutConfig.NutSpacing.StringDistances.Add(SiGen.Measuring.Measure.Mm(7.3m));
+            layoutConfig.NutSpacing.StringDistances.Add(SiGen.Measuring.Measure.Mm(7.3));
 
             layoutConfig.BridgeSpacing.CenterAlignment = LayoutCenterAlignment.OuterStrings;
             layoutConfig.BridgeSpacing.SpacingMode = StringSpacingMode.CenterToCenter;
-            layoutConfig.BridgeSpacing.StringDistances.Add(SiGen.Measuring.Measure.Mm(10.5m));
+            layoutConfig.BridgeSpacing.StringDistances.Add(SiGen.Measuring.Measure.Mm(10.5));
 
             layoutConfig.ScaleLength.CalculationMethod = ScaleLengthCalculationMethod.AlongFingerboard;
             layoutConfig.ScaleLength.Mode = ScaleLengthMode.Single;
-            layoutConfig.ScaleLength.SingleScale = SiGen.Measuring.Measure.In(25.5m);
+            layoutConfig.ScaleLength.SingleScale = SiGen.Measuring.Measure.In(25.5);
 
-            layoutConfig.Fingerboard.SetAllMargins(SiGen.Measuring.Measure.Mm(3.25m));
+            layoutConfig.Fingerboard.SetAllMargins(SiGen.Measuring.Measure.Mm(3.25));
             layoutConfig.Fingerboard.CompensateMarginsForStrings = true;
             layoutConfig.Fingerboard.ExtensionAfterLastFret = Measuring.Measure.Mm(10);
             layoutConfig.NumberOfFrets = 24;
@@ -77,15 +77,15 @@ namespace SiGen.Utilities
 
             layoutConfig.NutSpacing.SpacingMode = StringSpacingMode.Manual;
             layoutConfig.BridgeSpacing.SpacingMode = StringSpacingMode.Manual;
-            layoutConfig.NutSpacing.StringDistances.Add(SiGen.Measuring.Measure.Mm(9.2m));
-            layoutConfig.BridgeSpacing.StringDistances.Add(SiGen.Measuring.Measure.Mm(18m));
-            layoutConfig.NutSpacing.StringDistances.Add(SiGen.Measuring.Measure.Mm(8m));
-            layoutConfig.BridgeSpacing.StringDistances.Add(SiGen.Measuring.Measure.Mm(14m));
+            layoutConfig.NutSpacing.StringDistances.Add(SiGen.Measuring.Measure.Mm(9.2));
+            layoutConfig.BridgeSpacing.StringDistances.Add(SiGen.Measuring.Measure.Mm(18));
+            layoutConfig.NutSpacing.StringDistances.Add(SiGen.Measuring.Measure.Mm(8));
+            layoutConfig.BridgeSpacing.StringDistances.Add(SiGen.Measuring.Measure.Mm(14));
             
             for (int i = 0; i < 4; i++)
             {
-                layoutConfig.NutSpacing.StringDistances.Add(SiGen.Measuring.Measure.Mm(7.3m));
-                layoutConfig.BridgeSpacing.StringDistances.Add(SiGen.Measuring.Measure.Mm(10.5m));
+                layoutConfig.NutSpacing.StringDistances.Add(SiGen.Measuring.Measure.Mm(7.3));
+                layoutConfig.BridgeSpacing.StringDistances.Add(SiGen.Measuring.Measure.Mm(10.5));
             }
 
             layoutConfig.ScaleLength.CalculationMethod = ScaleLengthCalculationMethod.AlongString;
@@ -101,7 +101,7 @@ namespace SiGen.Utilities
                 //layoutConfig.StringConfigurations[i].MultiScaleRatio = 1;
             }
             layoutConfig.ScaleLength.MultiScaleRatio = 0.5;
-            layoutConfig.Fingerboard.SetAllMargins(SiGen.Measuring.Measure.Mm(3.25m));
+            layoutConfig.Fingerboard.SetAllMargins(SiGen.Measuring.Measure.Mm(3.25));
             layoutConfig.Fingerboard.CompensateMarginsForStrings = true;
             layoutConfig.Fingerboard.ExtensionAfterLastFret = Measuring.Measure.Mm(12);
             layoutConfig.NumberOfFrets = 24;
@@ -200,7 +200,7 @@ namespace SiGen.Utilities
             layoutConfig.BridgeSpacing.CenterAlignment = LayoutCenterAlignment.OuterStrings;
             layoutConfig.BridgeSpacing.StringDistances.Add(provider.GetBridgeSpacingPresets().ElementAt(1).Spacing);
 
-            layoutConfig.Fingerboard.SetAllMargins(SiGen.Measuring.Measure.Mm(3.25m));
+            layoutConfig.Fingerboard.SetAllMargins(SiGen.Measuring.Measure.Mm(3.25));
             layoutConfig.Fingerboard.CompensateMarginsForStrings = true;
 
             return layoutConfig;

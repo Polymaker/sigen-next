@@ -48,7 +48,7 @@ namespace SiGen.Measuring
             set => Height = Top - value;
         }
 
-        public PointM Center => Location + new PointM(Width * 0.5m, Height * -0.5m);
+        public PointM Center => Location + new PointM(Width * 0.5d, Height * -0.5d);
 
         public RectangleM() 
         {

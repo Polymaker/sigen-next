@@ -15,8 +15,8 @@ namespace SiGen.Measuring
     [TypeConverter(typeof(MeasureTypeConverter))]
     public struct Measure : IComparable, IComparable<Measure>
     {
-        private PreciseDouble? _CachedValue;
-        private PreciseDouble _NormalizedValue;
+        private double? _CachedValue;
+        private double _NormalizedValue;
         private LengthUnit _Unit;
 
         public LengthUnit Unit
@@ -35,7 +35,7 @@ namespace SiGen.Measuring
         /// <summary>
         /// The measure in CM
         /// </summary>
-        public PreciseDouble NormalizedValue
+        public double NormalizedValue
         {
             get => _NormalizedValue;
             //set
@@ -45,7 +45,7 @@ namespace SiGen.Measuring
             //}
         }
 
-        public PreciseDouble Value
+        public double Value
         {
             get
             {
@@ -65,30 +65,30 @@ namespace SiGen.Measuring
             //}
         }
 
-        public PreciseDouble this[LengthUnit unit]
+        public double this[LengthUnit unit]
         {
             get => ConvertFromNormalizedValue(_NormalizedValue, unit);
             //set => _NormalizedValue = ConvertToNormalizedValue(value, unit);
         }
 
-        public bool IsEmpty => _NormalizedValue.IsEmpty;
+        public bool IsEmpty => double.IsNaN(_NormalizedValue);
 
         public static Measure Zero => new(LengthUnit.Cm, 0);
         public static Measure Empty => new Measure();
 
         public Measure() 
         {
-            _NormalizedValue = PreciseDouble.Empty;
+            _NormalizedValue = double.NaN;
         }
 
-        public Measure(LengthUnit unit, PreciseDouble value)
+        public Measure(LengthUnit unit, double value)
         {
             _Unit = unit;
             _CachedValue = value;
             _NormalizedValue = ConvertToNormalizedValue(value, unit);
         }
 
-        public static Measure FromNormalizedValue(LengthUnit unit, PreciseDouble value)
+        public static Measure FromNormalizedValue(LengthUnit unit, double value)
         {
             return new Measure() 
             { 
@@ -98,17 +98,17 @@ namespace SiGen.Measuring
             };
         }
 
-        public static Measure Cm(PreciseDouble value)
+        public static Measure Cm(double value)
         {
             return new Measure(LengthUnit.Cm, value);
         }
 
-        public static Measure Mm(PreciseDouble value)
+        public static Measure Mm(double value)
         {
             return new Measure(LengthUnit.Mm, value);
         }
 
-        public static Measure In(PreciseDouble value)
+        public static Measure In(double value)
         {
             return new Measure(LengthUnit.In, value);
         }
@@ -211,22 +211,22 @@ namespace SiGen.Measuring
 
         #region Arithmetic operators
 
-        public static Measure operator *(Measure m1, PreciseDouble value)
+        public static Measure operator *(Measure m1, double value)
         {
             return new Measure(m1.Unit, m1.Value * value);
         }
 
-        public static Measure operator *(PreciseDouble value, Measure m1)
+        public static Measure operator *(double value, Measure m1)
         {
             return new Measure(m1.Unit, m1.Value * value);
         }
 
-        public static Measure operator /(Measure m1, PreciseDouble value)
+        public static Measure operator /(Measure m1, double value)
         {
             return new Measure(m1.Unit, m1.Value / value);
         }
 
-        public static Measure operator /(PreciseDouble value, Measure m1)
+        public static Measure operator /(double value, Measure m1)
         {
             return new Measure(m1.Unit, m1.Value / value);
         }
@@ -261,37 +261,37 @@ namespace SiGen.Measuring
 
         public static PointM operator *(Vector2 vector, Measure m1)
         {
-            return new PointM(m1 * (decimal)vector.X, m1 * (decimal)vector.Y);
+            return new PointM(m1 * vector.X, m1 * vector.Y);
         }
 
         public static PointM operator *(Measure m1, Vector2 vector)
         {
-            return new PointM(m1 * (decimal)vector.X, m1 * (decimal)vector.Y);
+            return new PointM(m1 * vector.X, m1 * vector.Y);
         }
 
 
         #region Normalized convertion
 
-        public static PreciseDouble ConvertFromNormalizedValue(PreciseDouble value, LengthUnit unit)
+        public static double ConvertFromNormalizedValue(double value, LengthUnit unit)
         {
             return unit switch
             {
                 LengthUnit.Cm => value,
                 LengthUnit.Mm => value * 10.0,
-                LengthUnit.In => value / 2.54m,
-                LengthUnit.Ft => value / (2.54m * 12m),
+                LengthUnit.In => value / 2.54,
+                LengthUnit.Ft => value / (2.54 * 12d),
                 _ => value
             };
         }
 
-        public static PreciseDouble ConvertToNormalizedValue(PreciseDouble value, LengthUnit unit)
+        public static double ConvertToNormalizedValue(double value, LengthUnit unit)
         {
             return unit switch
             {
                 LengthUnit.Cm => value,
-                LengthUnit.Mm => value * 0.1m,
-                LengthUnit.In => value * 2.54m,
-                LengthUnit.Ft => value * (2.54m * 12m),
+                LengthUnit.Mm => value * 0.1,
+                LengthUnit.In => value * 2.54,
+                LengthUnit.Ft => value * (2.54 * 12d),
                 _ => value
             };
         }
@@ -305,34 +305,34 @@ namespace SiGen.Measuring
 
         public static Measure Abs(Measure value)
         {
-            return FromNormalizedValue(value.Unit, MathD.Abs(value.NormalizedValue));
+            return FromNormalizedValue(value.Unit, Math.Abs(value.NormalizedValue));
         }
 
         public static Measure Round(Measure value)
         {
-            return new Measure(value.Unit, MathD.Round(value.Value));
+            return new Measure(value.Unit, Math.Round(value.Value));
         }
 
-        public static Measure Round(Measure value, PreciseDouble step)
+        public static Measure Round(Measure value, double step)
         {
-            return new Measure(value.Unit, MathD.Round(value.Value / step) * step);
+            return new Measure(value.Unit, Math.Round(value.Value / step) * step);
         }
 
-        public static Measure Round(Measure value, PreciseDouble step, LengthUnit unit)
+        public static Measure Round(Measure value, double step, LengthUnit unit)
         {
-            return new Measure(unit, MathD.Round(value[unit] / step) * step);
+            return new Measure(unit, Math.Round(value[unit] / step) * step);
         }
 
         public static Measure Max(Measure m1, params Measure[] values)
         {
-            PreciseDouble maxVal = values.Max(x => x.NormalizedValue);
+            double maxVal = values.Max(x => x.NormalizedValue);
             maxVal = MathD.Max(maxVal, m1.NormalizedValue);
             return FromNormalizedValue(m1.Unit, maxVal);
         }
 
         public static Measure Min(Measure m1, params Measure[] values)
         {
-            PreciseDouble minVal = values.Min(x => x.NormalizedValue);
+            double minVal = values.Min(x => x.NormalizedValue);
             minVal = MathD.Min(minVal, m1.NormalizedValue);
             return FromNormalizedValue(m1.Unit, minVal);
         }
@@ -364,7 +364,7 @@ namespace SiGen.Measuring
                 _ => $"{Unit}" // Fallback for any other unit
             };
 
-            return string.Format(culture, "{0:0.####}{1}", Value.DoubleValue, unitText);
+            return string.Format(culture, "{0:0.####}{1}", Value, unitText);
         }
 
         

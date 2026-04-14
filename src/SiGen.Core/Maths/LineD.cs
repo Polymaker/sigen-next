@@ -10,15 +10,15 @@ namespace SiGen.Maths
     public struct LineD
     {
         private bool _IsVertical;
-        private PreciseDouble _A;
-        private PreciseDouble _B;
-        private PreciseDouble _X;
+        private double _A;
+        private double _B;
+        private double _X;
 
-        public PreciseDouble A { get { return _A; } }
+        public double A { get { return _A; } }
 
-        public PreciseDouble B { get { return _B; } }
+        public double B { get { return _B; } }
 
-        public PreciseDouble X { get { return _X; } }
+        public double X { get { return _X; } }
 
         public bool IsVertical { get { return _IsVertical; } }
 
@@ -34,7 +34,7 @@ namespace SiGen.Maths
             }
         }
 
-        public LineD(PreciseDouble x)
+        public LineD(double x)
         {
             _IsVertical = true;
             _X = x;
@@ -42,7 +42,7 @@ namespace SiGen.Maths
             _B = 0;
         }
 
-        public LineD(PreciseDouble a, PreciseDouble b)
+        public LineD(double a, double b)
         {
             _IsVertical = false;
             _X = 0;
@@ -62,7 +62,7 @@ namespace SiGen.Maths
 
             var slope = dy / dx;
 
-            if (double.IsInfinity(slope.DoubleValue))
+            if (double.IsInfinity(slope))
                 return new LineD(p1.X);//vertical line
 
             var b = left.Y + ((left.X * -1) * slope);
@@ -75,14 +75,14 @@ namespace SiGen.Maths
 
         #region Functions
 
-        public VectorD GetPointForX(PreciseDouble x)
+        public VectorD GetPointForX(double x)
         {
             if (IsVertical)
                 return VectorD.Empty;
             return new VectorD(x, B + (x * A));
         }
 
-        public VectorD GetPointForY(PreciseDouble y)
+        public VectorD GetPointForY(double y)
         {
             if (IsVertical)
                 return new VectorD(X, y);
@@ -167,11 +167,11 @@ namespace SiGen.Maths
             return VectorD.Empty;
         }
 
-        public static PreciseDouble GetAngleBetweenLines(LineD l1, LineD l2)
+        public static double GetAngleBetweenLines(LineD l1, LineD l2)
         {
             // Case 1: both lines vertical
             if (l1.IsVertical && l2.IsVertical)
-                return 0m;
+                return 0d;
 
             // Case 2: one vertical, one not
             if (l1.IsVertical)
@@ -181,29 +181,29 @@ namespace SiGen.Maths
                 return AngleFromVerticalToSlope(l1.A);
 
             // General case
-            PreciseDouble m1 = l1.A;
-            PreciseDouble m2 = l2.A;
+            double m1 = l1.A;
+            double m2 = l2.A;
 
-            PreciseDouble numerator = MathD.Abs(m2 - m1);
-            PreciseDouble denominator = 1 + m1 * m2;
+            double numerator = Math.Abs(m2 - m1);
+            double denominator = 1 + m1 * m2;
 
             // Prevent division by zero
             if (denominator == 0)
-                return 90m;
+                return 90d;
 
-            PreciseDouble angleRad = MathD.Atan(numerator / denominator);
-            PreciseDouble angleDeg = angleRad * 180d / (double)Math.PI;
+            double angleRad = Math.Atan(numerator / denominator);
+            double angleDeg = angleRad * 180d / Math.PI;
 
             return angleDeg;
         }
 
-        private static PreciseDouble AngleFromVerticalToSlope(PreciseDouble slope)
+        private static double AngleFromVerticalToSlope(double slope)
         {
             if (slope == 0)
                 return 90d;
 
-            PreciseDouble angleRad = MathD.Atan(MathD.Abs(1d / slope));
-            PreciseDouble angleDeg = angleRad * 180d / (double)Math.PI;
+            double angleRad = Math.Atan(Math.Abs(1d / slope));
+            double angleDeg = angleRad * 180d / Math.PI;
 
             return angleDeg;
         }

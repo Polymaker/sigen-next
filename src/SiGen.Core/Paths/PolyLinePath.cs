@@ -50,13 +50,13 @@ namespace SiGen.Paths
             }
         }
 
-        public override PathBase? Extend(PreciseDouble amount)
+        public override PathBase? Extend(double amount)
         {
-            if (Points.Count < 2 || amount.IsEmpty || amount.DoubleValue == 0)
+            if (Points.Count < 2 || double.IsNaN(amount) || Math.Abs(amount) <= double.Epsilon)
                 return new PolyLinePath([.. Points]);
 
             var newPoints = new List<VectorD>(Points);
-            var absAmount = MathD.Abs(amount);
+            var absAmount = Math.Abs(amount);
 
             if (amount > 0)
             {

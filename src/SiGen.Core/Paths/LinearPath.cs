@@ -8,7 +8,7 @@ namespace SiGen.Paths
     {
         public VectorD Start { get; set; }
         public VectorD End { get; set; }
-        public PreciseDouble Length => VectorD.Distance(Start, End);
+        public double Length => VectorD.Distance(Start, End);
         public VectorD Direction => (End - Start).Normalized;
 
         public VectorD Size => VectorD.Abs(End - Start);
@@ -56,7 +56,7 @@ namespace SiGen.Paths
             VectorD vector2 = line2.End - line2.Start;
             VectorD vector3 = line1.Start - line2.Start;
 
-            PreciseDouble num = vector.X * vector2.Y - vector.Y * vector2.X;
+            double num = vector.X * vector2.Y - vector.Y * vector2.X;
 
             if (num == 0d)
                 return false;
@@ -106,7 +106,7 @@ namespace SiGen.Paths
 
         public LineD GetEquation() => LineD.FromPoints(Start, End);
 
-        public VectorD GetPointForX(PreciseDouble x)
+        public VectorD GetPointForX(double x)
         {
             return GetEquation().GetPointForX(x);
             //var line2 = new LinePath(new VectorD(x, 100), new VectorD(x, -100));
@@ -115,7 +115,7 @@ namespace SiGen.Paths
             //return VectorD.Empty;
         }
 
-        public VectorD GetPointForY(PreciseDouble y)
+        public VectorD GetPointForY(double y)
         {
             return GetEquation().GetPointForY(y);
             //var line2 = new LinePath(new VectorD(x, 100), new VectorD(x, -100));
@@ -124,7 +124,7 @@ namespace SiGen.Paths
             //return VectorD.Empty;
         }
 
-        public static PreciseDouble GetAngleBetweenLines(LinearPath l1, LinearPath l2)
+        public static double GetAngleBetweenLines(LinearPath l1, LinearPath l2)
         {
             return LineD.GetAngleBetweenLines(l1.GetEquation(), l2.GetEquation());
         }
@@ -189,7 +189,7 @@ namespace SiGen.Paths
 
         #endregion
 
-        public override PathBase? Extend(PreciseDouble amount)
+        public override PathBase? Extend(double amount)
         {
             var dirVec = Direction;
             var start = Start + dirVec * amount * -1;

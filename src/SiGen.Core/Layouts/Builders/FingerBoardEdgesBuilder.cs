@@ -78,7 +78,7 @@ namespace SiGen.Layouts.Builders
         {
             var points = new List<VectorD>();
 
-            PreciseDouble extension = 0;
+            double extension = 0;
             if (Configuration.Fingerboard.ExtensionAfterLastFret.HasValue)
                 extension = Configuration.Fingerboard.ExtensionAfterLastFret.Value.NormalizedValue;
             //VectorD nextMedianPoint = new VectorD(0, 0);
@@ -159,14 +159,14 @@ namespace SiGen.Layouts.Builders
 
             if (side == FingerboardSide.Bass)
             {
-                PreciseDouble offset = Configuration.StringConfigurations[0].GetHalfWidth(side, Configuration.Fingerboard.CompensateMarginsForStrings).NormalizedValue;
+                double offset = Configuration.StringConfigurations[0].GetHalfWidth(side, Configuration.Fingerboard.CompensateMarginsForStrings).NormalizedValue;
 
                 startPt -= PointM.FromVector(nutPerpLine.Vector * (nutMargin.NormalizedValue + offset));
                 endPt -= PointM.FromVector(bridgePerpLine.Vector * (bridgeMargin.NormalizedValue + offset));
             }
             else
             {
-                PreciseDouble offset = Configuration.StringConfigurations[^1].GetHalfWidth(side, Configuration.Fingerboard.CompensateMarginsForStrings).NormalizedValue;
+                double offset = Configuration.StringConfigurations[^1].GetHalfWidth(side, Configuration.Fingerboard.CompensateMarginsForStrings).NormalizedValue;
                 startPt += PointM.FromVector(nutPerpLine.Vector * (nutMargin.NormalizedValue + offset));
                 endPt += PointM.FromVector(bridgePerpLine.Vector * (bridgeMargin.NormalizedValue + offset));
             }

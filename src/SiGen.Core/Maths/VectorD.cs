@@ -8,16 +8,16 @@ namespace SiGen.Maths
     public struct VectorD : IEquatable<VectorD>, IFormattable
     {
         /// <summary>The X component of the vector.</summary>
-        public PreciseDouble X;
+        public double X;
 
         /// <summary>The Y component of the vector.</summary>
-        public PreciseDouble Y;
+        public double Y;
 
-        public VectorD(PreciseDouble value) : this(value, value)
+        public VectorD(double value) : this(value, value)
         {
         }
 
-        public VectorD(PreciseDouble x, PreciseDouble y)
+        public VectorD(double x, double y)
         {
             X = x;
             Y = y;
@@ -54,10 +54,10 @@ namespace SiGen.Maths
 
         public static VectorD Empty
         {
-            get => new VectorD(PreciseDouble.Empty, PreciseDouble.Empty);
+            get => new VectorD(double.NaN, double.NaN);
         }
 
-        public readonly bool IsEmpty => X.IsEmpty && Y.IsEmpty;
+        public readonly bool IsEmpty => double.IsNaN(X) && double.IsNaN(Y);
 
         public VectorD Normalized => Normalize(this);
 
@@ -85,7 +85,7 @@ namespace SiGen.Maths
         /// <returns>The result of the division.</returns>
         /// <remarks>The <see cref="System.Numerics.Vector2D.op_Division" /> method defines the division operation for <see cref="System.Numerics.Vector2D" /> objects.</remarks>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static VectorD operator /(VectorD value1, PreciseDouble value2)
+        public static VectorD operator /(VectorD value1, double value2)
         {
             return value1 / new VectorD(value2);
         }
@@ -119,7 +119,7 @@ namespace SiGen.Maths
         /// <returns>The scaled vector.</returns>
         /// <remarks>The <see cref="System.Numerics.Vector2D.op_Multiply" /> method defines the multiplication operation for <see cref="System.Numerics.Vector2D" /> objects.</remarks>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static VectorD operator *(VectorD left, PreciseDouble right)
+        public static VectorD operator *(VectorD left, double right)
         {
             return left * new VectorD(right);
         }
@@ -130,7 +130,7 @@ namespace SiGen.Maths
         /// <returns>The scaled vector.</returns>
         /// <remarks>The <see cref="System.Numerics.Vector2D.op_Multiply" /> method defines the multiplication operation for <see cref="System.Numerics.Vector2D" /> objects.</remarks>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static VectorD operator *(PreciseDouble left, VectorD right)
+        public static VectorD operator *(double left, VectorD right)
         {
             return right * left;
         }
@@ -159,8 +159,8 @@ namespace SiGen.Maths
         public static VectorD Abs(VectorD value)
         {
             return new VectorD(
-                MathD.Abs(value.X),
-                MathD.Abs(value.Y)
+                Math.Abs(value.X),
+                Math.Abs(value.Y)
             );
         }
 
@@ -191,10 +191,10 @@ namespace SiGen.Maths
         /// <param name="value2">The second point.</param>
         /// <returns>The distance.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static PreciseDouble Distance(VectorD value1, VectorD value2)
+        public static double Distance(VectorD value1, VectorD value2)
         {
-            PreciseDouble distanceSquared = DistanceSquared(value1, value2);
-            return MathD.Sqrt(distanceSquared);
+            double distanceSquared = DistanceSquared(value1, value2);
+            return Math.Sqrt(distanceSquared);
         }
 
         /// <summary>Returns the Euclidean distance squared between two specified points.</summary>
@@ -202,7 +202,7 @@ namespace SiGen.Maths
         /// <param name="value2">The second point.</param>
         /// <returns>The distance squared.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static PreciseDouble DistanceSquared(VectorD value1, VectorD value2)
+        public static double DistanceSquared(VectorD value1, VectorD value2)
         {
             VectorD difference = value1 - value2;
             return Dot(difference, difference);
@@ -223,7 +223,7 @@ namespace SiGen.Maths
         /// <param name="divisor">The scalar value.</param>
         /// <returns>The vector that results from the division.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static VectorD Divide(VectorD left, PreciseDouble divisor)
+        public static VectorD Divide(VectorD left, double divisor)
         {
             return left / divisor;
         }
@@ -233,7 +233,7 @@ namespace SiGen.Maths
         /// <param name="value2">The second vector.</param>
         /// <returns>The dot product.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static PreciseDouble Dot(VectorD value1, VectorD value2)
+        public static double Dot(VectorD value1, VectorD value2)
         {
             return (value1.X * value2.X)
                  + (value1.Y * value2.Y);
@@ -245,9 +245,9 @@ namespace SiGen.Maths
         /// <param name="amount">A value between 0 and 1 that indicates the weight of <paramref name="value2" />.</param>
         /// <returns>The interpolated vector.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static VectorD Lerp(VectorD value1, VectorD value2, PreciseDouble amount)
+        public static VectorD Lerp(VectorD value1, VectorD value2, double amount)
         {
-            return (value1 * (1.0m - amount)) + (value2 * amount);
+            return (value1 * (1.0 - amount)) + (value2 * amount);
         }
 
         /// <summary>Returns a vector whose elements are the maximum of each of the pairs of elements in two specified vectors.</summary>
@@ -291,7 +291,7 @@ namespace SiGen.Maths
         /// <param name="right">The scalar value.</param>
         /// <returns>The scaled vector.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static VectorD Multiply(VectorD left, PreciseDouble right)
+        public static VectorD Multiply(VectorD left, double right)
         {
             return left * right;
         }
@@ -301,7 +301,7 @@ namespace SiGen.Maths
         /// <param name="right">The vector.</param>
         /// <returns>The scaled vector.</returns>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static VectorD Multiply(PreciseDouble left, VectorD right)
+        public static VectorD Multiply(double left, VectorD right)
         {
             return left * right;
         }
@@ -331,8 +331,8 @@ namespace SiGen.Maths
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static VectorD Reflect(VectorD vector, VectorD normal)
         {
-            PreciseDouble dot = Dot(vector, normal);
-            return vector - (2m * dot * normal);
+            double dot = Dot(vector, normal);
+            return vector - (2 * dot * normal);
         }
 
         /// <summary>Returns a vector whose elements are the square root of each of a specified vector's elements.</summary>
@@ -342,8 +342,8 @@ namespace SiGen.Maths
         public static VectorD SquareRoot(VectorD value)
         {
             return new VectorD(
-                MathD.Sqrt(value.X),
-                MathD.Sqrt(value.Y)
+                Math.Sqrt(value.X),
+                Math.Sqrt(value.Y)
             );
         }
 
@@ -389,10 +389,10 @@ namespace SiGen.Maths
         /// <returns>The vector's length.</returns>
         /// <altmember cref="System.Numerics.Vector2D.LengthSquared"/>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public readonly PreciseDouble Length()
+        public readonly double Length()
         {
-            PreciseDouble lengthSquared = LengthSquared();
-            return (PreciseDouble)Math.Sqrt((double)lengthSquared);
+            double lengthSquared = LengthSquared();
+            return Math.Sqrt(lengthSquared);
         }
 
         /// <summary>Returns the length of the vector squared.</summary>
@@ -400,7 +400,7 @@ namespace SiGen.Maths
         /// <remarks>This operation offers better performance than a call to the <see cref="System.Numerics.Vector2D.Length" /> method.</remarks>
         /// <altmember cref="System.Numerics.Vector2D.Length"/>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public readonly PreciseDouble LengthSquared()
+        public readonly double LengthSquared()
         {
             return Dot(this, this);
         }

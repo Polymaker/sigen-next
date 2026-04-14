@@ -73,16 +73,16 @@ namespace SiGen.Paths
             Update();
         }
 
-        public VectorD Interpolate(PreciseDouble t)
+        public VectorD Interpolate(double t)
         {
             t = MathD.Clamp(t);
 
-            PreciseDouble omt = 1d - t;
+            double omt = 1d - t;
 
-            return MathD.Pow(omt, 3f) * ControlPoints[0] +
-                3 * MathD.Pow(omt, 2f) * t * ControlPoints[1] +
-                3 * omt * MathD.Pow(t, 2f) * ControlPoints[2] +
-                MathD.Pow(t, 3f) * ControlPoints[3];
+            return Math.Pow(omt, 3d) * ControlPoints[0] +
+                3 * Math.Pow(omt, 2d) * t * ControlPoints[1] +
+                3 * omt * Math.Pow(t, 2d) * ControlPoints[2] +
+                Math.Pow(t, 3d) * ControlPoints[3];
         }
 
         public override bool Intersects(LinearPath line, out VectorD intersection)
