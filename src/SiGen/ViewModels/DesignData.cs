@@ -18,7 +18,7 @@ namespace SiGen.ViewModels
             get
             {
                 var dialogSvc = new MockDialogService();
-                var model = new DesktopMainViewModel(dialogSvc, new MockSettingsService(), new LayoutDocumentModelFactory(dialogSvc));
+                var model = new DesktopMainViewModel(dialogSvc, new MockSettingsService(), new ViewModelFactory(dialogSvc, new InstrumentValuesProviderFactory(), new MockStringDataService()));
                 model.OpenDocuments.Add(new LayoutDocumentViewModel("Untitled", null, LayoutTemplates.CreateBassGuitarMultiscaleLayout())
                 {
                     HasUnsavedChanges = true

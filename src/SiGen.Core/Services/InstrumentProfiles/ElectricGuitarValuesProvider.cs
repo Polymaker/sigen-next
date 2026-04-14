@@ -73,12 +73,20 @@ namespace SiGen.Services.InstrumentProfiles
 
         public override IReadOnlyList<LayoutTemplate> GetLayoutTemplates()
         {
+            var microtonalConfig = GetSingleScaleConfiguration(Measure.In(25.5), Measure.Mm(7), Measure.Mm(10.5), Measure.Mm(3.5), 40);
+            microtonalConfig.Frets.ETSteps = 24;
+
+            var microtonalConfig2 = GetSingleScaleConfiguration(Measure.In(25.5), Measure.Mm(7), Measure.Mm(10.5), Measure.Mm(3.5), 22);
+            microtonalConfig2.Frets.Intervals = new List<double> { 450, 550 };
+
+
             var sevenStringsConfig = GetSingleScaleConfiguration(Measure.In(25.5), Measure.Mm(7), Measure.Mm(9.67), Measure.Mm(3), 24);
             sevenStringsConfig.NumberOfStrings = 7;
             sevenStringsConfig.StringConfigurations.Insert(0, new SingleStringConfiguration
             {
                 Tuning = new NoteAndOctave(NoteName.B, 1),
-                Gauge = Measure.In(0.054)
+                Gauge = Measure.In(0.054),
+                MaterialType = StringMaterialType.NickelWound
             });
 
             var eightStringsConfig = GetSingleScaleConfiguration(Measure.In(27), Measure.Mm(7), Measure.Mm(9.4), Measure.Mm(3), 24);
@@ -87,12 +95,14 @@ namespace SiGen.Services.InstrumentProfiles
             eightStringsConfig.StringConfigurations.Insert(0, new SingleStringConfiguration
             {
                 Tuning = new NoteAndOctave(NoteName.Gb, 1),
-                Gauge = Measure.In(0.060)
+                Gauge = Measure.In(0.060),
+                MaterialType = StringMaterialType.NickelWound
             });
             eightStringsConfig.StringConfigurations.Insert(1, new SingleStringConfiguration
             {
                 Tuning = new NoteAndOctave(NoteName.B, 1),
-                Gauge = Measure.In(0.054)
+                Gauge = Measure.In(0.054),
+                MaterialType = StringMaterialType.NickelWound
             });
 
             var multiScaleConfig = GetSingleScaleConfiguration(Measure.In(25.5), Measure.Mm(7), Measure.Mm(9.67), Measure.Mm(3), 24);
@@ -100,7 +110,8 @@ namespace SiGen.Services.InstrumentProfiles
             multiScaleConfig.StringConfigurations.Insert(0, new SingleStringConfiguration
             {
                 Tuning = new NoteAndOctave(NoteName.B, 1),
-                Gauge = Measure.In(0.054)
+                Gauge = Measure.In(0.054),
+                MaterialType = StringMaterialType.NickelWound
             });
 
             multiScaleConfig.ScaleLength.Mode = ScaleLengthMode.Multiscale;
@@ -116,6 +127,8 @@ namespace SiGen.Services.InstrumentProfiles
                 new LayoutTemplate($"7 {Texts.Preset_Strings}", sevenStringsConfig),
                 new LayoutTemplate($"8 {Texts.Preset_Strings}", eightStringsConfig),
                 new LayoutTemplate($"{Texts.ScaleLengthMode_Multiscale} 7 {Texts.Preset_Strings}", multiScaleConfig),
+                new LayoutTemplate("Microtonal 40 Frets", microtonalConfig),
+                new LayoutTemplate("Microtonal Test", microtonalConfig2)
             ];
         }
     }

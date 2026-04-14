@@ -1,18 +1,19 @@
 <Application xmlns="https://github.com/avaloniaui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="using:SiGen"
-             x:Class="SiGen.App"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:local="using:SiGen"
+			 x:Class="SiGen.App"
 			 xmlns:materialIcons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
 			 xmlns:controls="using:SiGen.UI.Controls"
 			 xmlns:themes="clr-namespace:Material.Styles.Themes;assembly=Material.Styles"
-             RequestedThemeVariant="Default">
-             <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
+			 xmlns:customStyles="clr-namespace:Sigen.UI.Theme"
+			 RequestedThemeVariant="Default">
+	<!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
 
-    <Application.DataTemplates>
-        <local:ViewLocator/>
-    </Application.DataTemplates>
+	<Application.DataTemplates>
+		<local:ViewLocator/>
+	</Application.DataTemplates>
 
-    
+
 	<Application.Resources>
 		<ResourceDictionary>
 			<ResourceDictionary.MergedDictionaries>
@@ -23,15 +24,19 @@
 			<ResourceDictionary.ThemeDictionaries>
 				<ResourceDictionary x:Key="Light">
 					<SolidColorBrush x:Key="PanelHeaderForeground">#808080</SolidColorBrush>
+					<SolidColorBrush x:Key='PanelBackgroundBrush'>#F5F5F5</SolidColorBrush>
+					<SolidColorBrush x:Key='EvenRowBrush'>#09000000</SolidColorBrush>
 				</ResourceDictionary >
 				<ResourceDictionary x:Key="Dark">
 					<SolidColorBrush x:Key="PanelHeaderForeground">#DFDFDF</SolidColorBrush>
+					<SolidColorBrush x:Key='PanelBackgroundBrush'>#191919</SolidColorBrush>
+					<SolidColorBrush x:Key='EvenRowBrush'>#10FFFFFF</SolidColorBrush>
 				</ResourceDictionary>
 			</ResourceDictionary.ThemeDictionaries>
 
 			<x:Double x:Key="FlyoutThemeMaxWidth">1000</x:Double>
 		</ResourceDictionary>
-		
+
 	</Application.Resources>
 
 	<Application.Styles>
@@ -39,10 +44,7 @@
 		<!--<themes:MaterialTheme PrimaryColor="Purple" SecondaryColor="Lime" />-->
 		<materialIcons:MaterialIconStyles />
 		<StyleInclude Source="avares://Avalonia.Controls.ColorPicker/Themes/Fluent/Fluent.xaml" />
-		<Style Selector="TextBlock.PanelHeader">
-			<Setter Property="FontSize" Value="16"/>
-			<Setter Property="Foreground" Value="{DynamicResource PanelHeaderForeground}"/>
-			<Setter Property="TextAlignment" Value="Center" />
-		</Style>
+
+		<StyleInclude Source="avares://SiGen/UI/Theme/ThemeOverrides.axaml" />
 	</Application.Styles>
 </Application>

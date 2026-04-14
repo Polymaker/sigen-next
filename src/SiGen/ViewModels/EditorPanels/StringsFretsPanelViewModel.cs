@@ -27,11 +27,14 @@ namespace SiGen.ViewModels.EditorPanels
         public List<BaseStringConfiguration> StringConfigurations { get; private set; } = new();
 
         public ICommand EditTuningCommand { get; }
+        public ICommand EditStringsCommand { get; }
 
         public StringsFretsPanelViewModel()
         {
             EditTuningCommand = new RelayCommand(EditTuning);
+            EditStringsCommand = new RelayCommand(EditStrings);
         }
+
 
         protected override void OnConfigurationChanged()
         {
@@ -93,8 +96,10 @@ namespace SiGen.ViewModels.EditorPanels
                 UpdateConfiguration("Add string", config =>
                 {
                     config.NumberOfStrings = StringConfigurations.Count;
-                    config.StringConfigurations = StringConfigurations.ToList();
+                    config.StringConfigurations.Clear();
 
+                    foreach (var strConfig in StringConfigurations)
+                        config.StringConfigurations.Add(strConfig); // Ensure all string configs are added to the configuration
                     if (config.NutSpacing.StringDistances.Count > 1)
                     {
                         var prev = side == FingerboardSide.Bass ? config.NutSpacing.StringDistances[0] : config.NutSpacing.StringDistances[^1];
@@ -192,7 +197,7 @@ namespace SiGen.ViewModels.EditorPanels
                 UpdateConfiguration("Remove string", config =>
                 {
                     config.NumberOfStrings = StringConfigurations.Count;
-                    config.StringConfigurations = StringConfigurations.ToList();
+                    config.StringConfigurations = new (StringConfigurations);
 
                     if (config.NutSpacing.SpacingMode == StringSpacingMode.Manual &&
                         config.NutSpacing.StringDistances.Count > 1)
@@ -214,8 +219,30 @@ namespace SiGen.ViewModels.EditorPanels
     
         public async void EditTuning()
         {
-            var dialogSvc = (App.Current as App)!.Services.GetService<IDialogService>()!; //TODO, switch access to DI
-            await dialogSvc.ShowTuningDialog(LayoutDocumentContext);
+            if (LayoutDocumentContext.DialogService == null)
+                return;
+
+            var result = await LayoutDocumentContext.DialogService.ShowTuningDialog(LayoutDocumentContext);
+            if (result != null)
+            {
+                UpdateConfiguration("Tuning edited", config =>
+                {
+                    result.Apply(config);
+                });
+            }
+        }
+
+
+        public async void EditStrings()
+        {
+            if (LayoutDocumentContext.DialogService == null)
+                return;
+
+            var result = await LayoutDocumentContext.DialogService.ShowStringsDialog(LayoutDocumentContext);
+            if (result != null)
+            {
+                UpdateConfiguration("Edit Strings", result.Apply);
+            }
         }
     }
 }

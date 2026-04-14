@@ -45,6 +45,26 @@ namespace SiGen.Settings
             }
         }
 
+        public static ThemeRenderSettings LightBlueprint
+        {
+            get
+            {
+                return new ThemeRenderSettings
+                {
+                    BackgroundColor = Color.Parse("#234475"),
+                    GridColor = Color.Parse("#EFEFEF"),
+                    MajorAxisColor = Colors.White,
+                    OverlayTextColor = Colors.White,
+                    StringColor = Color.FromRgb(230, 230, 240),
+                    FretColor = Colors.Silver,
+                    FingerBoardEdgeColor = Colors.White,
+                    NutColor = Colors.Sienna,
+                    BridgeColor = Colors.Sienna,
+                    GuideLineColor = Colors.DarkGray
+                };
+            }
+        }
+
         public static ThemeRenderSettings DarkMode
         {
             get

@@ -40,7 +40,7 @@ public partial class LayoutViewerControl : UserControl, ILayoutViewerContext
         AvaloniaProperty.Register<LayoutViewerControl, StringedInstrumentLayout?>(nameof(Layout));
 
     // Theme property
-    private ThemeRenderSettings _renderSettings = ThemeRenderSettings.Blueprint;
+    private ThemeRenderSettings _renderSettings = ThemeRenderSettings.LightBlueprint;
 
     public ThemeRenderSettings RenderSettings
     {

@@ -1,5 +1,4 @@
-﻿using netDxf.Entities;
-using SiGen.Data.Common;
+﻿using SiGen.Data.Common;
 using SiGen.Data.Presets;
 using SiGen.Layouts.Configuration;
 using SiGen.Layouts.Configuration.Builders;
@@ -60,24 +59,24 @@ namespace SiGen.Services.InstrumentProfiles
             ];
         }
 
-        public IReadOnlyList<TuningPreset> GetTuningPresets()
+        public IReadOnlyList<InstrumentTuningPreset> GetTuningPresets()
         {
             return [
                 //four strings
-                new TuningPreset(Texts.Tuning_Standard, [
-                        PitchInterval.FromNote(NoteName.G, 3),
-                        PitchInterval.FromNote(NoteName.D, 4),
-                        PitchInterval.FromNote(NoteName.A, 4),
-                        PitchInterval.FromNote(NoteName.E, 5)
+                new InstrumentTuningPreset(Texts.Tuning_Standard, [
+                       TuningCourse.Single(NoteName.G, 3),
+                       TuningCourse.Single(NoteName.D, 4),
+                       TuningCourse.Single(NoteName.A, 4),
+                       TuningCourse.Single(NoteName.E, 5)
                 ]),
 
                 //five strings
-                new TuningPreset(Texts.Tuning_Standard, [
-                        PitchInterval.FromNote(NoteName.C, 3),
-                        PitchInterval.FromNote(NoteName.G, 3),
-                        PitchInterval.FromNote(NoteName.D, 4),
-                        PitchInterval.FromNote(NoteName.A, 4),
-                        PitchInterval.FromNote(NoteName.E, 5)
+                new InstrumentTuningPreset(Texts.Tuning_Standard, [
+                       TuningCourse.Single(NoteName.C, 3),
+                       TuningCourse.Single(NoteName.G, 3),
+                       TuningCourse.Single(NoteName.D, 4),
+                       TuningCourse.Single(NoteName.A, 4),
+                       TuningCourse.Single(NoteName.E, 5)
                 ]),
             ];
         }
@@ -119,10 +118,45 @@ namespace SiGen.Services.InstrumentProfiles
             return builder.Build();
         }
 
+        private InstrumentLayoutConfiguration GetFiveStringConfig()
+        {
+            var builder = new LayoutConfigurationBuilder();
+
+            builder.WithMargins(Measure.Mm(2), true)
+                   .WithInstrumentType(InstrumentType.Mandolin)
+                   .WithNumberOfFrets(19)
+                   .WithScaleLength(Measure.In(14))
+                   .WithNutSpacing(Measure.Mm(7.5), centerAlignment: Layouts.Data.LayoutCenterAlignment.Fingerboard)
+                   .WithBridgeSpacing(Measure.Mm(10.5))
+                   .AddSingleString(c => 
+                        c.WithGauge(Measure.In(0.050))
+                        .WithTuning(new NoteAndOctave(NoteName.C, 3))
+                   )
+                   .AddSingleString(c =>
+                        c.WithGauge(Measure.In(0.040))
+                        .WithTuning(new NoteAndOctave(NoteName.G, 3))
+                   )
+                   .AddSingleString(c =>
+                        c.WithGauge(Measure.In(0.026))
+                        .WithTuning(new NoteAndOctave(NoteName.D, 4))
+                   )
+                   .AddSingleString(c =>
+                        c.WithGauge(Measure.In(0.015))
+                        .WithTuning(new NoteAndOctave(NoteName.A, 4))
+                   )
+                   .AddSingleString(c =>
+                        c.WithGauge(Measure.In(0.011))
+                        .WithTuning(new NoteAndOctave(NoteName.E, 5))
+                   )
+                   ;
+            return builder.Build();
+        }
+
         public IReadOnlyList<LayoutTemplate> GetLayoutTemplates()
         {
             return [
                 new LayoutTemplate("F5", GetDefaultConfiguration()),
+                new LayoutTemplate($"5 {Texts.Preset_Strings}", GetFiveStringConfig()),
             ];
         }
     }

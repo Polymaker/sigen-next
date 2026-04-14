@@ -1,4 +1,5 @@
-﻿using SiGen.Layouts;
+﻿using SiGen.Data.Entities;
+using SiGen.Layouts;
 using SiGen.Layouts.Configuration;
 using SiGen.Services;
 using System;
@@ -33,6 +34,8 @@ namespace SiGen.ViewModels
         /// </summary>
         StringedInstrumentLayout? Layout { get; }
 
+        //SiGenDbContext 
+
         /// <summary>
         /// Provides access to an optional <see cref="IInstrumentValuesProvider"/> instance,
         /// which supplies common instrument-related values and presets (such as string counts,
@@ -40,6 +43,10 @@ namespace SiGen.ViewModels
         /// May be <c>null</c> if no provider is available.
         /// </summary>
         IInstrumentValuesProvider? InstrumentValuesProvider { get; }
+
+        IDialogService? DialogService { get; }
+
+        IStringDataService DataService { get; }
 
         /// <summary>
         /// Updates the working configuration and triggers layout regeneration and change notification.

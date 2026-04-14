@@ -19,7 +19,10 @@ namespace SiGen.ViewModels.Dialogs
         public abstract string Title { get; }
 
         [ObservableProperty]
-        private bool showTitleBar;
+        private bool showTitleBar = true;
+
+        [ObservableProperty]
+        private bool resizable;
 
         public ICommand CancelCommand { get; }
 
@@ -77,7 +80,7 @@ namespace SiGen.ViewModels.Dialogs
 
     public class MockDialogViewModel : IDialogViewModel
     {
-        public string Title => string.Empty;
+        public string Title => "Dialog";
 
         public bool ShowTitleBar { get; set; } = true;
 

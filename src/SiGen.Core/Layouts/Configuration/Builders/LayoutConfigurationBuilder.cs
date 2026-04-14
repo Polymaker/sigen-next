@@ -138,6 +138,12 @@ namespace SiGen.Layouts.Configuration.Builders
             return this;
         }
 
+        public LayoutConfigurationBuilder WithExtension(Measure? measure)
+        {
+            _config.Fingerboard.ExtensionAfterLastFret = measure;
+            return this;
+        }
+
         public InstrumentLayoutConfiguration Build()
         {
             _config.NumberOfStrings = _config.StringConfigurations.Count;
@@ -164,6 +170,15 @@ namespace SiGen.Layouts.Configuration.Builders
             return this;
         }
 
+        public StringCourseBuilder AddString(System.Action<StringPropertiesBuilder> config)
+        {
+            var builder = new StringPropertiesBuilder();
+            config(builder);
+            var stringProps = builder.Build();
+            _courseConfig.Strings.Add(stringProps);
+            return this;
+        }
+
         public StringCourseBuilder WithSpacing(Measure spacing)
         {
             _courseConfig.Spacing = spacing;
@@ -180,6 +195,44 @@ namespace SiGen.Layouts.Configuration.Builders
         public StringGroupConfiguration Build() => _courseConfig;
     }
 
+    public class StringPropertiesBuilder
+    {
+        private readonly StringProperties _stringProps = new();
+        public StringPropertiesBuilder WithGauge(Measure? gauge)
+        {
+            _stringProps.Gauge = gauge;
+            return this;
+        }
+
+        public StringPropertiesBuilder WithTuning(NoteAndOctave? tuning)
+        {
+            _stringProps.Tuning = tuning;
+            return this;
+        }
+
+        public StringPropertiesBuilder WithTuning(NoteName note, int octave)
+        {
+            _stringProps.Tuning = new NoteAndOctave(note, octave);
+            return this;
+        }
+
+        public StringPropertiesBuilder WithMaterial(StringMaterialConfiguration? material)
+        {
+            _stringProps.Material = material;
+            return this;
+        }
+
+        public StringPropertiesBuilder WithMaterialType(StringMaterialType? material)
+        {
+            _stringProps.Material ??= new StringMaterialConfiguration();
+            _stringProps.Material.MaterialType = material;
+            return this;
+        }
+
+        public StringProperties Build() => _stringProps;
+
+    }
+
     public class SingleStringBuilder
     {
         private readonly SingleStringConfiguration _stringConfig = new();
@@ -193,6 +246,12 @@ namespace SiGen.Layouts.Configuration.Builders
         public SingleStringBuilder WithTuning(NoteAndOctave? tuning)
         {
             _stringConfig.Tuning = tuning;
+            return this;
+        }
+
+        public SingleStringBuilder WithTuning(NoteName note, int octave)
+        {
+            _stringConfig.Tuning = new NoteAndOctave(note, octave);
             return this;
         }
 
@@ -227,6 +286,15 @@ namespace SiGen.Layouts.Configuration.Builders
             if (_stringConfig.Properties == null)
                 _stringConfig.Properties = new StringProperties();
             _stringConfig.Properties.Material = material;
+            return this;
+        }
+
+        public SingleStringBuilder WithMaterialType(StringMaterialType? material)
+        {
+            if (_stringConfig.Properties == null)
+                _stringConfig.Properties = new StringProperties();
+            _stringConfig.Properties.Material ??= new StringMaterialConfiguration();
+            _stringConfig.Properties.Material.MaterialType = material;
             return this;
         }
 

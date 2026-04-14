@@ -1,20 +1,26 @@
-﻿using System;
+﻿using SiGen.Data.Common;
+using SiGen.Layouts.Data;
+using SiGen.Physics;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
-using SiGen.Data.Common;
-using SiGen.Layouts.Data;
 
 namespace SiGen.Layouts.Configuration
 {
     public class InstrumentLayoutConfiguration
     {
+        public int Version { get; set; } = 2;
+
         /// <summary>
         /// The number of strings on the instrument.
         /// </summary>
         public int NumberOfStrings { get; set; }
+
+        [JsonIgnore]
+        public int TotalNumberOfStrings => StringConfigurations.Sum(x => x.NumberOfStrings);
 
         /// <summary>
         /// Gets or sets the type of the instrument.
@@ -31,9 +37,11 @@ namespace SiGen.Layouts.Configuration
         /// <remarks>This property holds the configurations for strings, which may include details such as
         /// tuning, gauge, or material. Ensure that the list is properly initialized before accessing or modifying its
         /// contents.</remarks>
-        public List<BaseStringConfiguration> StringConfigurations { get; set; } = null!;
+        public StringConfigurationCollection StringConfigurations { get; set; } = null!;
 
-        
+        /// <summary>
+        /// Configures the fingerboard margins and other related settings.
+        /// </summary>
         public FingerboardConfiguration Fingerboard { get; set; } = null!;
 
 
@@ -53,11 +61,32 @@ namespace SiGen.Layouts.Configuration
         public ScaleLengthConfiguration ScaleLength { get; set; } = null!;
 
         /// <summary>
+        /// Global fret configuration.
+        /// </summary>
+        public FretConfiguration Frets { get; set; }
+
+        /// <summary>
         /// Gets or sets the number of frets on the instrument.
         /// Can also be set for each string individually.
         /// Put zero for no frets.
         /// </summary>
-        public int? NumberOfFrets { get; set; }
+        [JsonIgnore]
+        public int? NumberOfFrets
+        {
+            get => Frets.NumberOfFrets;
+            set => Frets.NumberOfFrets = value;
+        }
+
+        /// <summary>
+        /// Temperament used for fret placement on this string.
+        /// </summary>
+        /// <remarks>When set to <see cref="Temperament.Custom"/>, specify the intervals for each strings</remarks>
+        [JsonIgnore]
+        public Temperament Temperament
+        {
+            get => Frets.Temperament ?? Physics.Temperament.Equal;
+            set => Frets.Temperament = value;
+        }
 
         /// <summary>
         /// Gets or sets a value indicating whether the layout is left-handed.
@@ -65,16 +94,23 @@ namespace SiGen.Layouts.Configuration
         public bool LeftHanded { get; set; }
 
         // not used at the moment, but may be useful in the future
+        [JsonIgnore]
         public int? StringSetId { get; set; }
 
         public InstrumentLayoutConfiguration()
         {
-            StringConfigurations = new List<BaseStringConfiguration>();
+            StringConfigurations = new StringConfigurationCollection();
             Fingerboard = new FingerboardConfiguration();
             NutSpacing = new StringSpacingConfiguration();
             BridgeSpacing = new StringSpacingConfiguration();
             ScaleLength = new ScaleLengthConfiguration();
+            Frets = new FretConfiguration()
+            {
+                NumberOfFrets = 24,
+                Temperament = Temperament.Equal
+            };
             InstrumentType = SiGen.Data.Common.InstrumentType.ElectricGuitar;
+            Temperament = Physics.Temperament.Equal;
         }
 
         public StringSpacingConfiguration GetStringSpacing(FingerboardEnd end)
@@ -106,7 +142,7 @@ namespace SiGen.Layouts.Configuration
 
         public int GetMaxFrets()
         {
-            int numberOfFrets = NumberOfFrets ?? 0;
+            int numberOfFrets = Frets.NumberOfFrets ?? 0;
 
             foreach (var @string in StringConfigurations)
             {
@@ -115,6 +151,33 @@ namespace SiGen.Layouts.Configuration
             }
 
             return numberOfFrets; 
+        }
+
+        /// <summary>
+        /// Enumerates all string properties across all string configurations (both single strings and string groups).
+        /// </summary>
+        /// <returns>An enumerable of all StringProperties in the layout.</returns>
+        public IEnumerable<StringContext<StringProperties>> EnumerateStringProperties()
+        {
+            int totalIndex = 0;
+
+            for (int i = 0; i < NumberOfStrings; i++)
+            {
+                var stringConfig = StringConfigurations[i];
+                if (stringConfig is SingleStringConfiguration singleString && singleString.Properties != null)
+                {
+                    yield return new StringContext<StringProperties>(totalIndex, i, null, singleString.Properties);
+                    totalIndex++;
+                }
+                else if (stringConfig is StringGroupConfiguration stringGroup)
+                {
+                    for (int j = 0; j < stringGroup.NumberOfStrings; j++)
+                    {
+                        yield return new StringContext<StringProperties>(totalIndex, i, j, stringGroup.Strings[j]);
+                        totalIndex++;
+                    }
+                }
+            }
         }
 
         public static InstrumentLayoutConfiguration Duplicate(InstrumentLayoutConfiguration source)

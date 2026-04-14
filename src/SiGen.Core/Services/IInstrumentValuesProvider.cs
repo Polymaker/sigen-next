@@ -11,7 +11,7 @@ namespace SiGen.Services
         IReadOnlyList<int> GetCommonStringsCount();
         IReadOnlyList<int> GetCommonFretsCount();
         IReadOnlyList<ScaleLengthPreset> GetScaleLengthPresets();
-        IReadOnlyList<TuningPreset> GetTuningPresets();
+        IReadOnlyList<InstrumentTuningPreset> GetTuningPresets();
         IReadOnlyList<SpacingPreset> GetNutSpacingPresets();
         IReadOnlyList<SpacingPreset> GetBridgeSpacingPresets();
         IReadOnlyList<SpacingPreset> GetMarginPresets();

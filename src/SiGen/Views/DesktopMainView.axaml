@@ -82,6 +82,7 @@
 				<MenuItem Header="_Edit">
 					<MenuItem Header="Copy" Command="{Binding TestCommand}"/>
 					<MenuItem Header="Paste"/>
+					<MenuItem Header="Cycle Languages" Command="{Binding CycleLanguagesCommand}"/>
 				</MenuItem>
 				<!--<Menu.Effect>
 					<DropShadowEffect OffsetY="2" Opacity="0.5" OffsetX="-1" />

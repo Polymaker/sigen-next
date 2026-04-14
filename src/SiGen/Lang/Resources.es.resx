@@ -302,12 +302,48 @@ Abre un archivo reciente para continuar tu trabajo o crea un nuevo diseño con u
     <value>Puente</value>
   </data>
   <data name="Editor.MarginMode.NutBridge" xml:space="preserve">
-    <value>Cejuela y Puente</value>
+    <value>Por extremo</value>
   </data>
   <data name="Editor.MarginMode.BassTreble" xml:space="preserve">
-    <value>Najo y Agudos</value>
+    <value>Por lado</value>
   </data>
   <data name="Editor.MarginMode.All" xml:space="preserve">
-    <value>Única</value>
+    <value>Uniforme</value>
+  </data>
+  <data name="CourseLabel" xml:space="preserve">
+    <value>Orden</value>
+  </data>
+  <data name="EditTuningDialog.Title" xml:space="preserve">
+    <value>Configuración de afinación</value>
+  </data>
+  <data name="EditTuningDialog.ApplyPresetButton" xml:space="preserve">
+    <value>Aplicar</value>
+  </data>
+  <data name="EditTuningDialog.TuningPresetsLabel" xml:space="preserve">
+    <value>Afinaciones disponibles:</value>
+  </data>
+  <data name="EditTuningDialog.NoMatchingTuningsMessage" xml:space="preserve">
+    <value>No hay afinaciones disponibles para este instrumento</value>
+  </data>
+  <data name="EditTuningDialog.NoTuningSelectedMessage" xml:space="preserve">
+    <value>Ninguna afinación seleccionada</value>
+  </data>
+  <data name="NewDocumentName" xml:space="preserve">
+    <value>Nuevo plano</value>
+  </data>
+  <data name="StringSpacingDialog.TitleFormat" xml:space="preserve">
+    <value>Espaciado de cuerdas en el {0}</value>
+  </data>
+  <data name="Editor.NumberOfFrets.Tooltip" xml:space="preserve">
+    <value>Número total de trastes. Ajuste a cero para instrumentos sin trastes. También puede configurar los trastes por cuerda en los ajustes avanzados.</value>
+  </data>
+  <data name="Editor.MarginMode.Individual" xml:space="preserve">
+    <value>Individual</value>
+  </data>
+  <data name="FingerboardEditorPanel.DefineMarginsLabel" xml:space="preserve">
+    <value>Definir márgenes por</value>
+  </data>
+  <data name="FingerboardEditorPanel.CompensateMarginsLabel" xml:space="preserve">
+    <value>Compensar el calibre</value>
   </data>
 </root>

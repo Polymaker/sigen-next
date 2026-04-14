@@ -91,7 +91,8 @@ namespace SiGen.ViewModels
     
         public void OpenTemplate(LayoutTemplate template)
         {
-            documentManager.OpenLayoutConfiguration(template.Name, template.Configuration);
+            var instrumentName = Lang.Resources.ResourceManager.GetString($"InstrumentType.{template.InstrumentType}", Lang.Resources.Culture) ?? template.InstrumentType.ToString();
+            documentManager.OpenLayoutConfiguration($"{instrumentName} - {template.Name}", InstrumentLayoutConfiguration.Duplicate(template.Configuration));
         }
     }
 

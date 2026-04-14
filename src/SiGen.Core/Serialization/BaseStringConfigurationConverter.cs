@@ -20,6 +20,7 @@ namespace SiGen.Serialization
             {
                 "Single" => typeof(SingleStringConfiguration),
                 "Group" => typeof(StringGroupConfiguration),
+                "Course" => typeof(StringGroupConfiguration),
                 _ => throw new JsonException($"Unknown type: {typeName}")
             };
 
@@ -36,7 +37,7 @@ namespace SiGen.Serialization
             if (value is SingleStringConfiguration)
                 writer.WriteString("$type", "Single");
             else if (value is StringGroupConfiguration)
-                writer.WriteString("$type", "Group");
+                writer.WriteString("$type", "Course");
             else
                 throw new JsonException($"Unknown type: {typeName}");
 

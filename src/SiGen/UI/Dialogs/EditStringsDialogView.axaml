@@ -1,0 +1,193 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 mc:Ignorable="d"  d:DesignHeight="400" MinWidth="650" d:DesignWidth="650"
+			 x:Class="SiGen.UI.Dialogs.EditStringsDialogView"
+			 xmlns:vm="using:SiGen.ViewModels.Dialogs"
+			 xmlns:ctrl="using:SiGen.UI.Controls"
+			 xmlns:lang="using:SiGen.Lang"
+			 xmlns:materialIcons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+			 x:DataType="vm:EditStringsDialogViewModel"
+			 x:Name="StringsDialog">
+	<UserControl.DataContext>
+		<vm:EditStringsDialogViewModel/>
+	</UserControl.DataContext>
+	<UserControl.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.ThemeDictionaries>
+				<ResourceDictionary  x:Key="Light">
+					<SolidColorBrush x:Key='EvenCardBrush'>#09000000</SolidColorBrush>
+				</ResourceDictionary >
+				<ResourceDictionary x:Key="Dark">
+					<SolidColorBrush x:Key='EvenCardBrush'>#10FFFFFF</SolidColorBrush>
+				</ResourceDictionary>
+			</ResourceDictionary.ThemeDictionaries>
+		</ResourceDictionary>
+	</UserControl.Resources>
+
+	<Grid RowDefinitions="Auto,*,Auto" Margin="3">
+		<Grid Grid.Row="0" Margin="3" ColumnDefinitions="*,Auto">
+			<ComboBox x:Name="StringSetSelector" Grid.Column="0"
+					  ItemsSource="{Binding AvailableSets}" HorizontalAlignment="Stretch">
+				<ComboBox.ItemTemplate>
+					<DataTemplate>
+						<TextBlock Text="{Binding Name}" />
+					</DataTemplate>
+				</ComboBox.ItemTemplate>
+			</ComboBox>
+			<Button Grid.Column="1" Content="Apply" Margin="3,0,0,0" Padding="10,6"
+					Command="{Binding ApplyStringSetCommand}"
+					CommandParameter="{Binding #StringSetSelector.SelectedItem}"/>
+		</Grid>
+		<Border Grid.Row="1" Margin="3"
+				Background="{DynamicResource PanelBackgroundBrush}" CornerRadius="6">
+			<Grid RowDefinitions="Auto,*" HorizontalAlignment="Stretch" >
+				<Grid Grid.Row="0" 
+					  ColumnDefinitions="90,80,2*,120,*" RowDefinitions="Auto,*"
+					  HorizontalAlignment="Stretch" Margin="3,0">
+					<Label Grid.Column="0" Content="String"
+						   FontWeight="Bold" HorizontalAlignment="Center" />
+					<Label Grid.Column="1" Content="Gauge"
+						   FontWeight="Bold" HorizontalAlignment="Center" />
+					<Label Grid.Column="2" Content="Material"
+						   FontWeight="Bold" HorizontalAlignment="Center" />
+
+					<Label Grid.Column="3" Content="Preview"
+						   FontWeight="Bold" HorizontalAlignment="Center" />
+					<Label Grid.Column="4" Content="Actions"
+						   FontWeight="Bold" HorizontalAlignment="Center" />
+
+					<Separator Grid.Row="1" Grid.ColumnSpan="5" Margin="-3,3,-3,0" />
+				</Grid>
+				<ScrollViewer Grid.Row="1" HorizontalAlignment="Stretch">
+					<ItemsControl ItemsSource="{Binding Courses}">
+						<ItemsControl.ItemTemplate>
+							<DataTemplate>
+								<Border Classes.IsEven="{Binding IsEven}">
+									<Border.Styles>
+										<Style Selector="Border">
+											<Setter Property="Background" Value="Transparent"/>
+										</Style>
+										<Style Selector="Border.IsEven">
+											<Setter Property="Background" Value="{DynamicResource EvenCardBrush}"/>
+										</Style>
+									</Border.Styles>
+
+									<Grid RowDefinitions="Auto,*" Margin="3,0"
+										  ColumnDefinitions="90,80,2*,120,*">
+
+										<TextBlock  Grid.Row="1"  Grid.Column="0"
+													VerticalAlignment="Center"
+													Margin="3,0" FontWeight="Bold"
+													IsVisible="{Binding IsSingle}" >
+											<TextBlock.Text>
+												<MultiBinding StringFormat="{}{0} {1}">
+													<Binding Source="{x:Static lang:Resources.StringLabel}" />
+													<Binding Path="CourseNumber" />
+												</MultiBinding>
+											</TextBlock.Text>
+										</TextBlock>
+
+										<TextBlock  Grid.Row="0"  Grid.Column="0"
+													VerticalAlignment="Center"
+													Margin="3,10,0,0" FontWeight="Bold"
+													IsVisible="{Binding IsCourse}" >
+											<TextBlock.Text>
+												<MultiBinding StringFormat="{}{0} {1}">
+													<Binding Source="{x:Static lang:Resources.CourseLabel}" />
+													<Binding Path="CourseNumber" />
+												</MultiBinding>
+											</TextBlock.Text>
+										</TextBlock>
+
+										<StackPanel Grid.Column="0" Grid.Row="1"  IsVisible="{Binding IsCourse}"
+													Orientation="Horizontal" HorizontalAlignment="Center">
+											<Button Padding="2" ToolTip.Tip="Edit Spacing">
+												<Button.Flyout>
+													<Flyout>
+														<StackPanel Orientation="Horizontal">
+															<Label Content="Spacing" VerticalAlignment="Center" FontWeight="Bold" Margin="0,0,6,0" />
+															<ctrl:MeasureTextBox Width="90" Value="{Binding CourseSpacing}" />
+														</StackPanel>
+													</Flyout>
+												</Button.Flyout>
+												<ctrl:SvgIcon SvgImage="/Assets/Icons/CourseSpacingIcon.svg" Height="24"/>
+											</Button>
+										</StackPanel>
+
+
+										<!--<Label Content="{Binding CourseIndex}" />-->
+										<ItemsControl ItemsSource="{Binding Strings}"
+													  Grid.Row="0" Grid.ColumnSpan="6" Grid.RowSpan="2">
+											<ItemsControl.ItemTemplate>
+												<DataTemplate>
+													<Grid ColumnDefinitions="90,80,2*,120,*" >
+
+														<ctrl:MeasureTextBox Grid.Column="1" Margin="3" Value="{Binding Gauge, Mode=TwoWay}" />
+														<ComboBox x:Name="MaterialCombobox"
+																  Grid.Column="2" Margin="3"
+																  HorizontalAlignment="Stretch"
+																  SelectedValue="{Binding MaterialType, Mode=TwoWay}"
+																  ItemsSource="{Binding $parent[UserControl].DataContext.StringMaterials}">
+
+														</ComboBox>
+
+														<ctrl:GuitarStringRenderer Grid.Column="3" Grid.Row="1"
+																				   Margin="3,0,3,0"
+																				   Gauge="{Binding Gauge}"
+																				   Material="{Binding MaterialType}"
+																				   TrebleIndex="{Binding TrebleIndex}"
+																				   IsBassString="{Binding $parent[UserControl].DataContext.IsBassInstrument}"
+																				   />
+
+														<StackPanel Orientation="Horizontal" Grid.Column="4" Spacing="2"
+																	HorizontalAlignment="Center">
+															<Button Padding="6" CornerRadius="12"
+																	Command="{Binding  $parent[UserControl].DataContext.RemoveStringFromCourseCommand}"
+																	CommandParameter="{Binding .}"
+																	IsEnabled="{Binding CanRemove}"
+																	
+																	>
+																<materialIcons:MaterialIcon Kind="Remove" IconSize="12" />
+															</Button>
+															<Button Padding="6" CornerRadius="12" ToolTip.Tip="Add string to course"
+																	IsVisible="{Binding $parent[ItemsControl].DataContext.IsCourse}"
+																	Command="{Binding  $parent[UserControl].DataContext.AddStringToCourseCommand}"
+																	CommandParameter="{Binding $parent[ItemsControl].DataContext}"
+																	>
+																<materialIcons:MaterialIcon Kind="Add" IconSize="12" />
+															</Button>
+															<Button Padding="4" CornerRadius="12" ToolTip.Tip="Convert to course" 
+																	IsVisible="{Binding $parent[ItemsControl].DataContext.IsSingle}"
+																	Command="{Binding  $parent[UserControl].DataContext.AddStringToCourseCommand}"
+																	CommandParameter="{Binding $parent[ItemsControl].DataContext}"
+																	>
+																<materialIcons:MaterialIcon Kind="SetSplit" IconSize="16" />
+															</Button>
+														</StackPanel>
+													</Grid>
+												</DataTemplate>
+											</ItemsControl.ItemTemplate>
+										</ItemsControl>
+
+									</Grid>
+
+								</Border>
+							</DataTemplate>
+						</ItemsControl.ItemTemplate>
+					</ItemsControl>
+				</ScrollViewer>
+
+			</Grid>
+		</Border>
+
+		<WrapPanel Grid.Row="2" HorizontalAlignment="Center" Margin="0,3,0,0" >
+			<Button Classes="Primary" Content="Save" Command="{Binding SaveCommand}"
+					Margin="3,0" Width="100" HorizontalContentAlignment="Center" />
+			<Button Content="Cancel" Command="{Binding CancelCommand}"
+					Margin="3,0" Width="100" HorizontalContentAlignment="Center" />
+		</WrapPanel>
+	</Grid>
+
+</UserControl>

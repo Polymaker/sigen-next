@@ -41,9 +41,21 @@ namespace SiGen.Layouts.Elements
             return Segment.ContainsString(index);
         }
 
+        public bool IsLastFretForString(int index)
+        {
+            var point = Segment.FretPoints.FirstOrDefault(x => !x.IsReference && x.StringIndex == index);
+            return point?.IsLastFret ?? false;
+        }
+
         public bool ContainsFret(int fretIndex)
         {
             return Segment.FretPoints.Any(x => !x.IsReference && x.FretIndex == fretIndex);
+        }
+
+        public int GetFretIndexForString(int stringIndex)
+        {
+            var point = Segment.FretPoints.FirstOrDefault(x => !x.IsReference && x.StringIndex == stringIndex);
+            return point?.FretIndex ?? -1;
         }
 
         public bool HasFingerboardSide(FingerboardSide side)
@@ -133,6 +145,8 @@ namespace SiGen.Layouts.Elements
         public bool IsReference { get; set; }
         public bool IsNut { get; set; }
         public bool IsBridge { get; set; }
+        public bool IsLastFret { get; set; }
+        public bool IsManualInterval { get; set; }
 
         public FretPoint(int stringIndex, int fretIndex, PointM position, PitchInterval interval)
         {

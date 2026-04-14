@@ -38,50 +38,102 @@ namespace SiGen.UI.LayoutViewer.Visuals
             _clipGeometryCache.Clear();
 
             var fretSegments = Layout.Elements.OfType<FretSegmentElement>();
-            foreach (var segment in fretSegments)
+
+            // Group segments by color/thickness and string range to minimize Draw calls and Pen creation
+            var groups = Layout.Elements.OfType<FretSegmentElement>()
+                .Where(s => s.FretShape != null)
+                .GroupBy(s => new { s.IsNut, s.IsBridge, s.BassStringIndex, s.TrebleStringIndex });
+
+            foreach (var group in groups)
             {
-                if (segment.FretShape == null) continue;
-                var adjustedShape = segment.FretShape.Extend(0.25);
+                // 1. Setup the Pen once per group
+                var color = group.Key.IsNut ? RenderSettings.NutColor :
+                            group.Key.IsBridge ? RenderSettings.BridgeColor :
+                            RenderSettings.FretColor;
 
-                if (adjustedShape == null) continue;
-                var clipGeom = GetFretClipGeom(segment);
-                var fretColorBrush = segment.IsNut ? new SolidColorBrush(RenderSettings.NutColor) :
-                    (segment.IsBridge ? new SolidColorBrush(RenderSettings.BridgeColor) :
-                    new SolidColorBrush(RenderSettings.FretColor));
-
-                //var fretColor = segment.IsNut ? RenderSettings.NutColor :
-                //    (segment.IsBridge ? RenderSettings.BridgeColor : RenderSettings.FretColor);
-
-                var fretThickness = segment.IsNut || segment.IsBridge ? 2 : SiGen.Measuring.Measure.Mm(2).ToPixels();
-                var fretPen = new Pen(fretColorBrush, fretThickness);
-                Geometry? fretGeometry = null;
-                if (adjustedShape is LinearPath linearPath)
+                var thickness = group.Key.IsNut || group.Key.IsBridge ? 2 : SiGen.Measuring.Measure.Mm(2).ToPixels();
+                var fretPen = new Pen(new SolidColorBrush(color), thickness);
+                var clipGeom = GetFretClipGeom(group.First());
+                // 2. Create the StreamGeometry for this group
+                var streamGeom = new StreamGeometry();
+                using (var sContext = streamGeom.Open())
                 {
-                    fretGeometry = new LineGeometry
+                    foreach (var segment in group)
                     {
-                        StartPoint = linearPath.Start.ToAvalonia(),
-                        EndPoint = linearPath.End.ToAvalonia()
-                    };
-                    //context.DrawLine(fretColorBrush, linearPath.Start.ToAvalonia(), linearPath.End.ToAvalonia(), fretThickness, clipGeom);
-                }
-                else if (adjustedShape is PolyLinePath polyLine)
-                {
-                    fretGeometry = new PolylineGeometry()
-                    {
-                        Points = polyLine.Points.Select(p => p.ToAvalonia()).ToList()
-                    };
-                    //context.DrawGeometry(fretColorBrush, polyLine.Points.Select(x => x.ToAvalonia()), fretThickness, clipGeom);
+                        var adjustedShape = segment.FretShape?.Extend(0.25);
+                        if (adjustedShape == null) continue;
+
+                        if (adjustedShape is LinearPath linear)
+                        {
+                            sContext.BeginFigure(linear.Start.ToAvalonia(), isFilled: false);
+                            sContext.LineTo(linear.End.ToAvalonia());
+                            sContext.EndFigure(isClosed: false);
+                        }
+                        else if (adjustedShape is PolyLinePath poly)
+                        {
+                            var points = poly.Points.Select(p => p.ToAvalonia()).ToList();
+                            if (points.Count > 0)
+                            {
+                                sContext.BeginFigure(points[0], isFilled: false);
+                                for (int i = 1; i < points.Count; i++)
+                                    sContext.LineTo(points[i]);
+                                sContext.EndFigure(isClosed: false);
+
+                            }
+                        }
+                    }
                 }
 
-                if (fretGeometry != null)
-                {
-                    DrawingContext.PushedState? clipState = null;
-                    if (clipGeom != null)
-                        clipState = context.PushGeometryClip(clipGeom);
-                    context.DrawGeometry(null, fretPen, fretGeometry);
-                    clipState?.Dispose();
-                }
+                DrawingContext.PushedState? clipState = null;
+                if (clipGeom != null)
+                    clipState = context.PushGeometryClip(clipGeom);
+                context.DrawGeometry(null, fretPen, streamGeom);
+                clipState?.Dispose();
             }
+
+            //foreach (var segment in fretSegments)
+            //{
+            //    if (segment.FretShape == null) continue;
+            //    var adjustedShape = segment.FretShape.Extend(0.25); //extend slightly to extend past the fingerboard edges to prevent gaps, the excess will be clipped
+
+            //    if (adjustedShape == null) continue;
+            //    var clipGeom = GetFretClipGeom(segment);
+            //    var fretColorBrush = segment.IsNut ? new SolidColorBrush(RenderSettings.NutColor) :
+            //        (segment.IsBridge ? new SolidColorBrush(RenderSettings.BridgeColor) :
+            //        new SolidColorBrush(RenderSettings.FretColor));
+
+            //    //var fretColor = segment.IsNut ? RenderSettings.NutColor :
+            //    //    (segment.IsBridge ? RenderSettings.BridgeColor : RenderSettings.FretColor);
+
+            //    var fretThickness = segment.IsNut || segment.IsBridge ? 2 : SiGen.Measuring.Measure.Mm(2).ToPixels();
+            //    var fretPen = new Pen(fretColorBrush, fretThickness);
+            //    Geometry? fretGeometry = null;
+
+            //    if (adjustedShape is LinearPath linearPath)
+            //    {
+            //        fretGeometry = new LineGeometry
+            //        {
+            //            StartPoint = linearPath.Start.ToAvalonia(),
+            //            EndPoint = linearPath.End.ToAvalonia()
+            //        };
+            //    }
+            //    else if (adjustedShape is PolyLinePath polyLine)
+            //    {
+            //        fretGeometry = new PolylineGeometry()
+            //        {
+            //            Points = polyLine.Points.Select(p => p.ToAvalonia()).ToList()
+            //        };
+            //    }
+
+            //    if (fretGeometry != null)
+            //    {
+            //        DrawingContext.PushedState? clipState = null;
+            //        if (clipGeom != null)
+            //            clipState = context.PushGeometryClip(clipGeom);
+            //        context.DrawGeometry(null, fretPen, fretGeometry);
+            //        clipState?.Dispose();
+            //    }
+            //}
         }
 
         //todo: cache clip geometries by covered string range

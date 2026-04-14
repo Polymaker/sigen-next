@@ -88,7 +88,7 @@ namespace SiGen.Layouts.Builders
                 var stringElem = Layout.GetStringElement(i);
                 var lastFretSeg = Layout.GetFretSegments()
                     .OrderByDescending(x => x.FretIndex)
-                    .FirstOrDefault(x => !x.IsBridge && x.ContainsString(i));
+                    .FirstOrDefault(x => x.IsLastFretForString(i)/* !x.IsBridge && x.ContainsString(i)*/);
 
                 if (lastFretSeg?.FretShape == null) continue;
                 if (i == 0)

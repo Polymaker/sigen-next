@@ -33,12 +33,17 @@ namespace SiGen.Services
             throw new NotImplementedException();
         }
 
-        public Task<List<Measure>?> ShowCustomStringDialog(InstrumentLayoutConfiguration layoutConfiguration, FingerboardEnd end)
+        public Task<List<Measure>?> ShowSpacingDialog(InstrumentLayoutConfiguration layoutConfiguration, FingerboardEnd end)
         {
             throw new NotImplementedException();
         }
 
-        public Task ShowTuningDialog(ILayoutDocumentContext context)
+        public Task<EditTuningResult?> ShowTuningDialog(ILayoutDocumentContext context)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<EditStringsResult?> ShowStringsDialog(ILayoutDocumentContext context)
         {
             throw new NotImplementedException();
         }

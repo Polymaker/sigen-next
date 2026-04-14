@@ -38,7 +38,8 @@ namespace SiGen.Services
 
             var dialogWindow = new DialogHostWindow();
             dialogWindow.SystemDecorations = SystemDecorations.BorderOnly;
-            dialogWindow.CanResize = false;
+            dialogWindow.CanResize = viewModel.Resizable;
+            dialogWindow.SizeToContent = viewModel.Resizable ? SizeToContent.Manual : SizeToContent.WidthAndHeight;
             dialogWindow.SetDialogContent(dialogControl, viewModel);
 
             // The magic happens here: we create a TaskCompletionSource and give it to the view model
@@ -70,20 +71,27 @@ namespace SiGen.Services
 
         #region Editor Dialogs
 
-        public async Task<List<Measure>?> ShowCustomStringDialog(InstrumentLayoutConfiguration layoutConfiguration, FingerboardEnd end)
+        public async Task<List<Measure>?> ShowSpacingDialog(InstrumentLayoutConfiguration layoutConfiguration, FingerboardEnd end)
         {
-            var viewModel = new CustomStringSpacingDialogViewModel(layoutConfiguration, end);
-            var dialogControl = new CustomStringSpacingView();
+            var viewModel = new EditSpacingDialogViewModel(layoutConfiguration, end);
+            var dialogControl = new EditSpacingDialogView();
             return await ShowDialogAsync(dialogControl, viewModel);
             //return Task.CompletedTask;
         }
 
-        public async Task ShowTuningDialog(ILayoutDocumentContext context)
+        public async Task<EditTuningResult?> ShowTuningDialog(ILayoutDocumentContext context)
         {
-            var viewModel = new TuningDialogModel(context);
-            var dialogControl = new EditTuningView();
-            await ShowDialogAsync(dialogControl, viewModel);
+            var viewModel = new EditTuningDialogViewModel(context);
+            var dialogControl = new EditTuningDialogView();
+            return await ShowDialogAsync(dialogControl, viewModel);
 
+        }
+
+        public async Task<EditStringsResult?> ShowStringsDialog(ILayoutDocumentContext context)
+        {
+            var viewModel = new EditStringsDialogViewModel(context);
+            var dialogControl = new EditStringsDialogView();
+            return await ShowDialogAsync(dialogControl, viewModel);
         }
 
         #endregion

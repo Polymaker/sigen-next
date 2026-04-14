@@ -6,19 +6,11 @@ using System.Threading.Tasks;
 
 namespace SiGen.Physics
 {
-    public class Temperament
+    public enum Temperament
     {
-        public int Tones { get; }
-
-        public Temperament(int tones)
-        {
-            Tones = tones;
-        }
-
-
-
-        public static Temperament ET12 { get; } = new Temperament(12);
-
-
+        Equal, //Equal temperament
+        Just, //Pure intervals based on harmonic series
+        Thidell, // Used for true temperament on fretted instruments
+        Custom //When intervals are specified manually by the user
     }
 }

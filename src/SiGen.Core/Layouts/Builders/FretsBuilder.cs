@@ -1,4 +1,5 @@
-﻿using SiGen.Layouts.Configuration;
+﻿using netDxf;
+using SiGen.Layouts.Configuration;
 using SiGen.Layouts.Data;
 using SiGen.Layouts.Elements;
 using SiGen.Maths;
@@ -18,12 +19,19 @@ namespace SiGen.Layouts.Builders
 
         protected override void ExecuteFirstPass()
         {
-            if (!HasManualFretPositions())
-                GenerateEqualTemperamentFrets();
-            else
-            {
-                //todo
-            }
+
+            //var points = GenerateFretPoints();
+
+            BuildFretSegments();
+
+            //if (!HasManualFretPositions())
+            //{
+            //    GenerateFrets();
+            //}
+            //else
+            //{
+            //    //todo
+            //}
 
             AdjustFingerboardEdges();
 
@@ -32,6 +40,122 @@ namespace SiGen.Layouts.Builders
                 foreach (var @string in Layout.Strings)
                     @string.GeneratePath();
             }
+        }
+
+        private void BuildFretSegments()
+        {
+            //bool isMultiscale = Configuration.ScaleLength.Mode != ScaleLengthMode.Single;
+
+            var points = GenerateFretPoints();
+            var pointsByString = points
+                .GroupBy(p => p.StringIndex)
+                .ToDictionary(g => g.Key, g => g.OrderBy(p => p.Interval.Cents).ToList());
+
+            var queue = new Queue<FretPoint>(points.OrderBy(p => p.StringIndex).ThenBy(p => p.Interval.Cents));
+            var processed = new HashSet<FretPoint>();
+
+            var segments = new List<FretSegment>();
+
+            decimal fretBreakAngleThreshold = 10; //todo: put this setting in the configuration
+
+            while (queue.Count > 0)
+            {
+                var seed = queue.Dequeue();
+                if (processed.Contains(seed) || seed.IsReference) continue;
+
+                var segmentPoints = new List<FretPoint> { seed };
+                var currentPoint = seed;
+                var currentSegment = new FretSegment();
+                currentSegment.AddPoint(seed);
+                processed.Add(seed);
+                segments.Add(currentSegment);
+
+                // chain across strings
+                while (pointsByString.TryGetValue(currentPoint.StringIndex + 1, out var nextStringPoints))
+                {
+                    FretPoint? match = null;
+
+                    if (Configuration.ScaleLength.Mode == ScaleLengthMode.Single)
+                        match = FindLinearMatch(currentPoint, nextStringPoints, processed);
+                    else
+                        match = FindFannedMatch(currentPoint, currentSegment, nextStringPoints, processed);
+
+                    if (match == null) break;
+
+                    var candidateSegmentLine = new LinearPath(currentPoint.Position.ToVector(), match.Position.ToVector());
+                    if (currentSegment.Count >= 2)
+                    {
+                        var lastLine = currentSegment.GetLineFromLastTwoPoints();
+                        var angleRelativeToLastSegment = MathD.Abs(LinearPath.GetAngleBetweenLines(lastLine, candidateSegmentLine));
+                        //If the angle between consecutive segments exceeds fretBreakAngleThreshold, a new segment is started to avoid sharp bends.
+                        if (angleRelativeToLastSegment > fretBreakAngleThreshold)
+                            break;
+                    }
+
+                    currentSegment.AddPoint(match);
+                    processed.Add(match);
+                    currentPoint = match;
+                }
+            }
+
+            //remove segments that are only reference points (I don't know if it's even possilbe)
+            segments.RemoveAll(x => x.FretPoints.All(y => y.IsReference));
+
+            //Split fret segments that have references points between two real points
+            SplitSegments(segments);
+
+            //split segments that are partial nut segments (possible if a string has a starting fret > 0)
+            SplitNutSegments(segments);
+
+            int fretIndex = 0;
+            foreach (var segment in segments)
+            {
+                var segmentPath = CreateSegmentPath(segment);
+                Layout.AddElement(new FretSegmentElement(fretIndex++, segment, segmentPath));
+            }
+        }
+
+        private FretPoint? FindLinearMatch(FretPoint current, List<FretPoint> candidatePoints, HashSet<FretPoint> processed)
+        {
+            var currentPos = current.Position.ToVector();
+            double toleranceCm = 0.1; //todo: put this setting in the configuration
+
+            return candidatePoints
+                .Where(p => !processed.Contains(p))
+                .Where(p => MathD.Abs(p.Position.ToVector().Y - currentPos.Y) <= toleranceCm)
+                .MinBy(p => MathD.Abs(p.Position.ToVector().Y - currentPos.Y));
+        }
+
+        private FretPoint? FindFannedMatch(FretPoint currentPoint, FretSegment currentSegment, List<FretPoint> candidatePoints, HashSet<FretPoint> processed)
+        {
+            var currentString = Layout.GetStringElement(currentPoint.StringIndex);
+            var nextString = Layout.GetStringElement(currentPoint.StringIndex + 1);
+            if (nextString == null) return null;
+
+            var expectedPosition1 = nextString.Path.Interpolate(1d - (1d / currentPoint.Interval.Ratio));
+
+
+            if (currentSegment.Count >= 2)
+            {
+                if (currentPoint.FretIndex == 16)
+                {
+
+                }
+                var currentDirection = currentSegment.GetLineFromLastTwoPoints();
+                if (nextString.Path.Intersects(currentDirection, out var expectedPosition2, true))
+                {
+                    var foundPoint =  candidatePoints
+                       .Where(p => !processed.Contains(p))
+                       .Where(p => VectorD.Distance(p.Position.ToVector(), expectedPosition2) <= 0.2) //todo: put this setting in the configuration
+                       .MinBy(p => VectorD.Distance(p.Position.ToVector(), expectedPosition2));
+                    if (foundPoint != null) return foundPoint;
+                }
+            }
+
+            return candidatePoints
+                    .Where(p => !processed.Contains(p))
+                    .Where(p => VectorD.Distance(p.Position.ToVector(), expectedPosition1) <= 0.2) //todo: put this setting in the configuration
+                    .MinBy(p => VectorD.Distance(p.Position.ToVector(), expectedPosition1));
         }
 
         private void AdjustFingerboardEdges()
@@ -65,21 +189,22 @@ namespace SiGen.Layouts.Builders
             AdjustEdge(FingerboardSide.Bass);
             AdjustEdge(FingerboardSide.Treble);
 
-            for (int i = 0; i < NumberOfStrings - 1; i++)
-            {
-                var median = Layout.GetStringMedian(i);
-                var bassStr = Layout.GetStringElement(median.BassStringIndex);
-                var trebStr = Layout.GetStringElement(median.TrebleStringIndex);
-                //median.Path.Start = (bassStr.NutPoint + trebStr.NutPoint).ToVector() / 2d;
-            }
+            //for (int i = 0; i < NumberOfStrings - 1; i++)
+            //{
+            //    var median = Layout.GetStringMedian(i);
+            //    var bassStr = Layout.GetStringElement(median.BassStringIndex);
+            //    var trebStr = Layout.GetStringElement(median.TrebleStringIndex);
+            //    //median.Path.Start = (bassStr.NutPoint + trebStr.NutPoint).ToVector() / 2d;
+            //}
         }
 
         private bool HasManualFretPositions()
         {
-            return Configuration.StringConfigurations.Any(x => x.Frets != null && x.Frets.Intervals?.Any() == true);
+            return Configuration.Temperament == Temperament.Custom || 
+                Configuration.StringConfigurations.Any(x => x.Frets != null && x.Frets.Temperament == Temperament.Custom);
         }
 
-        private void GenerateEqualTemperamentFrets()
+        private void GenerateFrets()
         {
             var stringElems = Layout.Strings.ToList();
 
@@ -107,41 +232,119 @@ namespace SiGen.Layouts.Builders
 
             for (int i = 0; i < NumberOfStrings; i++)
             {
-                int? numberOfFrets = GetStringConfig(i)?.Frets?.NumberOfFrets ?? Configuration.NumberOfFrets;
+                var stringConfig = GetStringConfig(i);
+
+                bool hasStringFretConfig = stringConfig?.Frets != null;
+
+                var stringFretConfig = stringConfig?.Frets ?? Configuration.Frets;
+                int? numberOfFrets = stringFretConfig?.NumberOfFrets ?? Configuration.NumberOfFrets;
                 if (numberOfFrets == null)
                     continue;
 
-                int startingFret = GetStringConfig(i)?.Frets?.StartingFret ?? 0;
+                var temperament = stringFretConfig?.Temperament ?? Configuration.Temperament;
+                int etSteps = stringFretConfig?.ETSteps ?? Configuration.Frets.ETSteps ?? 12;
+
+                int startingFret = stringConfig?.Frets?.StartingFret ?? 0;
 
                 var stringElem = Layout.Strings.First(x => x.StringIndex == i);
 
-                for (int j = minimumFrets; j <= maximumFrets; j++)
+                var rootNote = stringConfig?.GetPrimaryNote() ?? new NoteAndOctave(NoteName.C, 1);
+
+                var rootInterval = temperament != Temperament.Custom ? 
+                    PitchInterval.FromNote(rootNote, temperament) : 
+                    PitchInterval.FromNote(rootNote, Temperament.Equal);
+
+                double rootCents = rootInterval.Cents;
+
+                int lastFretIndex = 0;
+
+                var stringPoints = new List<FretPoint>();
+
+                if (temperament != Temperament.Custom)
                 {
-                    var interval = PitchInterval.From12TET(j, 0);
-                    var fretRatio = 1d / interval.Ratio;
-                    var fretPos = stringElem.Path.Interpolate(1d - fretRatio);
-                    var fretPoint = new FretPoint(i, j, PointM.FromVector(fretPos), interval);
-
-                    if (j == startingFret)
+                    for (int j = minimumFrets; j <= maximumFrets; j++)
                     {
-                        fretPoint.IsNut = true;
-                        if (startingFret != 0)
-                            stringElem.NutPoint = fretPoint.Position;
+                        var fretCents = GetCentsForFret(j, rootNote, temperament, etSteps);
+
+                        /*var fretNote = rootNote.Transpose(j);
+
+                        var fretInterval = j == 0 ? rootInterval : PitchInterval.FromNote(fretNote, temperament);
+                        PitchInterval interval = fretInterval - rootInterval;*/
+                        PitchInterval interval = PitchInterval.FromCents(fretCents - rootCents);
+                        var fretRatio = 1d / interval.Ratio;
+                        var fretPos = stringElem.Path.Interpolate(1d - fretRatio);
+                        var fretPoint = new FretPoint(i, j, PointM.FromVector(fretPos), interval);
+
+                        // mark nut points
+                        if (j == startingFret)
+                        {
+                            fretPoint.IsNut = true;
+                            if (startingFret != 0) // update the nut point for the string when starting fret > 0
+                                stringElem.NutPoint = fretPoint.Position;
+                        }
+
+                        //the string does not really contain the fret
+                        if (j < startingFret || j > numberOfFrets)
+                            fretPoint.IsReference = true;
+
+                        //if (j == (stringConfig?.Frets?.NumberOfFrets ?? Configuration.NumberOfFrets))
+                        //    fretPoint.IsLastFret = true;
+
+                        stringPoints.Add(fretPoint);
+                        lastFretIndex = j;
                     }
-
-                    //the string does not really contain the fret
-                    if (j < startingFret || j > numberOfFrets)
-                        fretPoint.IsReference = true;
-
-                    points.Add(fretPoint);
-
                 }
 
-                var bridgePoint = new FretPoint(i, 999, stringElem.BridgePoint, PitchInterval.FromCents(0));
+                if (stringFretConfig?.Intervals != null)
+                {
+                    var intervals = new List<double>();
+                    
+                    intervals.AddRange(stringFretConfig.Intervals);
+
+                    if (temperament == Temperament.Custom && !intervals.Contains(0))
+                        intervals.Insert(0, 0); // ensure there is a nut point if using custom temperament with custom intervals
+
+                    for (int j = 0; j < intervals.Count; j++)
+                    {
+                        PitchInterval interval = PitchInterval.FromCents(intervals[j]);
+                        var fretRatio = 1d / interval.Ratio;
+                        var fretPos = stringElem.Path.Interpolate(1d - fretRatio);
+                        var fretPoint = new FretPoint(i, lastFretIndex + j + 1, PointM.FromVector(fretPos), interval);
+                        fretPoint.IsManualInterval = true;
+                        fretPoint.IsNut = intervals[j] == 0;
+                        //fretPoint.IsLastFret = j == intervals.Count - 1;
+                        stringPoints.Add(fretPoint);
+                    }
+                }
+
+                var lastPoint = stringPoints.OrderBy(x=>x.Interval.Cents).LastOrDefault(x => !x.IsReference);
+                if (lastPoint != null)
+                    lastPoint.IsLastFret = true;
+
+                //add bridge point
+                var bridgePoint = new FretPoint(i, 999, stringElem.BridgePoint, PitchInterval.FromCents(99999));
                 bridgePoint.IsBridge = true;
-                points.Add(bridgePoint);
+                stringPoints.Add(bridgePoint);
+
+                int index = 0;
+                stringPoints = stringPoints.OrderBy(x => x.Interval.Cents).ToList();
+                foreach (var pt in stringPoints)
+                    pt.FretIndex = index++;
+
+                points.AddRange(stringPoints);
             }
             return points;
+        }
+
+        private static double GetCentsForFret(int fretIndex, NoteAndOctave rootNote, Temperament temperament, int etSteps)
+        {
+            return temperament switch
+            {
+                Temperament.Equal => rootNote.ToAbsoluteCents() + (fretIndex * (1200.0 / etSteps)),
+                Temperament.Just or Temperament.Thidell =>
+                    PitchInterval.FromNote(rootNote.Transpose(fretIndex), temperament).Cents,
+                _ => throw new ArgumentOutOfRangeException()
+            };
         }
 
         /// <summary>

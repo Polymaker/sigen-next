@@ -119,10 +119,10 @@
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="ScaleLengthSideNotConfigured" xml:space="preserve">
-    <value>Le diapason pour le côté '{0}' n'est pas configuré.</value>
+    <value>Le diapason du côté {0} n'est pas configuré.</value>
   </data>
   <data name="ScaleLengthStringNotConfigured" xml:space="preserve">
-    <value>Le diapason pour la corde '{0}' n'est pas configuré.</value>
+    <value>Le diapason de la corde {0} n'est pas configuré.</value>
   </data>
   <data name="FingerboardSide.Bass" xml:space="preserve">
     <value>Basse</value>
@@ -146,16 +146,16 @@
     <value>Chevalet</value>
   </data>
   <data name="SingleScaleNotConfigured" xml:space="preserve">
-    <value>La longueur de diapason n'est pas configuré.</value>
+    <value>Le diapason n'est pas configuré.</value>
   </data>
   <data name="StringSpacingManualAlignmentBothEnds" xml:space="preserve">
-    <value>Impossible d'utiliser l'alignement central manuel pour les deux extrémités.</value>
+    <value>L'alignement central manuel ne peut pas être utilisé pour les deux extrémités.</value>
   </data>
   <data name="StringSpacingManualAlignmentRatioNotSet" xml:space="preserve">
-    <value>L'espacement au {0} est défini en mode manuel mais l'alignement n'a pas été spécifié.</value>
+    <value>L'espacement au {0} est manuel, mais l'alignement n'a pas été spécifié.</value>
   </data>
   <data name="StringSpacingConfigInvalid" xml:space="preserve">
-    <value>L'espacement des cordes n'est pas bien configuré au niveau du {0}.</value>
+    <value>L'espacement des cordes au {0} est invalide.</value>
   </data>
   <data name="NoteName.C" xml:space="preserve">
     <value>Do</value>
@@ -221,7 +221,7 @@
     <value>Proportionnel</value>
   </data>
   <data name="StringSpacingMode.CenterToCenter" xml:space="preserve">
-    <value>Centré / Égal</value>
+    <value>D’axe en axe</value>
   </data>
   <data name="StringSpacingMode.Manual" xml:space="preserve">
     <value>Manuel</value>
@@ -230,7 +230,7 @@
     <value>Cordes extérieures</value>
   </data>
   <data name="LayoutCenterAlignment.MiddleStrings" xml:space="preserve">
-    <value>Cordes médianes</value>
+    <value>Cordes centrales</value>
   </data>
   <data name="LayoutCenterAlignment.Fingerboard" xml:space="preserve">
     <value>Bords de la touche</value>
@@ -258,5 +258,11 @@
   </data>
   <data name="Preset_Strings" xml:space="preserve">
     <value>Cordes</value>
+  </data>
+  <data name="Tuning.HalfStepDown" xml:space="preserve">
+    <value>Demi-ton plus bas</value>
+  </data>
+  <data name="Tuning.WholeStepDown" xml:space="preserve">
+    <value>Un ton plus bas</value>
   </data>
 </root>

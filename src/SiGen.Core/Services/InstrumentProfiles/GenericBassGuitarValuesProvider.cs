@@ -27,65 +27,65 @@ namespace SiGen.Services.InstrumentProfiles
         public abstract IReadOnlyList<SpacingPreset> GetMarginPresets();
         public abstract IReadOnlyList<ScaleLengthPreset> GetScaleLengthPresets();
 
-        public virtual IReadOnlyList<TuningPreset> GetTuningPresets()
+        public virtual IReadOnlyList<InstrumentTuningPreset> GetTuningPresets()
         {
             return
             [
                 //4 strings
-                new TuningPreset($"{Texts.Tuning_Standard} {Texts.NoteName_E}",
+                new InstrumentTuningPreset($"{Texts.Tuning_Standard} {Texts.NoteName_E}",
                 [
-                    PitchInterval.FromNote(NoteName.E, 1),
-                    PitchInterval.FromNote(NoteName.A, 1),
-                    PitchInterval.FromNote(NoteName.D, 2),
-                    PitchInterval.FromNote(NoteName.G, 2),
+                    TuningCourse.Single(NoteName.E, 1),
+                    TuningCourse.Single(NoteName.A, 1),
+                    TuningCourse.Single(NoteName.D, 2),
+                    TuningCourse.Single(NoteName.G, 2),
                 ]),
 
-                new TuningPreset($"{Texts.Tuning_Drop} {Texts.NoteName_D}",
+                new InstrumentTuningPreset($"{Texts.Tuning_Drop} {Texts.NoteName_D}",
                 [
-                    PitchInterval.FromNote(NoteName.D, 1),
-                    PitchInterval.FromNote(NoteName.A, 1),
-                    PitchInterval.FromNote(NoteName.D, 2),
-                    PitchInterval.FromNote(NoteName.G, 2),
+                    TuningCourse.Single(NoteName.D, 1),
+                    TuningCourse.Single(NoteName.A, 1),
+                    TuningCourse.Single(NoteName.D, 2),
+                    TuningCourse.Single(NoteName.G, 2),
                 ]),
 
                 //5 strings
-                new TuningPreset($"{Texts.Tuning_Standard} {Texts.NoteName_B}",
+                new InstrumentTuningPreset($"{Texts.Tuning_Standard} {Texts.NoteName_B}",
                 [
-                    PitchInterval.FromNote(NoteName.B, 0),
-                    PitchInterval.FromNote(NoteName.E, 1),
-                    PitchInterval.FromNote(NoteName.A, 1),
-                    PitchInterval.FromNote(NoteName.D, 2),
-                    PitchInterval.FromNote(NoteName.G, 2),
+                    TuningCourse.Single(NoteName.B, 0),
+                    TuningCourse.Single(NoteName.E, 1),
+                    TuningCourse.Single(NoteName.A, 1),
+                    TuningCourse.Single(NoteName.D, 2),
+                    TuningCourse.Single(NoteName.G, 2),
                 ]),
 
-                new TuningPreset($"{Texts.Tuning_Drop} {Texts.NoteName_A}",
+                new InstrumentTuningPreset($"{Texts.Tuning_Drop} {Texts.NoteName_A}",
                 [
-                    PitchInterval.FromNote(NoteName.A, 0),
-                    PitchInterval.FromNote(NoteName.E, 1),
-                    PitchInterval.FromNote(NoteName.A, 1),
-                    PitchInterval.FromNote(NoteName.D, 2),
-                    PitchInterval.FromNote(NoteName.G, 2),
+                    TuningCourse.Single(NoteName.A, 0),
+                    TuningCourse.Single(NoteName.E, 1),
+                    TuningCourse.Single(NoteName.A, 1),
+                    TuningCourse.Single(NoteName.D, 2),
+                    TuningCourse.Single(NoteName.G, 2),
                 ]),
 
                 //6 strings
-                new TuningPreset($"{Texts.Tuning_Standard} {Texts.NoteName_B}",
+                new InstrumentTuningPreset($"{Texts.Tuning_Standard} {Texts.NoteName_B}",
                 [
-                    PitchInterval.FromNote(NoteName.B, 0),
-                    PitchInterval.FromNote(NoteName.E, 1),
-                    PitchInterval.FromNote(NoteName.A, 1),
-                    PitchInterval.FromNote(NoteName.D, 2),
-                    PitchInterval.FromNote(NoteName.G, 2),
-                    PitchInterval.FromNote(NoteName.C, 3),
+                    TuningCourse.Single(NoteName.B, 0),
+                    TuningCourse.Single(NoteName.E, 1),
+                    TuningCourse.Single(NoteName.A, 1),
+                    TuningCourse.Single(NoteName.D, 2),
+                    TuningCourse.Single(NoteName.G, 2),
+                    TuningCourse.Single(NoteName.C, 3),
                 ]),
 
-                new TuningPreset($"{Texts.Tuning_Standard} {Texts.NoteName_B} (Alt)",
+                new InstrumentTuningPreset($"{Texts.Tuning_Standard} {Texts.NoteName_B} (Alt)",
                 [
-                    PitchInterval.FromNote(NoteName.B, 0),
-                    PitchInterval.FromNote(NoteName.E, 1),
-                    PitchInterval.FromNote(NoteName.A, 1),
-                    PitchInterval.FromNote(NoteName.D, 2),
-                    PitchInterval.FromNote(NoteName.Gb, 2),
-                    PitchInterval.FromNote(NoteName.B, 2),
+                    TuningCourse.Single(NoteName.B, 0),
+                    TuningCourse.Single(NoteName.E, 1),
+                    TuningCourse.Single(NoteName.A, 1),
+                    TuningCourse.Single(NoteName.D, 2),
+                    TuningCourse.Single(NoteName.Gb, 2),
+                    TuningCourse.Single(NoteName.B, 2),
                 ]),
             ];
         }

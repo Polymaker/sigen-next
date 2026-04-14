@@ -21,9 +21,9 @@ namespace SiGen.Layouts.Configuration
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public NoteAndOctave? Tuning { get; set; }
 
-        //not used yet, will be used to grab material information from DB if not present in the configuration
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public string? InstrumentStringId { get; set; }
+        ////not used yet, will be used to grab material information from DB if not present in the configuration
+        //[JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        //public string? InstrumentStringId { get; set; }
 
         /// <summary>
         /// Gets or sets information about the string material.

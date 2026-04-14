@@ -137,13 +137,13 @@ Les valeurs positives inclinent les frettes d'un côté, les valeurs négatives 
   <data name="StringSpacingMode_Help" xml:space="preserve">
     <value>Choisissez l'espacement des cordes sur l'instrument:
 • **Proportionnel** : Les cordes sont espacées de manière à ce que l'espace libre entre elles soit égal, en tenant compte de leur épaisseur (calibre).
-• **Centré/Égal** : Les cordes sont espacées de manière à ce que la distance entre le centre d'une corde et celui de la suivante soit égale, quel que soit le calibre de la corde.
+• **D’axe en axe** : Les cordes sont espacées de manière à ce que la distance entre le centre d'une corde et celui de la suivante soit égale, quel que soit le calibre de la corde.
 • **Manuel** : La position des cordes est définie manuellement. Le mode d'espacement est ignoré et vous pouvez placer chaque corde exactement où vous le souhaitez.</value>
   </data>
   <data name="LayoutCenterAlignment_Help" xml:space="preserve">
     <value>Choisissez comment les cordes sont positionnées par rapport à la ligne centrale :
 • **Cordes extérieures** : Centre les cordes extérieures de manière équidistante de la ligne centrale.
-• **Cordes médianes** : Aligne la ou les cordes médianes sur la ligne centrale.
+• **Cordes centrales** : Aligne la ou les cordes médianes sur la ligne centrale.
 • **Touche** : Centre par les bords de la touche (identique aux Cordes extérieures quand les marges sont égales).
 • **Cordes symétriques** : *(Multidiapason uniquement)* Ajuste l'espacement pour maintenir un agencement symétrique au sillet et au chevalet.
 • **Touche symétrique** : *(Multidiapason uniquement)* Comme Cordes symétriques, mais tient compte des marges graves/aigus différentes.
@@ -160,5 +160,16 @@ La sélection d'un type d'instrument active des boutons d'information à côté 
     <value>Contrôle quelle frette est droite (perpendiculaire à la ligne centrale) sur un instrument multi-échelle.
 Entrez une valeur de 0 à 100 ou sélectionnez une frette à aligner dans le menu déroulant.
 Les valeurs élevées font "pointer" les frettes vers le chevalet, les valeurs faibles vers le sillet.</value>
+  </data>
+  <data name="MarginMode_Help" xml:space="preserve">
+    <value>Choisissez comment appliquer les marges de la touche :
+• **Uniforme** : Utilise la même marge pour tous les côtés et extrémités.
+• **Par extrémité** : Définit des marges différentes pour le sillet et le chevalet.
+• **Par côté** : Définit des marges différentes pour les côtés grave et aigu.
+• **Individuel** : Permet de régler manuellement chacune des quatre marges.</value>
+  </data>
+  <data name="CompensateForStrings_Help" xml:space="preserve">
+    <value>Prend en compte l'épaisseur de chaque corde pour le calcul des marges. 
+Une fois activée, la distance est mesurée du bord de la corde jusqu'au bord de la touche, plutôt que depuis le centre de la corde.</value>
   </data>
 </root>

@@ -217,7 +217,7 @@
     <value>Guitare</value>
   </data>
   <data name="Editor.NumberOfFrets.Tooltip" xml:space="preserve">
-    <value>Spécifiez le nombre total de frettes. Réglez-le sur zéro pour les instruments sans frettes. Vous pouvez également définir le nombre de frettes par corde dans les paramètres avancés.</value>
+    <value>Nombre total de frettes. Réglez sur zéro pour un instrument fretless. Vous pouvez également définir les frettes par corde dans les paramètres avancés.</value>
   </data>
   <data name="FretLabel" xml:space="preserve">
     <value>Frette</value>
@@ -305,12 +305,45 @@ Ouvrez un fichier récent pour continuer votre travail ou créez une nouvelle co
     <value>Chevalet</value>
   </data>
   <data name="Editor.MarginMode.NutBridge" xml:space="preserve">
-    <value>Sillet &amp; Chevalet</value>
+    <value>Par extrémité</value>
   </data>
   <data name="Editor.MarginMode.BassTreble" xml:space="preserve">
-    <value>Basse &amp; Aigus</value>
+    <value>Par côté</value>
   </data>
   <data name="Editor.MarginMode.All" xml:space="preserve">
-    <value>Simple</value>
+    <value>Uniforme</value>
+  </data>
+  <data name="CourseLabel" xml:space="preserve">
+    <value>Chœur</value>
+  </data>
+  <data name="EditTuningDialog.Title" xml:space="preserve">
+    <value>Configuration de l'accordage</value>
+  </data>
+  <data name="EditTuningDialog.ApplyPresetButton" xml:space="preserve">
+    <value>Appliquer</value>
+  </data>
+  <data name="EditTuningDialog.TuningPresetsLabel" xml:space="preserve">
+    <value>Accordages disponibles :</value>
+  </data>
+  <data name="StringSpacingDialog.TitleFormat" xml:space="preserve">
+    <value>Espacement des cordes au {0}</value>
+  </data>
+  <data name="EditTuningDialog.NoMatchingTuningsMessage" xml:space="preserve">
+    <value>Aucun accordage disponible pour cet instrument</value>
+  </data>
+  <data name="EditTuningDialog.NoTuningSelectedMessage" xml:space="preserve">
+    <value>Aucun accordage sélectionné</value>
+  </data>
+  <data name="NewDocumentName" xml:space="preserve">
+    <value>Nouveau plan</value>
+  </data>
+  <data name="Editor.MarginMode.Individual" xml:space="preserve">
+    <value>Individuel</value>
+  </data>
+  <data name="FingerboardEditorPanel.DefineMarginsLabel" xml:space="preserve">
+    <value>Mode de marge</value>
+  </data>
+  <data name="FingerboardEditorPanel.CompensateMarginsLabel" xml:space="preserve">
+    <value>Compenser le calibre</value>
   </data>
 </root>

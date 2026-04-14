@@ -1,4 +1,7 @@
-﻿namespace SiGen.Layouts.Configuration
+﻿using SiGen.Physics;
+using System.Text.Json.Serialization;
+
+namespace SiGen.Layouts.Configuration
 {
     public class FretConfiguration
     {
@@ -20,9 +23,20 @@
     
         /// <summary>
         /// List of custom fret intervals for this string.
-        /// Not currently used; intended for future support of non-standard fret layouts or temperaments.
         /// </summary>
         public List<double>? Intervals { get; set; }
-        //public Temperament Temperament { get; set; }
+
+        /// <summary>
+        /// Temperament used for fret placement on this string.
+        /// </summary>
+        /// <remarks>When set to <see cref="Temperament.Custom"/>, specify the intervals in <see cref="Intervals"/></remarks>
+        [JsonConverter(typeof(JsonStringEnumConverter))]
+        public Temperament? Temperament { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <remarks>only meaningful when Temperament == Equal</remarks>
+        public int? ETSteps { get; set; } = 12;
     }
 }

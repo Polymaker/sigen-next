@@ -1,6 +1,8 @@
 ﻿using SiGen.Data.Common;
 using SiGen.Data.Presets;
 using SiGen.Layouts.Configuration;
+using SiGen.Layouts.Configuration.Builders;
+using SiGen.Measuring;
 
 namespace SiGen.Services.InstrumentProfiles
 {
@@ -34,7 +36,25 @@ namespace SiGen.Services.InstrumentProfiles
 
         public override InstrumentLayoutConfiguration GetDefaultConfiguration()
         {
-            throw new NotImplementedException();
+            var builder = new LayoutConfigurationBuilder();
+            builder.WithInstrumentType(InstrumentType)
+                .WithScaleLength(Measure.In(32))
+                .WithNumberOfFrets(21)
+                .WithNutSpacing(Measure.Mm(11.4))
+                .WithBridgeSpacing(Measure.Mm(19))
+                .WithMargins(Measure.Mm(4))
+                .AddSingleString(sb => sb.WithGauge(Measure.In(0.100)).WithTuning(Physics.NoteName.E, 1).WithMaterialType(StringMaterialType.BronzeWound))
+                .AddSingleString(sb => sb.WithGauge(Measure.In(0.080)).WithTuning(Physics.NoteName.A, 1).WithMaterialType(StringMaterialType.BronzeWound))
+                .AddSingleString(sb => sb.WithGauge(Measure.In(0.065)).WithTuning(Physics.NoteName.D, 2).WithMaterialType(StringMaterialType.BronzeWound))
+                .AddSingleString(sb => sb.WithGauge(Measure.In(0.045)).WithTuning(Physics.NoteName.G, 2).WithMaterialType(StringMaterialType.BronzeWound))
+
+                ;
+            return builder.Build();
+        }
+
+        public override IReadOnlyList<LayoutTemplate> GetLayoutTemplates()
+        {
+            return [new LayoutTemplate("Default", GetDefaultConfiguration())];
         }
     }
 }

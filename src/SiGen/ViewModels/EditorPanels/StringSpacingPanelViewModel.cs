@@ -269,9 +269,10 @@ namespace SiGen.ViewModels.EditorPanels
 
         protected async void EditCustomSpacing(FingerboardEnd fingerboardEnd)
         {
-            var dialogSvc = (App.Current as App)!.Services.GetService<IDialogService>()!; //TODO, switch access to DI
-            
-            var newDistances = await dialogSvc.ShowCustomStringDialog(Configuration!, fingerboardEnd);
+            if (LayoutDocumentContext.DialogService == null)
+                return;
+
+            var newDistances = await LayoutDocumentContext.DialogService.ShowSpacingDialog(Configuration!, fingerboardEnd);
             if (newDistances != null)
             {
                 

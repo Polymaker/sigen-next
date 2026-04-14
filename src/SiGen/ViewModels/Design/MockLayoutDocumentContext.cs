@@ -23,9 +23,15 @@ namespace SiGen.ViewModels.Design
 
         public string? FilePath => string.Empty;
 
+        public IDialogService? DialogService { get; }
+
+        public IStringDataService DataService { get; }
+
         public MockLayoutDocumentContext()
         {
             InstrumentValuesProvider = new ElectricGuitarValuesProvider();
+            DataService = new MockStringDataService();
+            DialogService = new MockDialogService();
             // Initialize with a mock configuration for design-time purposes
             Configuration = new InstrumentLayoutConfiguration
             {

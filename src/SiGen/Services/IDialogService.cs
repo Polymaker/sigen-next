@@ -26,7 +26,15 @@ namespace SiGen.Services
         // For opening files
         Task<string?> ShowOpenFileDialogAsync(string? title = null, IEnumerable<FileDialogFilter>? filters = null);
 
-        Task<List<Measure>?> ShowCustomStringDialog(InstrumentLayoutConfiguration layoutConfiguration, FingerboardEnd end);
-        Task ShowTuningDialog(ILayoutDocumentContext context);
+
+
+        #region Editor Dialogs
+        Task<List<Measure>?> ShowSpacingDialog(InstrumentLayoutConfiguration layoutConfiguration, FingerboardEnd end);
+
+        Task<EditTuningResult?> ShowTuningDialog(ILayoutDocumentContext context);
+
+        Task<EditStringsResult?> ShowStringsDialog(ILayoutDocumentContext context);
+
+        #endregion
     }
 }

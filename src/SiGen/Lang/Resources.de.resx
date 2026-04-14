@@ -302,12 +302,48 @@
     <value>Steg</value>
   </data>
   <data name="Editor.MarginMode.NutBridge" xml:space="preserve">
-    <value>Sattel und Steg</value>
+    <value>Nach Ende</value>
   </data>
   <data name="Editor.MarginMode.BassTreble" xml:space="preserve">
-    <value>Bass und Diskant</value>
+    <value>Nach Seite</value>
   </data>
   <data name="Editor.MarginMode.All" xml:space="preserve">
-    <value>Einzeln</value>
+    <value>Einheitlich</value>
+  </data>
+  <data name="CourseLabel" xml:space="preserve">
+    <value>Chorsaite</value>
+  </data>
+  <data name="EditTuningDialog.Title" xml:space="preserve">
+    <value>Stimmkonfiguration</value>
+  </data>
+  <data name="EditTuningDialog.ApplyPresetButton" xml:space="preserve">
+    <value>Anwenden</value>
+  </data>
+  <data name="EditTuningDialog.TuningPresetsLabel" xml:space="preserve">
+    <value>Verfügbare Stimmungen:</value>
+  </data>
+  <data name="EditTuningDialog.NoMatchingTuningsMessage" xml:space="preserve">
+    <value>Keine verfügbaren Stimmungen für dieses Instrument</value>
+  </data>
+  <data name="EditTuningDialog.NoTuningSelectedMessage" xml:space="preserve">
+    <value>Keine Stimmung ausgewählt</value>
+  </data>
+  <data name="NewDocumentName" xml:space="preserve">
+    <value>Neuer Entwurf</value>
+  </data>
+  <data name="StringSpacingDialog.TitleFormat" xml:space="preserve">
+    <value>Saitenabstand am {0}</value>
+  </data>
+  <data name="Editor.NumberOfFrets.Tooltip" xml:space="preserve">
+    <value>Gesamtzahl der Bünde. Für bundlose Instrumente auf Null setzen. In den erweiterten Einstellungen können Sie zudem die Bundanzahl pro Saite festlegen.</value>
+  </data>
+  <data name="Editor.MarginMode.Individual" xml:space="preserve">
+    <value>Individuell</value>
+  </data>
+  <data name="FingerboardEditorPanel.DefineMarginsLabel" xml:space="preserve">
+    <value>Ränder definieren nach</value>
+  </data>
+  <data name="FingerboardEditorPanel.CompensateMarginsLabel" xml:space="preserve">
+    <value>Stärke kompensieren</value>
   </data>
 </root>

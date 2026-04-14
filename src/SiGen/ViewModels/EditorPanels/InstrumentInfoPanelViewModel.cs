@@ -99,7 +99,7 @@ namespace SiGen.ViewModels.EditorPanels
                 UpdateConfiguration("Add string", config =>
                 {
                     config.NumberOfStrings = stringConfigurations.Count;
-                    config.StringConfigurations = stringConfigurations.ToList();
+                    config.StringConfigurations = new StringConfigurationCollection(stringConfigurations);
 
                     if (config.NutSpacing.StringDistances.Count > 1)
                     {
@@ -196,7 +196,7 @@ namespace SiGen.ViewModels.EditorPanels
                 UpdateConfiguration("Remove string", config =>
                 {
                     config.NumberOfStrings = stringConfigurations.Count;
-                    config.StringConfigurations = stringConfigurations.ToList();
+                    config.StringConfigurations = new StringConfigurationCollection(stringConfigurations);
 
                     if (config.NutSpacing.SpacingMode == StringSpacingMode.Manual &&
                         config.NutSpacing.StringDistances.Count > 1)

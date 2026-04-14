@@ -132,7 +132,8 @@ namespace SiGen.Layouts.Builders
                     var offsetX = group.GetTotalSpacing() * -0.5d;
                     var stringElem = Layout.GetStringElement(i);
                     Layout.Elements.Remove(stringElem);
-                    for (int j = 0; j < group.StringCount; j++)
+
+                    for (int j = 0; j < group.NumberOfStrings; j++)
                     {
                         var path = (LinearPath)stringElem.Path.Clone();
                         path.Offset(new VectorD(offsetX.NormalizedValue, 0));
@@ -298,7 +299,7 @@ namespace SiGen.Layouts.Builders
                     var bassPerp = bassPath.GetEquation().GetPerpendicular(bassPath.Start);
 
                     PreciseDouble totalMargin = Configuration.Fingerboard.GetMargin(end, FingerboardSide.Bass).NormalizedValue;
-                    var stringWidth = Configuration.StringConfigurations[0]?.GetTotalWidth2(Configuration.Fingerboard.CompensateMarginsForStrings);
+                    var stringWidth = Configuration.StringConfigurations[0]?.GetStringSpan(Configuration.Fingerboard.CompensateMarginsForStrings);
                     if (compensateForStrings && !Measure.IsNullOrEmpty(stringWidth))
                         totalMargin += stringWidth.Value.NormalizedValue / 2d;
 
@@ -318,7 +319,7 @@ namespace SiGen.Layouts.Builders
                     var trebPerp = trebPath.GetEquation().GetPerpendicular(trebPath.Start);
 
                     PreciseDouble totalMargin = Configuration.Fingerboard.GetMargin(end, FingerboardSide.Treble).NormalizedValue;
-                    var stringWidth = Configuration.StringConfigurations[^1]?.GetTotalWidth2(Configuration.Fingerboard.CompensateMarginsForStrings);
+                    var stringWidth = Configuration.StringConfigurations[^1]?.GetStringSpan(Configuration.Fingerboard.CompensateMarginsForStrings);
                     if (compensateForStrings && !Measure.IsNullOrEmpty(stringWidth))
                         totalMargin += stringWidth.Value.NormalizedValue / 2d;
 
@@ -475,30 +476,27 @@ namespace SiGen.Layouts.Builders
                 if (spacingConfig.SpacingMode == StringSpacingMode.Proportional)
                 {
                     if (Configuration.StringConfigurations.Count == 0 ||
-                        !Configuration.StringConfigurations.All(x => !Measure.IsNullOrEmpty(x.GetTotalWidth())))
+                        !Configuration.StringConfigurations.All(x => x.IsGaugeDefined))
                         AddWarning("EqualSpacing is used but not all strings have gauge configured.");
 
-                    var totalSpreadAdj = spacingConfig.StringDistances[0] * (Configuration.NumberOfStrings - 1);
+                    var totalSpreadAdjusted = spacingConfig.StringDistances[0] * (Configuration.NumberOfStrings - 1);
 
                     for (int i = 0; i < Configuration.NumberOfStrings - 1; i++)
                     {
-                        var gauge1 = GetStringConfig(i)?.GetTotalWidth();
-                        if (Measure.IsNullOrEmpty(gauge1))
-                        {
-                            AddWarning($"String {i + 1} gauge is not configured, using 0mm. The equal spacing of strings cannot be calculated correctly.");
-                            gauge1 = Measure.Cm(0);
-                        }
+                        var space1 = GetStringConfig(i)?.GetHalfWidth(FingerboardSide.Treble, true); //get half the width of the string course toward the next course (treble)
+                        if (Measure.IsNullOrEmpty(space1))
+                            space1 = Measure.Cm(0);
 
-                        var gauge2 = GetStringConfig(i + 1)?.GetTotalWidth();
-                        if (Measure.IsNullOrEmpty(gauge2))
-                            gauge2 = Measure.Cm(0);
+                        var space2 = GetStringConfig(i + 1)?.GetHalfWidth(FingerboardSide.Bass, true); //get half the width of the next string course toward the current course (bass)
+                        if (Measure.IsNullOrEmpty(space2))
+                            space2 = Measure.Cm(0);
 
-                        var gaugeOffset = (gauge1.Value + gauge2.Value) / 2m;
-                        spacings.Add(gaugeOffset);
-                        totalSpreadAdj -= gaugeOffset;
+                        var spacingOffset = space1.Value + space2.Value;
+                        spacings.Add(spacingOffset);
+                        totalSpreadAdjusted -= spacingOffset;
                     }
 
-                    var avgSpacing = totalSpreadAdj / (NumberOfStrings - 1);
+                    var avgSpacing = totalSpreadAdjusted / (NumberOfStrings - 1);
                     for (int i = 0; i < NumberOfStrings - 1; i++)
                         spacings[i] += avgSpacing;
                 }

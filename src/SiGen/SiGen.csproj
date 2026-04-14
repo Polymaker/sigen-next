@@ -9,10 +9,6 @@
   <ItemGroup>
     <AvaloniaResource Include="Assets\**" />
   </ItemGroup>
-  
-  <ItemGroup>
-    <Compile Remove="ViewModels\LayoutDocumentViewModel.cs" />
-  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Avalonia" />
@@ -48,6 +44,15 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Update="UI\Dialogs\EditSpacingDialogView.axaml.cs">
+      <DependentUpon>EditSpacingDialogView.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="UI\Dialogs\EditTuningDialogView.axaml.cs">
+      <DependentUpon>EditTuningDialogView.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="UI\Dialogs\EditStringsDialogView.axaml.cs">
+      <DependentUpon>EditStringsDialogView.axaml</DependentUpon>
+    </Compile>
     <Compile Update="UI\EditorPanels\InstrumentInfoEditorPanel.axaml.cs">
       <DependentUpon>InstrumentInfoEditorPanel.axaml</DependentUpon>
     </Compile>
@@ -70,5 +75,11 @@
   <ItemGroup>
     <Folder Include="Services\Desktop\" />
     <Folder Include="UI\Windows\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="SiGenDatabase.db">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 </Project>

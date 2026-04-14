@@ -19,7 +19,7 @@ namespace SiGen.Lang {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "18.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Resources {
@@ -61,6 +61,15 @@ namespace SiGen.Lang {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Course.
+        /// </summary>
+        public static string CourseLabel {
+            get {
+                return ResourceManager.GetString("CourseLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Left handed.
         /// </summary>
         public static string Editor_Handedness_Left {
@@ -88,7 +97,7 @@ namespace SiGen.Lang {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Single.
+        ///   Looks up a localized string similar to Uniform.
         /// </summary>
         public static string Editor_MarginMode_All {
             get {
@@ -97,7 +106,7 @@ namespace SiGen.Lang {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Bass &amp; Treble.
+        ///   Looks up a localized string similar to By Side.
         /// </summary>
         public static string Editor_MarginMode_BassTreble {
             get {
@@ -106,7 +115,16 @@ namespace SiGen.Lang {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Nut &amp; Bridge.
+        ///   Looks up a localized string similar to Individual.
+        /// </summary>
+        public static string Editor_MarginMode_Individual {
+            get {
+                return ResourceManager.GetString("Editor.MarginMode.Individual", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to By End.
         /// </summary>
         public static string Editor_MarginMode_NutBridge {
             get {
@@ -201,6 +219,69 @@ namespace SiGen.Lang {
         public static string Editor_ScaleLengthMode_Single_Tooltip {
             get {
                 return ResourceManager.GetString("Editor.ScaleLengthMode.Single.Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Apply.
+        /// </summary>
+        public static string EditTuningDialog_ApplyPresetButton {
+            get {
+                return ResourceManager.GetString("EditTuningDialog.ApplyPresetButton", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No available tunings for this instrument.
+        /// </summary>
+        public static string EditTuningDialog_NoMatchingTuningsMessage {
+            get {
+                return ResourceManager.GetString("EditTuningDialog.NoMatchingTuningsMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No tuning selected.
+        /// </summary>
+        public static string EditTuningDialog_NoTuningSelectedMessage {
+            get {
+                return ResourceManager.GetString("EditTuningDialog.NoTuningSelectedMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tuning Configuration.
+        /// </summary>
+        public static string EditTuningDialog_Title {
+            get {
+                return ResourceManager.GetString("EditTuningDialog.Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Available tunings:.
+        /// </summary>
+        public static string EditTuningDialog_TuningPresetsLabel {
+            get {
+                return ResourceManager.GetString("EditTuningDialog.TuningPresetsLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Compensate for gauge.
+        /// </summary>
+        public static string FingerboardEditorPanel_CompensateMarginsLabel {
+            get {
+                return ResourceManager.GetString("FingerboardEditorPanel.CompensateMarginsLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Margin mode.
+        /// </summary>
+        public static string FingerboardEditorPanel_DefineMarginsLabel {
+            get {
+                return ResourceManager.GetString("FingerboardEditorPanel.DefineMarginsLabel", resourceCulture);
             }
         }
         
@@ -422,6 +503,15 @@ namespace SiGen.Lang {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to New Layout.
+        /// </summary>
+        public static string NewDocumentName {
+            get {
+                return ResourceManager.GetString("NewDocumentName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Scale length.
         /// </summary>
         public static string ScaleLength {
@@ -562,6 +652,15 @@ namespace SiGen.Lang {
         public static string StringsLabel {
             get {
                 return ResourceManager.GetString("StringsLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to String spacing at the {0}.
+        /// </summary>
+        public static string StringSpacingDialog_TitleFormat {
+            get {
+                return ResourceManager.GetString("StringSpacingDialog.TitleFormat", resourceCulture);
             }
         }
         

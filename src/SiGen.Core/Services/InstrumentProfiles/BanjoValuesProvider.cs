@@ -65,40 +65,40 @@ namespace SiGen.Services.InstrumentProfiles
             ];
         }
 
-        public IReadOnlyList<TuningPreset> GetTuningPresets()
+        public IReadOnlyList<InstrumentTuningPreset> GetTuningPresets()
         {
             return [
                 //4 strings
-                new TuningPreset("Tenor Standard (Jazz)", [
-                    PitchInterval.FromNote(NoteName.C, 3),
-                    PitchInterval.FromNote(NoteName.G, 3),
-                    PitchInterval.FromNote(NoteName.D, 4),
-                    PitchInterval.FromNote(NoteName.A, 4),
+                new InstrumentTuningPreset("Tenor Standard (Jazz)", [
+                    TuningCourse.Single(NoteName.C, 3),
+                    TuningCourse.Single(NoteName.G, 3),
+                    TuningCourse.Single(NoteName.D, 4),
+                    TuningCourse.Single(NoteName.A, 4),
                 ]),
 
-                new TuningPreset("Tenor Irish", [
-                    PitchInterval.FromNote(NoteName.G, 2),
-                    PitchInterval.FromNote(NoteName.D, 3),
-                    PitchInterval.FromNote(NoteName.A, 3),
-                    PitchInterval.FromNote(NoteName.E, 4),
+                new InstrumentTuningPreset("Tenor Irish", [
+                    TuningCourse.Single(NoteName.G, 2),
+                    TuningCourse.Single(NoteName.D, 3),
+                    TuningCourse.Single(NoteName.A, 3),
+                    TuningCourse.Single(NoteName.E, 4),
                 ]),
 
-                new TuningPreset($"Plectrum",
+                new InstrumentTuningPreset($"Plectrum",
                 [
-                    PitchInterval.FromNote(NoteName.C, 2),
-                    PitchInterval.FromNote(NoteName.G, 2),
-                    PitchInterval.FromNote(NoteName.B, 2),
-                    PitchInterval.FromNote(NoteName.D, 3),
+                    TuningCourse.Single(NoteName.C, 2),
+                    TuningCourse.Single(NoteName.G, 2),
+                    TuningCourse.Single(NoteName.B, 2),
+                    TuningCourse.Single(NoteName.D, 3),
                 ]),
 
                 //5 strings
-                new TuningPreset($"Bluegrass / {Texts.Tuning_Standard}",
+                new InstrumentTuningPreset($"Bluegrass / {Texts.Tuning_Standard}",
                 [
-                    PitchInterval.FromNote(NoteName.G, 4),
-                    PitchInterval.FromNote(NoteName.D, 3),
-                    PitchInterval.FromNote(NoteName.G, 3),
-                    PitchInterval.FromNote(NoteName.B, 3),
-                    PitchInterval.FromNote(NoteName.D, 4),
+                    TuningCourse.Single(NoteName.G, 4),
+                    TuningCourse.Single(NoteName.D, 3),
+                    TuningCourse.Single(NoteName.G, 3),
+                    TuningCourse.Single(NoteName.B, 3),
+                    TuningCourse.Single(NoteName.D, 4),
                 ]),
             ];
         }

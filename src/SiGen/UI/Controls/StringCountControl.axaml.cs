@@ -91,7 +91,7 @@ public partial class StringCountControl : UserControl
     {
         get
         {
-            return StringConfigurations.Sum(x => x is StringGroupConfiguration sg ? sg.StringCount : 1);
+            return StringConfigurations.Sum(x => x is StringGroupConfiguration sg ? sg.NumberOfStrings : 1);
         }
     }
 
@@ -247,7 +247,7 @@ public partial class StringCountControl : UserControl
                 dotContainer.Children.Add(dot);
                 dotContainer.Children.Add(new TextBlock
                 {
-                    Text = $"{group.StringCount}",
+                    Text = $"{group.NumberOfStrings}",
                     FontSize = 10,
                     VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center,
                     HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Stretch,

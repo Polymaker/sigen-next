@@ -98,16 +98,16 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.3500.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="StringSpacingConfigInvalid" xml:space="preserve">
-    <value>String spacing is not configured properly at the {0}.</value>
+    <value>String spacing at the {0} is invalid.</value>
   </data>
   <data name="SingleScaleNotConfigured" xml:space="preserve">
-    <value>Scale length is not configured.</value>
+    <value>Scale length has not been defined.</value>
   </data>
   <data name="ScaleLengthSideNotConfigured" xml:space="preserve">
-    <value>Scale length for '{0}' side is not configured.</value>
+    <value>Scale length for the {0} side has not been set.</value>
   </data>
   <data name="ScaleLengthStringNotConfigured" xml:space="preserve">
-    <value>Scale length for string {0} is not configured.</value>
+    <value>Scale length for string {0} has not been set.</value>
   </data>
   <data name="FingerboardSide.Bass" xml:space="preserve">
     <value>Bass</value>
@@ -125,7 +125,7 @@
     <value>Multiscale</value>
   </data>
   <data name="StringSpacingManualAlignmentRatioNotSet" xml:space="preserve">
-    <value>Spacing at the {0} is set to manual but the alignment was not specified.</value>
+    <value>Spacing at the {0} is set to manual, but no alignment value was specified.</value>
   </data>
   <data name="FingerboardEnd.Nut" xml:space="preserve">
     <value>Nut</value>
@@ -134,7 +134,7 @@
     <value>Bridge</value>
   </data>
   <data name="StringSpacingManualAlignmentBothEnds" xml:space="preserve">
-    <value>Cannot use manual center alignment for both ends.</value>
+    <value>Manual center alignment cannot be used for both ends.</value>
   </data>
   <data name="NoteName.C" xml:space="preserve">
     <value>C</value>
@@ -200,7 +200,7 @@
     <value>Proportional</value>
   </data>
   <data name="StringSpacingMode.CenterToCenter" xml:space="preserve">
-    <value>Centered / Equal</value>
+    <value>Center to Center</value>
   </data>
   <data name="StringSpacingMode.Manual" xml:space="preserve">
     <value>Manual</value>
@@ -237,5 +237,11 @@
   </data>
   <data name="Preset_Strings" xml:space="preserve">
     <value>Strings</value>
+  </data>
+  <data name="Tuning.HalfStepDown" xml:space="preserve">
+    <value>Half step down</value>
+  </data>
+  <data name="Tuning.WholeStepDown" xml:space="preserve">
+    <value>Whole step down</value>
   </data>
 </root>

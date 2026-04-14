@@ -62,42 +62,35 @@ namespace SiGen.UI.LayoutViewer.Overlays
                 context.DrawText(formattedText, position);
             }
 
-            for (int i = 1; i <= numberOfFrets; i++)
+            var fretSegments = Layout.Elements.OfType<FretSegmentElement>().Where(f => !(f.IsNut || f.IsBridge)).ToList();
+            int lastStringIndex = Layout.NumberOfStrings - 1;
+
+            foreach (var fretSegment in fretSegments)
             {
-                var bassSegment = Layout.Elements.OfType<FretSegmentElement>()
-                    .Where(f => f.FretIndex == i /*&& f.ContainsString(0)*/)
-                    .OrderBy(x => x.BassStringIndex)
-                    .FirstOrDefault();
+                if (fretSegment.FretShape == null)
+                    continue;
 
-                var trebleSegment = Layout.Elements.OfType<FretSegmentElement>()
-                    .Where(f => f.FretIndex == i /*&& f.ContainsString(0)*/)
-                    .OrderByDescending(x => x.TrebleStringIndex)
-                    .FirstOrDefault();
-
-                bool bassHasFirstString = bassSegment != null && bassSegment.ContainsString(0);
-                bool bassHasLastString = bassSegment != null && bassSegment.ContainsString(Layout.NumberOfStrings - 1);
-                if (bassSegment != null && bassSegment.FretShape != null && 
-                    (bassHasFirstString || (!bassHasLastString && (bassSegment.TrebleStringIndex - bassSegment.BassStringIndex) + 1 < Layout.NumberOfStrings))
-                    )
+                if (fretSegment.ContainsString(0))
                 {
-                    var fretPos = bassSegment.FretShape.GetFirstPoint();
-
+                    var fretPos = fretSegment.FretShape.GetFirstPoint();
                     var screenPos = ViewerContext.VectorToScreen(fretPos);
-                    var offsetVector = CorrectVectorForView(bassSegment.GetVector(FingerboardSide.Bass));
+                    int fretIndex = fretSegment.GetFretIndexForString(0);
+                    var offsetVector = CorrectVectorForView(fretSegment.GetVector(FingerboardSide.Bass));
                     screenPos += (offsetVector * margin).ToAvalonia(1);
-                    DrawFretNumber(i, screenPos, FingerboardSide.Bass);
+                    DrawFretNumber(fretIndex, screenPos, FingerboardSide.Bass);
                 }
 
-                if (trebleSegment?.FretShape != null && Layout.NumberOfStrings > 1)
+                if (fretSegment.ContainsString(lastStringIndex))
                 {
-                    var fretPos = trebleSegment.FretShape.GetLastPoint();
-
+                    var fretPos = fretSegment.FretShape.GetLastPoint();
                     var screenPos = ViewerContext.VectorToScreen(fretPos);
-                    var offsetVector = CorrectVectorForView(trebleSegment.GetVector(FingerboardSide.Treble));
+                    int fretIndex = fretSegment.GetFretIndexForString(lastStringIndex);
+                    var offsetVector = CorrectVectorForView(fretSegment.GetVector(FingerboardSide.Treble));
                     screenPos += (offsetVector * margin).ToAvalonia(1);
-                    DrawFretNumber(i, screenPos, FingerboardSide.Treble);
+                    DrawFretNumber(fretIndex, screenPos, FingerboardSide.Treble);
                 }
             }
+
         }
 
         private VectorD CorrectVectorForView(VectorD vector)

@@ -1,6 +1,9 @@
-﻿using Avalonia.Styling;
+﻿using Avalonia.Controls.ApplicationLifetimes;
+using Avalonia.Styling;
+using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using HarfBuzzSharp;
 using SiGen.Export;
 using SiGen.Layouts.Configuration;
 using SiGen.Measuring;
@@ -12,6 +15,7 @@ using SiGen.ViewModels.Dialogs;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
@@ -24,7 +28,7 @@ namespace SiGen.ViewModels
     {
         private readonly IDialogService dialogService;
         private readonly ISettingsService settingsService;
-        private readonly LayoutDocumentModelFactory documentFactory;
+        private readonly ViewModelFactory documentFactory;
 
         //public ICommand NewCommand { get; }
         public ICommand OpenHomeCommand { get; }
@@ -35,6 +39,11 @@ namespace SiGen.ViewModels
         public ICommand TestCommand { get; }
         public RelayCommand<IDocumentTabViewModel> CloseDocumentCommand { get; }
 
+        public RelayCommand CycleLanguagesCommand { get; }
+        private readonly string[] languages = new[] { "en", "fr", "de", "es" };
+        private int currentLangIndex = 0;
+
+
         public ObservableCollection<IDocumentTabViewModel> OpenDocuments { get; } = new ObservableCollection<IDocumentTabViewModel>();
 
         public List<RecentFileMenuModel> RecentFiles { get; } = new();
@@ -42,7 +51,7 @@ namespace SiGen.ViewModels
         [ObservableProperty]
         private IDocumentTabViewModel? selectedDocument;
 
-        public DesktopMainViewModel(IDialogService dialogService, ISettingsService settingsService, LayoutDocumentModelFactory documentFactory)
+        public DesktopMainViewModel(IDialogService dialogService, ISettingsService settingsService, ViewModelFactory documentFactory)
         {
             this.dialogService = dialogService;
             this.settingsService = settingsService;
@@ -81,16 +90,53 @@ namespace SiGen.ViewModels
             OpenHomeCommand = new RelayCommand(OpenHomePage);
             OpenFileCommand = new RelayCommand<string>(OpenDocumentFile);
 
+            // Create cycle languages command
+            CycleLanguagesCommand = new RelayCommand(CycleLanguages);
+
+            // initialize currentLangIndex from current UI culture
+            var curTwo = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
+            var idx = Array.IndexOf(languages, curTwo);
+            currentLangIndex = idx >= 0 ? idx : 0;
+
+
             RebuildRecentFilesMenu();
         }
 
-        //public DesktopMainViewModel() : this(new DummyFileDialogService())
-        //{
-        //    // Default constructor for design-time data
-        //    OpenDocuments.Add(new DocumentViewModel("Untitled", null, new Layouts.Configuration.InstrumentLayoutConfiguration()) { HasUnsavedChanges = true });
-        //    OpenDocuments.Add(new DocumentViewModel("Layout 1", null, new Layouts.Configuration.InstrumentLayoutConfiguration()));
-        //    SelectedDocument = OpenDocuments.FirstOrDefault();
-        //}
+        private void CycleLanguages()
+        {
+            // advance index
+            currentLangIndex = (currentLangIndex + 1) % languages.Length;
+            var code = languages[currentLangIndex];
+
+            var culture = new CultureInfo(code);
+
+            // Set cultures for current thread and default for new threads
+            CultureInfo.DefaultThreadCurrentCulture = culture;
+            CultureInfo.DefaultThreadCurrentUICulture = culture;
+            CultureInfo.CurrentCulture = culture;
+            CultureInfo.CurrentUICulture = culture;
+
+            // Light UI refresh: invalidate visuals on all windows to encourage re-evaluation.
+            // This is intentionally simple for testing; a full resource reload may require re-creating windows or controls.
+            Dispatcher.UIThread.Post(() =>
+            {
+                var app = App.Current;
+                if (app?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+                {
+
+                    foreach (var w in desktop.Windows)
+                    {
+                        try
+                        {
+                            
+                            w.InvalidateArrange();
+                            w.InvalidateVisual();
+                        }
+                        catch { }
+                    }
+                }
+            });
+        }
 
         public void ReorderDocuments(int oldIndex, int newIndex)
         {
@@ -227,7 +273,7 @@ namespace SiGen.ViewModels
             if (config == null) return;
 
 
-            var document = documentFactory.CreateViewModel(filePath, config);
+            var document = documentFactory.CreateLayoutDocumentViewModel(filePath, config);
 
             settingsService.AddRecentFile(document);
             OpenDocuments.Add(document);
@@ -250,10 +296,7 @@ namespace SiGen.ViewModels
 
         public void OpenLayoutConfiguration(string documentName, InstrumentLayoutConfiguration configuration)
         {
-            var document = new LayoutDocumentViewModel(
-                documentName,
-                null,
-                configuration);
+            var document = this.documentFactory.CreateLayoutDocumentViewModel(null, configuration, documentName);
             OpenDocuments.Add(document);
             SelectedDocument = document;
         }
@@ -301,8 +344,6 @@ namespace SiGen.ViewModels
             RecentFiles.AddRange(settingsService.Settings.RecentFiles.Take(10).Select((f, i) => new RecentFileMenuModel(i + 1, f, OpenDocumentFile)));
             OnPropertyChanged(nameof(RecentFiles));
         }
-
-        
 
         #endregion
     }

@@ -48,10 +48,8 @@ public partial class DialogHostWindow : Window
         // Handle Escape key
         KeyDown += (s, e) =>
         {
-            if (e.Key == Key.Escape)
-            {
+            if (e.Key == Key.Escape && viewModel.CanClose())
                 viewModel.CancelDialog();
-            }
         };
     }
 

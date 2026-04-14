@@ -29,7 +29,7 @@ public class SvgIcon : TemplatedControl
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
         base.OnPropertyChanged(change);
-        if (change.Property == ForegroundProperty)
+        if (change.Property == ForegroundProperty || change.Property == OpacityProperty)
             UpdateIconCss();
     }
 
@@ -38,7 +38,7 @@ public class SvgIcon : TemplatedControl
         if (Foreground != null && Foreground is ISolidColorBrush solid)
         {
             string hex = GetColorHex(solid.Color);
-            IconCss = $"path, circle, rect {{fill: {hex} !important; }} ";
+            IconCss = $"path, circle, rect {{fill: {hex} !important; opacity: {Opacity}; }} ";
         }
         else
             IconCss = null;

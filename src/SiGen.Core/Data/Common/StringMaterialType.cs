@@ -10,6 +10,7 @@
         PhosphorBronzeWound,
         NylonPlain,
         GutPlain,
-        // Add others as needed
+        SilverPlatedWound,
     }
 }
+ 

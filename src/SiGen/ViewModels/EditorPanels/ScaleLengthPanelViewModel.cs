@@ -236,12 +236,11 @@ namespace SiGen.ViewModels.EditorPanels
 
             for (int i = 0; i <= maxFrets; i++)
             {
-                double ratio = (double)(i + 1) / maxFrets;
-                var interval = PitchInterval.From12TET(i, 0);
-                var fretRatio = 1d - (1d / interval.Ratio);
+                var fretRatio = 1d - (1d / Math.Pow(2, i / 12d));
                 string fretLabel = i == 0 ? SiGen.Localization.Texts.FingerboardEnd_Nut : $"{Lang.Resources.FretLabel} {i}";
                 MultiScaleRatioPresets.Add(new AlignmentRatioPreset(fretRatio, fretLabel));
             }
+
             MultiScaleRatioPresets.Add(new AlignmentRatioPreset(1d, SiGen.Localization.Texts.FingerboardEnd_Bridge));
         }
 

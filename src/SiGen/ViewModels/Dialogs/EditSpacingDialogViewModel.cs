@@ -14,19 +14,21 @@ using System.Windows.Input;
 
 namespace SiGen.ViewModels.Dialogs
 {
-    public partial class CustomStringSpacingDialogViewModel : DialogViewModelBase<List<Measure>>
+    public partial class EditSpacingDialogViewModel : DialogViewModelBase<List<Measure>>
     {
-        public override string Title => "String Spacing";
+        private string _Title;
+        public override string Title => _Title;
 
         public ObservableCollection<CustomSpacingModel> Distances { get; }
 
         public ICommand SaveCommand { get; }
 
-        public CustomStringSpacingDialogViewModel(InstrumentLayoutConfiguration layoutConfiguration, FingerboardEnd fingerboardEnd)
+        public EditSpacingDialogViewModel(InstrumentLayoutConfiguration layoutConfiguration, FingerboardEnd fingerboardEnd)
         {
             Distances = new ObservableCollection<CustomSpacingModel>();
             var spacingCfg = layoutConfiguration.GetStringSpacing(fingerboardEnd);
-
+            string fingerboardEndName = fingerboardEnd == FingerboardEnd.Nut ? Lang.Resources.FingerboardEnd_Nut : Lang.Resources.FingerboardEnd_Bridge;
+            _Title = string.Format(Lang.Resources.StringSpacingDialog_TitleFormat, fingerboardEndName);
             for (int i = 0; i < layoutConfiguration.NumberOfStrings -1; i++)
                 Distances.Add(new CustomSpacingModel(i, spacingCfg.GetDistance(i)));
             ShowTitleBar = true;
@@ -34,12 +36,12 @@ namespace SiGen.ViewModels.Dialogs
         }
 
 
-        public CustomStringSpacingDialogViewModel()
+        public EditSpacingDialogViewModel()
         {
             var layoutConfiguration = new ElectricGuitarValuesProvider().GetDefaultConfiguration();
             Distances = new ObservableCollection<CustomSpacingModel>();
             var spacingCfg = layoutConfiguration.GetStringSpacing(FingerboardEnd.Nut);
-
+            _Title = string.Format(Lang.Resources.StringSpacingDialog_TitleFormat, Lang.Resources.FingerboardEnd_Nut);
             for (int i = 0; i < layoutConfiguration.NumberOfStrings - 1; i++)
                 Distances.Add(new CustomSpacingModel(i, spacingCfg.GetDistance(i)));
             SaveCommand = new RelayCommand(Save);
@@ -56,8 +58,11 @@ namespace SiGen.ViewModels.Dialogs
     {
 
         public int Index { get; }
+
         [ObservableProperty]
         private Measuring.Measure distance;
+
+        public bool IsEven => Index % 2 == 0;
 
         public CustomSpacingModel(int index, Measure distance)
         {

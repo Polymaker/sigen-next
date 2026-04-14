@@ -1,0 +1,52 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 mc:Ignorable="d"
+			 xmlns:vm="using:SiGen.ViewModels.Dialogs"
+			 xmlns:ctrl="using:SiGen.UI.Controls"
+			 x:Class="SiGen.UI.Dialogs.EditSpacingDialogView" MinWidth="300"
+			 x:DataType="vm:EditSpacingDialogViewModel" >
+	<UserControl.DataContext>
+		<vm:EditSpacingDialogViewModel/>
+	</UserControl.DataContext>
+	<UserControl.Styles>
+
+	</UserControl.Styles>
+	<Grid RowDefinitions="*,Auto">
+
+		<ItemsControl ItemsSource="{Binding Distances}" Background="{DynamicResource PanelBackgroundBrush}">
+			<ItemsControl.ItemsPanel>
+				<ItemsPanelTemplate>
+					<StackPanel/>
+				</ItemsPanelTemplate>
+			</ItemsControl.ItemsPanel>
+			<ItemsControl.ItemTemplate>
+				<DataTemplate>
+					<Border Classes.IsEven="{Binding IsEven}">
+						<Border.Styles>
+									<Style Selector="Border">
+										<Setter Property="Background" Value="Transparent"/>
+									</Style>
+									<Style Selector="Border.IsEven">
+										<Setter Property="Background" Value="{DynamicResource EvenRowBrush}"/>
+									</Style>
+								</Border.Styles>
+						<ctrl:MeasureTextBox Margin="3" Height="20"
+										 MinimumValue="2mm"
+										 MaximumValue="20mm"
+										 Value="{Binding Distance, Mode=TwoWay}" Width="100" TextAlignment="Right" />
+					</Border>
+					
+				</DataTemplate>
+			</ItemsControl.ItemTemplate>
+		</ItemsControl>
+		<WrapPanel Grid.Row="1" HorizontalAlignment="Center" >
+			<Button Grid.Row="1" Content="Save" Margin="3" Command="{Binding SaveCommand}"
+					Classes="Primary"
+					Width="100" HorizontalContentAlignment="Center"/>
+			<Button Grid.Row="1" Content="Cancel" Margin="3" Command="{Binding CancelCommand}"
+					Width="100" HorizontalContentAlignment="Center"/>
+		</WrapPanel>
+	</Grid>
+</UserControl>

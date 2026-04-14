@@ -15,7 +15,7 @@ namespace SiGen.Maths
         private readonly double? _dblValue;
         public readonly decimal DecimalValue => DISABLE_DECIMALS ? (decimal)_dblValue!.Value : (_decValue ?? 0);
 
-        public readonly double DoubleValue => _dblValue ?? (double)DecimalValue;
+        public readonly double DoubleValue => _dblValue ?? (_decValue.HasValue ? (double)_decValue.Value : 0);
 
         public readonly bool IsEmpty => /*_decValue == null && */_dblValue != null && (double.IsNaN(_dblValue.Value) || _dblValue == double.NaN);
 
@@ -32,7 +32,7 @@ namespace SiGen.Maths
         public PreciseDouble()
         {
             _decValue = 0;
-            _dblValue = null;
+            _dblValue = DISABLE_DECIMALS ? 0 : null;
         }
 
         public PreciseDouble(decimal value)

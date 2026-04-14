@@ -19,7 +19,7 @@ namespace SiGen.Lang {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "18.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Help {
@@ -72,6 +72,16 @@ namespace SiGen.Lang {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Accounts for the thickness of each string when calculating margins. 
+        ///When enabled, the distance is measured from the edge of the string to the edge of the fingerboard, rather than from the string center..
+        /// </summary>
+        public static string CompensateForStrings_Help {
+            get {
+                return ResourceManager.GetString("CompensateForStrings_Help", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Select whether the instrument layout is for a right-handed or left-handed player..
         /// </summary>
         public static string Handedness_Help {
@@ -101,6 +111,19 @@ namespace SiGen.Lang {
         public static string LayoutCenterAlignment_Help {
             get {
                 return ResourceManager.GetString("LayoutCenterAlignment_Help", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Choose how to apply fingerboard margins:
+        ///• **Uniform**: Use the same margin for all sides and ends.
+        ///• **By End**: Set different margins for the nut and the bridge.
+        ///• **By Side**: Set different margins for the bass and treble sides.
+        ///• **Individual**: Manually set each of the four margins..
+        /// </summary>
+        public static string MarginMode_Help {
+            get {
+                return ResourceManager.GetString("MarginMode_Help", resourceCulture);
             }
         }
         
@@ -148,7 +171,7 @@ namespace SiGen.Lang {
         /// <summary>
         ///   Looks up a localized string similar to Choose how strings are spaced on the instrument:
         ///• **Proportional**: Strings are spaced so the free space between each string is equal, taking into account the thickness (gauge) of each string.
-        ///• **Centered/Equal**: Strings are spaced so the distance from the center of one string to the center of the next is equal, regardless of string gauge.
+        ///• **Center to Center**: Strings are spaced so the distance from the center of one string to the center of the next is equal, regardless of string gauge.
         ///• **Manual**: String positions are set manually. The spacing mode is ignored, and you can place each string exactly where you want..
         /// </summary>
         public static string StringSpacingMode_Help {

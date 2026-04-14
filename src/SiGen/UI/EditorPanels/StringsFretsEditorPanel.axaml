@@ -42,7 +42,8 @@
 		</ctrl:CustomFormField>
 		<TextBlock Text="Advanced" TextAlignment="Center" />
 		<StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="8">
-			<Button ToolTip.Tip="{x:Static lang:Resources.StringsLabel}">
+			<Button ToolTip.Tip="{x:Static lang:Resources.StringsLabel}"
+					Command="{Binding EditStringsCommand}">
 				<ctrl:SvgIcon SvgImage="/Assets/Icons/StringIcon.svg" Width="24" />
 			</Button>
 			<Button ToolTip.Tip="Frets">

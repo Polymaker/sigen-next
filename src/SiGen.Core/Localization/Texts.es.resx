@@ -210,4 +210,49 @@
   <data name="Preset_Strings" xml:space="preserve">
     <value>Cuerdas</value>
   </data>
+  <data name="LayoutCenterAlignment.OuterStrings" xml:space="preserve">
+    <value>Cuerdas exteriores</value>
+  </data>
+  <data name="LayoutCenterAlignment.MiddleStrings" xml:space="preserve">
+    <value>Cuerdas centrales</value>
+  </data>
+  <data name="LayoutCenterAlignment.Manual" xml:space="preserve">
+    <value>Manual</value>
+  </data>
+  <data name="LayoutCenterAlignment.SymmetricStrings" xml:space="preserve">
+    <value>Diapasón simétrico</value>
+  </data>
+  <data name="LayoutCenterAlignment.SymmetricFingerboard" xml:space="preserve">
+    <value>Cuerdas simétricas</value>
+  </data>
+  <data name="LayoutCenterAlignment.Fingerboard" xml:space="preserve">
+    <value>Bordes del diapasón</value>
+  </data>
+  <data name="ScaleLengthSideNotConfigured" xml:space="preserve">
+    <value>La escala para el lado {0} no está configurada.</value>
+  </data>
+  <data name="ScaleLengthStringNotConfigured" xml:space="preserve">
+    <value>La escala para la cuerda {0} no está configurada.</value>
+  </data>
+  <data name="SingleScaleNotConfigured" xml:space="preserve">
+    <value>La escala no está configurada.</value>
+  </data>
+  <data name="StringSpacingConfigInvalid" xml:space="preserve">
+    <value>El espaciado de cuerdas en el {0} no es válido.</value>
+  </data>
+  <data name="StringSpacingManualAlignmentBothEnds" xml:space="preserve">
+    <value>No se puede usar el alineamiento central manual en ambos extremos.</value>
+  </data>
+  <data name="StringSpacingManualAlignmentRatioNotSet" xml:space="preserve">
+    <value>El espaciado en el {0} es manual, pero no se especificó el alineamiento.</value>
+  </data>
+  <data name="StringSpacingMode.Proportional" xml:space="preserve">
+    <value>Proporcional</value>
+  </data>
+  <data name="StringSpacingMode.Manual" xml:space="preserve">
+    <value>Manual</value>
+  </data>
+  <data name="StringSpacingMode.CenterToCenter" xml:space="preserve">
+    <value>De centro a centro</value>
+  </data>
 </root>

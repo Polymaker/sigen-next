@@ -1,4 +1,5 @@
-﻿using SiGen.Layouts.Data;
+﻿using SiGen.Data.Common;
+using SiGen.Layouts.Data;
 using SiGen.Measuring;
 using SiGen.Physics;
 using System;
@@ -42,12 +43,31 @@ namespace SiGen.Layouts.Configuration
             }
         }
 
+        public override bool IsStringCourse => false;
+
+        public override int NumberOfStrings => 1;
+
+        [JsonIgnore]
+        public StringMaterialConfiguration? Material => Properties?.Material;
+
+        [JsonIgnore]
+        public StringMaterialType? MaterialType
+        {
+            get => Properties?.Material?.MaterialType;
+            set
+            {
+                Properties ??= new StringProperties();
+                Properties.Material ??= new StringMaterialConfiguration();
+                Properties.Material.MaterialType = value;
+            }
+        }
+
         public override Measure? GetTotalWidth()
         {
             return Gauge;
         }
 
-        public override Measure GetTotalWidth2(bool includeGauge)
+        public override Measure GetStringSpan(bool includeGauge)
         {
             return includeGauge ? (Gauge.HasValue ? Gauge.Value : Measure.Zero) : Measure.Zero;
         }

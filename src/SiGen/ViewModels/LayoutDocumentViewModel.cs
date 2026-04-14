@@ -1,244 +1,195 @@
-﻿using Avalonia.Data;
+﻿using Avalonia;
 using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
-using Microsoft.Extensions.DependencyInjection;
 using SiGen.Layouts;
 using SiGen.Layouts.Builders;
 using SiGen.Layouts.Configuration;
-using SiGen.Serialization;
+using SiGen.Measuring;
 using SiGen.Services;
+using SiGen.UI.LayoutViewer;
 using SiGen.ViewModels.EditorPanels;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.IO;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
-using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace SiGen.ViewModels
 {
-    /// <summary>
-    /// Represents a single layout document in the editor.
-    /// </summary>
-    public partial class LayoutDocumentViewModel : ObservableObject, ILayoutDocumentContext
+    public partial class LayoutDocumentViewModel : ObservableObject, ILayoutDocumentContext, IDocumentTabViewModel
     {
-        private readonly IInstrumentValuesProviderFactory valuesProviderFactory;
-        public IInstrumentValuesProvider? InstrumentValuesProvider { get; private set; }
-
-
-        // File location (null if not yet saved)
-        private string? _filePath;
-        public string? FilePath
-        {
-            get => _filePath;
-            set => SetProperty(ref _filePath, value);
-        }
-
-        // Display name (filename or "Untitled")
-        public string DisplayName => !string.IsNullOrEmpty(FilePath) ? System.IO.Path.GetFileName(FilePath) : "Untitled";
-
-        // Unsaved changes tracking
-        private bool _hasUnsavedChanges;
-        private readonly IFileDialogService fileDialogService;
-
-        public bool HasUnsavedChanges
-        {
-            get => _hasUnsavedChanges;
-            set => SetProperty(ref _hasUnsavedChanges, value);
-        }
-
-        // Panel ViewModels
-        private List<EditorPanelViewModelBase> panelViewModels = new();
+        [ObservableProperty]
+        private string title;
 
         [ObservableProperty]
-        private StringedInstrumentLayout currentLayout;
+        private InstrumentLayoutConfiguration _configuration;
+
+        [ObservableProperty]
+        private string? filePath;
+
+        [ObservableProperty]
+        private bool hasUnsavedChanges;
+
+        [ObservableProperty]
+        public partial StringedInstrumentLayout? Layout { get; private set; }
 
         public event EventHandler? LayoutChanged;
 
-        //public MarginPanelViewModel MarginPanel { get; }
-        // Add other panels as needed
+        #region Layout Viewer Properties
 
-        public LayoutDocumentViewModel(IServiceProvider serviceProvider, IFileDialogService fileDialogService, IInstrumentValuesProviderFactory valuesProviderFactory)
+        [ObservableProperty]
+        private double layoutZoom = 1.0;
+
+        [ObservableProperty]
+        private Point layoutTrans = new Point(0, 0);
+
+        [ObservableProperty]
+        private LayoutOrientation layoutOrientation = LayoutOrientation.HorizontalNutRight;
+
+        [ObservableProperty]
+        private UnitMode layoutUnitMode = UnitMode.Metric;
+
+        public bool IsZoomToFit { get; set; } = true;
+
+        #endregion
+
+        // New property to expose dialog service to panels through the document context
+        public IDialogService? DialogService { get; private set; }
+        public IStringDataService DataService { get; }
+
+        private List<EditorPanelViewModelBase> PanelViewModels = new();
+
+        protected IInstrumentValuesProviderFactory? InstrumentValuesProviderFactory { get; } 
+        public IInstrumentValuesProvider? InstrumentValuesProvider { get; private set; }
+
+        string? IDocumentTabViewModel.TabToolTip => FilePath;
+
+        public bool IsBindingPanels { get; set; } = false;
+
+        public LayoutDocumentViewModel(string title, string? filePath, InstrumentLayoutConfiguration configuration)
         {
-            this.valuesProviderFactory = valuesProviderFactory;
-
-            this.fileDialogService = fileDialogService;
-
-            currentLayout = new StringedInstrumentLayout();
-            StableConfiguration = new InstrumentLayoutConfiguration();
-            WorkingConfiguration = new InstrumentLayoutConfiguration();
-
-
-            Type[] panelTypes = [typeof(InstrumentInfoPanelViewModel), typeof(ScaleLengthPanelViewModel)]; //, typeof(MarginPanelViewModel)];
-            foreach (var type in panelTypes)
-            {
-                var panel = (EditorPanelViewModelBase)serviceProvider.GetRequiredService(type);
-                panel.AssignContext(this);
-                panelViewModels.Add(panel);
-            }
+            this.title = title;
+            this.filePath = filePath;
+            Configuration = configuration;
+            InstrumentValuesProvider = new InstrumentValuesProviderFactory().CreateProvider(Configuration.InstrumentType);
+            InitializePanelViewModels();
+            DataService = new MockStringDataService();
         }
 
-        public T GetPanelViewModel<T>() where T : EditorPanelViewModelBase
+        //DI constructor
+        public LayoutDocumentViewModel(string title, string? filePath, InstrumentLayoutConfiguration configuration, 
+            //services
+            IInstrumentValuesProviderFactory? instrumentValuesProviderFactory, 
+            IDialogService? dialogService,
+            IStringDataService dataService)
         {
-            return (T)panelViewModels.First(p => p is T) ?? throw new InvalidOperationException($"Panel of type {typeof(T).Name} not found.");
+            this.title = title;
+            this.filePath = filePath;
+            Configuration = configuration;
+            InstrumentValuesProviderFactory = instrumentValuesProviderFactory;
+            InstrumentValuesProvider = instrumentValuesProviderFactory?.CreateProvider(Configuration.InstrumentType);
+            DialogService = dialogService;
+            DataService = dataService;
+            InitializePanelViewModels();
         }
 
-        protected override void OnPropertyChanged(PropertyChangedEventArgs e)
+        private void InitializePanelViewModels()
         {
-            base.OnPropertyChanged(e);
-            if (e.PropertyName == nameof(Layout))
-            {
-                LayoutChanged?.Invoke(this, EventArgs.Empty);
-            }
+            GetType().Assembly.GetTypes()
+                .Where(t => t.IsSubclassOf(typeof(EditorPanelViewModelBase)) && !t.IsAbstract)
+                .ToList()
+                .ForEach(t =>
+                {
+                    if (Activator.CreateInstance(t) is EditorPanelViewModelBase panel)
+                    {
+                        panel.AssignContext(this);
+                        PanelViewModels.Add(panel);
+                    }
+                });
+        }
+
+        public T? GetPanelViewModel<T>() where T : EditorPanelViewModelBase
+        {
+            return PanelViewModels.OfType<T>().FirstOrDefault();
         }
 
 
-        public void SetDocument(InstrumentLayoutConfiguration configuration, string? filepath = null)
-        {
-            StableConfiguration = configuration;
-            WorkingConfiguration = CloneConfiguration(configuration);
-            InstrumentValuesProvider = valuesProviderFactory?.CreateProvider(StableConfiguration.InstrumentType);
-            FilePath = filepath;
-            OnConfigurationChanged();
-            NotifyConfigurationChanged();
-        }
-
-        private InstrumentLayoutConfiguration CloneConfiguration(InstrumentLayoutConfiguration config)
-        {
-            var options = new JsonSerializerOptions();
-            options.Converters.Add(new BaseStringConfigurationConverter());
-            options.Converters.Add(new MeasureConverter());
-            var json = JsonSerializer.Serialize(config, options);
-            return JsonSerializer.Deserialize<InstrumentLayoutConfiguration>(json, options)!;
-        }
-
-
-        protected void RebuildLayout()
-        {
-            // Rebuild the layout using the current configuration
-            var result = LayoutBuilder.Build(WorkingConfiguration);
-            if (result.Success)
-            {
-                Layout = result.Layout!;
-            }
-            else
-            {
-
-                // Handle errors (e.g., show messages, log, etc.)
-                // For now, just clear the layout
-            }
-        }
-
-        #region Configuration Editing
-
-        public InstrumentLayoutConfiguration StableConfiguration { get; private set; }
-        public InstrumentLayoutConfiguration WorkingConfiguration { get; private set; }
-
-        InstrumentLayoutConfiguration ILayoutDocumentContext.Configuration => WorkingConfiguration;
-        private bool isLoadingConfig = false;
-
-        public void UpdateConfiguration(string reason, Action<InstrumentLayoutConfiguration> updateAction)
-        {
-            if (isLoadingConfig) return;
-            
-            int numberOfStrings = WorkingConfiguration.NumberOfStrings;
-            var instrumentType = WorkingConfiguration.InstrumentType;
-
-            // Apply the update action to the working configuration
-            updateAction(WorkingConfiguration);
-
-            if (WorkingConfiguration.NumberOfStrings != numberOfStrings)
-                NotifyNumberOfStringsChanged();
-
-            if (WorkingConfiguration.InstrumentType != instrumentType)
-            {
-                InstrumentValuesProvider = valuesProviderFactory?.CreateProvider(WorkingConfiguration.InstrumentType);
-                NotifyInstrumentTypeChanged();
-            }
-
-            OnConfigurationChanged();
-            HasUnsavedChanges = true;
-        }
-
-        private void NotifyConfigurationChanged()
-        {
-            isLoadingConfig = true;
-            foreach (var panel in panelViewModels)
-                panel.NotifyConfigurationChanged();
-            isLoadingConfig = false;
-        }
-
-        private void NotifyNumberOfStringsChanged()
-        {
-            foreach (var panel in panelViewModels)
-                panel.NotifyNumberOfStringsChanged();
-        }
-
-        private void NotifyInstrumentTypeChanged()
-        {
-            foreach (var panel in panelViewModels)
-                panel.NotifyInstrumentTypeChanged();
-        }
-
-        protected void OnConfigurationChanged()
+        partial void OnConfigurationChanged(InstrumentLayoutConfiguration value)
         {
             RebuildLayout();
         }
 
+        //partial void OnLayoutZoomChanging(double oldValue, double newValue)
+        //{
+        //    Trace.WriteLine($"{Title} zoom changing from {oldValue} to {newValue}");
+        //}
 
-        #endregion
-
-        #region Commands
-
-        // Save command
-        public IRelayCommand SaveCommand => new RelayCommand(async () => await SaveAsync());
-        // SaveAs command
-        public IRelayCommand SaveAsCommand => new RelayCommand(async () => await SaveAsAsync());
-
-        public async Task<bool> SaveAsync()
+        private void RebuildLayout()
         {
-            if (string.IsNullOrEmpty(FilePath))
+            var result = LayoutBuilder.Build(Configuration);
+            if (result.Success)
             {
-                // No file path, so call SaveAs
-                return await SaveAsAsync();
+                Layout = result.Layout;
             }
-
-            try
+            else
             {
-                // Serialize the configuration (replace with your preferred format)
-                var options = new JsonSerializerOptions
-                {
-                    WriteIndented = true,
-                    PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-                };
-                options.Converters.Add(new BaseStringConfigurationConverter());
-                options.Converters.Add(new MeasureConverter());
-                var json = JsonSerializer.Serialize(StableConfiguration, options);
-                await File.WriteAllTextAsync(FilePath, json);
-
-                HasUnsavedChanges = false;
-                return true;
-            }
-            catch (Exception)
-            {
-                // Handle error (log, show message, etc.)
-                // For now, just return false
-                return false;
+                //Layout = null;
             }
         }
 
-        private async Task<bool> SaveAsAsync()
+        partial void OnLayoutChanged(StringedInstrumentLayout? value)
         {
-            string? newPath = await fileDialogService.ShowSaveFileDialogAsync();
-            if (string.IsNullOrEmpty(newPath))
-                return false;
-
-            FilePath = newPath;
-            return await SaveAsync();
+            LayoutChanged?.Invoke(this, EventArgs.Empty);
         }
 
-        #endregion
+        public void UpdateConfiguration(string reason, Action<InstrumentLayoutConfiguration> updateAction)
+        {
+            if (IsBindingPanels)
+                return;
+
+            int numberOfStrings = Configuration.NumberOfStrings;
+            var instrumentType = Configuration.InstrumentType;
+
+            updateAction(Configuration);
+
+            HasUnsavedChanges = true;
+
+            if (Configuration.NumberOfStrings != numberOfStrings)
+            {
+                NotifyNumberOfStringsChanged();
+            }
+            if (Configuration.InstrumentType != instrumentType)
+            {
+                InstrumentValuesProvider = InstrumentValuesProviderFactory?.CreateProvider(Configuration.InstrumentType);
+                NotifyInstrumentTypeChanged();
+            }
+
+            NotifyConfigurationChanged();
+            RebuildLayout();
+        }
+
+        private void NotifyConfigurationChanged()
+        {
+            foreach (var panel in PanelViewModels)
+            {
+                panel.NotifyConfigurationChanged();
+            }
+        }
+
+        private void NotifyNumberOfStringsChanged()
+        {
+            foreach (var panel in PanelViewModels)
+            {
+                panel.NotifyNumberOfStringsChanged();
+            }
+        }
+
+        private void NotifyInstrumentTypeChanged()
+        {
+            foreach (var panel in PanelViewModels)
+            {
+                panel.NotifyInstrumentTypeChanged();
+            }
+        }
     }
 }

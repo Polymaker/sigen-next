@@ -16,7 +16,9 @@ namespace SiGen.Layouts.Configuration
         public List<StringProperties> Strings { get; set; } = new List<StringProperties>();
 
         [JsonIgnore]
-        public int StringCount => Strings.Count;
+        public override int NumberOfStrings => Strings.Count;
+
+        public override bool IsStringCourse => true;
 
         public Measure? GetGauge(int index)
         {
@@ -28,14 +30,14 @@ namespace SiGen.Layouts.Configuration
         public Measure GetTotalSpacing()
         {
             var spacing = Measure.IsNullOrEmpty(Spacing) ? Measure.Mm(1.5) : Spacing;
-            return spacing.Value * (StringCount - 1);
+            return spacing.Value * (NumberOfStrings - 1);
         }
 
         public override Measure? GetTotalWidth()
         {
             Measure measure = Measure.Zero;
             var spacing = Measure.IsNullOrEmpty(Spacing) ? Measure.Mm(1.5) : Spacing.Value; 
-            measure += spacing * (StringCount - 1);
+            measure += spacing * (NumberOfStrings - 1);
 
             foreach (var str in Strings)
             {
@@ -46,7 +48,7 @@ namespace SiGen.Layouts.Configuration
             return measure;
         }
 
-        public override Measure GetTotalWidth2(bool includeGauge)
+        public override Measure GetStringSpan(bool includeGauge)
         {
             var spacing = GetTotalSpacing();
             if (includeGauge)

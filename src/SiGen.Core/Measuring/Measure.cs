@@ -134,7 +134,7 @@ namespace SiGen.Measuring
         public static bool operator ==(Measure? m1, Measure? m2)
         {
             if (m1 is null || m2 is null)
-                return ReferenceEquals(m1, m2);
+                return m1 is null && m2 is null;
             return m1.Equals(m2);
         }
 

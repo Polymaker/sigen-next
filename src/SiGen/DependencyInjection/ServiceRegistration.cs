@@ -19,13 +19,15 @@ namespace SiGen.DependencyInjection
             services.AddSingleton<ISettingsService, SettingsService>();
             //services.AddSingleton<InstrumentValuesProviderFactory>();
 
+            services.AddSingleton<ViewModelFactory>();
+            services.AddSingleton<IStringDataService, StringDataService>();
             // ViewModels
 
             services.AddSingleton<HomePageViewModel>();
             services.AddSingleton<DesktopMainViewModel>();
 
-            services.AddTransient<ScaleLengthPanelViewModel>();
-            services.AddTransient<InstrumentInfoPanelViewModel>();
+            //services.AddTransient<ScaleLengthPanelViewModel>();
+            //services.AddTransient<InstrumentInfoPanelViewModel>();
             //services.AddTransient<LayoutDocumentViewModel>();
             
             return services;

@@ -19,7 +19,7 @@ namespace SiGen.Localization {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "18.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Texts {
@@ -349,7 +349,7 @@ namespace SiGen.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Scale length for &apos;{0}&apos; side is not configured..
+        ///   Looks up a localized string similar to Scale length for the {0} side has not been set..
         /// </summary>
         public static string ScaleLengthSideNotConfigured {
             get {
@@ -358,7 +358,7 @@ namespace SiGen.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Scale length for string {0} is not configured..
+        ///   Looks up a localized string similar to Scale length for string {0} has not been set..
         /// </summary>
         public static string ScaleLengthStringNotConfigured {
             get {
@@ -367,7 +367,7 @@ namespace SiGen.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Scale length is not configured..
+        ///   Looks up a localized string similar to Scale length has not been defined..
         /// </summary>
         public static string SingleScaleNotConfigured {
             get {
@@ -376,7 +376,7 @@ namespace SiGen.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to String spacing is not configured properly at the {0}..
+        ///   Looks up a localized string similar to String spacing at the {0} is invalid..
         /// </summary>
         public static string StringSpacingConfigInvalid {
             get {
@@ -385,7 +385,7 @@ namespace SiGen.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cannot use manual center alignment for both ends..
+        ///   Looks up a localized string similar to Manual center alignment cannot be used for both ends..
         /// </summary>
         public static string StringSpacingManualAlignmentBothEnds {
             get {
@@ -394,7 +394,7 @@ namespace SiGen.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Spacing at the {0} is set to manual but the alignment was not specified..
+        ///   Looks up a localized string similar to Spacing at the {0} is set to manual, but no alignment value was specified..
         /// </summary>
         public static string StringSpacingManualAlignmentRatioNotSet {
             get {
@@ -403,7 +403,7 @@ namespace SiGen.Localization {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Centered / Equal.
+        ///   Looks up a localized string similar to Center to Center.
         /// </summary>
         public static string StringSpacingMode_CenterToCenter {
             get {
@@ -448,6 +448,15 @@ namespace SiGen.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Half step down.
+        /// </summary>
+        public static string Tuning_HalfStepDown {
+            get {
+                return ResourceManager.GetString("Tuning.HalfStepDown", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Open.
         /// </summary>
         public static string Tuning_Open {
@@ -480,6 +489,15 @@ namespace SiGen.Localization {
         public static string Tuning_StandardFormat {
             get {
                 return ResourceManager.GetString("Tuning.StandardFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Whole step down.
+        /// </summary>
+        public static string Tuning_WholeStepDown {
+            get {
+                return ResourceManager.GetString("Tuning.WholeStepDown", resourceCulture);
             }
         }
     }

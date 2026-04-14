@@ -3,7 +3,8 @@ using System.Text.RegularExpressions;
 
 namespace SiGen.Physics
 {
-    public readonly record struct NoteAndOctave(NoteName Note, int Octave, double CentOffset = 0)
+    public readonly record struct 
+        NoteAndOctave(NoteName Note, int Octave, double CentOffset = 0)
     {
         public override string ToString() =>
             CentOffset == 0
@@ -14,6 +15,11 @@ namespace SiGen.Physics
             CentOffset == 0
                 ? $"{Note}{Octave}"
                 : $"{Note}{Octave}{CentOffset:+0.##;-0.##}";
+
+        public string ToStringFormatted()
+        {
+            return Note.ToString().Replace('b', '♭') + Octave.ToString();
+        }
 
         private static Regex NotePattern = new(@"^([A-Ga-g])([#b♯♭])?(\d+)?(([+-]\d+))?$", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
@@ -87,5 +93,21 @@ namespace SiGen.Physics
             result = new NoteAndOctave(noteName, octave, centOffset);
             return true;
         }
+    
+        public NoteAndOctave Transpose(int semitones)
+        {
+            int totalSemitones = (int)Note + (Octave * 12) + semitones;
+            int newOctave = totalSemitones / 12;
+            int newNoteOffset = totalSemitones % 12;
+            if (newNoteOffset < 0)
+            {
+                newNoteOffset += 12;
+                newOctave -= 1;
+            }
+            NoteName newNote = (NoteName)newNoteOffset;
+            return new NoteAndOctave(newNote, newOctave, CentOffset);
+        }
+
+        public double ToAbsoluteCents() => (Octave * 1200) + ((int)Note * 100) + CentOffset;
     }
 }

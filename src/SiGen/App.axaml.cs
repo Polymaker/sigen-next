@@ -54,7 +54,7 @@ public partial class App : Application
             //collection.AddSingleton<IFileDialogService, DummyFileDialogService>();
             var mainWindow = new MainWindow();
             collection.AddSingleton<IDialogService, DesktopDialogService>(sp => new DesktopDialogService(mainWindow, sp));
-            collection.AddSingleton<LayoutDocumentModelFactory>();
+            //collection.AddSingleton<ViewModelFactory>();
             Services = collection.BuildServiceProvider();
             mainWindow.DataContext = Services.GetService<DesktopMainViewModel>();
             desktop.MainWindow = mainWindow;
@@ -62,7 +62,7 @@ public partial class App : Application
         else if (ApplicationLifetime is ISingleViewApplicationLifetime singleViewPlatform)
         {
             collection.AddSingleton<IDialogService, MockDialogService>();
-            collection.AddSingleton<LayoutDocumentModelFactory>();
+            //collection.AddSingleton<ViewModelFactory>();
             Services = collection.BuildServiceProvider();
             singleViewPlatform.MainView = new MobileMainView
             {

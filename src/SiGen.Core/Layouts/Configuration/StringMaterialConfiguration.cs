@@ -25,7 +25,7 @@ namespace SiGen.Layouts.Configuration
         public double? CoreDiameter { get; set; }
 
         /// <summary>
-        /// The material and style type of the string (e.g., SteelWound, NylonPlain).
+        /// The material and style type of the string (e.g., NickelWound, NylonPlain).
         /// Used for display and rendering, and to select physical properties.
         /// </summary>
         public StringMaterialType? MaterialType { get; set; }

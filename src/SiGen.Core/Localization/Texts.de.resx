@@ -210,4 +210,52 @@
   <data name="Preset_Strings" xml:space="preserve">
     <value>Saiten</value>
   </data>
+  <data name="Tuning.HalfStepDown" xml:space="preserve">
+    <value>Halbton tiefer</value>
+  </data>
+  <data name="LayoutCenterAlignment.OuterStrings" xml:space="preserve">
+    <value>Außensaiten</value>
+  </data>
+  <data name="LayoutCenterAlignment.MiddleStrings" xml:space="preserve">
+    <value>Mittelsaiten</value>
+  </data>
+  <data name="LayoutCenterAlignment.Fingerboard" xml:space="preserve">
+    <value>Griffbrettkanten</value>
+  </data>
+  <data name="LayoutCenterAlignment.Manual" xml:space="preserve">
+    <value>Manuell</value>
+  </data>
+  <data name="LayoutCenterAlignment.SymmetricFingerboard" xml:space="preserve">
+    <value>Symmetrisches Griffbrett</value>
+  </data>
+  <data name="LayoutCenterAlignment.SymmetricStrings" xml:space="preserve">
+    <value>Symmetrische Saiten</value>
+  </data>
+  <data name="ScaleLengthSideNotConfigured" xml:space="preserve">
+    <value>Mensur für die {0}-Seite ist nicht konfiguriert.</value>
+  </data>
+  <data name="ScaleLengthStringNotConfigured" xml:space="preserve">
+    <value>Mensur für Saite {0} ist nicht konfiguriert.</value>
+  </data>
+  <data name="SingleScaleNotConfigured" xml:space="preserve">
+    <value>Mensur ist nicht konfiguriert.</value>
+  </data>
+  <data name="StringSpacingConfigInvalid" xml:space="preserve">
+    <value>Saitenabstand am {0} ist ungültig.</value>
+  </data>
+  <data name="StringSpacingManualAlignmentBothEnds" xml:space="preserve">
+    <value>Manueller Mittenausgleich kann nicht für beide Enden verwendet werden.</value>
+  </data>
+  <data name="StringSpacingManualAlignmentRatioNotSet" xml:space="preserve">
+    <value>Abstand am {0} ist auf manuell gesetzt, aber die Ausrichtung wurde nicht angegeben.</value>
+  </data>
+  <data name="StringSpacingMode.Proportional" xml:space="preserve">
+    <value>Proportional</value>
+  </data>
+  <data name="StringSpacingMode.CenterToCenter" xml:space="preserve">
+    <value>Mitte zu Mitte</value>
+  </data>
+  <data name="StringSpacingMode.Manual" xml:space="preserve">
+    <value>Manuell</value>
+  </data>
 </root>
