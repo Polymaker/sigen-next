@@ -21,6 +21,7 @@ namespace SiGen.DependencyInjection
 
             services.AddSingleton<ViewModelFactory>();
             services.AddSingleton<IStringDataService, StringDataService>();
+            services.AddTransient<IStringMaterialEstimationService, StringMaterialEstimationService>();
             // ViewModels
 
             services.AddSingleton<HomePageViewModel>();

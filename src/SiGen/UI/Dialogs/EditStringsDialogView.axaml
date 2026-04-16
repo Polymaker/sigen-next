@@ -79,7 +79,7 @@
 
 										<TextBlock  Grid.Row="1"  Grid.Column="0"
 													VerticalAlignment="Center"
-													Margin="3,0" FontWeight="Bold"
+													Margin="3,0" FontWeight="DemiBold"
 													IsVisible="{Binding IsSingle}" >
 											<TextBlock.Text>
 												<MultiBinding StringFormat="{}{0} {1}">
@@ -91,7 +91,7 @@
 
 										<TextBlock  Grid.Row="0"  Grid.Column="0"
 													VerticalAlignment="Center"
-													Margin="3,10,0,0" FontWeight="Bold"
+													Margin="3,10,0,0" FontWeight="DemiBold"
 													IsVisible="{Binding IsCourse}" >
 											<TextBlock.Text>
 												<MultiBinding StringFormat="{}{0} {1}">
@@ -122,7 +122,14 @@
 													  Grid.Row="0" Grid.ColumnSpan="6" Grid.RowSpan="2">
 											<ItemsControl.ItemTemplate>
 												<DataTemplate>
-													<Grid ColumnDefinitions="90,80,2*,120,*" >
+													<Grid>
+														<Grid.ColumnDefinitions>
+															<ColumnDefinition Width="90"/>
+															<ColumnDefinition Width="80"/>
+															<ColumnDefinition Width="2*"/>
+															<ColumnDefinition Width="120"/>
+															<ColumnDefinition Width="*"/>
+														</Grid.ColumnDefinitions>
 
 														<ctrl:MeasureTextBox Grid.Column="1" Margin="3" Value="{Binding Gauge, Mode=TwoWay}" />
 														<ComboBox x:Name="MaterialCombobox"
@@ -134,7 +141,7 @@
 														</ComboBox>
 
 														<ctrl:GuitarStringRenderer Grid.Column="3" Grid.Row="1"
-																				   Margin="3,0,3,0"
+																				   Margin="6,0,3,0"
 																				   Gauge="{Binding Gauge}"
 																				   Material="{Binding MaterialType}"
 																				   TrebleIndex="{Binding TrebleIndex}"

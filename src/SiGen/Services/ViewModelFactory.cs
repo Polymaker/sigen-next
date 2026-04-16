@@ -1,32 +1,29 @@
-﻿using SiGen.Layouts.Configuration;
+﻿using Microsoft.Extensions.DependencyInjection;
+using SiGen.Layouts.Configuration;
 using SiGen.ViewModels;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SiGen.Services
 {
     public class ViewModelFactory
     {
-        private IDialogService dialogService;
-        private IInstrumentValuesProviderFactory instrumentValuesProviderFactory;
-        private readonly IStringDataService stringDataService;
+        private readonly IServiceProvider serviceProvider;
 
-        public ViewModelFactory(IDialogService dialogService, IInstrumentValuesProviderFactory instrumentValuesProviderFactory, IStringDataService stringDataService)
+        public ViewModelFactory(IServiceProvider serviceProvider)
         {
-            this.dialogService = dialogService;
-            this.instrumentValuesProviderFactory = instrumentValuesProviderFactory;
-            this.stringDataService = stringDataService;
+            this.serviceProvider = serviceProvider;
         }
 
         public LayoutDocumentViewModel CreateLayoutDocumentViewModel(string? filepath, InstrumentLayoutConfiguration configuration, string? templateName = null)
         {
-            string title = templateName ?? 
+            string title = templateName ??
                 (!string.IsNullOrEmpty(filepath) ? System.IO.Path.GetFileNameWithoutExtension(filepath) : Lang.Resources.NewDocumentName);
 
-            return new LayoutDocumentViewModel(title, filepath, configuration, instrumentValuesProviderFactory, dialogService, stringDataService);
+            return ActivatorUtilities.CreateInstance<LayoutDocumentViewModel>(
+                serviceProvider,
+                title,
+                filepath ?? string.Empty,
+                configuration);
         }
     }
 }

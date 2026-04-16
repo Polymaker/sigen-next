@@ -48,6 +48,8 @@ namespace SiGen.ViewModels
 
         IStringDataService DataService { get; }
 
+        IStringMaterialEstimationService MaterialEstimationService { get; }
+
         /// <summary>
         /// Updates the working configuration and triggers layout regeneration and change notification.
         /// </summary>

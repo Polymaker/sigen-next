@@ -1,5 +1,6 @@
 ﻿using Avalonia;
 using CommunityToolkit.Mvvm.ComponentModel;
+using Microsoft.Extensions.DependencyInjection;
 using SiGen.Layouts;
 using SiGen.Layouts.Builders;
 using SiGen.Layouts.Configuration;
@@ -37,6 +38,9 @@ namespace SiGen.ViewModels
 
         #region Layout Viewer Properties
 
+        // These properties control the zoom, pan, orientation, and unit mode of the layout viewer.
+        // They are stored in the document so when the user switches between different documents, the viewer settings for each document are preserved.
+
         [ObservableProperty]
         private double layoutZoom = 1.0;
 
@@ -56,6 +60,7 @@ namespace SiGen.ViewModels
         // New property to expose dialog service to panels through the document context
         public IDialogService? DialogService { get; private set; }
         public IStringDataService DataService { get; }
+        public IStringMaterialEstimationService MaterialEstimationService { get; }
 
         private List<EditorPanelViewModelBase> PanelViewModels = new();
 
@@ -72,24 +77,28 @@ namespace SiGen.ViewModels
             this.filePath = filePath;
             Configuration = configuration;
             InstrumentValuesProvider = new InstrumentValuesProviderFactory().CreateProvider(Configuration.InstrumentType);
-            InitializePanelViewModels();
             DataService = new MockStringDataService();
+            MaterialEstimationService = new StringMaterialEstimationService(DataService);
+            InitializePanelViewModels();
         }
 
         //DI constructor
+        [ActivatorUtilitiesConstructor]
         public LayoutDocumentViewModel(string title, string? filePath, InstrumentLayoutConfiguration configuration, 
             //services
             IInstrumentValuesProviderFactory? instrumentValuesProviderFactory, 
             IDialogService? dialogService,
-            IStringDataService dataService)
+            IStringDataService dataService,
+            IStringMaterialEstimationService materialEstimationService)
         {
             this.title = title;
-            this.filePath = filePath;
+            this.filePath = string.IsNullOrEmpty(filePath) ? null : filePath;
             Configuration = configuration;
             InstrumentValuesProviderFactory = instrumentValuesProviderFactory;
             InstrumentValuesProvider = instrumentValuesProviderFactory?.CreateProvider(Configuration.InstrumentType);
             DialogService = dialogService;
             DataService = dataService;
+            MaterialEstimationService = materialEstimationService;
             InitializePanelViewModels();
         }
 

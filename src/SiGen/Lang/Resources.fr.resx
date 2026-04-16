@@ -279,9 +279,21 @@
   <data name="HomePageView.Header" xml:space="preserve">
     <value>Concevoir, personnaliser et créer des plans d'instruments</value>
   </data>
-  <data name="HomePageView.WelcomText" xml:space="preserve">
-    <value>SiGen vous aide à concevoir et personnaliser avec précision des configurations d'instruments à cordes.
-Ouvrez un fichier récent pour continuer votre travail ou créez une nouvelle configuration à l'aide de l'un de nos modèles.</value>
+  <data name="HomePageView.HeaderPart1" xml:space="preserve">
+    <value>Chaque frette,</value>
+  </data>
+  <data name="HomePageView.HeaderPart2" xml:space="preserve">
+    <value>exactement à sa place.</value>
+  </data>
+  <data name="HomePageView.RecentFilesLabel" xml:space="preserve">
+    <value>FICHIERS RÉCENTS</value>
+  </data>
+  <data name="HomePageView.TemplateLabel" xml:space="preserve">
+    <value>COMMENCER À PARTIR D’UN MODÈLE</value>
+  </data>
+  <data name="HomePageView.WelcomeText" xml:space="preserve">
+    <value>Concevez et exportez des schémas précis pour instruments à cordes, de la Stratocaster standard à la guitare 8 cordes à frettes en éventail.
+Ouvrez un fichier récent ou partez d'un modèle.</value>
   </data>
   <data name="InstrumentInfoEditorPanel.Handedness" xml:space="preserve">
     <value>Orientation de l'instrument</value>
@@ -334,6 +346,12 @@ Ouvrez un fichier récent pour continuer votre travail ou créez une nouvelle co
   <data name="EditTuningDialog.NoTuningSelectedMessage" xml:space="preserve">
     <value>Aucun accordage sélectionné</value>
   </data>
+  <data name="EditTuningDialog.OptionalTuningMessage" xml:space="preserve">
+    <value>L’accordage est optionnel et ne modifie pas directement le plan. Définissez-le pour estimer la tension ; il est requis pour la compensation des frettes.</value>
+  </data>
+  <data name="PresetFlyout.ClickPresetToApply" xml:space="preserve">
+    <value>Cliquez sur un préréglage pour l’appliquer</value>
+  </data>
   <data name="NewDocumentName" xml:space="preserve">
     <value>Nouveau plan</value>
   </data>
@@ -345,5 +363,20 @@ Ouvrez un fichier récent pour continuer votre travail ou créez une nouvelle co
   </data>
   <data name="FingerboardEditorPanel.CompensateMarginsLabel" xml:space="preserve">
     <value>Compenser le calibre</value>
+  </data>
+  <data name="DateLabel.Today" xml:space="preserve">
+    <value>Aujourd’hui {0}</value>
+  </data>
+  <data name="DateLabel.Yesterday" xml:space="preserve">
+    <value>Hier {0}</value>
+  </data>
+  <data name="ScaleLengthEditorPanel.SingleScalePresetHeader" xml:space="preserve">
+    <value>Diapasons courants</value>
+  </data>
+  <data name="StringsFretsEditorPanel.CommonFretsPresetHeader" xml:space="preserve">
+    <value>Nombres de frettes courants</value>
+  </data>
+  <data name="FretsLabel" xml:space="preserve">
+    <value>Frettes</value>
   </data>
 </root>

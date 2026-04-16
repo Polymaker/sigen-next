@@ -70,6 +70,24 @@ namespace SiGen.Lang {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Today {0}.
+        /// </summary>
+        public static string DateLabel_Today {
+            get {
+                return ResourceManager.GetString("DateLabel.Today", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Yesterday {0}.
+        /// </summary>
+        public static string DateLabel_Yesterday {
+            get {
+                return ResourceManager.GetString("DateLabel.Yesterday", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Left handed.
         /// </summary>
         public static string Editor_Handedness_Left {
@@ -250,6 +268,15 @@ namespace SiGen.Lang {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Tuning is optional and does not change the layout directly. Set it to estimate tension; it is required for fret compensation..
+        /// </summary>
+        public static string EditTuningDialog_OptionalTuningMessage {
+            get {
+                return ResourceManager.GetString("EditTuningDialog.OptionalTuningMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Tuning Configuration.
         /// </summary>
         public static string EditTuningDialog_Title {
@@ -340,6 +367,15 @@ namespace SiGen.Lang {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Frets.
+        /// </summary>
+        public static string FretsLabel {
+            get {
+                return ResourceManager.GetString("FretsLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Design, Customize, and Create Instrument Layouts.
         /// </summary>
         public static string HomePageView_Header {
@@ -349,12 +385,48 @@ namespace SiGen.Lang {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to SiGen helps you design and customize stringed instrument layouts with precision.
-        ///Open a recent file to continue your work, or start a new layout using one of our templates..
+        ///   Looks up a localized string similar to Every fret,.
         /// </summary>
-        public static string HomePageView_WelcomText {
+        public static string HomePageView_HeaderPart1 {
             get {
-                return ResourceManager.GetString("HomePageView.WelcomText", resourceCulture);
+                return ResourceManager.GetString("HomePageView.HeaderPart1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to exactly where it belongs..
+        /// </summary>
+        public static string HomePageView_HeaderPart2 {
+            get {
+                return ResourceManager.GetString("HomePageView.HeaderPart2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to RECENT FILES.
+        /// </summary>
+        public static string HomePageView_RecentFilesLabel {
+            get {
+                return ResourceManager.GetString("HomePageView.RecentFilesLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to START FROM A TEMPLATE.
+        /// </summary>
+        public static string HomePageView_TemplateLabel {
+            get {
+                return ResourceManager.GetString("HomePageView.TemplateLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Design and export precision stringed instrument layouts — from a standard Strat to a fanned-fret 8-string.
+        ///Open a recent file or start from a template..
+        /// </summary>
+        public static string HomePageView_WelcomeText {
+            get {
+                return ResourceManager.GetString("HomePageView.WelcomeText", resourceCulture);
             }
         }
         
@@ -512,6 +584,15 @@ namespace SiGen.Lang {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Click on a preset to apply.
+        /// </summary>
+        public static string PresetFlyout_ClickPresetToApply {
+            get {
+                return ResourceManager.GetString("PresetFlyout.ClickPresetToApply", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Scale length.
         /// </summary>
         public static string ScaleLength {
@@ -553,6 +634,15 @@ namespace SiGen.Lang {
         public static string ScaleLengthEditorPanel_ScaleLengthMode {
             get {
                 return ResourceManager.GetString("ScaleLengthEditorPanel.ScaleLengthMode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Common scale lengths.
+        /// </summary>
+        public static string ScaleLengthEditorPanel_SingleScalePresetHeader {
+            get {
+                return ResourceManager.GetString("ScaleLengthEditorPanel.SingleScalePresetHeader", resourceCulture);
             }
         }
         
@@ -616,6 +706,15 @@ namespace SiGen.Lang {
         public static string StringLabel {
             get {
                 return ResourceManager.GetString("StringLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Common number of frets.
+        /// </summary>
+        public static string StringsFretsEditorPanel_CommonFretsPresetHeader {
+            get {
+                return ResourceManager.GetString("StringsFretsEditorPanel.CommonFretsPresetHeader", resourceCulture);
             }
         }
         

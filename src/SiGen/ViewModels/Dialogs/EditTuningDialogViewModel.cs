@@ -21,8 +21,11 @@ namespace SiGen.ViewModels.Dialogs
 {
     public partial class EditTuningDialogViewModel : DialogViewModelBase<EditTuningResult>
     {
+        private const double TensionBalanceTolerance = 0.25;
+
         private readonly InstrumentLayoutConfiguration layoutConfiguration;
         private readonly ILayoutDocumentContext? layoutContext;
+        private readonly IStringMaterialEstimationService materialEstimationService;
 
         public override string Title => Lang.Resources.EditTuningDialog_Title;
 
@@ -41,6 +44,7 @@ namespace SiGen.ViewModels.Dialogs
             valuesProvider = new ElectricGuitarValuesProvider();
             var layout = valuesProvider.GetDefaultConfiguration();
             this.layoutConfiguration = layout;
+            materialEstimationService = new StringMaterialEstimationService(new MockStringDataService());
             UpdateAvailablePresets();
             BuildStringCollection();
             ApplyTuningCommand = new RelayCommand<InstrumentTuningPreset>(ApplyTuningPreset);
@@ -50,6 +54,7 @@ namespace SiGen.ViewModels.Dialogs
         {
             this.layoutConfiguration = context.Configuration;
             this.valuesProvider = context.InstrumentValuesProvider;
+            materialEstimationService = context.MaterialEstimationService;
             
             ShowTitleBar = true;
             ApplyTuningCommand = new RelayCommand<InstrumentTuningPreset>(ApplyTuningPreset);
@@ -81,22 +86,20 @@ namespace SiGen.ViewModels.Dialogs
             {
                 var stringElem = layoutContext?.Layout?.GetStringElement(i);
 
-                var course = new TuningCourseViewModel(i, layoutConfiguration.StringConfigurations[i], (double)(stringElem?.Path.Length ?? 0));
-                if (anyCourse && course.NumberOfStrings > 1)
-                {
-                    course.Label = $"{Resources.StringCourseLabel} {i + 1}";
-                }
-                else
-                    course.Label = $"{Resources.StringLabel} {i + 1}";
+                var course = new TuningCourseViewModel(i, layoutConfiguration.StringConfigurations[i], (double)(stringElem?.Path.Length ?? 0), RecalculateTensionBalance);
+                //if (anyCourse && course.NumberOfStrings > 1)
+                //{
+                //    course.Label = $"{Resources.StringCourseLabel} {i + 1}";
+                //}
+                //else
+                //    course.Label = $"{Resources.StringLabel} {i + 1}";
                 StringCourses.Add(course);
             }
-
-            //EstimateUnitWeights();
         }
 
         public async Task EstimateUnitWeights()
         {
-            if (layoutContext == null) return;
+            await materialEstimationService.EstimateUnitWeightsAsync(layoutConfiguration);
 
             for (int i = 0; i < layoutConfiguration.NumberOfStrings; i++)
             {
@@ -104,26 +107,47 @@ namespace SiGen.ViewModels.Dialogs
                 if (strConfig is SingleStringConfiguration single)
                 {
                     StringCourses[i].Strings[0].UnitWeight = single.Material?.UnitWeight;
+                    StringCourses[i].Strings[0].RecalculateTension();
                 }
                 else if (strConfig is StringGroupConfiguration group)
                 {
                     for (int j = 0; j < group.NumberOfStrings; j++)
-                        StringCourses[i].Strings[j].UnitWeight = group.Strings[j].Material?.UnitWeight;
-                }
-
-                for (int j = 0; j < StringCourses[i].Strings.Count; j++)
-                {
-                    var stringModel = StringCourses[i].Strings[j];
-                    if (stringModel.Properties == null || !stringModel.Properties.Gauge.HasValue) continue;
-
-                    if ((stringModel.UnitWeight ?? 0) == 0)
                     {
-                        stringModel.UnitWeight = await layoutContext.DataService.InterpolateUnitWeight(
-                            (double)stringModel.Properties.Gauge.Value[Measuring.LengthUnit.In], stringModel.Properties.Material?.MaterialType);
+                        StringCourses[i].Strings[j].UnitWeight = group.Strings[j].Material?.UnitWeight;
+                        StringCourses[i].Strings[j].RecalculateTension();
                     }
-
-                    stringModel.RecalculateTension();
                 }
+            }
+
+            RecalculateTensionBalance();
+        }
+
+        private void RecalculateTensionBalance()
+        {
+            var strings = StringCourses
+                .SelectMany(course => course.Strings)
+                .Where(s => s.StiffnessIndex.HasValue && s.StiffnessIndex.Value > 0)
+                .ToList();
+
+            foreach (var stringModel in StringCourses.SelectMany(course => course.Strings))
+                stringModel.TensionBalanceState = TensionBalanceState.Unknown;
+
+            if (strings.Count < 2)
+                return;
+
+            var averageStiffness = strings.Average(s => s.StiffnessIndex!.Value);
+            if (averageStiffness <= 0)
+                return;
+
+            foreach (var stringModel in strings)
+            {
+                var deltaRatio = (stringModel.StiffnessIndex!.Value - averageStiffness) / averageStiffness;
+                if (Math.Abs(deltaRatio) <= TensionBalanceTolerance)
+                    stringModel.TensionBalanceState = TensionBalanceState.Balanced;
+                else if (deltaRatio < 0)
+                    stringModel.TensionBalanceState = TensionBalanceState.UnderTensioned;
+                else
+                    stringModel.TensionBalanceState = TensionBalanceState.OverTensioned;
             }
         }
 
@@ -151,49 +175,68 @@ namespace SiGen.ViewModels.Dialogs
 
     public partial class StringTuningModel : ObservableObject
     {
+        private readonly Action? tensionMetricsChanged;
+
         [ObservableProperty]
         private NoteAndOctave? tuning;
         [ObservableProperty]
         private double? stringTension;
-
-        public string Label { get; set; } = string.Empty;
-        public int StringIndex { get; }
-        public int StringNumber => StringIndex + 1;
-        public StringProperties? Properties { get; }
-        public double StringLength { get; }
- 
         [ObservableProperty]
         private double? stiffnessIndex;
         [ObservableProperty]
         private double? unitWeight;
+        [ObservableProperty]
+        private TensionBalanceState tensionBalanceState;
 
-        public StringTuningModel(int index, StringProperties? properties, double stringLength)
+        public int StringIndex { get; }
+        public int StringNumber => StringIndex + 1;
+        public StringProperties? Properties { get; }
+        public double StringLengthCM { get; }
+
+        public StringTuningModel(int index, StringProperties? properties, double stringLengthCM, Action? tensionMetricsChanged = null)
         {
             StringIndex = index;
             Tuning = properties?.Tuning;
             Properties = properties;
-            StringLength = stringLength;
-            StringTension = 14.5;
+            StringLengthCM = stringLengthCM;
+            this.tensionMetricsChanged = tensionMetricsChanged;
             RecalculateTension();
         }
 
         partial void OnTuningChanged(NoteAndOctave? value)
         {
             RecalculateTension();
+            tensionMetricsChanged?.Invoke();
         }
+
+        //partial void OnUnitWeightChanged(double? value)
+        //{
+        //    RecalculateTension();
+        //    tensionMetricsChanged?.Invoke();
+        //}
 
         public void RecalculateTension()
         {
-            if (Tuning.HasValue && StringLength > 0 && UnitWeight.HasValue && UnitWeight > 0)
+            if (Tuning.HasValue && StringLengthCM > 0 && UnitWeight.HasValue && UnitWeight > 0)
             {
-                double scaleLengthInches = StringLength / 2.54;
-                double gaugeInches = (double)Properties!.Gauge!.Value[Measuring.LengthUnit.In];
+                double scaleLengthInches = StringLengthCM / 2.54;
                 var noteFreq = PitchInterval.CalculateFrequency(PitchInterval.FromNote(Tuning.Value));
                 StringTension = (UnitWeight.Value * Math.Pow(2 * scaleLengthInches * noteFreq, 2)) / 386.089;
-                StiffnessIndex = StringTension / (scaleLengthInches);
+                StiffnessIndex = StringTension / scaleLengthInches;
+                return;
             }
-        }
 
+            StringTension = null;
+            StiffnessIndex = null;
+        }
+    }
+
+    public enum TensionBalanceState
+    {
+        Unknown,
+        UnderTensioned,
+        Balanced,
+        OverTensioned
     }
 
     public record StringCourseTuning(NoteAndOctave?[] Strings);
@@ -230,11 +273,10 @@ namespace SiGen.ViewModels.Dialogs
 
     public partial class TuningCourseViewModel : ObservableObject
     {
-        // The collection of individual string tunings within this course
         [ObservableProperty]
         private ObservableCollection<StringTuningModel> _strings;
 
-        public int CourseIndex { get; set; } // Set this when creating the VM
+        public int CourseIndex { get; set; }
         public int CourseNumber => CourseIndex + 1;
         public bool IsGrouped => Strings.Count > 1;
         public bool IsNotGrouped => Strings.Count == 1;
@@ -244,26 +286,23 @@ namespace SiGen.ViewModels.Dialogs
 
         public TuningCourseViewModel()
         {
-            // Copy data from the model into the observable collection
             _strings = new ObservableCollection<StringTuningModel>();
         }
 
-        public TuningCourseViewModel(int index, BaseStringConfiguration stringConfiguration, double stringLength)
+        public TuningCourseViewModel(int index, BaseStringConfiguration stringConfiguration, double stringLength, Action? tensionMetricsChanged = null)
         {
             CourseIndex = index;
-            // Copy data from the model into the observable collection
             _strings = new ObservableCollection<StringTuningModel>();
             if (stringConfiguration is SingleStringConfiguration singleString)
             {
-                _strings.Add(new StringTuningModel(0, singleString.Properties, stringLength) { UnitWeight = singleString.Material?.UnitWeight });
+                _strings.Add(new StringTuningModel(0, singleString.Properties, stringLength, tensionMetricsChanged) { UnitWeight = singleString.Material?.UnitWeight });
             }
             else if (stringConfiguration is StringGroupConfiguration stringGroup)
             {
                 for (int i = 0; i < stringGroup.NumberOfStrings; i++)
-                    _strings.Add(new StringTuningModel(i, stringGroup.Strings[i], stringLength) { Label = $"String {i + 1}", UnitWeight = stringGroup.Strings[i].Material?.UnitWeight});
+                    _strings.Add(new StringTuningModel(i, stringGroup.Strings[i], stringLength, tensionMetricsChanged) { UnitWeight = stringGroup.Strings[i].Material?.UnitWeight});
             }
         }
-
 
         public void ApplyTunig(TuningCourse tuning)
         {

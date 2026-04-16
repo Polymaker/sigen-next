@@ -282,9 +282,21 @@
   <data name="HomePageView.Header" xml:space="preserve">
     <value>Diseñar, personalizar y crear diseños de instrumentos</value>
   </data>
-  <data name="HomePageView.WelcomText" xml:space="preserve">
+  <data name="HomePageView.HeaderPart1" xml:space="preserve">
+    <value>Cada traste,</value>
+  </data>
+  <data name="HomePageView.HeaderPart2" xml:space="preserve">
+    <value>exactamente donde debe estar.</value>
+  </data>
+  <data name="HomePageView.RecentFilesLabel" xml:space="preserve">
+    <value>ARCHIVOS RECIENTES</value>
+  </data>
+  <data name="HomePageView.TemplateLabel" xml:space="preserve">
+    <value>COMENZAR DESDE UNA PLANTILLA</value>
+  </data>
+  <data name="HomePageView.WelcomeText" xml:space="preserve">
     <value>SiGen te ayuda a diseñar y personalizar diseños de instrumentos de cuerda con precisión.
-Abre un archivo reciente para continuar tu trabajo o crea un nuevo diseño con una de nuestras plantillas.</value>
+Abre un archivo reciente para continuar tu trabajo o crea un nuevo diseño con una de nossas plantillas.</value>
   </data>
   <data name="FingerboardEditorPanel.Header" xml:space="preserve">
     <value>Márgenes del diapasón</value>
@@ -328,6 +340,12 @@ Abre un archivo reciente para continuar tu trabajo o crea un nuevo diseño con u
   <data name="EditTuningDialog.NoTuningSelectedMessage" xml:space="preserve">
     <value>Ninguna afinación seleccionada</value>
   </data>
+  <data name="EditTuningDialog.OptionalTuningMessage" xml:space="preserve">
+    <value>La afinación es opcional y no cambia directamente el diseño. Puedes definirla para estimar la tensión; es necesaria para la compensación de trastes.</value>
+  </data>
+  <data name="PresetFlyout.ClickPresetToApply" xml:space="preserve">
+    <value>Haz clic en un preajuste para aplicarlo</value>
+  </data>
   <data name="NewDocumentName" xml:space="preserve">
     <value>Nuevo plano</value>
   </data>
@@ -345,5 +363,20 @@ Abre un archivo reciente para continuar tu trabajo o crea un nuevo diseño con u
   </data>
   <data name="FingerboardEditorPanel.CompensateMarginsLabel" xml:space="preserve">
     <value>Compensar el calibre</value>
+  </data>
+  <data name="DateLabel.Today" xml:space="preserve">
+    <value>Hoy {0}</value>
+  </data>
+  <data name="DateLabel.Yesterday" xml:space="preserve">
+    <value>Ayer {0}</value>
+  </data>
+  <data name="ScaleLengthEditorPanel.SingleScalePresetHeader" xml:space="preserve">
+    <value>Escalas habituales</value>
+  </data>
+  <data name="StringsFretsEditorPanel.CommonFretsPresetHeader" xml:space="preserve">
+    <value>Número de trastes habituales</value>
+  </data>
+  <data name="FretsLabel" xml:space="preserve">
+    <value>Trastes</value>
   </data>
 </root>

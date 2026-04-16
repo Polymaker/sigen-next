@@ -157,6 +157,7 @@ namespace SiGen.ViewModels.EditorPanels
                         var newGauge = prevConfig.Gauge.Value * (side == FingerboardSide.Bass ? 1.15 : 0.85);
                         currConfig.Gauge = Measuring.Measure.Min(Measuring.Measure.Max(newGauge, Measuring.Measure.In(0.007)), Measuring.Measure.In(0.15));
                     }
+                    currConfig.MaterialType = prevConfig.MaterialType;
                 }
                 else if (newStringConfig is StringGroupConfiguration groupConfiguration1 &&
                     previousString is StringGroupConfiguration groupConfiguration2)

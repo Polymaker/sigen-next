@@ -6,7 +6,7 @@
 			 xmlns:controls="using:SiGen.UI.Controls"
 			 xmlns:themes="clr-namespace:Material.Styles.Themes;assembly=Material.Styles"
 			 xmlns:customStyles="clr-namespace:Sigen.UI.Theme"
-			 RequestedThemeVariant="Default">
+			 RequestedThemeVariant="Dark">
 	<!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available options. -->
 
 	<Application.DataTemplates>
@@ -23,11 +23,13 @@
 
 			<ResourceDictionary.ThemeDictionaries>
 				<ResourceDictionary x:Key="Light">
+					<SolidColorBrush x:Key="AppBackgroundBrush">#f4f5f8</SolidColorBrush>
 					<SolidColorBrush x:Key="PanelHeaderForeground">#808080</SolidColorBrush>
 					<SolidColorBrush x:Key='PanelBackgroundBrush'>#F5F5F5</SolidColorBrush>
 					<SolidColorBrush x:Key='EvenRowBrush'>#09000000</SolidColorBrush>
 				</ResourceDictionary >
 				<ResourceDictionary x:Key="Dark">
+					<SolidColorBrush x:Key="AppBackgroundBrush">#0f1117</SolidColorBrush>
 					<SolidColorBrush x:Key="PanelHeaderForeground">#DFDFDF</SolidColorBrush>
 					<SolidColorBrush x:Key='PanelBackgroundBrush'>#191919</SolidColorBrush>
 					<SolidColorBrush x:Key='EvenRowBrush'>#10FFFFFF</SolidColorBrush>
@@ -40,7 +42,14 @@
 	</Application.Resources>
 
 	<Application.Styles>
-		<FluentTheme />
+		<FluentTheme >
+			<FluentTheme.Palettes>
+			<!-- Redefine for Light and/or Dark variants -->
+			<ColorPaletteResources x:Key="Light" Accent="#2a9e65" />
+			<ColorPaletteResources x:Key="Dark" Accent="#3db87a" />
+		  </FluentTheme.Palettes>
+		</FluentTheme>
+
 		<!--<themes:MaterialTheme PrimaryColor="Purple" SecondaryColor="Lime" />-->
 		<materialIcons:MaterialIconStyles />
 		<StyleInclude Source="avares://Avalonia.Controls.ColorPicker/Themes/Fluent/Fluent.xaml" />

@@ -3,13 +3,13 @@
     public enum StringMaterialType
     {
         SteelPlain,
-        SteelWound,
-        SteelFlatwound,
+        //SteelWound,
+        //SteelFlatwound,
         NickelWound,
         BronzeWound,
-        PhosphorBronzeWound,
+        //PhosphorBronzeWound,
         NylonPlain,
-        GutPlain,
+        //GutPlain,
         SilverPlatedWound,
     }
 }

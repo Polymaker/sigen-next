@@ -8,6 +8,7 @@
 				<StackPanel >
 					<Button Content="Test" />
 					<Button Classes="Primary" Content="Test" />
+					<Button Classes="CircleButton" Content="?" />
 				</StackPanel>
 			</Border>
 		</ThemeVariantScope>
@@ -19,6 +20,7 @@
 	<Style Selector="TextBlock.PanelHeader">
 		<!--<Setter Property="FontSize" Value="16"/>-->
 		<Setter Property="Foreground" Value="{DynamicResource PanelHeaderForeground}"/>
+		<Setter Property="FontWeight" Value="SemiBold"/>
 		<!--<Setter Property="TextAlignment" Value="Center" />-->
 	</Style>
 
@@ -35,5 +37,35 @@
 
 	<Style Selector="Button.Primary:pressed /template/ ContentPresenter#PART_ContentPresenter">
 		<Setter Property="Background" Value="{DynamicResource SystemAccentColorDark1}" />
+	</Style>
+
+	<Style Selector="Button.CircleButton">
+		<Setter Property="Width" Value="20"/>
+		<Setter Property="Height" Value="20"/>
+		<Setter Property="Padding" Value="0"/>
+		<Setter Property="CornerRadius" Value="10"/>
+		<Setter Property="BorderBrush" Value="{DynamicResource SystemAccentColor}" />
+		<Setter Property="Background" Value="Transparent" />
+		<Setter Property="Foreground" Value="{DynamicResource SystemAccentColor}" />
+		<Setter Property="HorizontalContentAlignment" Value="Center" />
+		<!--<Setter Property="Padding" Value="15,7" />-->
+	</Style>
+	<Style Selector="Button.CircleButton:pointerover:not(:pressed) /template/ ContentPresenter">
+
+		<Setter Property="Foreground" Value="{DynamicResource SystemAccentColor}" />
+		<Setter Property="Background" Value="#55999999"/>
+		<Setter Property="BorderBrush" Value="{DynamicResource SystemAccentColor}"/>
+	</Style>
+	<Style Selector="Button.CircleButton:pressed">
+		<Setter Property="RenderTransform" Value="" />
+	</Style>
+	<Style Selector="Button.CircleButton:pressed /template/ ContentPresenter">
+		<Setter Property="Foreground" Value="{DynamicResource SystemAccentColor}" />
+		<Setter Property="BorderBrush" Value="{DynamicResource SystemAccentColor}"/>
+	</Style>
+
+
+	<Style Selector="MenuItem.HideMenuGesture /template/ ContentPresenter#PART_HeaderPresenter">
+		<Setter Property="Margin" Value="0,0,-24,0"/>
 	</Style>
 </Styles>

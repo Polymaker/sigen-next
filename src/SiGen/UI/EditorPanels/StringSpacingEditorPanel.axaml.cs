@@ -6,6 +6,7 @@ using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using SiGen.Data.Presets;
 using SiGen.Services;
+using SiGen.UI.Utils;
 using SiGen.ViewModels.EditorPanels;
 using System;
 using System.Diagnostics;
@@ -30,16 +31,12 @@ public partial class StringSpacingEditorPanel : UserControl
 
         RebuildPresetFlyouts();
         UpdateSpreadMinMax();
-        //var nutSliderFlyout = FlyoutBase.GetAttachedFlyout(NutCenterAlignmentBox);
-        //if (nutSliderFlyout != null)
-        //    nutSliderFlyout.Closed += NutSliderFlyout_Closed;
     }
 
     protected override void OnDataContextChanged(EventArgs e)
     {
         base.OnDataContextChanged(e);
 
-        // Detach from previous ViewModel
         if (_attachedViewModel != null)
         {
             _attachedViewModel.InstrumentTypeChanged -= ViewModel_InstrumentTypeChanged;
@@ -78,17 +75,10 @@ public partial class StringSpacingEditorPanel : UserControl
         BridgeStringSpreadBox.MaximumValue = Measuring.Measure.Mm(25) * (ViewModel.NumberOfStrings - 1);
     }
 
-    //private void NutSliderFlyout_Closed(object? sender, System.EventArgs e)
-    //{
-    //    if (ViewModel != null) ViewModel.IsEditingBySlider = false;
-    //}
-
     private void ShowSliderButton_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
     {
         if (ViewModel != null)
         {
-            //ViewModel.IsEditingBySlider = true;
-            //NutAlignmentSlider.Value = (double)vm.NutManualAlignment;
             FlyoutBase.ShowAttachedFlyout(NutCenterAlignmentBox);
         }
     }
@@ -114,7 +104,6 @@ public partial class StringSpacingEditorPanel : UserControl
         {
             BridgeSpacingInfoButton.IsVisible = BridgeSpacingInfoButton.Flyout != null && ViewModel!.BridgeSpacingMode != Layouts.Data.StringSpacingMode.Manual;
         }
-        //NutStringSpreadBox
     }
 
     #region Info loading
@@ -142,66 +131,54 @@ public partial class StringSpacingEditorPanel : UserControl
 
     private FlyoutBase? CreateNutSpacingPresetMenu(IInstrumentValuesProvider provider)
     {
-        if (provider == null) return null;
-        var menu = new MenuFlyout();
         var presets = provider.GetNutSpacingPresets();
         if (presets.Count == 0) return null;
-        menu.Items.Add(new MenuItem() {
-            Header = Lang.Resources.StringSpacingEditorPanel_SpacingPresetHeader, 
-            IsHitTestVisible = false, 
-            FontWeight = Avalonia.Media.FontWeight.Bold,
-        });
+
+        var menuBuilder = new MenuFlyoutBuilder()
+            .AddHeader(Lang.Resources.StringSpacingEditorPanel_SpacingPresetHeader)
+            .AddSubText(Lang.Resources.PresetFlyout_ClickPresetToApply);
+
         foreach (var preset in presets)
         {
-            var labelGrid = new Grid() { ColumnDefinitions = new ColumnDefinitions("*,Auto") };
-            labelGrid.Children.Add(new TextBlock() { Text = preset.Name });
-            Grid.SetColumn(labelGrid.Children[0], 0);
-            labelGrid.Children.Add(new TextBlock() { Text = $"({preset.Spacing.ToStringFormatted()})" });
-            Grid.SetColumn(labelGrid.Children[1], 1);
-            var item = new MenuItem() { Header = labelGrid, Tag = preset };
-            item.Click += (s, e) =>
+            menuBuilder.AddOption(CreateSpacingPresetHeader(preset), () =>
             {
-                if (s is MenuItem mi && mi.Tag is SpacingPreset np && ViewModel != null)
-                {
-                    ViewModel.NutSpacing = np.Spacing;
-                }
-            };
-            menu.Items.Add(item);
+                if (ViewModel != null)
+                    ViewModel.NutSpacing = preset.Spacing;
+            });
         }
 
-        return menu;
+        return menuBuilder.Build();
     }
 
     private FlyoutBase? CreateBridgeSpacingPresetMenu(IInstrumentValuesProvider provider)
     {
-        if (provider == null) return null;
-        var menu = new MenuFlyout();
         var presets = provider.GetBridgeSpacingPresets();
         if (presets.Count == 0) return null;
-        menu.Items.Add(new MenuItem()
-        {
-            Header = Lang.Resources.StringSpacingEditorPanel_SpacingPresetHeader,
-            IsHitTestVisible = false,
-            FontWeight = Avalonia.Media.FontWeight.Bold,
-        });
+
+        var menuBuilder = new MenuFlyoutBuilder()
+            .AddHeader(Lang.Resources.StringSpacingEditorPanel_SpacingPresetHeader)
+            .AddSubText(Lang.Resources.PresetFlyout_ClickPresetToApply);
+
         foreach (var preset in presets)
         {
-            var labelGrid = new Grid() {  ColumnDefinitions = new ColumnDefinitions("*,Auto") };
-            labelGrid.Children.Add(new TextBlock() { Text = preset.Name });
-            Grid.SetColumn(labelGrid.Children[0], 0);
-            labelGrid.Children.Add(new TextBlock() { Text = $"({preset.Spacing.ToStringFormatted()})" });
-            Grid.SetColumn(labelGrid.Children[1], 1);
-            var item = new MenuItem() { Header = labelGrid, Tag = preset };
-            item.Click += (s, e) =>
+            menuBuilder.AddOption(CreateSpacingPresetHeader(preset), () =>
             {
-                if (s is MenuItem mi && mi.Tag is SpacingPreset np && ViewModel != null)
-                {
-                    ViewModel.BridgeSpacing = np.Spacing;
-                }
-            };
-            menu.Items.Add(item);
+                if (ViewModel != null)
+                    ViewModel.BridgeSpacing = preset.Spacing;
+            });
         }
-        return menu;
+
+        return menuBuilder.Build();
+    }
+
+    private static Grid CreateSpacingPresetHeader(SpacingPreset preset)
+    {
+        var labelGrid = new Grid { ColumnDefinitions = new ColumnDefinitions("*,Auto") };
+        labelGrid.Children.Add(new TextBlock { Text = preset.Name });
+        Grid.SetColumn(labelGrid.Children[0], 0);
+        labelGrid.Children.Add(new TextBlock { Text = $"({preset.Spacing.ToStringFormatted()})" });
+        Grid.SetColumn(labelGrid.Children[1], 1);
+        return labelGrid;
     }
 
     #endregion

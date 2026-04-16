@@ -252,7 +252,7 @@ public partial class StringCountControl : UserControl
                     VerticalAlignment = Avalonia.Layout.VerticalAlignment.Center,
                     HorizontalAlignment = Avalonia.Layout.HorizontalAlignment.Stretch,
                     TextAlignment = TextAlignment.Center,
-                    
+                    IsHitTestVisible = false,
                 });
                 ToolTip.SetTip(dotContainer, $"{Lang.Resources.StringCourseLabel} {i + 1}");
                 return dotContainer;

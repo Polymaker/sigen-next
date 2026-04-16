@@ -282,7 +282,19 @@
   <data name="HomePageView.Header" xml:space="preserve">
     <value>Entwerfen, Anpassen und Erstellen von Instrumentenlayouts</value>
   </data>
-  <data name="HomePageView.WelcomText" xml:space="preserve">
+  <data name="HomePageView.HeaderPart1" xml:space="preserve">
+    <value>Jeder Bund,</value>
+  </data>
+  <data name="HomePageView.HeaderPart2" xml:space="preserve">
+    <value>genau dort, wo er hingehört.</value>
+  </data>
+  <data name="HomePageView.RecentFilesLabel" xml:space="preserve">
+    <value>ZULETZT VERWENDETE DATEIEN</value>
+  </data>
+  <data name="HomePageView.TemplateLabel" xml:space="preserve">
+    <value>MIT EINER VORLAGE STARTEN</value>
+  </data>
+  <data name="HomePageView.WelcomeText" xml:space="preserve">
     <value>SiGen unterstützt Sie bei der präzisen Gestaltung und Anpassung von Saiteninstrumentenlayouts.
 Öffnen Sie eine aktuelle Datei, um Ihre Arbeit fortzusetzen, oder beginnen Sie ein neues Layout mit einer unserer Vorlagen.</value>
   </data>
@@ -328,6 +340,12 @@
   <data name="EditTuningDialog.NoTuningSelectedMessage" xml:space="preserve">
     <value>Keine Stimmung ausgewählt</value>
   </data>
+  <data name="EditTuningDialog.OptionalTuningMessage" xml:space="preserve">
+    <value>Die Stimmung ist optional und verändert das Layout nicht direkt. Für eine Spannungsabschätzung kann sie gesetzt werden; für Bundkompensation ist sie erforderlich.</value>
+  </data>
+  <data name="PresetFlyout.ClickPresetToApply" xml:space="preserve">
+    <value>Klicken Sie auf eine Vorgabe, um sie anzuwenden</value>
+  </data>
   <data name="NewDocumentName" xml:space="preserve">
     <value>Neuer Entwurf</value>
   </data>
@@ -345,5 +363,20 @@
   </data>
   <data name="FingerboardEditorPanel.CompensateMarginsLabel" xml:space="preserve">
     <value>Stärke kompensieren</value>
+  </data>
+  <data name="DateLabel.Today" xml:space="preserve">
+    <value>Heute {0}</value>
+  </data>
+  <data name="DateLabel.Yesterday" xml:space="preserve">
+    <value>Gestern {0}</value>
+  </data>
+  <data name="ScaleLengthEditorPanel.SingleScalePresetHeader" xml:space="preserve">
+    <value>Gängige Mensuren</value>
+  </data>
+  <data name="StringsFretsEditorPanel.CommonFretsPresetHeader" xml:space="preserve">
+    <value>Gängige Bundanzahlen</value>
+  </data>
+  <data name="FretsLabel" xml:space="preserve">
+    <value>Bünde</value>
   </data>
 </root>

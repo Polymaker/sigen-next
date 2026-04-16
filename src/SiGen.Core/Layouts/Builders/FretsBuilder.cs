@@ -45,7 +45,7 @@ namespace SiGen.Layouts.Builders
         private void BuildFretSegments()
         {
             //bool isMultiscale = Configuration.ScaleLength.Mode != ScaleLengthMode.Single;
-
+            bool useLinearMatching = Configuration.ScaleLength.Mode == ScaleLengthMode.Single && Measure.IsNullOrEmpty(Configuration.ScaleLength.BassTrebleSkew);
             var points = GenerateFretPoints();
             var pointsByString = points
                 .GroupBy(p => p.StringIndex)
@@ -75,7 +75,7 @@ namespace SiGen.Layouts.Builders
                 {
                     FretPoint? match = null;
 
-                    if (Configuration.ScaleLength.Mode == ScaleLengthMode.Single)
+                    if (useLinearMatching)
                         match = FindLinearMatch(currentPoint, nextStringPoints, processed);
                     else
                         match = FindFannedMatch(currentPoint, currentSegment, nextStringPoints, processed);

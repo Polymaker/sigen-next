@@ -52,24 +52,8 @@
 								 IsReadOnly="{Binding NutSpacingMode, Converter={StaticResource EqualsConverter}, ConverterParameter=Manual}"/>
 
 			<Button Name="NutSpacingInfoButton" Grid.Column="3" Grid.Row="1"
-					Width="20" Height="20" Padding="0" Margin="4"
-					Background="Transparent"
-					BorderBrush="{DynamicResource SystemAccentColor}"
-					BorderThickness="1"
-					CornerRadius="10"
-					VerticalAlignment="Center">
-				<materialIcons:MaterialIcon
-					Kind="InformationSerifSymbol"
-					Foreground="{DynamicResource SystemAccentColor}" />
-				<Button.Styles>
-					<Style Selector="Button:pointerover:not(:pressed) /template/ ContentPresenter">
-						<Setter Property="Background" Value="#55999999"/>
-						<Setter Property="BorderBrush" Value="{DynamicResource SystemAccentColor}"/>
-					</Style>
-					<Style Selector="Button:pressed /template/ ContentPresenter">
-						<Setter Property="BorderBrush" Value="{DynamicResource SystemAccentColor}"/>
-					</Style>
-				</Button.Styles>
+					Margin="4" Classes="CircleButton">
+				<materialIcons:MaterialIcon Kind="InformationSerifSymbol" />
 			</Button>
 		</Grid>
 
@@ -164,26 +148,10 @@
 								 FontSize="13" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
 								 Grid.Column="2" Grid.Row="1" Margin="4,0,4,0" IsReadOnly="{Binding BridgeSpacingMode, Converter={StaticResource EqualsConverter}, ConverterParameter=Manual}"/>
 
-			<Button Name="BridgeSpacingInfoButton" Grid.Column="3" Grid.Row="1"
-					Width="20" Height="20" Padding="0" Margin="4"
-					Background="Transparent"
-					BorderBrush="{DynamicResource SystemAccentColor}"
-					BorderThickness="1"
-					CornerRadius="10"
-					VerticalAlignment="Center">
-				<materialIcons:MaterialIcon
-					Kind="InformationSerifSymbol"
-					Foreground="{DynamicResource SystemAccentColor}" />
-				<Button.Styles>
-					<Style Selector="Button:pointerover:not(:pressed) /template/ ContentPresenter">
-						<Setter Property="Background" Value="#55999999"/>
-						<Setter Property="BorderBrush" Value="{DynamicResource SystemAccentColor}"/>
-					</Style>
-					<Style Selector="Button:pressed /template/ ContentPresenter">
-
-						<Setter Property="BorderBrush" Value="{DynamicResource SystemAccentColor}"/>
-					</Style>
-				</Button.Styles>
+			<Button Name="BridgeSpacingInfoButton" Grid.Column="3" Grid.Row="1" 
+					Margin="4" Classes="CircleButton"
+					>
+				<materialIcons:MaterialIcon Kind="InformationSerifSymbol"/>
 			</Button>
 		</Grid>
 

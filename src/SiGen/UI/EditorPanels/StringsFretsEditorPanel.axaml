@@ -29,14 +29,17 @@
 								 IsLeftHanded="{Binding LeftHanded}"/>
 			</ctrl:CustomFormField.Input>
 		</ctrl:CustomFormField>
-		<ctrl:CustomFormField Label="{x:Static lang:Resources.StringsFretsEditorPanel_NumberOfFrets}"
-								  Orientation="Vertical"
-								  LabelHorizontalAlignment="Center"
+		<ctrl:CustomFormField x:Name="FretCountField" 
+								Label="{x:Static lang:Resources.StringsFretsEditorPanel_NumberOfFrets}"
+								Orientation="Vertical"
+								LabelHorizontalAlignment="Center"
+								HorizontalAlignment="Center"
 								  >
 			<ctrl:CustomFormField.Input>
-				<ctrl:NumericTextBox Value="{Binding NumberOfFrets, Mode=TwoWay}" 
-									 MaxWidth="100" TextAlignment="Center"
-									 Padding="6"
+				<ctrl:NumericTextBox x:Name="FretCountEditor"
+									Value="{Binding NumberOfFrets, Mode=TwoWay}" 
+									 Width="80" TextAlignment="Center"
+									 Padding="6" 
 									 MinimumValue="0" MaximumValue="40" />
 			</ctrl:CustomFormField.Input>
 		</ctrl:CustomFormField>

@@ -95,7 +95,7 @@ namespace SiGen.Services.InstrumentProfiles
             eightStringsConfig.StringConfigurations.Insert(0, new SingleStringConfiguration
             {
                 Tuning = new NoteAndOctave(NoteName.Gb, 1),
-                Gauge = Measure.In(0.060),
+                Gauge = Measure.In(0.065),
                 MaterialType = StringMaterialType.NickelWound
             });
             eightStringsConfig.StringConfigurations.Insert(1, new SingleStringConfiguration
@@ -127,7 +127,7 @@ namespace SiGen.Services.InstrumentProfiles
                 new LayoutTemplate($"7 {Texts.Preset_Strings}", sevenStringsConfig),
                 new LayoutTemplate($"8 {Texts.Preset_Strings}", eightStringsConfig),
                 new LayoutTemplate($"{Texts.ScaleLengthMode_Multiscale} 7 {Texts.Preset_Strings}", multiScaleConfig),
-                new LayoutTemplate("Microtonal 40 Frets", microtonalConfig),
+                //new LayoutTemplate("Microtonal 40 Frets", microtonalConfig),
                 new LayoutTemplate("Microtonal Test", microtonalConfig2)
             ];
         }

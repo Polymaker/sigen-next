@@ -212,7 +212,6 @@ namespace SiGen.ViewModels.Dialogs
 
         #endregion
 
-
         public async Task LoadAvailableStringSets()
         {
             var stringSets = await dataService.GetAvailableStringSetsAsync(LayoutConfiguration.TotalNumberOfStrings, LayoutConfiguration.InstrumentType);
@@ -408,6 +407,12 @@ namespace SiGen.ViewModels.Dialogs
 
 
         partial void OnGaugeChanged(Measure? value)
+        {
+            UnitWeight = null;
+            Modulus = null;
+        }
+
+        partial void OnMaterialTypeChanged(StringMaterialType? value)
         {
             UnitWeight = null;
             Modulus = null;

@@ -57,7 +57,7 @@
 					
 					<editors:FingerboardEditorPanel x:Name="FingerboardPanel" />
 				</StackPanel>-->
-				<Grid ColumnDefinitions="2.5*,2,3*,2,2.8*,2,3.5*,2,2.5*">
+				<Grid ColumnDefinitions="2.5*,2,3*,2,2.8*,2,3*,2,2.5*">
 					<editors:InstrumentInfoEditorPanel x:Name="InfoPanel" Grid.Column="0" />
 
 					<Separator VerticalAlignment="Stretch" Grid.Column="1" Margin="1" Height="200" HorizontalAlignment="Left" Width="1"/>

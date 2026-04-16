@@ -22,8 +22,7 @@
 					<SolidColorBrush x:Key='DotsBorderBrush'>#DDD</SolidColorBrush>
 					<SolidColorBrush x:Key='StringDotBrush'>#666</SolidColorBrush>
 
-					<SolidColorBrush x:Key='BassColorBrush'>#FFA04D</SolidColorBrush>
-					<SolidColorBrush x:Key='TrebleColorBrush'>#64B5F6</SolidColorBrush>
+					
 				</ResourceDictionary >
 				<ResourceDictionary x:Key="Dark">
 					<SolidColorBrush x:Key='BackgroundBrush'>Black</SolidColorBrush>
@@ -32,10 +31,13 @@
 					<SolidColorBrush x:Key='DotsBorderBrush'>#999</SolidColorBrush>
 					<SolidColorBrush x:Key='StringDotBrush'>#BBB</SolidColorBrush>
 
-					<SolidColorBrush x:Key='BassColorBrush'>#FFA04D</SolidColorBrush>
-					<SolidColorBrush x:Key='TrebleColorBrush'>#64B5F6</SolidColorBrush>
 				</ResourceDictionary>
 			</ResourceDictionary.ThemeDictionaries>
+
+			<SolidColorBrush x:Key='BassColorBrush'>#FFA04D</SolidColorBrush>
+			<SolidColorBrush x:Key='BassButtonPointerOver'>#FFC97F</SolidColorBrush>
+			<SolidColorBrush x:Key='TrebleColorBrush'>#64B5F6</SolidColorBrush>
+			<SolidColorBrush x:Key='TrebleButtonPointerOver'>#97CCF4</SolidColorBrush>
 		</ResourceDictionary>
 	</UserControl.Resources>
 	
@@ -58,20 +60,24 @@
 			<Setter Property="Foreground" Value="White"/>
 		</Style>
 
-		<!--<Style Selector="Button.string-button:pointerover /template/ ContentPresenter">
+		<Style Selector="Button.string-button:pointerover /template/ ContentPresenter">
 			<Setter Property="Foreground" Value="White"/>
-		</Style>-->
+		</Style>
 
 		<Style Selector="Button.bass-button">
 			<Setter Property="Background" Value="{DynamicResource BassColorBrush}"/>
 		</Style>
 
-		<!--<Style Selector="Button.bass-button:pointerover /template/ ContentPresenter">
-			<Setter Property="Background" Value="#FFC97F"/>
-		</Style>-->
+		<Style Selector="Button.bass-button:pointerover /template/ ContentPresenter">
+			<Setter Property="Background" Value="{DynamicResource BassButtonPointerOver}"/>
+		</Style>
 
 		<Style Selector="Button.treble-button">
 			<Setter Property="Background" Value="{DynamicResource TrebleColorBrush}"/>
+		</Style>
+
+		<Style Selector="Button.treble-button:pointerover /template/ ContentPresenter">
+			<Setter Property="Background" Value="{DynamicResource TrebleButtonPointerOver}"/>
 		</Style>
 
 		<Style Selector="Ellipse.string-dot">
@@ -87,6 +93,11 @@
 
 		<Style Selector="Ellipse.string-dot.treble">
 			<Setter Property="Fill" Value="{DynamicResource TrebleColorBrush}"/>
+		</Style>
+
+		<Style Selector="Ellipse.string-dot:pointerover">
+			<Setter Property="Stroke" Value="{DynamicResource DotsBackgroundBrush}"/>
+			<Setter Property="StrokeThickness" Value="1.5"/>
 		</Style>
 	</UserControl.Styles>
 

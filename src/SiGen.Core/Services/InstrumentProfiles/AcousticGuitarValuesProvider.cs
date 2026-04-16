@@ -140,7 +140,7 @@ namespace SiGen.Services.InstrumentProfiles
                 .WithMargins(Measure.Mm(2), true)
                 .WithNutSpacing(Measure.Mm(8))
                 .WithBridgeSpacing(Measure.Mm(11))
-                .WithExtension(Measure.Mm(10))
+                .WithExtension(Measure.Mm(14))
                 .Build();
         }
     }

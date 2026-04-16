@@ -30,6 +30,7 @@ namespace SiGen.Services.InstrumentProfiles
             return
             [
                 new ScaleLengthPreset("Short Scale", SiGen.Measuring.Measure.In(30)),
+                new ScaleLengthPreset("Ibanez", SiGen.Measuring.Measure.In(32)),
                 new ScaleLengthPreset("Standard", SiGen.Measuring.Measure.In(34)),
             ];
         }
@@ -47,7 +48,7 @@ namespace SiGen.Services.InstrumentProfiles
                 .AddSingleString(sb => sb.WithGauge(Measure.In(0.080)).WithTuning(Physics.NoteName.A, 1).WithMaterialType(StringMaterialType.BronzeWound))
                 .AddSingleString(sb => sb.WithGauge(Measure.In(0.065)).WithTuning(Physics.NoteName.D, 2).WithMaterialType(StringMaterialType.BronzeWound))
                 .AddSingleString(sb => sb.WithGauge(Measure.In(0.045)).WithTuning(Physics.NoteName.G, 2).WithMaterialType(StringMaterialType.BronzeWound))
-
+                .WithExtension(Measure.Mm(10))
                 ;
             return builder.Build();
         }

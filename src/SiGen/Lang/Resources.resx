@@ -259,9 +259,21 @@
   <data name="HomePageView.Header" xml:space="preserve">
     <value>Design, Customize, and Create Instrument Layouts</value>
   </data>
-  <data name="HomePageView.WelcomText" xml:space="preserve">
-    <value>SiGen helps you design and customize stringed instrument layouts with precision.
-Open a recent file to continue your work, or start a new layout using one of our templates.</value>
+  <data name="HomePageView.HeaderPart1" xml:space="preserve">
+    <value>Every fret,</value>
+  </data>
+  <data name="HomePageView.HeaderPart2" xml:space="preserve">
+    <value>exactly where it belongs.</value>
+  </data>
+  <data name="HomePageView.RecentFilesLabel" xml:space="preserve">
+    <value>RECENT FILES</value>
+  </data>
+  <data name="HomePageView.TemplateLabel" xml:space="preserve">
+    <value>START FROM A TEMPLATE</value>
+  </data>
+  <data name="HomePageView.WelcomeText" xml:space="preserve">
+    <value>Design and export precision stringed instrument layouts — from a standard Strat to a fanned-fret 8-string.
+Open a recent file or start from a template.</value>
   </data>
   <data name="InstrumentInfoEditorPanel.LayoutName" xml:space="preserve">
     <value>Layout name</value>
@@ -314,6 +326,12 @@ Open a recent file to continue your work, or start a new layout using one of our
   <data name="EditTuningDialog.NoTuningSelectedMessage" xml:space="preserve">
     <value>No tuning selected</value>
   </data>
+  <data name="EditTuningDialog.OptionalTuningMessage" xml:space="preserve">
+    <value>Tuning is optional and does not change the layout directly. Set it to estimate tension; it is required for fret compensation.</value>
+  </data>
+  <data name="PresetFlyout.ClickPresetToApply" xml:space="preserve">
+    <value>Click on a preset to apply</value>
+  </data>
   <data name="NewDocumentName" xml:space="preserve">
     <value>New Layout</value>
   </data>
@@ -325,5 +343,20 @@ Open a recent file to continue your work, or start a new layout using one of our
   </data>
   <data name="FingerboardEditorPanel.CompensateMarginsLabel" xml:space="preserve">
     <value>Compensate for gauge</value>
+  </data>
+  <data name="DateLabel.Today" xml:space="preserve">
+    <value>Today {0}</value>
+  </data>
+  <data name="DateLabel.Yesterday" xml:space="preserve">
+    <value>Yesterday {0}</value>
+  </data>
+  <data name="ScaleLengthEditorPanel.SingleScalePresetHeader" xml:space="preserve">
+    <value>Common scale lengths</value>
+  </data>
+  <data name="StringsFretsEditorPanel.CommonFretsPresetHeader" xml:space="preserve">
+    <value>Common number of frets</value>
+  </data>
+  <data name="FretsLabel" xml:space="preserve">
+    <value>Frets</value>
   </data>
 </root>

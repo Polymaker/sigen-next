@@ -138,6 +138,14 @@ namespace SiGen.Layouts.Configuration.Builders
             return this;
         }
 
+        public LayoutConfigurationBuilder WithNutBridgeMargins(Measure nut, Measure bridge, bool compensateForStrings = false)
+        {
+            _config.Fingerboard.SetNutAndBridgeMargins(FingerboardEnd.Nut, nut);
+            _config.Fingerboard.SetNutAndBridgeMargins(FingerboardEnd.Bridge, bridge);
+            _config.Fingerboard.CompensateMarginsForStrings = compensateForStrings;
+            return this;
+        }
+
         public LayoutConfigurationBuilder WithExtension(Measure? measure)
         {
             _config.Fingerboard.ExtensionAfterLastFret = measure;

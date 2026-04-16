@@ -1,8 +1,8 @@
 # Copilot Instructions
 
 ## General Guidelines
-- First general instruction
-- Second general instruction
+- When adding reusable localized text, prefer a generic resource name instead of a control-specific key if the text can be shared elsewhere.
+- Keep the Help resource file only for help content; UI labels like flyout headers should go in the normal Resources file instead.
 
 ## Code Style
 - Use specific formatting rules

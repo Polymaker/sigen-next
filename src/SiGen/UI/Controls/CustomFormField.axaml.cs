@@ -213,14 +213,22 @@ public class CustomFormField : TemplatedControl, INotifyPropertyChanged
     {
         if (infoButton != null && Info != null)
         {
-            FlyoutBase.SetAttachedFlyout(infoButton, new Flyout
+            if (Info is FlyoutBase flyoutBase)
             {
-                Content = Info,
-                ShowMode = FlyoutShowMode.Standard,
-                Placement = PlacementMode.RightEdgeAlignedTop,
-                HorizontalOffset = 5,
-                VerticalOffset = -10
-            });
+                FlyoutBase.SetAttachedFlyout(infoButton, flyoutBase);
+            }
+            else
+            {
+                FlyoutBase.SetAttachedFlyout(infoButton, new Flyout
+                {
+                    Content = Info,
+                    ShowMode = FlyoutShowMode.Standard,
+                    Placement = PlacementMode.RightEdgeAlignedTop,
+                    HorizontalOffset = 5,
+                    VerticalOffset = -10
+                });
+            }
+                
         }
         else if (infoButton != null)
         {

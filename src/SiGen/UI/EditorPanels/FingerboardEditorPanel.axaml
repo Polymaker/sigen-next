@@ -103,7 +103,7 @@
 				<ToggleSwitch IsChecked="{Binding CompensateForStringThickness, Mode=TwoWay}" OnContent="Yes" OffContent="No" />
 			</ctrl:CustomFormField.Input>
 			<ctrl:CustomFormField.Help>
-				<TextBlock TextWrapping="Wrap" 
+				<TextBlock TextWrapping="Wrap" MaxWidth="600"
 						   Inlines="{Binding Source={x:Static lang:Help.CompensateForStrings_Help}, Converter={StaticResource MarkdownConverter}}"/>
 			</ctrl:CustomFormField.Help>
 		</ctrl:CustomFormField>

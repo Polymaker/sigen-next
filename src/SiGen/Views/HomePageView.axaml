@@ -2,9 +2,9 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="700"
              x:Class="SiGen.Views.HomePageView"
-			 Background="{DynamicResource SystemRegionBrush}"
+			 Background="{DynamicResource AppBackgroundBrush}"
 			 xmlns:vm="using:SiGen.ViewModels"
 			 x:DataType="vm:HomePageViewModel"
 			 xmlns:settings="using:SiGen.Settings"
@@ -23,31 +23,54 @@
 			<ResourceDictionary.ThemeDictionaries>
 				<ResourceDictionary  x:Key="Light">
 					<SolidColorBrush x:Key='AlternateListItemBackground'>#F8F8F8</SolidColorBrush>
+					<SolidColorBrush x:Key='HeaderHighlightBrush'>#3db87a</SolidColorBrush>
+					<SolidColorBrush x:Key='HeaderTitleBrush'>#3db87a</SolidColorBrush>
+					<SolidColorBrush x:Key='HomePageDescriptionBrush'>#5F6670</SolidColorBrush>
+					<SolidColorBrush x:Key='RecentFileDateBrush'>#2FB567</SolidColorBrush>
+					<SolidColorBrush x:Key='RecentFilePathBrush'>#5F6670</SolidColorBrush>
+					<SolidColorBrush x:Key='TemplateButtonForegroundBrush'>#242</SolidColorBrush>
+					<SolidColorBrush x:Key='TemplateButtonBackgroundBrush'>#e8edf5</SolidColorBrush>
 				</ResourceDictionary >
 				<ResourceDictionary x:Key="Dark">
 					<SolidColorBrush x:Key='AlternateListItemBackground'>#191919</SolidColorBrush>
+					<SolidColorBrush x:Key='HeaderHighlightBrush'>#3db87a</SolidColorBrush>
+					<SolidColorBrush x:Key='HomePageDescriptionBrush'>#A6AFBC</SolidColorBrush>
+					<SolidColorBrush x:Key='RecentFileDateBrush'>#B0B8B0</SolidColorBrush>
+					<SolidColorBrush x:Key='RecentFilePathBrush'>#888888</SolidColorBrush>
+					<SolidColorBrush x:Key='TemplateButtonForegroundBrush'>#CDC</SolidColorBrush>
+					<SolidColorBrush x:Key='TemplateButtonBackgroundBrush'>#1e2230</SolidColorBrush>
+					
 				</ResourceDictionary>
 			</ResourceDictionary.ThemeDictionaries>
 		</ResourceDictionary>
 	</UserControl.Resources>
-	<Grid ColumnDefinitions="*,*" RowDefinitions="Auto,*" Margin="4" ColumnSpacing="4">
+
+	<Grid  ColumnSpacing="4" VerticalAlignment="Stretch"  >
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="*" MaxWidth="800" />
+			<ColumnDefinition Width="Auto" />
+			<ColumnDefinition Width="*" MaxWidth="800"/>
+		</Grid.ColumnDefinitions>
 		
-		<StackPanel Orientation="Vertical" Grid.ColumnSpan="2"
-					HorizontalAlignment="Left" Spacing="8" Margin="4">
-			<!--<Svg Path="/Assets/SigenLogo.svg" Height="30" />-->
-			<TextBlock Text="{x:Static lang:Resources.HomePageView_Header}"
 
-                   VerticalAlignment="Center"
-                   FontSize="24"/>
+		<StackPanel Grid.Column="0" Margin="10" Spacing="4" >
+			<TextBlock FontSize="24" TextWrapping="Wrap" FontWeight="DemiBold">
+				<Run Text="{x:Static lang:Resources.HomePageView_HeaderPart1}" />
+				<Run Text="{x:Static lang:Resources.HomePageView_HeaderPart2}" Foreground="{DynamicResource SystemAccentColor}" />
+			</TextBlock>
 
-			<TextBlock TextWrapping="Wrap" 
-						   Inlines="{Binding Source={x:Static lang:Resources.HomePageView_WelcomText}, Converter={StaticResource MarkdownConverter}}"/>
-		</StackPanel>
+			<TextBlock TextWrapping="Wrap" Foreground="{DynamicResource HomePageDescriptionBrush}"
+						   Inlines="{Binding Source={x:Static lang:Resources.HomePageView_WelcomeText}, Converter={StaticResource MarkdownConverter}}"/>
+			<Separator Margin="0,8,0,0" />
 
-		<StackPanel Grid.Column="0" Grid.Row="1" Margin="4" Spacing="4">
-			<TextBlock Text="Open Recent" FontSize="20" />
-			<TextBox Watermark="Search..." Text="{Binding SearchText, Mode=TwoWay}" />
-			<ListBox ItemsSource="{Binding FilteredRecentFiles}" Grid.Column="0" Grid.Row="1"
+			<TextBlock Text="{x:Static lang:Resources.HomePageView_RecentFilesLabel}"  Margin="0,4"
+					   FontSize="15" Foreground="{DynamicResource SystemAccentColor}" FontWeight="DemiBold" />
+
+			<TextBox Watermark="Search..." Text="{Binding SearchText, Mode=TwoWay}" Margin="0,4" />
+			
+			<ListBox ItemsSource="{Binding FilteredRecentFiles}" 
+					 Margin="0,4" Background="Transparent"
+					 Grid.Column="0" Grid.Row="1" 
 				  SelectionChanged="RecentFilesListBox_SelectionChanged">
 				<ListBox.ItemTemplate>
 					<DataTemplate x:DataType="settings:RecentFileModel">
@@ -57,29 +80,51 @@
 								 Grid.RowSpan="2"
 								 VerticalAlignment="Center" />
 
-							<TextBlock Text="{Binding DisplayName}" FontSize="16" Grid.Column="1" />
+							<TextBlock Text="{Binding DisplayName}" FontSize="14" FontWeight="DemiBold" Grid.Column="1"
+									   TextTrimming="CharacterEllipsis"/>
 							<TextBlock Text="{Binding FilePath}"
-									   FontSize="12"
+									   FontSize="13"
+									   Foreground="{DynamicResource RecentFilePathBrush}"
+									   TextTrimming="CharacterEllipsis"
 									   Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" />
 
-							<TextBlock Text="{Binding LastOpened, Converter={StaticResource DateTimeToStringConverter}, ConverterParameter='yyyy-MM-dd HH:mm'}"
-									   Grid.Column="2"  />
+							<TextBlock Text="{Binding LastOpened, Converter={StaticResource DateTimeToStringConverter}, ConverterParameter='RecentRelative'}"
+									   Foreground="{DynamicResource RecentFileDateBrush}"
+									   Grid.Column="2" FontSize="13" VerticalAlignment="Center" />
 
 						</Grid>
 					</DataTemplate>
 				</ListBox.ItemTemplate>
 				<ListBox.Styles>
+					<Style Selector="ListBoxItem">
+						
+						<Setter Property="CornerRadius" Value="6"/>
+					</Style>
 					<Style Selector="ListBoxItem:pointerover">
 						<Setter Property="Cursor" Value="Hand"/>
 					</Style>
-					<Style Selector="ListBox ListBoxItem:nth-child(2n)">
+					<!--<Style Selector="ListBox ListBoxItem:nth-child(2n)">
 						<Setter Property="Background" Value="{DynamicResource AlternateListItemBackground}"/>
-					</Style>
+					</Style>-->
 				</ListBox.Styles>
 			</ListBox>
+
+			
 		</StackPanel>
-		<DockPanel Grid.Column="1" Grid.Row="1" Margin="4">
-			<TextBlock Text="Templates" FontSize="20" Margin="0,4" DockPanel.Dock="Top" />
+
+		<!--<GridSplitter Grid.Column="1"  Width="2" Background="{DynamicResource SystemAccentColor}" HorizontalAlignment="Center" />-->
+		<!--<Separator Grid.Column="1" VerticalAlignment="Stretch" HorizontalAlignment="Left" Width="1" Height="NaN" />-->
+		
+		<Border Grid.Column="1" Background="{DynamicResource SystemControlForegroundBaseMediumLowBrush}" 
+				Width="1" Opacity="0.5"
+				VerticalAlignment="Stretch"  />
+		
+		<DockPanel Grid.Column="2"  Margin="10">
+			<TextBlock Text="{x:Static lang:Resources.HomePageView_TemplateLabel}" 
+					   FontSize="15" FontWeight="DemiBold" 
+					   Margin="0,4" DockPanel.Dock="Top" 
+					   Foreground="{DynamicResource SystemAccentColor}" />
+
 			<ScrollViewer >
 				<ItemsControl ItemsSource="{Binding InstrumentTemplates}"
 						  HorizontalAlignment="Stretch" >
@@ -90,7 +135,8 @@
 					</ItemsControl.ItemsPanel>
 					<ItemsControl.ItemTemplate>
 						<DataTemplate x:DataType="vm:InstrumentTemplateGroupModel">
-							<Border Background="{DynamicResource AlternateListItemBackground}" CornerRadius="8">
+							<Border 
+									CornerRadius="4">
 								<DockPanel>
 									<ctrl:SvgIcon SvgImage="{Binding InstrumentType, Converter={StaticResource InstrumentTypeToSvgPathConverter}}"
 									 Height="40" Margin="8,0,4,0"
@@ -99,7 +145,7 @@
 
 									<StackPanel Orientation="Vertical" Margin="4,4" VerticalAlignment="Center" >
 
-										<TextBlock Text="{Binding Name}" Margin="2,0,0,0" FontSize="16" />
+										<TextBlock Text="{Binding Name}" Margin="2,0,0,0" FontSize="14" FontWeight="DemiBold" />
 
 										<ItemsControl ItemsSource="{Binding Templates}">
 											<ItemsControl.ItemsPanel>
@@ -109,9 +155,27 @@
 											</ItemsControl.ItemsPanel>
 											<ItemsControl.ItemTemplate>
 												<DataTemplate >
-													<Button Click="TemplateButton_Click" Content="{Binding Name}" Padding="6,2" Margin="2" />
+													<Button Click="TemplateButton_Click" FontWeight="DemiBold"
+															Content="{Binding Name}" Padding="6,2" Margin="2" >
+														<Button.Styles>
+															<Style Selector="Button">
+																<Setter Property="Foreground" Value="{DynamicResource TemplateButtonForegroundBrush}" />
+																<Setter Property="Background" Value="{DynamicResource TemplateButtonBackgroundBrush}" />
+																<Setter Property="BorderBrush" Value="#2a3a30" />
+															</Style>
+															<Style Selector="Button:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+																<Setter Property="Foreground" Value="{DynamicResource SystemAccentColor}" />
+																<Setter Property="BorderBrush" Value="{DynamicResource SystemAccentColor}" />
+															</Style>
+															<Style Selector="Button:pressed /template/ ContentPresenter#PART_ContentPresenter">
+																<Setter Property="Foreground" Value="{DynamicResource SystemAccentColor}" />
+																<Setter Property="BorderBrush" Value="{DynamicResource SystemAccentColor}" />
+															</Style>
+														</Button.Styles>
+													</Button>
 												</DataTemplate>
 											</ItemsControl.ItemTemplate>
+
 										</ItemsControl>
 									</StackPanel>
 								</DockPanel>

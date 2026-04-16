@@ -27,10 +27,13 @@ namespace SiGen.ViewModels.Design
 
         public IStringDataService DataService { get; }
 
+        public IStringMaterialEstimationService MaterialEstimationService { get; }
+
         public MockLayoutDocumentContext()
         {
             InstrumentValuesProvider = new ElectricGuitarValuesProvider();
             DataService = new MockStringDataService();
+            MaterialEstimationService = new StringMaterialEstimationService(DataService);
             DialogService = new MockDialogService();
             // Initialize with a mock configuration for design-time purposes
             Configuration = new InstrumentLayoutConfiguration

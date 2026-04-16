@@ -147,7 +147,7 @@ namespace SiGen.UI.Controls
             StreamGeometry stringGeometry = CreateWoundStringGeometry(drawnHeight, wrapThicknessPx, spacingPx, slantOffset, twistLength, availableWidth);
 
             var metallicBrush = CreateMetallicBrush(Material ?? StringMaterialType.SteelPlain);
-            var lineCap = Material == StringMaterialType.SteelFlatwound ? PenLineCap.Square : PenLineCap.Round;
+            var lineCap = /*Material == StringMaterialType.SteelFlatwound ? PenLineCap.Square :*/ PenLineCap.Round;
 
             var pen1 = new Pen(metallicBrush, wrapThicknessPx, lineCap: lineCap);
             var pen2 = new Pen(CreateWindingHighlightBrush(wrapThicknessPx, spacingPx, angleDegrees), wrapThicknessPx, lineCap: PenLineCap.Round);
@@ -423,11 +423,11 @@ namespace SiGen.UI.Controls
                 StringMaterialType.SteelPlain =>
                     (Color.Parse("#A8A8A8"), Color.Parse("#444444"), Colors.White, 0.3),
 
-                StringMaterialType.SteelWound =>
-                    (Color.Parse("#B0B0B0"), Color.Parse("#333333"), Colors.White, 0.35),
+                //StringMaterialType.SteelWound =>
+                //    (Color.Parse("#B0B0B0"), Color.Parse("#333333"), Colors.White, 0.35),
 
-                StringMaterialType.SteelFlatwound =>
-                    (Color.Parse("#8E8E8E"), Color.Parse("#2A2A2A"), Color.Parse("#D0D0D0"), 0.4),
+                //StringMaterialType.SteelFlatwound =>
+                //    (Color.Parse("#8E8E8E"), Color.Parse("#2A2A2A"), Color.Parse("#D0D0D0"), 0.4),
 
                 StringMaterialType.NickelWound =>
                     (Color.Parse("#9DA2A8"), Color.Parse("#303235"), Color.Parse("#E8EAED"), 0.35),
@@ -435,14 +435,14 @@ namespace SiGen.UI.Controls
                 StringMaterialType.BronzeWound =>
                     (Color.Parse("#CD7F32"), Color.Parse("#4A2E12"), Color.Parse("#FFD39B"), 0.35),
 
-                StringMaterialType.PhosphorBronzeWound =>
-                    (Color.Parse("#B87333"), Color.Parse("#3D1F0A"), Color.Parse("#FFB07C"), 0.35),
+                //StringMaterialType.PhosphorBronzeWound =>
+                //    (Color.Parse("#B87333"), Color.Parse("#3D1F0A"), Color.Parse("#FFB07C"), 0.35),
 
                 StringMaterialType.NylonPlain =>
                     (Color.Parse("#E0E0E0"), Color.Parse("#A0A0A0"), Colors.White, 0.45), // Low contrast
 
-                StringMaterialType.GutPlain =>
-                    (Color.Parse("#D2B48C"), Color.Parse("#8B7355"), Color.Parse("#F5DEB3"), 0.5),
+                //StringMaterialType.GutPlain =>
+                //    (Color.Parse("#D2B48C"), Color.Parse("#8B7355"), Color.Parse("#F5DEB3"), 0.5),
 
                 StringMaterialType.SilverPlatedWound =>
                     (Color.Parse("#C0C0C0"), Color.Parse("#444444"), Colors.White, 0.3),

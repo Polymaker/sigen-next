@@ -146,21 +146,22 @@ namespace SiGen.Services
 
 
             var closests = await query
+                .Where(s => s.UnitWeight.HasValue && Math.Abs(s.Gauge - gauge) <= 0.025)
                 .OrderBy(s => Math.Abs(s.Gauge - gauge))
                 .Take(2)
                 .ToListAsync();
 
-            if (closests.Any(x=>x.Gauge == gauge && x.UnitWeight.HasValue))
+            if (closests.HasAny(x => x.Gauge == gauge, out var exactMatch))
             {
-                return closests.First(x => x.Gauge == gauge).UnitWeight;
+                return exactMatch.UnitWeight;
             }
-            else if (closests.Count == 2 && closests.All(x => x.UnitWeight.HasValue))
+            else if (closests.Count == 2)
             {
                 var a = closests[0];
                 var b = closests[1];
 
                 // avoid division by zero if both gauges are somehow identical
-                if (Math.Abs(a.Gauge - b.Gauge) < double.Epsilon)
+                if (Math.Abs(a.Gauge - b.Gauge) <= double.Epsilon)
                     return a.UnitWeight;
 
                 double t = (gauge - a.Gauge) / (b.Gauge - a.Gauge);
@@ -168,7 +169,17 @@ namespace SiGen.Services
             }
             else if (closests.Count == 1)
             {
-                return closests[0].UnitWeight;
+                var closest = closests[0];
+                if (closest.Gauge > gauge)
+                {
+                    // Extrapolate downwards
+                    return closest.UnitWeight * (gauge / closest.Gauge);
+                }
+                else
+                {
+                    // Extrapolate upwards
+                    return closest.UnitWeight * (gauge / closest.Gauge);
+                }
             }
 
             return null;

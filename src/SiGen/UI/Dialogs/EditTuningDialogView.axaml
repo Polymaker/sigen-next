@@ -2,7 +2,7 @@
 			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-			 mc:Ignorable="d"  d:DesignHeight="400" MinWidth="400"
+			 mc:Ignorable="d"  d:DesignHeight="450" MinWidth="350" MaxHeight="700"
 			 xmlns:vm="using:SiGen.ViewModels.Dialogs"
 			 xmlns:ctrl="using:SiGen.UI.Controls"
 			 x:DataType="vm:EditTuningDialogViewModel"
@@ -17,6 +17,7 @@
 			  RowDefinitions="Auto,Auto,Auto">
 			<Label Grid.Row="0"
 				   Content="{x:Static lang:Resources.EditTuningDialog_TuningPresetsLabel}" VerticalAlignment="Center" />
+			
 			<ComboBox Name="TuningSelector"
 					  SelectedValueBinding="{Binding Preset}"
 					  ItemsSource="{Binding TuningPresets}"
@@ -51,91 +52,108 @@
 				</Button.Styles>
 			</Button>
 
+			<TextBlock Grid.Row="2" Grid.ColumnSpan="2"
+					   Text="{x:Static lang:Resources.EditTuningDialog_OptionalTuningMessage}"
+					   TextWrapping="Wrap" MaxWidth="450"
+					   Margin="2,6,2,3"
+					   Opacity="0.85" />
+
 			<!--<Separator Grid.Row="2" Grid.ColumnSpan="2" Margin="4,1"/>-->
 		</Grid>
 		<Border Grid.Row="1"  CornerRadius="6" Margin="0,3,0,0"
 				Background="{DynamicResource PanelBackgroundBrush}">
 			<Grid RowDefinitions="Auto,Auto,*" ColumnDefinitions="*,*,*">
 
-				<Label Content="Strings" HorizontalAlignment="Center" FontWeight="Bold" />
+				<Label Content="{x:Static lang:Resources.StringLabel}" HorizontalAlignment="Center" FontWeight="Bold" />
 				<Label Content="Tuning" Grid.Column="1" HorizontalAlignment="Center" FontWeight="Bold" />
-				<Label Content="Tension * " Grid.Column="2" HorizontalAlignment="Center" FontWeight="Bold" />
+			
+				<Label Grid.Column="2" HorizontalAlignment="Center" FontWeight="Bold"
+					   Content="Tension * " ToolTip.Tip="TODO"
+					   />
+
 				<Separator Grid.Row="1" Grid.ColumnSpan="5" Margin="0,3,0,0" />
+				<ScrollViewer Grid.Row="2" Grid.ColumnSpan="3">
+					<ItemsControl
+					ItemsSource="{Binding StringCourses}"
+					>
+						<ItemsControl.ItemTemplate>
+							<DataTemplate>
+								<Border Classes.IsEven="{Binding IsEven}">
+									<Border.Styles>
+										<Style Selector="Border">
+											<Setter Property="Background" Value="Transparent"/>
+										</Style>
+										<Style Selector="Border.IsEven">
+											<Setter Property="Background" Value="{DynamicResource EvenRowBrush}"/>
+										</Style>
+									</Border.Styles>
 
-				<ItemsControl Grid.Row="2" Grid.ColumnSpan="3"
-							  ItemsSource="{Binding StringCourses}"
-							  >
-					<ItemsControl.ItemTemplate>
-						<DataTemplate>
-							<Border Classes.IsEven="{Binding IsEven}">
-								<Border.Styles>
-									<Style Selector="Border">
-										<Setter Property="Background" Value="Transparent"/>
-									</Style>
-									<Style Selector="Border.IsEven">
-										<Setter Property="Background" Value="{DynamicResource EvenRowBrush}"/>
-									</Style>
-								</Border.Styles>
+									<Grid ColumnDefinitions="*, *, *" >
 
-								<Grid ColumnDefinitions="*, *, *" >
+										<StackPanel Orientation="Horizontal" Grid.Column="0">
+											<ctrl:SvgIcon Margin="6,9,3,0"
+														  SvgImage="/Assets/Icons/StringIcon.svg" Height="24" Opacity="0.5" VerticalAlignment="Top" />
 
-									<StackPanel Orientation="Horizontal" Grid.Column="0">
-										<ctrl:SvgIcon Margin="6,9,3,0"
-													  SvgImage="/Assets/Icons/StringIcon.svg" Height="24" Opacity="0.5" VerticalAlignment="Top" />
+											<TextBlock VerticalAlignment="Center" FontWeight="DemiBold"
+													   Width="65" Margin="3,0"
+													   IsVisible="{Binding IsNotGrouped}" >
+												<TextBlock.Text>
+													<MultiBinding StringFormat="{}{0} {1}">
+														<Binding Source="{x:Static lang:Resources.StringLabel}" />
+														<Binding Path="CourseNumber" />
+													</MultiBinding>
+												</TextBlock.Text>
+											</TextBlock>
+											<TextBlock VerticalAlignment="Top" FontWeight="DemiBold"
+													   Width="80" Margin="3,10,0,0" IsVisible="{Binding IsGrouped}">
+												<TextBlock.Text>
+													<MultiBinding StringFormat="{}{0} {1}">
+														<Binding Source="{x:Static lang:Resources.CourseLabel}" />
+														<Binding Path="CourseNumber" />
+													</MultiBinding>
+												</TextBlock.Text>
+											</TextBlock>
+										</StackPanel>
 
-										<TextBlock VerticalAlignment="Center" FontWeight="Bold"
-												   Width="65" Margin="3,0"
-												   IsVisible="{Binding IsNotGrouped}" >
-											<TextBlock.Text>
-												<MultiBinding StringFormat="{}{0} {1}">
-													<Binding Source="{x:Static lang:Resources.StringLabel}" />
-													<Binding Path="CourseNumber" />
-												</MultiBinding>
-											</TextBlock.Text>
-										</TextBlock>
-										<TextBlock VerticalAlignment="Top" FontWeight="Bold"
-												   Width="80" Margin="3,10,0,0" IsVisible="{Binding IsGrouped}">
-											<TextBlock.Text>
-												<MultiBinding StringFormat="{}{0} {1}">
-													<Binding Source="{x:Static lang:Resources.CourseLabel}" />
-													<Binding Path="CourseNumber" />
-												</MultiBinding>
-											</TextBlock.Text>
-										</TextBlock>
-									</StackPanel>
+										<ItemsControl ItemsSource="{Binding Strings}" Grid.Column="0" Grid.ColumnSpan="3">
+											<ItemsControl.ItemTemplate>
+												<DataTemplate >
+													<Grid ColumnDefinitions="*,*,*">
+							
+														<ctrl:NoteUpDown Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center"
+																		 Value="{Binding Tuning, Mode=TwoWay}" Margin="0,3" Width="100" />
+														
+														<TextBlock Grid.Column="2" Text="N/A"  FontSize="12"
+																   HorizontalAlignment="Center" VerticalAlignment="Center"
+																   IsVisible="{Binding StringTension, Converter={x:Static ObjectConverters.IsNull}}" />
+														
+														<StackPanel Grid.Column="2" VerticalAlignment="Center"
+																	IsVisible="{Binding StringTension, Converter={x:Static ObjectConverters.IsNotNull}}" >
+															<Label
+																Content="{Binding StringTension, StringFormat='{}{0:0.##} lbs'}"
+																VerticalAlignment="Center" Padding="0" FontSize="13"
+																HorizontalAlignment="Center"/>
+															<!--<Label
+																Content="{Binding StiffnessIndex, StringFormat='{}{0:0.##}'}"
+																VerticalAlignment="Center" Padding="0" FontSize="13"
+																HorizontalAlignment="Center"/>-->
+															<Label
+																Content="{Binding TensionBalanceState}"
+																VerticalAlignment="Center" Padding="0" FontSize="13"
+																HorizontalAlignment="Center"/>
+														</StackPanel>
 
-									<ItemsControl ItemsSource="{Binding Strings}" Grid.Column="0" Grid.ColumnSpan="3">
-										<ItemsControl.ItemTemplate>
-											<DataTemplate >
-												<Grid ColumnDefinitions="*,*, *">
-													<!--<TextBlock Text="{Binding Label}" FontSize="12" Width="50"
-													HorizontalAlignment="Right"
-													IsVisible="{Binding $parent[ItemsControl].DataContext.IsGrouped}"
-													Margin="3,0" VerticalAlignment="Center" >
+													</Grid>
+												</DataTemplate>
+											</ItemsControl.ItemTemplate>
+										</ItemsControl>
+									</Grid>
+								</Border>
+							</DataTemplate>
+						</ItemsControl.ItemTemplate>
+					</ItemsControl>
+				</ScrollViewer>
 
-													</TextBlock>-->
-													<ctrl:NoteUpDown Grid.Column="1" HorizontalAlignment="Center"
-																	 Value="{Binding Tuning, Mode=TwoWay}" Margin="0,3" Width="100" />
-													<StackPanel Grid.Column="2" >
-														<Label 
-														   Content="{Binding StringTension, StringFormat='{}{0:0.##} lbs'}"
-														   VerticalAlignment="Center" Padding="0" FontSize="13"
-														   HorizontalAlignment="Center"/>
-													<Label Grid.Column="2"
-														   Content="{Binding StiffnessIndex, StringFormat='{}{0:0.##}'}"
-														   VerticalAlignment="Center" Padding="0" FontSize="13"
-														   HorizontalAlignment="Center"/>
-													</StackPanel>
-													
-												</Grid>
-											</DataTemplate>
-										</ItemsControl.ItemTemplate>
-									</ItemsControl>
-								</Grid>
-							</Border>
-						</DataTemplate>
-					</ItemsControl.ItemTemplate>
-				</ItemsControl>
 			</Grid>
 
 		</Border>

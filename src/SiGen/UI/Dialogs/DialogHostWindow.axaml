@@ -17,12 +17,14 @@
                   ColumnDefinitions="*, Auto">
                 
                 <TextBlock Text="{Binding Title}" 
+                Foreground="{DynamicResource AccentButtonForeground}"
                            VerticalAlignment="Center" 
                            Margin="10,5"/>
                 
                 <Button Grid.Column="1" 
                         Content="✕" 
                         Command="{Binding CancelCommand}"
+                        Foreground="{DynamicResource AccentButtonForeground}"
                         Background="Transparent"
                         BorderThickness="0"/>
             </Grid>

@@ -27,7 +27,7 @@ namespace SiGen.Services
                 { InstrumentType.AcousticBass, () => new InstrumentProfiles.AcousticBassValuesProvider() },
                 { InstrumentType.Mandolin, () => new InstrumentProfiles.MandolinValuesProvider() },
                 { InstrumentType.Banjo, () => new InstrumentProfiles.BanjoValuesProvider() },
-                //{ InstrumentType.Ukulele, () => new InstrumentProfiles.UkuleleValuesProvider() },
+                { InstrumentType.Ukulele, () => new InstrumentProfiles.UkuleleValuesProvider() },
             };
         }
 

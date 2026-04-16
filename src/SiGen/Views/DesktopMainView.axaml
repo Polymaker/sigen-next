@@ -120,7 +120,7 @@
 							<views:LayoutDocumentView DataContext="{Binding}" />
 						</DataTemplate>
 						<DataTemplate x:DataType="vm:HomePageViewModel">
-							<views:HomePageView DataContext="{Binding}" />
+							<views:HomePageView DataContext="{Binding}" VerticalAlignment="Stretch" />
 						</DataTemplate>
 					</TabControl.DataTemplates>
 						<!--<TabControl.ContentTemplates>

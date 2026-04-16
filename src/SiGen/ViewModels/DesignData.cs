@@ -1,4 +1,5 @@
-﻿using SiGen.Layouts.Configuration;
+﻿using Microsoft.Extensions.DependencyInjection;
+using SiGen.Layouts.Configuration;
 using SiGen.Services;
 using SiGen.UI.Controls;
 using SiGen.Utilities;
@@ -18,7 +19,18 @@ namespace SiGen.ViewModels
             get
             {
                 var dialogSvc = new MockDialogService();
-                var model = new DesktopMainViewModel(dialogSvc, new MockSettingsService(), new ViewModelFactory(dialogSvc, new InstrumentValuesProviderFactory(), new MockStringDataService()));
+
+                var services = new ServiceCollection();
+                services.AddSingleton<IDialogService>(dialogSvc);
+                services.AddSingleton<IInstrumentValuesProviderFactory, InstrumentValuesProviderFactory>();
+                services.AddSingleton<IStringDataService, MockStringDataService>();
+                services.AddSingleton<IStringMaterialEstimationService, StringMaterialEstimationService>();
+                var provider = services.BuildServiceProvider();
+
+                var model = new DesktopMainViewModel(
+                    dialogSvc,
+                    new MockSettingsService(),
+                    new ViewModelFactory(provider));
                 model.OpenDocuments.Add(new LayoutDocumentViewModel("Untitled", null, LayoutTemplates.CreateBassGuitarMultiscaleLayout())
                 {
                     HasUnsavedChanges = true
