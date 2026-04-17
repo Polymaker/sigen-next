@@ -379,4 +379,46 @@
   <data name="FretsLabel" xml:space="preserve">
     <value>Bünde</value>
   </data>
+  <data name="Common.Save" xml:space="preserve">
+    <value>Speichern</value>
+  </data>
+  <data name="Common.Cancel" xml:space="preserve">
+    <value>Abbrechen</value>
+  </data>
+  <data name="EditFretsDialog.Title" xml:space="preserve">
+    <value>Bundkonfiguration</value>
+  </data>
+  <data name="EditFretsDialog.GlobalSettingsHeader" xml:space="preserve">
+    <value>Globale Bundeinstellungen</value>
+  </data>
+  <data name="EditFretsDialog.TemperamentHeader" xml:space="preserve">
+    <value>Temperament</value>
+  </data>
+  <data name="EditFretsDialog.EqualTemperamentStepsHeader" xml:space="preserve">
+    <value>Teilungen</value>
+  </data>
+  <data name="EditFretsDialog.OverrideInfo" xml:space="preserve">
+    <value>Die Einstellungen pro Saite können Anzahl der Bünde, Startbund, Temperament und ET-Schritte überschreiben.</value>
+  </data>
+  <data name="EditFretsDialog.StringOrCourseHeader" xml:space="preserve">
+    <value>Saite / Chorsaite</value>
+  </data>
+  <data name="EditFretsDialog.StartingFretHeader" xml:space="preserve">
+    <value>Startbund</value>
+  </data>
+  <data name="EditFretsDialog.UseGlobal" xml:space="preserve">
+    <value>Global verwenden</value>
+  </data>
+  <data name="EditFretsDialog.GlobalLabel" xml:space="preserve">
+    <value>Global</value>
+  </data>
+  <data name="EditFretsDialog.StringCountSuffix" xml:space="preserve">
+    <value>Saiten</value>
+  </data>
+  <data name="EditFretsDialog.EqualTemperamentStepsTooltip" xml:space="preserve">
+    <value>Anzahl gleichmäßiger Teilungen der Oktave für die Bundpositionen bei gleichstufigem Temperament. 12 ist das westliche Standardsystem. Höhere Werte können für mikrotonale Layouts verwendet werden.</value>
+  </data>
+  <data name="EditFretsDialog.StartingFretTooltip" xml:space="preserve">
+    <value>Startbundindex für diese Saite oder diesen Chorsatz. 0 bedeutet, dass der Sattel die Startposition ist. Positive Werte beginnen hinter dem Sattel. Negative Werte fügen einen oder mehrere Bünde vor dem Sattel hinzu.</value>
+  </data>
 </root>

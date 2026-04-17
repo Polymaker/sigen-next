@@ -379,4 +379,46 @@ Abre un archivo reciente para continuar tu trabajo o crea un nuevo diseño con u
   <data name="FretsLabel" xml:space="preserve">
     <value>Trastes</value>
   </data>
+  <data name="Common.Save" xml:space="preserve">
+    <value>Guardar</value>
+  </data>
+  <data name="Common.Cancel" xml:space="preserve">
+    <value>Cancelar</value>
+  </data>
+  <data name="EditFretsDialog.Title" xml:space="preserve">
+    <value>Configuración de trastes</value>
+  </data>
+  <data name="EditFretsDialog.GlobalSettingsHeader" xml:space="preserve">
+    <value>Ajustes globales de trastes</value>
+  </data>
+  <data name="EditFretsDialog.TemperamentHeader" xml:space="preserve">
+    <value>Temperamento</value>
+  </data>
+  <data name="EditFretsDialog.EqualTemperamentStepsHeader" xml:space="preserve">
+    <value>Divisiones</value>
+  </data>
+  <data name="EditFretsDialog.OverrideInfo" xml:space="preserve">
+    <value>La configuración por cuerda puede reemplazar el número de trastes, el traste inicial, el temperamento y el número de pasos del temperamento igual.</value>
+  </data>
+  <data name="EditFretsDialog.StringOrCourseHeader" xml:space="preserve">
+    <value>Cuerda / orden</value>
+  </data>
+  <data name="EditFretsDialog.StartingFretHeader" xml:space="preserve">
+    <value>Traste inicial</value>
+  </data>
+  <data name="EditFretsDialog.UseGlobal" xml:space="preserve">
+    <value>Usar global</value>
+  </data>
+  <data name="EditFretsDialog.GlobalLabel" xml:space="preserve">
+    <value>Global</value>
+  </data>
+  <data name="EditFretsDialog.StringCountSuffix" xml:space="preserve">
+    <value>cuerdas</value>
+  </data>
+  <data name="EditFretsDialog.EqualTemperamentStepsTooltip" xml:space="preserve">
+    <value>Número de divisiones iguales de la octava utilizado para colocar los trastes cuando el temperamento es igual. 12 es el sistema occidental estándar. Se pueden usar valores más altos para diseños microtonales.</value>
+  </data>
+  <data name="EditFretsDialog.StartingFretTooltip" xml:space="preserve">
+    <value>Índice del traste inicial para esta cuerda u orden. 0 significa que la cejuela es la posición inicial. Los valores positivos empiezan después de la cejuela. Los valores negativos añaden uno o más trastes antes de la cejuela.</value>
+  </data>
 </root>

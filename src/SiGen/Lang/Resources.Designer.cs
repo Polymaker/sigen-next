@@ -61,6 +61,24 @@ namespace SiGen.Lang {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cancel.
+        /// </summary>
+        public static string Common_Cancel {
+            get {
+                return ResourceManager.GetString("Common.Cancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save.
+        /// </summary>
+        public static string Common_Save {
+            get {
+                return ResourceManager.GetString("Common.Save", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Course.
         /// </summary>
         public static string CourseLabel {
@@ -84,6 +102,114 @@ namespace SiGen.Lang {
         public static string DateLabel_Yesterday {
             get {
                 return ResourceManager.GetString("DateLabel.Yesterday", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Divisions.
+        /// </summary>
+        public static string EditFretsDialog_EqualTemperamentStepsHeader {
+            get {
+                return ResourceManager.GetString("EditFretsDialog.EqualTemperamentStepsHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Number of equal divisions of the octave used for fret placement when the temperament is equal. 12 is the standard western system. Higher values can be used for microtonal layouts..
+        /// </summary>
+        public static string EditFretsDialog_EqualTemperamentStepsTooltip {
+            get {
+                return ResourceManager.GetString("EditFretsDialog.EqualTemperamentStepsTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Global.
+        /// </summary>
+        public static string EditFretsDialog_GlobalLabel {
+            get {
+                return ResourceManager.GetString("EditFretsDialog.GlobalLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Global fret settings.
+        /// </summary>
+        public static string EditFretsDialog_GlobalSettingsHeader {
+            get {
+                return ResourceManager.GetString("EditFretsDialog.GlobalSettingsHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Per-string settings can override fret count, starting fret, temperament, and equal temperament steps..
+        /// </summary>
+        public static string EditFretsDialog_OverrideInfo {
+            get {
+                return ResourceManager.GetString("EditFretsDialog.OverrideInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Start fret.
+        /// </summary>
+        public static string EditFretsDialog_StartingFretHeader {
+            get {
+                return ResourceManager.GetString("EditFretsDialog.StartingFretHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Starting fret index for this string or course. 0 means the nut is the starting position. Positive values start after the nut. Negative values add one or more frets before the nut..
+        /// </summary>
+        public static string EditFretsDialog_StartingFretTooltip {
+            get {
+                return ResourceManager.GetString("EditFretsDialog.StartingFretTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to strings.
+        /// </summary>
+        public static string EditFretsDialog_StringCountSuffix {
+            get {
+                return ResourceManager.GetString("EditFretsDialog.StringCountSuffix", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to String / course.
+        /// </summary>
+        public static string EditFretsDialog_StringOrCourseHeader {
+            get {
+                return ResourceManager.GetString("EditFretsDialog.StringOrCourseHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Temperament.
+        /// </summary>
+        public static string EditFretsDialog_TemperamentHeader {
+            get {
+                return ResourceManager.GetString("EditFretsDialog.TemperamentHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fret Configuration.
+        /// </summary>
+        public static string EditFretsDialog_Title {
+            get {
+                return ResourceManager.GetString("EditFretsDialog.Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Use global.
+        /// </summary>
+        public static string EditFretsDialog_UseGlobal {
+            get {
+                return ResourceManager.GetString("EditFretsDialog.UseGlobal", resourceCulture);
             }
         }
         

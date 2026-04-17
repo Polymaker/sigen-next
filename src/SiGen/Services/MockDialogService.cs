@@ -47,5 +47,10 @@ namespace SiGen.Services
         {
             throw new NotImplementedException();
         }
+
+        public Task<EditFretsResult?> ShowFretsDialog(ILayoutDocumentContext context)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

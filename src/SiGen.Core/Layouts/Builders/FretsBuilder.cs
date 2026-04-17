@@ -232,23 +232,24 @@ namespace SiGen.Layouts.Builders
 
             for (int i = 0; i < NumberOfStrings; i++)
             {
-                var stringConfig = GetStringConfig(i);
+                var stringConfig = GetStringConfig(i)!;
 
-                bool hasStringFretConfig = stringConfig?.Frets != null;
+                bool hasStringFretConfig = stringConfig.Frets != null;
 
-                var stringFretConfig = stringConfig?.Frets ?? Configuration.Frets;
+                var stringFretConfig = stringConfig.Frets ?? Configuration.Frets;
                 int? numberOfFrets = stringFretConfig?.NumberOfFrets ?? Configuration.NumberOfFrets;
                 if (numberOfFrets == null)
                     continue;
 
                 var temperament = stringFretConfig?.Temperament ?? Configuration.Temperament;
                 int etSteps = stringFretConfig?.ETSteps ?? Configuration.Frets.ETSteps ?? 12;
+                var intervalConfig = stringFretConfig?.Intervals ?? Configuration.Frets.Intervals;
 
-                int startingFret = stringConfig?.Frets?.StartingFret ?? 0;
+                int startingFret = stringConfig.Frets?.StartingFret ?? 0;
 
                 var stringElem = Layout.Strings.First(x => x.StringIndex == i);
 
-                var rootNote = stringConfig?.GetPrimaryNote() ?? new NoteAndOctave(NoteName.C, 1);
+                var rootNote = stringConfig.GetPrimaryNote() ?? new NoteAndOctave(NoteName.C, 1);
 
                 var rootInterval = temperament != Temperament.Custom ? 
                     PitchInterval.FromNote(rootNote, temperament) : 
@@ -273,7 +274,7 @@ namespace SiGen.Layouts.Builders
                         PitchInterval interval = PitchInterval.FromCents(fretCents - rootCents);
                         var fretRatio = 1d / interval.Ratio;
                         var fretPos = stringElem.Path.Interpolate(1d - fretRatio);
-                        var fretPoint = new FretPoint(i, j, PointM.FromVector(fretPos), interval);
+                        var fretPoint = new FretPoint(i, PointM.FromVector(fretPos), interval);
 
                         // mark nut points
                         if (j == startingFret)
@@ -295,11 +296,11 @@ namespace SiGen.Layouts.Builders
                     }
                 }
 
-                if (stringFretConfig?.Intervals != null)
+                if (intervalConfig != null)
                 {
                     var intervals = new List<double>();
                     
-                    intervals.AddRange(stringFretConfig.Intervals);
+                    intervals.AddRange(intervalConfig);
 
                     if (temperament == Temperament.Custom && !intervals.Contains(0))
                         intervals.Insert(0, 0); // ensure there is a nut point if using custom temperament with custom intervals
@@ -309,7 +310,7 @@ namespace SiGen.Layouts.Builders
                         PitchInterval interval = PitchInterval.FromCents(intervals[j]);
                         var fretRatio = 1d / interval.Ratio;
                         var fretPos = stringElem.Path.Interpolate(1d - fretRatio);
-                        var fretPoint = new FretPoint(i, lastFretIndex + j + 1, PointM.FromVector(fretPos), interval);
+                        var fretPoint = new FretPoint(i, PointM.FromVector(fretPos), interval);
                         fretPoint.IsManualInterval = true;
                         fretPoint.IsNut = intervals[j] == 0;
                         //fretPoint.IsLastFret = j == intervals.Count - 1;
@@ -326,10 +327,16 @@ namespace SiGen.Layouts.Builders
                 bridgePoint.IsBridge = true;
                 stringPoints.Add(bridgePoint);
 
-                int index = 0;
+                int curFretIndex = 0;
+                //int curFretNumber = 1;
+                int curFretNumber = (stringFretConfig?.StartingFret ?? 0) + 1;
                 stringPoints = stringPoints.OrderBy(x => x.Interval.Cents).ToList();
                 foreach (var pt in stringPoints)
-                    pt.FretIndex = index++;
+                {
+                    pt.FretIndex = curFretIndex++;
+                    if (!pt.IsReference && !(pt.IsBridge || pt.IsNut))
+                        pt.FretNumber = curFretNumber++;
+                }
 
                 points.AddRange(stringPoints);
             }
@@ -341,7 +348,7 @@ namespace SiGen.Layouts.Builders
             return temperament switch
             {
                 Temperament.Equal => rootNote.ToAbsoluteCents() + (fretIndex * (1200.0 / etSteps)),
-                Temperament.Just or Temperament.Thidell =>
+                Temperament.Just or Temperament.Thidell or Temperament.Pythagorean =>
                     PitchInterval.FromNote(rootNote.Transpose(fretIndex), temperament).Cents,
                 _ => throw new ArgumentOutOfRangeException()
             };

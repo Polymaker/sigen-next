@@ -359,4 +359,46 @@ Open a recent file or start from a template.</value>
   <data name="FretsLabel" xml:space="preserve">
     <value>Frets</value>
   </data>
+  <data name="EditFretsDialog.Title" xml:space="preserve">
+    <value>Fret Configuration</value>
+  </data>
+  <data name="EditFretsDialog.GlobalSettingsHeader" xml:space="preserve">
+    <value>Global fret settings</value>
+  </data>
+  <data name="EditFretsDialog.TemperamentHeader" xml:space="preserve">
+    <value>Temperament</value>
+  </data>
+  <data name="EditFretsDialog.EqualTemperamentStepsHeader" xml:space="preserve">
+    <value>Divisions</value>
+  </data>
+  <data name="EditFretsDialog.OverrideInfo" xml:space="preserve">
+    <value>Per-string settings can override fret count, starting fret, temperament, and equal temperament steps.</value>
+  </data>
+  <data name="EditFretsDialog.StringOrCourseHeader" xml:space="preserve">
+    <value>String / course</value>
+  </data>
+  <data name="EditFretsDialog.StartingFretHeader" xml:space="preserve">
+    <value>Start fret</value>
+  </data>
+  <data name="EditFretsDialog.UseGlobal" xml:space="preserve">
+    <value>Use global</value>
+  </data>
+  <data name="EditFretsDialog.GlobalLabel" xml:space="preserve">
+    <value>Global</value>
+  </data>
+  <data name="EditFretsDialog.StringCountSuffix" xml:space="preserve">
+    <value>strings</value>
+  </data>
+  <data name="Common.Save" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="Common.Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="EditFretsDialog.EqualTemperamentStepsTooltip" xml:space="preserve">
+    <value>Number of equal divisions of the octave used for fret placement when the temperament is equal. 12 is the standard western system. Higher values can be used for microtonal layouts.</value>
+  </data>
+  <data name="EditFretsDialog.StartingFretTooltip" xml:space="preserve">
+    <value>Starting fret index for this string or course. 0 means the nut is the starting position. Positive values start after the nut. Negative values add one or more frets before the nut.</value>
+  </data>
 </root>

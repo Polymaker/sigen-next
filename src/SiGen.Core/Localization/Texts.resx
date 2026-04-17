@@ -244,4 +244,19 @@
   <data name="Tuning.WholeStepDown" xml:space="preserve">
     <value>Whole step down</value>
   </data>
+  <data name="Temperament.Equal" xml:space="preserve">
+    <value>Equal temperament</value>
+  </data>
+  <data name="Temperament.Just" xml:space="preserve">
+    <value>Just intonation</value>
+  </data>
+  <data name="Temperament.Thidell" xml:space="preserve">
+    <value>Thidell</value>
+  </data>
+  <data name="Temperament.Custom" xml:space="preserve">
+    <value>Custom</value>
+  </data>
+  <data name="Temperament.Pythagorean" xml:space="preserve">
+    <value>Pythagorean</value>
+  </data>
 </root>

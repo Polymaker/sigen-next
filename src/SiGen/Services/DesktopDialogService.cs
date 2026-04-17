@@ -37,7 +37,6 @@ namespace SiGen.Services
             dialogControl.DataContext = viewModel;
 
             var dialogWindow = new DialogHostWindow();
-            dialogWindow.SystemDecorations = SystemDecorations.BorderOnly;
             dialogWindow.CanResize = viewModel.Resizable;
             dialogWindow.SizeToContent = viewModel.Resizable ? SizeToContent.Manual : SizeToContent.WidthAndHeight;
             dialogWindow.SetDialogContent(dialogControl, viewModel);
@@ -91,6 +90,13 @@ namespace SiGen.Services
         {
             var viewModel = new EditStringsDialogViewModel(context);
             var dialogControl = new EditStringsDialogView();
+            return await ShowDialogAsync(dialogControl, viewModel);
+        }
+
+        public async Task<EditFretsResult?> ShowFretsDialog(ILayoutDocumentContext context)
+        {
+            var viewModel = new EditFretsDialogViewModel(context);
+            var dialogControl = new EditFretsDialogView();
             return await ShowDialogAsync(dialogControl, viewModel);
         }
 

@@ -73,13 +73,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Services\Desktop\" />
-    <Folder Include="UI\Windows\" />
+    <None Include="..\DbPopulator\StringDB.xml" Link="StringDB.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="SiGenDatabase.db">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    <Folder Include="Services\Desktop\" />
+    <Folder Include="UI\Windows\" />
   </ItemGroup>
 </Project>

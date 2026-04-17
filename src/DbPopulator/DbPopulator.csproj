@@ -11,4 +11,10 @@
     <ProjectReference Include="..\SiGen.Core\SiGen.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="StringDB.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

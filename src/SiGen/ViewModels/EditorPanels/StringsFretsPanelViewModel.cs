@@ -28,11 +28,13 @@ namespace SiGen.ViewModels.EditorPanels
 
         public ICommand EditTuningCommand { get; }
         public ICommand EditStringsCommand { get; }
+        public ICommand EditFretsCommand { get; }
 
         public StringsFretsPanelViewModel()
         {
             EditTuningCommand = new RelayCommand(EditTuning);
             EditStringsCommand = new RelayCommand(EditStrings);
+            EditFretsCommand = new RelayCommand(EditFrets);
         }
 
 
@@ -226,10 +228,7 @@ namespace SiGen.ViewModels.EditorPanels
             var result = await LayoutDocumentContext.DialogService.ShowTuningDialog(LayoutDocumentContext);
             if (result != null)
             {
-                UpdateConfiguration("Tuning edited", config =>
-                {
-                    result.Apply(config);
-                });
+                UpdateConfiguration("Tuning edited", result.Apply);
             }
         }
 
@@ -243,6 +242,20 @@ namespace SiGen.ViewModels.EditorPanels
             if (result != null)
             {
                 UpdateConfiguration("Edit Strings", result.Apply);
+                OnConfigurationChanged(); //
+            }
+        }
+
+        public async void EditFrets()
+        {
+            if (LayoutDocumentContext.DialogService == null)
+                return;
+
+            var result = await LayoutDocumentContext.DialogService.ShowFretsDialog(LayoutDocumentContext);
+            if (result != null)
+            {
+                UpdateConfiguration("Edit Frets", result.Apply);
+                OnConfigurationChanged(); //force update of number of frets
             }
         }
     }

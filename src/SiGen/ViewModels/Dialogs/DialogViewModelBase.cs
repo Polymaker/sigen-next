@@ -10,6 +10,7 @@ namespace SiGen.ViewModels.Dialogs
         string Title { get; }
         bool ShowTitleBar { get; set; }
         ICommand CancelCommand { get; }
+        bool Resizable { get; set; }
     }
 
     public abstract partial class DialogViewModelBase<TResult> : ObservableObject, IDialogViewModel//, IDialogViewModel<TResult>
@@ -85,5 +86,7 @@ namespace SiGen.ViewModels.Dialogs
         public bool ShowTitleBar { get; set; } = true;
 
         public ICommand CancelCommand { get; } = new RelayCommand(() => { });
+
+        public bool Resizable { get; set; } = true;
     }
 }

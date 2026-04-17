@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using SiGen.Data.Entities;
 using SiGen.Services;
 using SiGen.ViewModels;
 using SiGen.ViewModels.EditorPanels;
@@ -17,7 +19,10 @@ namespace SiGen.DependencyInjection
             // Register all shared services here
             services.AddSingleton<IInstrumentValuesProviderFactory, InstrumentValuesProviderFactory>();
             services.AddSingleton<ISettingsService, SettingsService>();
-            //services.AddSingleton<InstrumentValuesProviderFactory>();
+            services.AddSingleton<IDatabaseInitializationService, DatabaseInitializationService>();
+
+            services.AddDbContextFactory<SiGenDbContext>(options =>
+                options.UseSqlite(SiGenDatabasePath.GetConnectionString()));
 
             services.AddSingleton<ViewModelFactory>();
             services.AddSingleton<IStringDataService, StringDataService>();
@@ -30,7 +35,7 @@ namespace SiGen.DependencyInjection
             //services.AddTransient<ScaleLengthPanelViewModel>();
             //services.AddTransient<InstrumentInfoPanelViewModel>();
             //services.AddTransient<LayoutDocumentViewModel>();
-            
+
             return services;
         }
     }

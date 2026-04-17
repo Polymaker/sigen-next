@@ -46,7 +46,7 @@ public partial class App : Application
         collection.AddSiGenServices();
 
 
-        CultureInfo.CurrentUICulture = new CultureInfo("en-CA");
+        CultureInfo.CurrentUICulture = new CultureInfo("en-CA"); //new CultureInfo("fr-CA");
 
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
@@ -56,6 +56,7 @@ public partial class App : Application
             collection.AddSingleton<IDialogService, DesktopDialogService>(sp => new DesktopDialogService(mainWindow, sp));
             //collection.AddSingleton<ViewModelFactory>();
             Services = collection.BuildServiceProvider();
+            InitializeDatabase();
             mainWindow.DataContext = Services.GetService<DesktopMainViewModel>();
             desktop.MainWindow = mainWindow;
         }
@@ -64,6 +65,7 @@ public partial class App : Application
             collection.AddSingleton<IDialogService, MockDialogService>();
             //collection.AddSingleton<ViewModelFactory>();
             Services = collection.BuildServiceProvider();
+            InitializeDatabase();
             singleViewPlatform.MainView = new MobileMainView
             {
                 //DataContext = Services.GetService<MainViewModel>() ?? new MainViewModel()
@@ -71,6 +73,13 @@ public partial class App : Application
         }
 
         base.OnFrameworkInitializationCompleted();
+    }
+
+    private void InitializeDatabase()
+    {
+        var initializer = Services.GetService<IDatabaseInitializationService>();
+        //set to true to re-import from StringsDB xml
+        initializer?.InitializeAsync(false).GetAwaiter().GetResult();
     }
 
     // Avoid duplicate validations from both Avalonia and the CommunityToolkit. 

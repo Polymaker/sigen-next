@@ -11,6 +11,11 @@
 *.sln.docstates
 *.env
 
+# SQLite runtime/generated files
+**/*.db
+**/*.db-shm
+**/*.db-wal
+
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
 

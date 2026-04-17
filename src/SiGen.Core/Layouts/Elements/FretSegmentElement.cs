@@ -58,6 +58,12 @@ namespace SiGen.Layouts.Elements
             return point?.FretIndex ?? -1;
         }
 
+        public int GetFretNumberForString(int stringIndex)
+        {
+            var point = Segment.FretPoints.FirstOrDefault(x => !x.IsReference && x.StringIndex == stringIndex);
+            return point?.FretNumber ?? -1;
+        }
+
         public bool HasFingerboardSide(FingerboardSide side)
         {
             if (side == FingerboardSide.Bass)
@@ -137,6 +143,7 @@ namespace SiGen.Layouts.Elements
     public class FretPoint
     {
         public int FretIndex { get; set; }
+        public int FretNumber { get; set; }
         public PointM Position { get; set; }
         public PitchInterval Interval { get; set; }
         
@@ -147,6 +154,13 @@ namespace SiGen.Layouts.Elements
         public bool IsBridge { get; set; }
         public bool IsLastFret { get; set; }
         public bool IsManualInterval { get; set; }
+
+        public FretPoint(int stringIndex, PointM position, PitchInterval interval)
+        {
+            StringIndex = stringIndex;
+            Position = position;
+            Interval = interval;
+        }
 
         public FretPoint(int stringIndex, int fretIndex, PointM position, PitchInterval interval)
         {

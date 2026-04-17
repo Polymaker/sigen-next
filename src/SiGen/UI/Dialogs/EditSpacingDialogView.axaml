@@ -5,6 +5,7 @@
 			 mc:Ignorable="d"
 			 xmlns:vm="using:SiGen.ViewModels.Dialogs"
 			 xmlns:ctrl="using:SiGen.UI.Controls"
+			 xmlns:lang="using:SiGen.Lang"
 			 x:Class="SiGen.UI.Dialogs.EditSpacingDialogView" MinWidth="300"
 			 x:DataType="vm:EditSpacingDialogViewModel" >
 	<UserControl.DataContext>
@@ -42,10 +43,10 @@
 			</ItemsControl.ItemTemplate>
 		</ItemsControl>
 		<WrapPanel Grid.Row="1" HorizontalAlignment="Center" >
-			<Button Grid.Row="1" Content="Save" Margin="3" Command="{Binding SaveCommand}"
+			<Button Grid.Row="1" Content="{x:Static lang:Resources.Common_Save}" Margin="3" Command="{Binding SaveCommand}"
 					Classes="Primary"
 					Width="100" HorizontalContentAlignment="Center"/>
-			<Button Grid.Row="1" Content="Cancel" Margin="3" Command="{Binding CancelCommand}"
+			<Button Grid.Row="1" Content="{x:Static lang:Resources.Common_Cancel}" Margin="3" Command="{Binding CancelCommand}"
 					Width="100" HorizontalContentAlignment="Center"/>
 		</WrapPanel>
 	</Grid>

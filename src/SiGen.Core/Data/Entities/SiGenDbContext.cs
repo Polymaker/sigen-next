@@ -24,7 +24,7 @@ namespace SiGen.Data.Entities
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlite("Data Source=SiGenDatabase.db");
+                optionsBuilder.UseSqlite(SiGenDatabasePath.GetConnectionString());
             }
             base.OnConfiguring(optionsBuilder);
         }

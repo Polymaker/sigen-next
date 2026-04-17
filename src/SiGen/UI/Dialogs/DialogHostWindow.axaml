@@ -2,32 +2,107 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        mc:Ignorable="d" d:DesignWidth="200" d:DesignHeight="200" MinHeight="100" MinWidth="100"
+        mc:Ignorable="d" 
+        d:DesignWidth="200" d:DesignHeight="200" 
+        MinHeight="80" MinWidth="100"
         x:Class="SiGen.UI.Dialogs.DialogHostWindow"
         xmlns:vm="using:SiGen.ViewModels.Dialogs"
-        x:DataType="vm:IDialogViewModel" SizeToContent="WidthAndHeight"
-        Title="DialogHostWindow">
+        x:DataType="vm:IDialogViewModel"
+        
+        CanResize="False"
+        SystemDecorations="None"
+        Title="{Binding Title}">
     <Window.DataContext>
-		<vm:MockDialogViewModel />
+        <vm:MockDialogViewModel />
     </Window.DataContext>
-	<Grid RowDefinitions="Auto,*">
-        <Grid Grid.Row="0" 
+
+    <Grid>
+        <Grid Margin="2" RowDefinitions="Auto,*">
+            <Border Grid.RowSpan="2"
+                     />
+
+            <Grid x:Name="CustomTitleBar"
+                  Grid.Row="0" Margin="-2,-2,-2,0"
                   Background="{DynamicResource SystemAccentColor}"
                   IsVisible="{Binding ShowTitleBar}"
-                  ColumnDefinitions="*, Auto">
-                
-                <TextBlock Text="{Binding Title}" 
-                Foreground="{DynamicResource AccentButtonForeground}"
-                           VerticalAlignment="Center" 
+                  ColumnDefinitions="*, Auto"
+                  PointerPressed="CustomTitleBar_OnPointerPressed">
+                <TextBlock Text="{Binding Title}"
+                           Foreground="{DynamicResource AccentButtonForeground}"
+                           VerticalAlignment="Center"
                            Margin="10,5"/>
-                
-                <Button Grid.Column="1" 
-                        Content="✕" 
+
+                <Button Grid.Column="1"
+                        Content="✕"
                         Command="{Binding CancelCommand}"
                         Foreground="{DynamicResource AccentButtonForeground}"
                         Background="Transparent"
                         BorderThickness="0"/>
             </Grid>
-		<ContentPresenter Grid.Row="1" Name="DialogContent" />
+
+            <ContentPresenter Grid.Row="1" Name="DialogContent" />
+        </Grid>
+
+        <Border Background="Transparent" IsVisible="{Binding Resizable}"
+                Height="6"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Top"
+                Tag="North"
+                Cursor="SizeNorthSouth"
+                PointerPressed="ResizeGrip_OnPointerPressed"/>
+        <Border Background="Transparent" IsVisible="{Binding Resizable}"
+                Height="6"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Bottom"
+                Tag="South" 
+                Cursor="SizeNorthSouth"
+                PointerPressed="ResizeGrip_OnPointerPressed"/>
+        <Border Background="Transparent" IsVisible="{Binding Resizable}"
+                Width="6"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Stretch"
+                Tag="West"
+                Cursor="SizeWestEast"
+                PointerPressed="ResizeGrip_OnPointerPressed"/>
+        <Border Background="Transparent" IsVisible="{Binding Resizable}"
+                Width="6"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Stretch"
+                Tag="East"
+                Cursor="SizeWestEast"
+                PointerPressed="ResizeGrip_OnPointerPressed"/>
+
+        <Border Background="Transparent" IsVisible="{Binding Resizable}"
+                Width="10"
+                Height="10"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                Tag="NorthWest"
+                Cursor="TopLeftCorner"
+                PointerPressed="ResizeGrip_OnPointerPressed"/>
+        <Border Background="Transparent" IsVisible="{Binding Resizable}"
+                Width="4"
+                Height="4"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Top"
+                Tag="NorthEast"
+                Cursor="TopRightCorner"
+                PointerPressed="ResizeGrip_OnPointerPressed"/>
+        <Border Background="Transparent" IsVisible="{Binding Resizable}"
+                Width="10"
+                Height="10"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Bottom"
+                Tag="SouthWest"
+                Cursor="BottomLeftCorner"
+                PointerPressed="ResizeGrip_OnPointerPressed"/>
+        <Border Background="Transparent" IsVisible="{Binding Resizable}"
+                Width="10"
+                Height="10"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Bottom"
+                Tag="SouthEast"
+                Cursor="BottomRightCorner"
+                PointerPressed="ResizeGrip_OnPointerPressed"/>
     </Grid>
 </Window>

@@ -56,6 +56,8 @@ namespace SiGen.Physics
             }
             else if (temperament == Temperament.Just)
                 totalCents += RatioToCents(JustScaleRatios[((int)note.Note) % JustScaleRatios.Length]);
+            else if (temperament == Temperament.Pythagorean)
+                totalCents += RatioToCents(PythagoreanScaleRatios[((int)note.Note) % PythagoreanScaleRatios.Length]);
             return FromCents(totalCents + note.CentOffset);
         }
 
@@ -171,7 +173,23 @@ namespace SiGen.Physics
             15d/8d,//B
             //2d/1d//C
         ];
+        public static readonly double[] PythagoreanScaleRatios =
+        [
+            1,//C (0 fifths)
+            256d/243d,//C# (7 fifths up, reduced by 4 octaves: 3^7/2^12)
+            9d/8d,//D (2 fifths)
+            32d/27d,//Eb (5 fifths down, reduced: 2^5/3^3)
+            81d/64d,//E (4 fifths)
+            4d/3d,//F (1 fifth down: 2^2/3)
+            729d/512d,//F# (6 fifths, reduced by 3 octaves: 3^6/2^9)
+            3d/2d,//G (1 fifth)
+            128d/81d,//Ab (3 fifths down, reduced: 2^7/3^4)
+            27d/16d,//A (3 fifths)
+            16d/9d,//Bb (2 fifths down: 2^4/3^2)
+            243d/128d,//B (5 fifths, reduced by 3 octaves: 3^5/2^7)
+            //2d/1d//C
+        ];
         public static readonly double[] ThidellFormulaChromaticOffsets = [2, -4, 2, -4, -2, 0, -4, 4, -4, 0, -4, -1];
-        public static readonly double[] DieWohltemperirteChromaticOffsets = [5.9, 1.4, 2, 0.6, -2, 7.8, -1.4, 3.9, 0.2, 0, 3.9, 0];
+        public static readonly double[] DieWohltemperiertChromaticOffsets = [5.9, 1.4, 2, 0.6, -2, 7.8, -1.4, 3.9, 0.2, 0, 3.9, 0];
     }
 }

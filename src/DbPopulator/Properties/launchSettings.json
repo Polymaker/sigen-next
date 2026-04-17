@@ -1,0 +1,11 @@
+{
+  "profiles": {
+    "DbPopulator Export": {
+      "commandName": "Project",
+      "commandLineArgs": "--export"
+    },
+    "DbPopulator Import": {
+      "commandName": "Project"
+    }
+  }
+}

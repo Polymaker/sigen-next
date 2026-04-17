@@ -57,8 +57,6 @@
 					   TextWrapping="Wrap" MaxWidth="450"
 					   Margin="2,6,2,3"
 					   Opacity="0.85" />
-
-			<!--<Separator Grid.Row="2" Grid.ColumnSpan="2" Margin="4,1"/>-->
 		</Grid>
 		<Border Grid.Row="1"  CornerRadius="6" Margin="0,3,0,0"
 				Background="{DynamicResource PanelBackgroundBrush}">
@@ -92,7 +90,7 @@
 
 										<StackPanel Orientation="Horizontal" Grid.Column="0">
 											<ctrl:SvgIcon Margin="6,9,3,0"
-														  SvgImage="/Assets/Icons/StringIcon.svg" Height="24" Opacity="0.5" VerticalAlignment="Top" />
+													  SvgImage="/Assets/Icons/StringIcon.svg" Height="24" Opacity="0.5" VerticalAlignment="Top" />
 
 											<TextBlock VerticalAlignment="Center" FontWeight="DemiBold"
 													   Width="65" Margin="3,0"
@@ -158,13 +156,11 @@
 
 		</Border>
 
-
-
 		<Border Grid.Row="2">
 			<WrapPanel HorizontalAlignment="Center" Margin="0,3,0,0" >
-				<Button Classes="Primary" Content="Save" Command="{Binding SaveCommand}"
+				<Button Classes="Primary" Content="{x:Static lang:Resources.Common_Save}" Command="{Binding SaveCommand}"
 						Margin="3,0" Width="100" HorizontalContentAlignment="Center" />
-				<Button Content="Cancel" Command="{Binding CancelCommand}"
+				<Button Content="{x:Static lang:Resources.Common_Cancel}" Command="{Binding CancelCommand}"
 						Margin="3,0" Width="100" HorizontalContentAlignment="Center" />
 			</WrapPanel>
 		</Border>

@@ -258,4 +258,25 @@
   <data name="StringSpacingMode.Manual" xml:space="preserve">
     <value>Manuell</value>
   </data>
+  <data name="Temperament.Equal" xml:space="preserve">
+    <value>Gleichstufiges Temperament</value>
+  </data>
+  <data name="Temperament.Just" xml:space="preserve">
+    <value>Reine Stimmung</value>
+  </data>
+  <data name="Temperament.Thidell" xml:space="preserve">
+    <value>Thidell</value>
+  </data>
+  <data name="Temperament.Custom" xml:space="preserve">
+    <value>Benutzerdefiniert</value>
+  </data>
+  <data name="Temperament.Pythagorean" xml:space="preserve">
+    <value>Pythagoreische</value>
+  </data>
+  <data name="Preset_Default" xml:space="preserve">
+    <value>Default</value>
+  </data>
+  <data name="Tuning.WholeStepDown" xml:space="preserve">
+    <value>Ganzton tiefer</value>
+  </data>
 </root>

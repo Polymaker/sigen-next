@@ -1,0 +1,344 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<StringsDB>
+  <StringSpecs>
+    <StringSpec Name="PL007" Brand="D'Addario" MaterialType="SteelPlain" Gauge="0.007" CD="0.007" UW="1.085E-05" />
+    <StringSpec Name="PL008" Brand="D'Addario" MaterialType="SteelPlain" Gauge="0.008" CD="0.008" UW="1.418E-05" />
+    <StringSpec Name="PL0085" Brand="D'Addario" MaterialType="SteelPlain" Gauge="0.0085" CD="0.0085" UW="1.601E-05" />
+    <StringSpec Name="PL009" Brand="D'Addario" MaterialType="SteelPlain" Gauge="0.009" CD="0.009" UW="1.794E-05" />
+    <StringSpec Name="PL0095" Brand="D'Addario" MaterialType="SteelPlain" Gauge="0.0095" CD="0.0095" UW="1.999E-05" />
+    <StringSpec Name="PL010" Brand="D'Addario" MaterialType="SteelPlain" Gauge="0.01" CD="0.01" UW="2.215E-05" />
+    <StringSpec Name="PL0105" Brand="D'Addario" MaterialType="SteelPlain" Gauge="0.0105" CD="0.0105" UW="2.442E-05" />
+    <StringSpec Name="PL011" Brand="D'Addario" MaterialType="SteelPlain" Gauge="0.011" CD="0.011" UW="2.68E-05" />
+    <StringSpec Name="PL0115" Brand="D'Addario" MaterialType="SteelPlain" Gauge="0.0115" CD="0.0115" UW="2.93E-05" />
+    <StringSpec Name="PL012" Brand="D'Addario" MaterialType="SteelPlain" Gauge="0.012" CD="0.012" UW="3.19E-05" />
+    <StringSpec Name="PL013" Brand="D'Addario" MaterialType="SteelPlain" Gauge="0.013" CD="0.013" UW="3.744E-05" />
+    <StringSpec Name="PL0135" Brand="D'Addario" MaterialType="SteelPlain" Gauge="0.0135" CD="0.0135" UW="4.037E-05" />
+    <StringSpec Name="PL014" Brand="D'Addario" MaterialType="SteelPlain" Gauge="0.014" CD="0.014" UW="4.342E-05" />
+    <StringSpec Name="PL015" Brand="D'Addario" MaterialType="SteelPlain" Gauge="0.015" CD="0.015" UW="4.984E-05" />
+    <StringSpec Name="PL016" Brand="D'Addario" MaterialType="SteelPlain" Gauge="0.016" CD="0.016" UW="5.671E-05" />
+    <StringSpec Name="PL017" Brand="D'Addario" MaterialType="SteelPlain" Gauge="0.017" CD="0.017" UW="6.402E-05" />
+    <StringSpec Name="PL018" Brand="D'Addario" MaterialType="SteelPlain" Gauge="0.018" CD="0.018" UW="7.177E-05" />
+    <StringSpec Name="PL019" Brand="D'Addario" MaterialType="SteelPlain" Gauge="0.019" CD="0.019" UW="7.997E-05" />
+    <StringSpec Name="PL020" Brand="D'Addario" MaterialType="SteelPlain" Gauge="0.02" CD="0.02" UW="8.861E-05" />
+    <StringSpec Name="PL022" Brand="D'Addario" MaterialType="SteelPlain" Gauge="0.022" CD="0.022" UW="0.00010722" />
+    <StringSpec Name="PL024" Brand="D'Addario" MaterialType="SteelPlain" Gauge="0.024" CD="0.024" UW="0.0001276" />
+    <StringSpec Name="PL026" Brand="D'Addario" MaterialType="SteelPlain" Gauge="0.026" CD="0.026" UW="0.00014975" />
+    <StringSpec Name="NW017" Brand="D'Addario" MaterialType="NickelWound" Gauge="0.017" CD="0.0064600000000000005" UW="5.524E-05" />
+    <StringSpec Name="NW018" Brand="D'Addario" MaterialType="NickelWound" Gauge="0.018" CD="0.00684" UW="6.215E-05" />
+    <StringSpec Name="NW019" Brand="D'Addario" MaterialType="NickelWound" Gauge="0.019" CD="0.00722" UW="6.947E-05" />
+    <StringSpec Name="NW020" Brand="D'Addario" MaterialType="NickelWound" Gauge="0.02" CD="0.0076" UW="7.495E-05" />
+    <StringSpec Name="NW021" Brand="D'Addario" MaterialType="NickelWound" Gauge="0.021" CD="0.007980000000000001" UW="8.293E-05" />
+    <StringSpec Name="NW022" Brand="D'Addario" MaterialType="NickelWound" Gauge="0.022" CD="0.00836" UW="9.184E-05" />
+    <StringSpec Name="NW024" Brand="D'Addario" MaterialType="NickelWound" Gauge="0.024" CD="0.00912" UW="0.00010857" />
+    <StringSpec Name="NW026" Brand="D'Addario" MaterialType="NickelWound" Gauge="0.026" CD="0.00988" UW="0.00012671" />
+    <StringSpec Name="NW028" Brand="D'Addario" MaterialType="NickelWound" Gauge="0.028" CD="0.01064" UW="0.00014666" />
+    <StringSpec Name="NW030" Brand="D'Addario" MaterialType="NickelWound" Gauge="0.03" CD="0.0114" UW="0.00017236" />
+    <StringSpec Name="NW032" Brand="D'Addario" MaterialType="NickelWound" Gauge="0.032" CD="0.01216" UW="0.00019347" />
+    <StringSpec Name="NW034" Brand="D'Addario" MaterialType="NickelWound" Gauge="0.034" CD="0.012920000000000001" UW="0.0002159" />
+    <StringSpec Name="NW036" Brand="D'Addario" MaterialType="NickelWound" Gauge="0.036" CD="0.01368" UW="0.00023964" />
+    <StringSpec Name="NW038" Brand="D'Addario" MaterialType="NickelWound" Gauge="0.038" CD="0.01444" UW="0.00026471" />
+    <StringSpec Name="NW039" Brand="D'Addario" MaterialType="NickelWound" Gauge="0.039" CD="0.01482" UW="0.00027932" />
+    <StringSpec Name="NW042" Brand="D'Addario" MaterialType="NickelWound" Gauge="0.042" CD="0.015960000000000002" UW="0.00032279" />
+    <StringSpec Name="NW044" Brand="D'Addario" MaterialType="NickelWound" Gauge="0.044" CD="0.01672" UW="0.00035182" />
+    <StringSpec Name="NW046" Brand="D'Addario" MaterialType="NickelWound" Gauge="0.046" CD="0.01748" UW="0.00038216" />
+    <StringSpec Name="NW048" Brand="D'Addario" MaterialType="NickelWound" Gauge="0.048" CD="0.01824" UW="0.00041382" />
+    <StringSpec Name="NW049" Brand="D'Addario" MaterialType="NickelWound" Gauge="0.049" CD="0.01862" UW="0.00043014" />
+    <StringSpec Name="NW052" Brand="D'Addario" MaterialType="NickelWound" Gauge="0.052" CD="0.01976" UW="0.00048109" />
+    <StringSpec Name="NW054" Brand="D'Addario" MaterialType="NickelWound" Gauge="0.054" CD="0.02052" UW="0.00053838" />
+    <StringSpec Name="NW056" Brand="D'Addario" MaterialType="NickelWound" Gauge="0.056" CD="0.02128" UW="0.00057598" />
+    <StringSpec Name="NW059" Brand="D'Addario" MaterialType="NickelWound" Gauge="0.059" CD="0.02242" UW="0.00064191" />
+    <StringSpec Name="NW060" Brand="D'Addario" MaterialType="NickelWound" Gauge="0.06" CD="0.0228" UW="0.00066542" />
+    <StringSpec Name="NW062" Brand="D'Addario" MaterialType="NickelWound" Gauge="0.062" CD="0.02356" UW="0.00070697" />
+    <StringSpec Name="NW064" Brand="D'Addario" MaterialType="NickelWound" Gauge="0.064" CD="0.02432" UW="0.00074984" />
+    <StringSpec Name="NW065" Brand="D'Addario" MaterialType="NickelWound" Gauge="0.065" CD="0.0247" UW="0.00077436" />
+    <StringSpec Name="NW066" Brand="D'Addario" MaterialType="NickelWound" Gauge="0.066" CD="0.02508" UW="0.00079889" />
+    <StringSpec Name="NW068" Brand="D'Addario" MaterialType="NickelWound" Gauge="0.068" CD="0.025840000000000002" UW="0.00084614" />
+    <StringSpec Name="NW070" Brand="D'Addario" MaterialType="NickelWound" Gauge="0.07" CD="0.026600000000000002" UW="0.00089304" />
+    <StringSpec Name="NW072" Brand="D'Addario" MaterialType="NickelWound" Gauge="0.072" CD="0.02736" UW="0.00094124" />
+    <StringSpec Name="NW074" Brand="D'Addario" MaterialType="NickelWound" Gauge="0.074" CD="0.02812" UW="0.00098869" />
+    <StringSpec Name="NW080" Brand="D'Addario" MaterialType="NickelWound" Gauge="0.08" CD="0.0304" UW="0.00115011" />
+    <StringSpec Name="PB020" Brand="D'Addario" MaterialType="BronzeWound" Gauge="0.02" CD="0.0068000000000000005" UW="8.106E-05" />
+    <StringSpec Name="PB021" Brand="D'Addario" MaterialType="BronzeWound" Gauge="0.021" CD="0.007140000000000001" UW="8.944E-05" />
+    <StringSpec Name="PB022" Brand="D'Addario" MaterialType="BronzeWound" Gauge="0.022" CD="0.00748" UW="9.876E-05" />
+    <StringSpec Name="PB023" Brand="D'Addario" MaterialType="BronzeWound" Gauge="0.023" CD="0.00782" UW="0.00010801" />
+    <StringSpec Name="PB024" Brand="D'Addario" MaterialType="BronzeWound" Gauge="0.024" CD="0.00816" UW="0.00011682" />
+    <StringSpec Name="PB025" Brand="D'Addario" MaterialType="BronzeWound" Gauge="0.025" CD="0.0085" UW="0.00012686" />
+    <StringSpec Name="PB026" Brand="D'Addario" MaterialType="BronzeWound" Gauge="0.026" CD="0.00884" UW="0.0001364" />
+    <StringSpec Name="PB027" Brand="D'Addario" MaterialType="BronzeWound" Gauge="0.027" CD="0.00918" UW="0.00014834" />
+    <StringSpec Name="PB029" Brand="D'Addario" MaterialType="BronzeWound" Gauge="0.029" CD="0.00986" UW="0.00017381" />
+    <StringSpec Name="PB030" Brand="D'Addario" MaterialType="BronzeWound" Gauge="0.03" CD="0.0102" UW="0.0001866" />
+    <StringSpec Name="PB032" Brand="D'Addario" MaterialType="BronzeWound" Gauge="0.032" CD="0.01088" UW="0.00021018" />
+    <StringSpec Name="PB034" Brand="D'Addario" MaterialType="BronzeWound" Gauge="0.034" CD="0.01156" UW="0.00023887" />
+    <StringSpec Name="PB035" Brand="D'Addario" MaterialType="BronzeWound" Gauge="0.035" CD="0.011900000000000003" UW="0.00025365" />
+    <StringSpec Name="PB036" Brand="D'Addario" MaterialType="BronzeWound" Gauge="0.036" CD="0.01224" UW="0.0002683" />
+    <StringSpec Name="PB039" Brand="D'Addario" MaterialType="BronzeWound" Gauge="0.039" CD="0.013260000000000001" UW="0.00031125" />
+    <StringSpec Name="PB042" Brand="D'Addario" MaterialType="BronzeWound" Gauge="0.042" CD="0.014280000000000003" UW="0.00036722" />
+    <StringSpec Name="PB045" Brand="D'Addario" MaterialType="BronzeWound" Gauge="0.045" CD="0.015300000000000001" UW="0.00041751" />
+    <StringSpec Name="PB047" Brand="D'Addario" MaterialType="BronzeWound" Gauge="0.047" CD="0.01598" UW="0.00045289" />
+    <StringSpec Name="PB049" Brand="D'Addario" MaterialType="BronzeWound" Gauge="0.049" CD="0.01666" UW="0.00049151" />
+    <StringSpec Name="PB052" Brand="D'Addario" MaterialType="BronzeWound" Gauge="0.052" CD="0.01768" UW="0.00055223" />
+    <StringSpec Name="PB053" Brand="D'Addario" MaterialType="BronzeWound" Gauge="0.053" CD="0.01802" UW="0.00056962" />
+    <StringSpec Name="PB056" Brand="D'Addario" MaterialType="BronzeWound" Gauge="0.056" CD="0.01904" UW="0.00063477" />
+    <StringSpec Name="PB059" Brand="D'Addario" MaterialType="BronzeWound" Gauge="0.059" CD="0.02006" UW="0.00070535" />
+    <StringSpec Name="PB060" Brand="D'Addario" MaterialType="BronzeWound" Gauge="0.06" CD="0.0204" UW="0.00073039" />
+    <StringSpec Name="PB062" Brand="D'Addario" MaterialType="BronzeWound" Gauge="0.062" CD="0.02108" UW="0.00077682" />
+    <StringSpec Name="PB064" Brand="D'Addario" MaterialType="BronzeWound" Gauge="0.064" CD="0.02176" UW="0.0008278" />
+    <StringSpec Name="PB066" Brand="D'Addario" MaterialType="BronzeWound" Gauge="0.066" CD="0.02244" UW="0.00087718" />
+    <StringSpec Name="PB070" Brand="D'Addario" MaterialType="BronzeWound" Gauge="0.07" CD="0.023800000000000005" UW="0.00096833" />
+    <StringSpec Name="J4304" Brand="D'Addario" MaterialType="SilverPlatedWound" Gauge="0.028" CD="0.0098" UW="0.00010203" />
+    <StringSpec Name="J4305" Brand="D'Addario" MaterialType="SilverPlatedWound" Gauge="0.033" CD="0.01155" UW="0.00015347" />
+    <StringSpec Name="J4306" Brand="D'Addario" MaterialType="SilverPlatedWound" Gauge="0.042" CD="0.0147" UW="0.00028881" />
+    <StringSpec Name="J4404" Brand="D'Addario" MaterialType="SilverPlatedWound" Gauge="0.03" CD="0.010499999999999999" UW="0.00011237" />
+    <StringSpec Name="J4405" Brand="D'Addario" MaterialType="SilverPlatedWound" Gauge="0.036" CD="0.012599999999999998" UW="0.00019521" />
+    <StringSpec Name="J4406" Brand="D'Addario" MaterialType="SilverPlatedWound" Gauge="0.045" CD="0.01575" UW="0.00034351" />
+    <StringSpec Name="J4504" Brand="D'Addario" MaterialType="SilverPlatedWound" Gauge="0.029" CD="0.01015" UW="0.00010754" />
+    <StringSpec Name="J4505" Brand="D'Addario" MaterialType="SilverPlatedWound" Gauge="0.035" CD="0.01225" UW="0.00018416" />
+    <StringSpec Name="J4506" Brand="D'Addario" MaterialType="SilverPlatedWound" Gauge="0.044" CD="0.015399999999999999" UW="0.00030632" />
+    <StringSpec Name="J4604" Brand="D'Addario" MaterialType="SilverPlatedWound" Gauge="0.03" CD="0.010499999999999999" UW="0.00011237" />
+    <StringSpec Name="J4605" Brand="D'Addario" MaterialType="SilverPlatedWound" Gauge="0.036" CD="0.012599999999999998" UW="0.00019521" />
+    <StringSpec Name="J4606" Brand="D'Addario" MaterialType="SilverPlatedWound" Gauge="0.044" CD="0.015399999999999999" UW="0.00031726" />
+    <StringSpec Name="J4301" Brand="D'Addario" MaterialType="NylonPlain" Gauge="0.0275" CD="0.0275" UW="2.024E-05" />
+    <StringSpec Name="J4302" Brand="D'Addario" MaterialType="NylonPlain" Gauge="0.0317" CD="0.0317" UW="2.729E-05" />
+    <StringSpec Name="J4303" Brand="D'Addario" MaterialType="NylonPlain" Gauge="0.0397" CD="0.0397" UW="4.525E-05" />
+    <StringSpec Name="J4401" Brand="D'Addario" MaterialType="NylonPlain" Gauge="0.029" CD="0.029" UW="2.243E-05" />
+    <StringSpec Name="J4402" Brand="D'Addario" MaterialType="NylonPlain" Gauge="0.0333" CD="0.0333" UW="3.046E-05" />
+    <StringSpec Name="J4403" Brand="D'Addario" MaterialType="NylonPlain" Gauge="0.0416" CD="0.0416" UW="4.989E-05" />
+    <StringSpec Name="J4501" Brand="D'Addario" MaterialType="NylonPlain" Gauge="0.028" CD="0.028" UW="2.092E-05" />
+    <StringSpec Name="J4502" Brand="D'Addario" MaterialType="NylonPlain" Gauge="0.0322" CD="0.0322" UW="2.827E-05" />
+    <StringSpec Name="J4503" Brand="D'Addario" MaterialType="NylonPlain" Gauge="0.0403" CD="0.0403" UW="4.679E-05" />
+    <StringSpec Name="J4601" Brand="D'Addario" MaterialType="NylonPlain" Gauge="0.0285" CD="0.0285" UW="2.161E-05" />
+    <StringSpec Name="J4602" Brand="D'Addario" MaterialType="NylonPlain" Gauge="0.0327" CD="0.0327" UW="2.924E-05" />
+    <StringSpec Name="J4603" Brand="D'Addario" MaterialType="NylonPlain" Gauge="0.041" CD="0.041" UW="4.795E-05" />
+    <StringSpec Name="XLB042" Brand="D'Addario" MaterialType="NickelWound" Gauge="0.042" CD="0.015960000000000002" UW="0.00032252" />
+    <StringSpec Name="XLB052" Brand="D'Addario" MaterialType="NickelWound" Gauge="0.052" CD="0.01976" UW="0.00051322" />
+    <StringSpec Name="XLB032" Brand="D'Addario" MaterialType="NickelWound" Gauge="0.032" CD="0.01216" UW="0.00019" />
+    <StringSpec Name="XLB035" Brand="D'Addario" MaterialType="NickelWound" Gauge="0.035" CD="0.013300000000000001" UW="0.00022362" />
+    <StringSpec Name="XLB040" Brand="D'Addario" MaterialType="NickelWound" Gauge="0.04" CD="0.0152" UW="0.00029322" />
+    <StringSpec Name="XLB045" Brand="D'Addario" MaterialType="NickelWound" Gauge="0.045" CD="0.0171" UW="0.0003724" />
+    <StringSpec Name="XLB050" Brand="D'Addario" MaterialType="NickelWound" Gauge="0.05" CD="0.019000000000000003" UW="0.00046463" />
+    <StringSpec Name="XLB055" Brand="D'Addario" MaterialType="NickelWound" Gauge="0.055" CD="0.020900000000000002" UW="0.00054816" />
+    <StringSpec Name="XLB060" Brand="D'Addario" MaterialType="NickelWound" Gauge="0.06" CD="0.0228" UW="0.0006654" />
+    <StringSpec Name="XLB065" Brand="D'Addario" MaterialType="NickelWound" Gauge="0.065" CD="0.0247" UW="0.00079569" />
+    <StringSpec Name="XLB070" Brand="D'Addario" MaterialType="NickelWound" Gauge="0.07" CD="0.026600000000000002" UW="0.00093218" />
+    <StringSpec Name="XLB075" Brand="D'Addario" MaterialType="NickelWound" Gauge="0.075" CD="0.028499999999999998" UW="0.00104973" />
+    <StringSpec Name="XLB080" Brand="D'Addario" MaterialType="NickelWound" Gauge="0.08" CD="0.0304" UW="0.00116023" />
+    <StringSpec Name="XLB085" Brand="D'Addario" MaterialType="NickelWound" Gauge="0.085" CD="0.0323" UW="0.00133702" />
+    <StringSpec Name="XLB090" Brand="D'Addario" MaterialType="NickelWound" Gauge="0.09" CD="0.0342" UW="0.00150277" />
+    <StringSpec Name="XLB095" Brand="D'Addario" MaterialType="NickelWound" Gauge="0.095" CD="0.0361" UW="0.00169349" />
+    <StringSpec Name="XLB100" Brand="D'Addario" MaterialType="NickelWound" Gauge="0.1" CD="0.038000000000000006" UW="0.00179687" />
+    <StringSpec Name="XLB105" Brand="D'Addario" MaterialType="NickelWound" Gauge="0.105" CD="0.0399" UW="0.00198395" />
+    <StringSpec Name="XLB110" Brand="D'Addario" MaterialType="NickelWound" Gauge="0.11" CD="0.041800000000000004" UW="0.0022744" />
+    <StringSpec Name="XLB120" Brand="D'Addario" MaterialType="NickelWound" Gauge="0.12" CD="0.0456" UW="0.0025028" />
+    <StringSpec Name="XLB125" Brand="D'Addario" MaterialType="NickelWound" Gauge="0.125" CD="0.0475" UW="0.0027481" />
+    <StringSpec Name="XLB130" Brand="D'Addario" MaterialType="NickelWound" Gauge="0.13" CD="0.0494" UW="0.00301941" />
+    <StringSpec Name="XLB135" Brand="D'Addario" MaterialType="NickelWound" Gauge="0.135" CD="0.051300000000000005" UW="0.00315944" />
+    <StringSpec Name="XLB145" Brand="D'Addario" MaterialType="NickelWound" Gauge="0.145" CD="0.055099999999999996" UW="0.00363204" />
+    <StringSpec Name="PBB045" Brand="D'Addario" MaterialType="BronzeWound" Gauge="0.045" CD="0.015300000000000001" UW="0.0004133" />
+    <StringSpec Name="PBB065" Brand="D'Addario" MaterialType="BronzeWound" Gauge="0.065" CD="0.0221" UW="0.00086394" />
+    <StringSpec Name="PBB080" Brand="D'Addario" MaterialType="BronzeWound" Gauge="0.08" CD="0.027200000000000002" UW="0.0013094" />
+    <StringSpec Name="PBB100" Brand="D'Addario" MaterialType="BronzeWound" Gauge="0.1" CD="0.034" UW="0.00197902" />
+    <StringSpec Name="PBB130" Brand="D'Addario" MaterialType="BronzeWound" Gauge="0.13" CD="0.0442" UW="0.00324696" />
+    <StringSpec Name="J6201" Brand="D'Addario" MaterialType="SteelPlain" Gauge="0.01" CD="0.01" UW="2.215E-05" />
+  </StringSpecs>
+  <StringSets>
+    <StringSet Name="Light" Brand="D'Addario" InstrumentType="AcousticGuitar" NumberOfStrings="6">
+      <String Name="PB053" Order="1" />
+      <String Name="PB042" Order="2" />
+      <String Name="PB032" Order="3" />
+      <String Name="PB024" Order="4" />
+      <String Name="PL016" Order="5" />
+      <String Name="PL012" Order="6" />
+    </StringSet>
+    <StringSet Name="Medium" Brand="D'Addario" InstrumentType="AcousticGuitar" NumberOfStrings="6">
+      <String Name="PB056" Order="1" />
+      <String Name="PB045" Order="2" />
+      <String Name="PB035" Order="3" />
+      <String Name="PB026" Order="4" />
+      <String Name="PL017" Order="5" />
+      <String Name="PL013" Order="6" />
+    </StringSet>
+    <StringSet Name="Light" Brand="D'Addario" InstrumentType="ClassicalGuitar" NumberOfStrings="6">
+      <String Name="J4306" Order="1" />
+      <String Name="J4305" Order="2" />
+      <String Name="J4304" Order="3" />
+      <String Name="J4303" Order="4" />
+      <String Name="J4302" Order="5" />
+      <String Name="J4301" Order="6" />
+    </StringSet>
+    <StringSet Name="Normal" Brand="D'Addario" InstrumentType="ClassicalGuitar" NumberOfStrings="6">
+      <String Name="J4506" Order="1" />
+      <String Name="J4505" Order="2" />
+      <String Name="J4504" Order="3" />
+      <String Name="J4503" Order="4" />
+      <String Name="J4502" Order="5" />
+      <String Name="J4501" Order="6" />
+    </StringSet>
+    <StringSet Name="Hard" Brand="D'Addario" InstrumentType="ClassicalGuitar" NumberOfStrings="6">
+      <String Name="J4606" Order="1" />
+      <String Name="J4605" Order="2" />
+      <String Name="J4604" Order="3" />
+      <String Name="J4603" Order="4" />
+      <String Name="J4602" Order="5" />
+      <String Name="J4601" Order="6" />
+    </StringSet>
+    <StringSet Name="Extra Hard" Brand="D'Addario" InstrumentType="ClassicalGuitar" NumberOfStrings="6">
+      <String Name="J4606" Order="1" />
+      <String Name="J4605" Order="2" />
+      <String Name="J4604" Order="3" />
+      <String Name="J4403" Order="4" />
+      <String Name="J4402" Order="5" />
+      <String Name="J4401" Order="6" />
+    </StringSet>
+    <StringSet Name="Super Light" Brand="D'Addario" InstrumentType="ElectricGuitar" NumberOfStrings="6">
+      <String Name="NW042" Order="1" />
+      <String Name="NW032" Order="2" />
+      <String Name="NW024" Order="3" />
+      <String Name="PL016" Order="4" />
+      <String Name="PL011" Order="5" />
+      <String Name="PL009" Order="6" />
+    </StringSet>
+    <StringSet Name="Regular Light" Brand="D'Addario" InstrumentType="ElectricGuitar" NumberOfStrings="6">
+      <String Name="NW046" Order="1" />
+      <String Name="NW036" Order="2" />
+      <String Name="NW026" Order="3" />
+      <String Name="PL017" Order="4" />
+      <String Name="PL013" Order="5" />
+      <String Name="PL010" Order="6" />
+    </StringSet>
+    <StringSet Name="Light Top/Heavy Bottom" Brand="D'Addario" InstrumentType="ElectricGuitar" NumberOfStrings="6">
+      <String Name="NW052" Order="1" />
+      <String Name="NW042" Order="2" />
+      <String Name="NW030" Order="3" />
+      <String Name="PL017" Order="4" />
+      <String Name="PL013" Order="5" />
+      <String Name="PL010" Order="6" />
+    </StringSet>
+    <StringSet Name="Super Light" Brand="D'Addario" InstrumentType="ElectricGuitar" NumberOfStrings="7">
+      <String Name="NW054" Order="1" />
+      <String Name="NW042" Order="2" />
+      <String Name="NW032" Order="3" />
+      <String Name="NW024" Order="4" />
+      <String Name="PL016" Order="5" />
+      <String Name="PL011" Order="6" />
+      <String Name="PL009" Order="7" />
+    </StringSet>
+    <StringSet Name="Regular Light" Brand="D'Addario" InstrumentType="ElectricGuitar" NumberOfStrings="7">
+      <String Name="NW059" Order="1" />
+      <String Name="NW046" Order="2" />
+      <String Name="NW036" Order="3" />
+      <String Name="NW026" Order="4" />
+      <String Name="PL017" Order="5" />
+      <String Name="PL013" Order="6" />
+      <String Name="PL010" Order="7" />
+    </StringSet>
+    <StringSet Name="Light Top/Heavy Bottom" Brand="D'Addario" InstrumentType="ElectricGuitar" NumberOfStrings="7">
+      <String Name="NW064" Order="1" />
+      <String Name="NW054" Order="2" />
+      <String Name="NW042" Order="3" />
+      <String Name="NW030" Order="4" />
+      <String Name="PL017" Order="5" />
+      <String Name="PL013" Order="6" />
+      <String Name="PL010" Order="7" />
+    </StringSet>
+    <StringSet Name="Super Light" Brand="D'Addario" InstrumentType="ElectricGuitar" NumberOfStrings="8">
+      <String Name="NW065" Order="1" />
+      <String Name="NW054" Order="2" />
+      <String Name="NW042" Order="3" />
+      <String Name="NW032" Order="4" />
+      <String Name="NW024" Order="5" />
+      <String Name="PL016" Order="6" />
+      <String Name="PL011" Order="7" />
+      <String Name="PL009" Order="8" />
+    </StringSet>
+    <StringSet Name="Light Top/Heavy Bottom" Brand="D'Addario" InstrumentType="ElectricGuitar" NumberOfStrings="8">
+      <String Name="NW074" Order="1" />
+      <String Name="NW064" Order="2" />
+      <String Name="NW054" Order="3" />
+      <String Name="NW042" Order="4" />
+      <String Name="NW030" Order="5" />
+      <String Name="PL017" Order="6" />
+      <String Name="PL013" Order="7" />
+      <String Name="PL010" Order="8" />
+    </StringSet>
+    <StringSet Name="Regular Light" Brand="D'Addario" InstrumentType="ElectricGuitar" NumberOfStrings="12">
+      <String Name="NW046" Order="1" />
+      <String Name="NW026" Order="2" />
+      <String Name="NW036" Order="3" />
+      <String Name="PL018" Order="4" />
+      <String Name="NW026" Order="5" />
+      <String Name="PL012" Order="6" />
+      <String Name="PL017" Order="7" />
+      <String Name="PL008" Order="8" />
+      <String Name="PL013" Order="9" />
+      <String Name="PL013" Order="10" />
+      <String Name="PL010" Order="11" />
+      <String Name="PL010" Order="12" />
+    </StringSet>
+    <StringSet Name="Super Light" Brand="D'Addario" InstrumentType="ElectricBass" NumberOfStrings="4">
+      <String Name="XLB095" Order="1" />
+      <String Name="XLB075" Order="2" />
+      <String Name="XLB060" Order="3" />
+      <String Name="XLB040" Order="4" />
+    </StringSet>
+    <StringSet Name="Super Light" Brand="D'Addario" InstrumentType="ElectricBass" NumberOfStrings="5">
+      <String Name="XLB125" Order="1" />
+      <String Name="XLB095" Order="2" />
+      <String Name="XLB075" Order="3" />
+      <String Name="XLB060" Order="4" />
+      <String Name="XLB040" Order="5" />
+    </StringSet>
+    <StringSet Name="Regular Light" Brand="D'Addario" InstrumentType="ElectricBass" NumberOfStrings="4">
+      <String Name="XLB100" Order="1" />
+      <String Name="XLB080" Order="2" />
+      <String Name="XLB065" Order="3" />
+      <String Name="XLB045" Order="4" />
+    </StringSet>
+    <StringSet Name="Regular Light" Brand="D'Addario" InstrumentType="ElectricBass" NumberOfStrings="5">
+      <String Name="XLB130" Order="1" />
+      <String Name="XLB100" Order="2" />
+      <String Name="XLB080" Order="3" />
+      <String Name="XLB065" Order="4" />
+      <String Name="XLB045" Order="5" />
+    </StringSet>
+    <StringSet Name="Regular Light" Brand="D'Addario" InstrumentType="ElectricBass" NumberOfStrings="6">
+      <String Name="XLB130" Order="1" />
+      <String Name="XLB100" Order="2" />
+      <String Name="XLB080" Order="3" />
+      <String Name="XLB065" Order="4" />
+      <String Name="XLB045" Order="5" />
+      <String Name="XLB032" Order="6" />
+    </StringSet>
+    <StringSet Name="Medium" Brand="D'Addario" InstrumentType="ElectricBass" NumberOfStrings="4">
+      <String Name="XLB105" Order="1" />
+      <String Name="XLB085" Order="2" />
+      <String Name="XLB070" Order="3" />
+      <String Name="XLB050" Order="4" />
+    </StringSet>
+    <StringSet Name="Medium" Brand="D'Addario" InstrumentType="ElectricBass" NumberOfStrings="5">
+      <String Name="XLB135" Order="1" />
+      <String Name="XLB105" Order="2" />
+      <String Name="XLB085" Order="3" />
+      <String Name="XLB070" Order="4" />
+      <String Name="XLB050" Order="5" />
+    </StringSet>
+    <StringSet Name="Regular Light" Brand="D'Addario" InstrumentType="AcousticBass" NumberOfStrings="4">
+      <String Name="PBB100" Order="1" />
+      <String Name="PBB080" Order="2" />
+      <String Name="PBB065" Order="3" />
+      <String Name="PBB045" Order="4" />
+    </StringSet>
+    <StringSet Name="Regular" Brand="D'Addario" InstrumentType="AcousticBass" NumberOfStrings="4">
+      <String Name="PBB100" Order="1" />
+      <String Name="PBB080" Order="2" />
+      <String Name="PBB065" Order="3" />
+      <String Name="PBB045" Order="4" />
+    </StringSet>
+    <StringSet Name="Regular" Brand="D'Addario" InstrumentType="AcousticBass" NumberOfStrings="5">
+      <String Name="PBB130" Order="1" />
+      <String Name="PBB100" Order="2" />
+      <String Name="PBB080" Order="3" />
+      <String Name="PBB065" Order="4" />
+      <String Name="PBB045" Order="5" />
+    </StringSet>
+  </StringSets>
+</StringsDB>

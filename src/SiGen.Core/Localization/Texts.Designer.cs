@@ -430,6 +430,51 @@ namespace SiGen.Localization {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Custom.
+        /// </summary>
+        public static string Temperament_Custom {
+            get {
+                return ResourceManager.GetString("Temperament.Custom", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Equal temperament.
+        /// </summary>
+        public static string Temperament_Equal {
+            get {
+                return ResourceManager.GetString("Temperament.Equal", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Just intonation.
+        /// </summary>
+        public static string Temperament_Just {
+            get {
+                return ResourceManager.GetString("Temperament.Just", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Pythagorean.
+        /// </summary>
+        public static string Temperament_Pythagorean {
+            get {
+                return ResourceManager.GetString("Temperament.Pythagorean", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Thidell.
+        /// </summary>
+        public static string Temperament_Thidell {
+            get {
+                return ResourceManager.GetString("Temperament.Thidell", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Drop.
         /// </summary>
         public static string Tuning_Drop {

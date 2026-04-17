@@ -110,6 +110,13 @@ namespace SiGen.ViewModels.EditorPanels
             base.OnInitialize();
         }
 
+        protected override void OnNumberOfStringsChanged()
+        {
+            base.OnNumberOfStringsChanged();
+            OnPropertyChanged(nameof(NutStringSpread));
+            OnPropertyChanged(nameof(BridgeStringSpread));
+        }
+
         #region Nut Values Handling
 
         partial void OnNutSpacingChanged(Measure value)

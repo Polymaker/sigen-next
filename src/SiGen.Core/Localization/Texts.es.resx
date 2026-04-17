@@ -255,4 +255,28 @@
   <data name="StringSpacingMode.CenterToCenter" xml:space="preserve">
     <value>De centro a centro</value>
   </data>
+  <data name="Temperament.Equal" xml:space="preserve">
+    <value>Temperamento igual</value>
+  </data>
+  <data name="Temperament.Just" xml:space="preserve">
+    <value>Entonación justa</value>
+  </data>
+  <data name="Temperament.Thidell" xml:space="preserve">
+    <value>Thidell</value>
+  </data>
+  <data name="Temperament.Custom" xml:space="preserve">
+    <value>Personalizado</value>
+  </data>
+  <data name="Temperament.Pythagorean" xml:space="preserve">
+    <value>Pitagórica</value>
+  </data>
+  <data name="Tuning.HalfStepDown" xml:space="preserve">
+    <value>Medio tono más bajo</value>
+  </data>
+  <data name="Preset_Default" xml:space="preserve">
+    <value>Defecto</value>
+  </data>
+  <data name="Tuning.WholeStepDown" xml:space="preserve">
+    <value>Tono más bajo</value>
+  </data>
 </root>

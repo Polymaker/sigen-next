@@ -87,12 +87,7 @@ namespace SiGen.ViewModels.Dialogs
                 var stringElem = layoutContext?.Layout?.GetStringElement(i);
 
                 var course = new TuningCourseViewModel(i, layoutConfiguration.StringConfigurations[i], (double)(stringElem?.Path.Length ?? 0), RecalculateTensionBalance);
-                //if (anyCourse && course.NumberOfStrings > 1)
-                //{
-                //    course.Label = $"{Resources.StringCourseLabel} {i + 1}";
-                //}
-                //else
-                //    course.Label = $"{Resources.StringLabel} {i + 1}";
+
                 StringCourses.Add(course);
             }
         }

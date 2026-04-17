@@ -61,33 +61,27 @@ namespace SiGen.Services
 
     public class StringDataService : IStringDataService
     {
+        private readonly IDbContextFactory<SiGenDbContext> dbContextFactory;
+
+        public StringDataService(IDbContextFactory<SiGenDbContext> dbContextFactory)
+        {
+            this.dbContextFactory = dbContextFactory;
+        }
+
         #region String Sets
 
         public async Task<List<StringSet>> GetAvailableStringSetsAsync(int numberOfStrings, InstrumentType? instrumentType)
         {
-            // 1. Fetch from System (Read-Only)
-            using var systemDb = new SiGenDbContext();
+            await using var systemDb = await dbContextFactory.CreateDbContextAsync();
 
             var query = systemDb.StringSets
-                .AsNoTracking() // Performance boost for read-only
+                .AsNoTracking()
                 .Include(s => s.Strings).ThenInclude(i => i.String)
                 .Where(x => x.NumberOfStrings == numberOfStrings);
 
             if (instrumentType.HasValue)
             {
                 query = query.Where(x => x.InstrumentType == instrumentType.ToString());
-                //if (instrumentType.Value.ToString().Contains("Bass"))
-                //{
-                //    query = query.Where(x => x.InstrumentType == "Bass");
-                //}
-                //else if (instrumentType.Value.ToString().Contains("Guitar"))
-                //{
-                //    query = query.Where(x => x.InstrumentType == "Guitar");
-                //}
-                //else
-                //{
-                //    query = query.Where(x => x.InstrumentType == instrumentType.ToString());
-                //}
             }
 
             var systemSets = await query
@@ -112,23 +106,11 @@ namespace SiGen.Services
 
         public async Task<StringSpec?> FindClosestStringSpec(double gauge, StringMaterialType? materialType, InstrumentType? instrumentType)
         {
-            using var systemDb = new SiGenDbContext();
+            await using var systemDb = await dbContextFactory.CreateDbContextAsync();
             var query = systemDb.StringSpecs
                 .AsNoTracking();
             if (materialType.HasValue)
                 query = query.Where(s => s.MaterialType == materialType.Value);
-            //if (instrumentType.ToString().Contains("Bass"))
-            //{
-            //    query = query.Where(s => s.Name.Contains("Bass"));
-            //}
-            //else if (instrumentType.ToString().Contains("Guitar"))
-            //{
-            //    query = query.Where(s => s.Name.Contains("Guitar"));
-            //}
-            //else
-            //{
-            //    query = query.Where(s => s.Name.Contains(instrumentType.ToString()));
-            //}
             var specs = await query.ToListAsync();
             return specs
                 .OrderBy(s => Math.Abs(s.Gauge - gauge))
@@ -137,7 +119,7 @@ namespace SiGen.Services
 
         public async Task<double?> InterpolateUnitWeight(double gauge, StringMaterialType? materialType)
         {
-            using var systemDb = new SiGenDbContext();
+            await using var systemDb = await dbContextFactory.CreateDbContextAsync();
             var query = systemDb.StringSpecs
                 .AsNoTracking();
 

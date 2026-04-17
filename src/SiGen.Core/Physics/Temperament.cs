@@ -11,6 +11,7 @@ namespace SiGen.Physics
         Equal, //Equal temperament
         Just, //Pure intervals based on harmonic series
         Thidell, // Used for true temperament on fretted instruments
+        Pythagorean, //Pure intervals based on perfect fifths (3/2 ratio)
         Custom //When intervals are specified manually by the user
     }
 }

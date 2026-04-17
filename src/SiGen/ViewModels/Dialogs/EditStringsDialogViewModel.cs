@@ -590,12 +590,12 @@ namespace SiGen.ViewModels.Dialogs
                         Tuning = origStringProp?.Data?.Tuning,
                     };
                 }
-
-                
             }
+
             layoutConfiguration.StringConfigurations.Clear();
             foreach (var str in newStringConfigs)
                 layoutConfiguration.StringConfigurations.Add(str);
+            layoutConfiguration.NumberOfStrings = layoutConfiguration.StringConfigurations.Count;
         }
     }
 }

@@ -379,4 +379,46 @@ Ouvrez un fichier récent ou partez d'un modèle.</value>
   <data name="FretsLabel" xml:space="preserve">
     <value>Frettes</value>
   </data>
+  <data name="Common.Save" xml:space="preserve">
+    <value>Enregistrer</value>
+  </data>
+  <data name="Common.Cancel" xml:space="preserve">
+    <value>Annuler</value>
+  </data>
+  <data name="EditFretsDialog.Title" xml:space="preserve">
+    <value>Configuration des frettes</value>
+  </data>
+  <data name="EditFretsDialog.GlobalSettingsHeader" xml:space="preserve">
+    <value>Paramètres globaux des frettes</value>
+  </data>
+  <data name="EditFretsDialog.TemperamentHeader" xml:space="preserve">
+    <value>Tempérament</value>
+  </data>
+  <data name="EditFretsDialog.EqualTemperamentStepsHeader" xml:space="preserve">
+    <value>Divisions</value>
+  </data>
+  <data name="EditFretsDialog.OverrideInfo" xml:space="preserve">
+    <value>Les paramètres par corde peuvent remplacer le nombre de frettes, la frette de départ, le tempérament et le nombre de divisions en tempérament égal.</value>
+  </data>
+  <data name="EditFretsDialog.StringOrCourseHeader" xml:space="preserve">
+    <value>Corde / chœur</value>
+  </data>
+  <data name="EditFretsDialog.StartingFretHeader" xml:space="preserve">
+    <value>Frette de départ</value>
+  </data>
+  <data name="EditFretsDialog.UseGlobal" xml:space="preserve">
+    <value>Utiliser global</value>
+  </data>
+  <data name="EditFretsDialog.GlobalLabel" xml:space="preserve">
+    <value>Global</value>
+  </data>
+  <data name="EditFretsDialog.StringCountSuffix" xml:space="preserve">
+    <value>cordes</value>
+  </data>
+  <data name="EditFretsDialog.EqualTemperamentStepsTooltip" xml:space="preserve">
+    <value>Nombre de divisions égales de l’octave utilisé pour le placement des frettes lorsque le tempérament est égal. 12 correspond au système occidental standard. Des valeurs plus élevées peuvent être utilisées pour des instruments microtonaux.</value>
+  </data>
+  <data name="EditFretsDialog.StartingFretTooltip" xml:space="preserve">
+    <value>Index de départ des frettes pour cette corde ou ce chœur. 0 signifie que le sillet est la position de départ. Les valeurs positives commencent après le sillet. Les valeurs négatives ajoutent une ou plusieurs frettes avant le sillet.</value>
+  </data>
 </root>

@@ -62,12 +62,14 @@ public partial class StringSpacingEditorPanel : UserControl
 
     private void ViewModel_NumberOfStringsChanged(object? sender, EventArgs e)
     {
+
         UpdateSpreadMinMax();
     }
 
     private void UpdateSpreadMinMax()
     {
         if (ViewModel == null) return;
+
 
         NutStringSpreadBox.MinimumValue = Measuring.Measure.Mm(2) * (ViewModel.NumberOfStrings - 1);
         NutStringSpreadBox.MaximumValue = Measuring.Measure.Mm(25) * (ViewModel.NumberOfStrings - 1);

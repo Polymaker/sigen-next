@@ -74,7 +74,7 @@ namespace SiGen.UI.LayoutViewer.Overlays
                 {
                     var fretPos = fretSegment.FretShape.GetFirstPoint();
                     var screenPos = ViewerContext.VectorToScreen(fretPos);
-                    int fretIndex = fretSegment.GetFretIndexForString(0);
+                    int fretIndex = fretSegment.GetFretNumberForString(0);
                     var offsetVector = CorrectVectorForView(fretSegment.GetVector(FingerboardSide.Bass));
                     screenPos += (offsetVector * margin).ToAvalonia(1);
                     DrawFretNumber(fretIndex, screenPos, FingerboardSide.Bass);
@@ -84,7 +84,7 @@ namespace SiGen.UI.LayoutViewer.Overlays
                 {
                     var fretPos = fretSegment.FretShape.GetLastPoint();
                     var screenPos = ViewerContext.VectorToScreen(fretPos);
-                    int fretIndex = fretSegment.GetFretIndexForString(lastStringIndex);
+                    int fretIndex = fretSegment.GetFretNumberForString(lastStringIndex);
                     var offsetVector = CorrectVectorForView(fretSegment.GetVector(FingerboardSide.Treble));
                     screenPos += (offsetVector * margin).ToAvalonia(1);
                     DrawFretNumber(fretIndex, screenPos, FingerboardSide.Treble);

@@ -49,7 +49,7 @@
 					Command="{Binding EditStringsCommand}">
 				<ctrl:SvgIcon SvgImage="/Assets/Icons/StringIcon.svg" Width="24" />
 			</Button>
-			<Button ToolTip.Tip="Frets">
+			<Button ToolTip.Tip="Frets" Command="{Binding EditFretsCommand}">
 				<ctrl:SvgIcon SvgImage="/Assets/Icons/FretIcon.svg" Width="24" />
 			</Button>
 			<Button ToolTip.Tip="Tuning" Command="{Binding EditTuningCommand}">
