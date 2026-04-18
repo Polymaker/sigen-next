@@ -46,7 +46,7 @@ public partial class App : Application
         collection.AddSiGenServices();
 
 
-        CultureInfo.CurrentUICulture = new CultureInfo("en-CA"); //new CultureInfo("fr-CA");
+        CultureInfo.CurrentUICulture = new CultureInfo("fr-CA"); //new CultureInfo("fr-CA");
 
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {

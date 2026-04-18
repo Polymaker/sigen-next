@@ -51,7 +51,7 @@ namespace SiGen.Settings
             {
                 return new ThemeRenderSettings
                 {
-                    BackgroundColor = Color.Parse("#2E5489"),//234475
+                    BackgroundColor = Color.Parse("#234475"),//234475  2E5489
                     GridColor = Color.Parse("#EFEFEF"),
                     MajorAxisColor = Colors.White,
                     OverlayTextColor = Colors.White,

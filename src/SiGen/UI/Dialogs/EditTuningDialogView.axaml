@@ -1,4 +1,4 @@
-<UserControl xmlns="https://github.com/avaloniaui"
+﻿<UserControl xmlns="https://github.com/avaloniaui"
 			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -6,11 +6,18 @@
 			 xmlns:vm="using:SiGen.ViewModels.Dialogs"
 			 xmlns:ctrl="using:SiGen.UI.Controls"
 			 x:DataType="vm:EditTuningDialogViewModel"
+			 xmlns:conv="using:SiGen.Converters"
 			 xmlns:lang="using:SiGen.Lang"
 			 x:Class="SiGen.UI.Dialogs.EditTuningDialogView">
 	<UserControl.DataContext>
 		<vm:EditTuningDialogViewModel/>
 	</UserControl.DataContext>
+	
+	<UserControl.Resources>
+		<ResourceDictionary>
+			<conv:EnumValueConverter x:Key="EnumValueConverter" />
+		</ResourceDictionary>
+	</UserControl.Resources>
 
 	<Grid RowDefinitions="Auto,*,Auto" Margin="3" >
 		<Grid ColumnDefinitions="*,Auto" Margin="2"
@@ -34,11 +41,7 @@
 						</StackPanel>
 					</DataTemplate>
 				</ComboBox.ItemTemplate>
-				<!--<ComboBox.SelectionBoxItemTemplate>
-				<DataTemplate>
-				<TextBlock Text="{Binding Name}" />
-				</DataTemplate>
-				</ComboBox.SelectionBoxItemTemplate>-->
+
 			</ComboBox>
 
 			<Button Grid.Row="1" Grid.Column="1" Content="Apply"
@@ -62,12 +65,16 @@
 				Background="{DynamicResource PanelBackgroundBrush}">
 			<Grid RowDefinitions="Auto,Auto,*" ColumnDefinitions="*,*,*">
 
-				<Label Content="{x:Static lang:Resources.StringLabel}" HorizontalAlignment="Center" FontWeight="Bold" />
-				<Label Content="Tuning" Grid.Column="1" HorizontalAlignment="Center" FontWeight="Bold" />
-			
-				<Label Grid.Column="2" HorizontalAlignment="Center" FontWeight="Bold"
-					   Content="Tension * " ToolTip.Tip="TODO"
-					   />
+			<Label Content="{x:Static lang:Resources.StringLabel}" HorizontalAlignment="Center" FontWeight="Bold" />
+			<Label Content="{x:Static lang:Resources.EditTuningDialog_TuningHeader}" Grid.Column="1" HorizontalAlignment="Center" FontWeight="Bold" />
+	
+
+				<TextBlock  Grid.Column="2" ToolTip.Tip="{x:Static lang:Resources.EditTuningDialog_TensionToolTip}"
+							HorizontalAlignment="Center" VerticalAlignment="Center"
+							FontWeight="Bold">
+					<Run Text="{x:Static lang:Resources.EditTuningDialog_TensionHeader}" />
+					<Run Text="ⓘ" FontWeight="Normal"/>
+				</TextBlock>
 
 				<Separator Grid.Row="1" Grid.ColumnSpan="5" Margin="0,3,0,0" />
 				<ScrollViewer Grid.Row="2" Grid.ColumnSpan="3">
@@ -136,7 +143,7 @@
 																VerticalAlignment="Center" Padding="0" FontSize="13"
 																HorizontalAlignment="Center"/>-->
 															<Label
-																Content="{Binding TensionBalanceState}"
+																Content="{Binding TensionBalanceState, Converter={StaticResource EnumValueConverter}}"
 																VerticalAlignment="Center" Padding="0" FontSize="13"
 																HorizontalAlignment="Center"/>
 														</StackPanel>

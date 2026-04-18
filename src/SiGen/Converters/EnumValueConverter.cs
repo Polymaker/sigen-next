@@ -4,6 +4,7 @@ using SiGen.Layouts.Configuration;
 using SiGen.Layouts.Data;
 using SiGen.Localization;
 using SiGen.Physics;
+using SiGen.ViewModels.Dialogs;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -46,6 +47,16 @@ namespace SiGen.Converters
             {
                 string key = $"Temperament.{temperament}";
                 return Texts.ResourceManager.GetString(key, Texts.Culture) ?? key;
+            }
+            else if (value is TensionBalanceState tensionBalanceState)
+            {
+                string key = $"TensionBalanceState.{tensionBalanceState}";
+                return Lang.Resources.ResourceManager.GetString(key, Lang.Resources.Culture) ?? key;
+            }
+            else if (value is StringMaterialType materialType)
+            {
+                string key = $"StringMaterialType.{materialType}";
+                return Lang.Resources.ResourceManager.GetString(key, Lang.Resources.Culture) ?? key;
             }
             return value?.ToString();
         }

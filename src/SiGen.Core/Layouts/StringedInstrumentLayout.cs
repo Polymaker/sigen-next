@@ -3,6 +3,7 @@ using SiGen.Layouts.Configuration;
 using SiGen.Layouts.Data;
 using SiGen.Measuring;
 using SiGen.Paths;
+using SiGen.Layouts.Snapping;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,6 +15,8 @@ namespace SiGen.Layouts
     public class StringedInstrumentLayout
     {
         public LayoutElementCollection Elements { get; }
+
+        public LayoutSnapData SnapData { get; private set; } = LayoutSnapData.Empty;
 
         public IEnumerable<StringElement> Strings => Elements.OfType<StringElement>();
 
@@ -79,6 +82,16 @@ namespace SiGen.Layouts
         //        (string1.BridgePoint.ToVector() + string2.BridgePoint.ToVector()) / 2d
         //    );
         //}
+
+        public void ClearSnapData()
+        {
+            SnapData = LayoutSnapData.Empty;
+        }
+
+        public void RebuildSnapData()
+        {
+            SnapData = LayoutSnapDataBuilder.Build(this);
+        }
 
         public void CalculateBounds()
         {

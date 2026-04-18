@@ -47,6 +47,8 @@ public partial class LayoutDocumentView : UserControl
             previousModel.LayoutZoom = Viewer.Zoom;
             previousModel.LayoutTrans = Viewer.Translation;
             previousModel.LayoutOrientation = Viewer.Orientation;
+            previousModel.ActiveSnapFilters = Viewer.ActiveSnapFilters;
+            previousModel.IsMeasureToolEnabled = Viewer.IsMeasureToolActive;
             previousModel.LayoutChanged -= DocumentViewModel_LayoutChanged;
             previousModel = null;
         }
@@ -57,6 +59,8 @@ public partial class LayoutDocumentView : UserControl
             Viewer.Layout = null;
             Viewer.Orientation = documentViewModel.LayoutOrientation;
             Viewer.Zoom = documentViewModel.LayoutZoom;
+            Viewer.ActiveSnapFilters = documentViewModel.ActiveSnapFilters;
+            Viewer.IsMeasureToolActive = documentViewModel.IsMeasureToolEnabled;
             Viewer.Layout = documentViewModel.Layout;
             
             Viewer.Translation = documentViewModel.LayoutTrans;

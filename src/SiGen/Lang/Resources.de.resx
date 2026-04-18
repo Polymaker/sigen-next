@@ -421,4 +421,88 @@
   <data name="EditFretsDialog.StartingFretTooltip" xml:space="preserve">
     <value>Startbundindex für diese Saite oder diesen Chorsatz. 0 bedeutet, dass der Sattel die Startposition ist. Positive Werte beginnen hinter dem Sattel. Negative Werte fügen einen oder mehrere Bünde vor dem Sattel hinzu.</value>
   </data>
+  <data name="EditTuningDialog.TensionToolTip" xml:space="preserve">
+    <value>Die Saitenspannungswerte werden basierend auf Stimmung, Mensur und Saitenstärke geschätzt. Dies sind Näherungswerte, die Ihnen helfen, die Spannung zwischen den Saiten auszugleichen.</value>
+  </data>
+  <data name="EditTuningDialog.TensionHeader" xml:space="preserve">
+    <value>Spannung</value>
+  </data>
+  <data name="EditTuningDialog.TuningHeader" xml:space="preserve">
+    <value>Stimmung</value>
+  </data>
+  <data name="TensionBalanceState.Unknown" xml:space="preserve">
+    <value>Unbekannt</value>
+  </data>
+  <data name="TensionBalanceState.UnderTensioned" xml:space="preserve">
+    <value>Unterspannt</value>
+  </data>
+  <data name="TensionBalanceState.Balanced" xml:space="preserve">
+    <value>Ausgewogen</value>
+  </data>
+  <data name="TensionBalanceState.OverTensioned" xml:space="preserve">
+    <value>Überspannt</value>
+  </data>
+  <data name="EditStringsDialog.StringHeader" xml:space="preserve">
+    <value>Saite</value>
+  </data>
+  <data name="EditStringsDialog.GaugeHeader" xml:space="preserve">
+    <value>Stärke</value>
+  </data>
+  <data name="EditStringsDialog.MaterialHeader" xml:space="preserve">
+    <value>Material</value>
+  </data>
+  <data name="EditStringsDialog.PreviewHeader" xml:space="preserve">
+    <value>Vorschau</value>
+  </data>
+  <data name="EditStringsDialog.ActionsHeader" xml:space="preserve">
+    <value>Aktionen</value>
+  </data>
+  <data name="StringMaterialType.SteelPlain" xml:space="preserve">
+    <value>Blanker Stahl</value>
+  </data>
+  <data name="StringMaterialType.NickelWound" xml:space="preserve">
+    <value>Nickel umwickelt</value>
+  </data>
+  <data name="StringMaterialType.BronzeWound" xml:space="preserve">
+    <value>Bronze umwickelt</value>
+  </data>
+  <data name="StringMaterialType.NylonPlain" xml:space="preserve">
+    <value>Blankes Nylon</value>
+  </data>
+  <data name="StringMaterialType.SilverPlatedWound" xml:space="preserve">
+    <value>Versilbert umwickelt</value>
+  </data>
+  <data name="EditStringsDialog.EditSpacingTooltip" xml:space="preserve">
+    <value>Abstand zwischen Saiten in diesem Chorsatz bearbeiten</value>
+  </data>
+  <data name="EditStringsDialog.RemoveStringFromCourseTooltip" xml:space="preserve">
+    <value>Diese Saite aus dem Chorsatz entfernen</value>
+  </data>
+  <data name="EditStringsDialog.RemoveSingleStringTooltip" xml:space="preserve">
+    <value>Diese Saite entfernen</value>
+  </data>
+  <data name="EditStringsDialog.AddStringTooltip" xml:space="preserve">
+    <value>Eine weitere Saite zu diesem Chorsatz hinzufügen</value>
+  </data>
+  <data name="EditStringsDialog.ConvertToCourseTooltip" xml:space="preserve">
+    <value>Diese Saite in einen Chorsatz umwandeln</value>
+  </data>
+  <data name="MeasureTool.SnapToLabel" xml:space="preserve">
+    <value>Einrasten an:</value>
+  </data>
+  <data name="MeasureTool.Tooltip" xml:space="preserve">
+    <value>Abstände auf dem Plan messen</value>
+  </data>
+  <data name="MeasureTool.SnapFilter.Frets" xml:space="preserve">
+    <value>Bünde</value>
+  </data>
+  <data name="MeasureTool.SnapFilter.Strings" xml:space="preserve">
+    <value>Saiten</value>
+  </data>
+  <data name="MeasureTool.SnapFilter.Fingerboard" xml:space="preserve">
+    <value>Griffbrett</value>
+  </data>
+  <data name="MeasureTool.SnapFilter.CenterLine" xml:space="preserve">
+    <value>Mittellinie</value>
+  </data>
 </root>

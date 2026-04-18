@@ -421,4 +421,88 @@ Ouvrez un fichier récent ou partez d'un modèle.</value>
   <data name="EditFretsDialog.StartingFretTooltip" xml:space="preserve">
     <value>Index de départ des frettes pour cette corde ou ce chœur. 0 signifie que le sillet est la position de départ. Les valeurs positives commencent après le sillet. Les valeurs négatives ajoutent une ou plusieurs frettes avant le sillet.</value>
   </data>
+  <data name="EditTuningDialog.TensionToolTip" xml:space="preserve">
+    <value>Les valeurs de tension des cordes sont estimées en fonction de l'accordage, de la longueur vibrante et du calibre des cordes. Ce sont des valeurs approximatives pour vous aider à équilibrer la tension entre les cordes.</value>
+  </data>
+  <data name="EditTuningDialog.TensionHeader" xml:space="preserve">
+    <value>Tension</value>
+  </data>
+  <data name="EditTuningDialog.TuningHeader" xml:space="preserve">
+    <value>Accordage</value>
+  </data>
+  <data name="TensionBalanceState.Unknown" xml:space="preserve">
+    <value>Inconnue</value>
+  </data>
+  <data name="TensionBalanceState.UnderTensioned" xml:space="preserve">
+    <value>Sous-tendue</value>
+  </data>
+  <data name="TensionBalanceState.Balanced" xml:space="preserve">
+    <value>Équilibrée</value>
+  </data>
+  <data name="TensionBalanceState.OverTensioned" xml:space="preserve">
+    <value>Sur-tendue</value>
+  </data>
+  <data name="EditStringsDialog.StringHeader" xml:space="preserve">
+    <value>Corde</value>
+  </data>
+  <data name="EditStringsDialog.GaugeHeader" xml:space="preserve">
+    <value>Calibre</value>
+  </data>
+  <data name="EditStringsDialog.MaterialHeader" xml:space="preserve">
+    <value>Matériau</value>
+  </data>
+  <data name="EditStringsDialog.PreviewHeader" xml:space="preserve">
+    <value>Aperçu</value>
+  </data>
+  <data name="EditStringsDialog.ActionsHeader" xml:space="preserve">
+    <value>Actions</value>
+  </data>
+  <data name="StringMaterialType.SteelPlain" xml:space="preserve">
+    <value>Acier lisse</value>
+  </data>
+  <data name="StringMaterialType.NickelWound" xml:space="preserve">
+    <value>Nickel filé</value>
+  </data>
+  <data name="StringMaterialType.BronzeWound" xml:space="preserve">
+    <value>Bronze filé</value>
+  </data>
+  <data name="StringMaterialType.NylonPlain" xml:space="preserve">
+    <value>Nylon lisse</value>
+  </data>
+  <data name="StringMaterialType.SilverPlatedWound" xml:space="preserve">
+    <value>Argenté filé</value>
+  </data>
+  <data name="EditStringsDialog.EditSpacingTooltip" xml:space="preserve">
+    <value>Modifier l'espacement entre les cordes de ce chœur</value>
+  </data>
+  <data name="EditStringsDialog.RemoveStringFromCourseTooltip" xml:space="preserve">
+    <value>Retirer cette corde du chœur</value>
+  </data>
+  <data name="EditStringsDialog.RemoveSingleStringTooltip" xml:space="preserve">
+    <value>Supprimer cette corde</value>
+  </data>
+  <data name="EditStringsDialog.AddStringTooltip" xml:space="preserve">
+    <value>Ajouter une autre corde à ce chœur</value>
+  </data>
+  <data name="EditStringsDialog.ConvertToCourseTooltip" xml:space="preserve">
+    <value>Convertir cette corde en chœur</value>
+  </data>
+  <data name="MeasureTool.SnapToLabel" xml:space="preserve">
+    <value>Accrocher à :</value>
+  </data>
+  <data name="MeasureTool.Tooltip" xml:space="preserve">
+    <value>Mesurer les distances sur le plan</value>
+  </data>
+  <data name="MeasureTool.SnapFilter.Frets" xml:space="preserve">
+    <value>Frettes</value>
+  </data>
+  <data name="MeasureTool.SnapFilter.Strings" xml:space="preserve">
+    <value>Cordes</value>
+  </data>
+  <data name="MeasureTool.SnapFilter.Fingerboard" xml:space="preserve">
+    <value>Touche</value>
+  </data>
+  <data name="MeasureTool.SnapFilter.CenterLine" xml:space="preserve">
+    <value>Ligne centrale</value>
+  </data>
 </root>

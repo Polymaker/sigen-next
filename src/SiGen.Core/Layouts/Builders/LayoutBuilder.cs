@@ -42,6 +42,7 @@ namespace SiGen.Layouts.Builders
             Configuration = configuration;
             Layout.Configuration = configuration;
             Layout.Elements.Clear();
+            Layout.ClearSnapData();
 
             var builderPasses = new (Type builderType, int pass)[]
             {
@@ -75,7 +76,10 @@ namespace SiGen.Layouts.Builders
             }
 
             if (Success)
+            {
                 Layout.CalculateBounds();
+                Layout.RebuildSnapData();
+            }
 
             return new LayoutBuildResult(Success, Layout, Messages.ToList());
         }

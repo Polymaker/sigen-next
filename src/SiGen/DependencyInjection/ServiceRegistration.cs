@@ -27,14 +27,9 @@ namespace SiGen.DependencyInjection
             services.AddSingleton<ViewModelFactory>();
             services.AddSingleton<IStringDataService, StringDataService>();
             services.AddTransient<IStringMaterialEstimationService, StringMaterialEstimationService>();
-            // ViewModels
 
             services.AddSingleton<HomePageViewModel>();
             services.AddSingleton<DesktopMainViewModel>();
-
-            //services.AddTransient<ScaleLengthPanelViewModel>();
-            //services.AddTransient<InstrumentInfoPanelViewModel>();
-            //services.AddTransient<LayoutDocumentViewModel>();
 
             return services;
         }

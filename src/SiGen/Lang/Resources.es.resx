@@ -421,4 +421,88 @@ Abre un archivo reciente para continuar tu trabajo o crea un nuevo diseño con u
   <data name="EditFretsDialog.StartingFretTooltip" xml:space="preserve">
     <value>Índice del traste inicial para esta cuerda u orden. 0 significa que la cejuela es la posición inicial. Los valores positivos empiezan después de la cejuela. Los valores negativos añaden uno o más trastes antes de la cejuela.</value>
   </data>
+  <data name="EditTuningDialog.TensionToolTip" xml:space="preserve">
+    <value>Los valores de tensión de las cuerdas se estiman según la afinación, longitud de escala y calibre de las cuerdas. Son valores aproximados para ayudarte a equilibrar la tensión entre las cuerdas.</value>
+  </data>
+  <data name="EditTuningDialog.TensionHeader" xml:space="preserve">
+    <value>Tensión</value>
+  </data>
+  <data name="EditTuningDialog.TuningHeader" xml:space="preserve">
+    <value>Afinación</value>
+  </data>
+  <data name="TensionBalanceState.Unknown" xml:space="preserve">
+    <value>Desconocido</value>
+  </data>
+  <data name="TensionBalanceState.UnderTensioned" xml:space="preserve">
+    <value>Baja tensión</value>
+  </data>
+  <data name="TensionBalanceState.Balanced" xml:space="preserve">
+    <value>Equilibrada</value>
+  </data>
+  <data name="TensionBalanceState.OverTensioned" xml:space="preserve">
+    <value>Alta tensión</value>
+  </data>
+  <data name="EditStringsDialog.StringHeader" xml:space="preserve">
+    <value>Cuerda</value>
+  </data>
+  <data name="EditStringsDialog.GaugeHeader" xml:space="preserve">
+    <value>Calibre</value>
+  </data>
+  <data name="EditStringsDialog.MaterialHeader" xml:space="preserve">
+    <value>Material</value>
+  </data>
+  <data name="EditStringsDialog.PreviewHeader" xml:space="preserve">
+    <value>Vista previa</value>
+  </data>
+  <data name="EditStringsDialog.ActionsHeader" xml:space="preserve">
+    <value>Acciones</value>
+  </data>
+  <data name="StringMaterialType.SteelPlain" xml:space="preserve">
+    <value>Acero liso</value>
+  </data>
+  <data name="StringMaterialType.NickelWound" xml:space="preserve">
+    <value>Níquel entorchada</value>
+  </data>
+  <data name="StringMaterialType.BronzeWound" xml:space="preserve">
+    <value>Bronce entorchada</value>
+  </data>
+  <data name="StringMaterialType.NylonPlain" xml:space="preserve">
+    <value>Nailon liso</value>
+  </data>
+  <data name="StringMaterialType.SilverPlatedWound" xml:space="preserve">
+    <value>Plateada entorchada</value>
+  </data>
+  <data name="EditStringsDialog.EditSpacingTooltip" xml:space="preserve">
+    <value>Editar el espaciado entre cuerdas de este orden</value>
+  </data>
+  <data name="EditStringsDialog.RemoveStringFromCourseTooltip" xml:space="preserve">
+    <value>Eliminar esta cuerda del orden</value>
+  </data>
+  <data name="EditStringsDialog.RemoveSingleStringTooltip" xml:space="preserve">
+    <value>Eliminar esta cuerda</value>
+  </data>
+  <data name="EditStringsDialog.AddStringTooltip" xml:space="preserve">
+    <value>Añadir otra cuerda a este orden</value>
+  </data>
+  <data name="EditStringsDialog.ConvertToCourseTooltip" xml:space="preserve">
+    <value>Convertir esta cuerda en un orden</value>
+  </data>
+  <data name="MeasureTool.SnapToLabel" xml:space="preserve">
+    <value>Ajustar a:</value>
+  </data>
+  <data name="MeasureTool.Tooltip" xml:space="preserve">
+    <value>Medir distancias en el diseño</value>
+  </data>
+  <data name="MeasureTool.SnapFilter.Frets" xml:space="preserve">
+    <value>Trastes</value>
+  </data>
+  <data name="MeasureTool.SnapFilter.Strings" xml:space="preserve">
+    <value>Cuerdas</value>
+  </data>
+  <data name="MeasureTool.SnapFilter.Fingerboard" xml:space="preserve">
+    <value>Diapasón</value>
+  </data>
+  <data name="MeasureTool.SnapFilter.CenterLine" xml:space="preserve">
+    <value>Línea central</value>
+  </data>
 </root>

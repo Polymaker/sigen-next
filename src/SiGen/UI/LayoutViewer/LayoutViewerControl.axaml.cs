@@ -13,7 +13,7 @@ using SiGen.Layouts;
 using SiGen.Layouts.Elements;
 using SiGen.Maths;
 using SiGen.Measuring;
-using SiGen.Settings; 
+using SiGen.Settings;
 using SiGen.UI.LayoutViewer.Overlays;
 using SiGen.UI.LayoutViewer.Visuals;
 using SiGen.Utilities;
@@ -22,6 +22,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Reactive.Linq;
+using SiGen.Layouts.Snapping;
 
 namespace SiGen.UI.LayoutViewer;
 
@@ -84,18 +85,42 @@ public partial class LayoutViewerControl : UserControl, ILayoutViewerContext
     public static readonly StyledProperty<UnitMode> UnitModeProperty =
         AvaloniaProperty.Register<LayoutViewerControl, UnitMode>(nameof(UnitMode), UnitMode.Metric);
 
+    public static readonly StyledProperty<SnapLineType> ActiveSnapFiltersProperty =
+        AvaloniaProperty.Register<LayoutViewerControl, SnapLineType>(nameof(ActiveSnapFilters), SnapLineType.Fret | SnapLineType.String | SnapLineType.Fingerboard | SnapLineType.CenterLine);
+
+    public static readonly StyledProperty<bool> IsMeasureToolActiveProperty =
+        AvaloniaProperty.Register<LayoutViewerControl, bool>(nameof(IsMeasureToolActive), false);
+
     public UnitMode UnitMode
     {
         get => GetValue(UnitModeProperty);
         set => SetValue(UnitModeProperty, value);
     }
 
+    public SnapLineType ActiveSnapFilters
+    {
+        get => GetValue(ActiveSnapFiltersProperty);
+        set => SetValue(ActiveSnapFiltersProperty, value);
+    }
+
+    public bool IsMeasureToolActive
+    {
+        get => GetValue(IsMeasureToolActiveProperty);
+        set => SetValue(IsMeasureToolActiveProperty, value);
+    }
+
+    private const double SnapMaxDistancePx = 10;
+
+    private LayoutSnapResult _currentSnapResult = LayoutSnapResult.None;
+
+    private MeasurementOverlayPresenter measurementOverlay;
+
     private TranslateTransform _centerTransform;
     private ScaleTransform _zoomTransform;
     private TranslateTransform _translateTransform;
     private RotateTransform _orientationTransform;
 
-    
+
     public bool IsAssigningLayout { get; set; }
 
     public LayoutViewerControl()
@@ -133,12 +158,12 @@ public partial class LayoutViewerControl : UserControl, ILayoutViewerContext
         {
             Children = { _centerTransform, _translateTransform }
         };
-       
+
         BorderContainer.AddHandler(Gestures.PinchEvent, Canvas_PinchGesture, handledEventsToo: true);
         BorderContainer.AddHandler(Gestures.PinchEndedEvent, Canvas_PinchGestureEnded, handledEventsToo: true);
 
 
-        Button1.Click += Button1_Click;
+        //Button1.Click += Button1_Click;
         Button2.Click += (s, e) =>
         {
             Orientation = (LayoutOrientation)(((int)Orientation + 1) % Enum.GetValues(typeof(LayoutOrientation)).Length);
@@ -147,13 +172,15 @@ public partial class LayoutViewerControl : UserControl, ILayoutViewerContext
         {
             UnitMode = (UnitMode)(((int)UnitMode + 1) % 2);
         };
+
+        fretNumberOverlay = new FretNumberOverlayControl(this);
+        measurementOverlay = new MeasurementOverlayPresenter(v => ((ILayoutViewerContext)this).VectorToScreen(v), UnitMode, RenderSettings);
+
         OnRenderSettingsChanged();
         LayoutGrid.SetBluePrintBounds(new RectangleM(Measuring.Measure.Cm(-5), Measuring.Measure.Cm(-5), Measuring.Measure.Cm(10), Measuring.Measure.Cm(10)));
 
         zoomEndTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(200) };
         zoomEndTimer.Tick += ZoomEndTimer_Tick;
-
-        fretNumberOverlay = new FretNumberOverlayControl(this);
     }
 
 
@@ -164,6 +191,7 @@ public partial class LayoutViewerControl : UserControl, ILayoutViewerContext
         if (change.Property == UnitModeProperty)
         {
             LayoutGrid.UnitMode = UnitMode;
+            measurementOverlay.SetUnitMode(UnitMode);
         }
         else if (change.Property == ZoomProperty)
         {
@@ -185,6 +213,11 @@ public partial class LayoutViewerControl : UserControl, ILayoutViewerContext
 
             OnTranslationChanged();
         }
+        else if (change.Property == IsMeasureToolActiveProperty && !IsMeasureToolActive)
+        {
+            HideSnapPreview();
+            measurementOverlay.Clear();
+        }
 
         if (change.Property == LayoutProperty)
         {
@@ -196,7 +229,9 @@ public partial class LayoutViewerControl : UserControl, ILayoutViewerContext
             CalculateTranslationBounds();
 
             CreateLayoutVisualsAndOverlays();
-            
+            HideSnapPreview();
+            measurementOverlay.Clear();
+
             CalculateZoomToFit();
 
             if (IsZoomToFit)
@@ -217,7 +252,7 @@ public partial class LayoutViewerControl : UserControl, ILayoutViewerContext
             RepositionOverlays();
         }
     }
-    
+
     private bool hasLoaded = false;
 
     protected override void OnLoaded(RoutedEventArgs e)
@@ -267,7 +302,7 @@ public partial class LayoutViewerControl : UserControl, ILayoutViewerContext
 
     private const double ZoomFactorStep = 1.1;
     private Point _lastMousePosition;
-    
+
     public bool IsZoomToFit { get; private set; } = true;
     private bool isZooming = false;
     private double minimumZoom = 0.5;
@@ -399,20 +434,20 @@ public partial class LayoutViewerControl : UserControl, ILayoutViewerContext
         LayoutGrid.Zoom = Zoom;
         //DebugText.Text = $"Zoom: {Zoom:0.##}";
         //if (!isZooming)
-            RepositionOverlays();
+        RepositionOverlays();
 
         ZoomTextBox.Text = $"{Zoom:0%}";
     }
 
-    
+
     private void ZoomEndTimer_Tick(object? sender, EventArgs e)
     {
         zoomEndTimer.Stop();
         isZooming = false;
-      
+
         OnZoomEnd();
-        
-  
+
+
     }
 
     #endregion
@@ -534,6 +569,7 @@ public partial class LayoutViewerControl : UserControl, ILayoutViewerContext
 
     protected void OnTranslationChanged()
     {
+        measurementOverlay.Reposition();
         //DebugText.Text = $"Translate: ({_translateTransform.X:0.##}, {_translateTransform.Y:0.##})";
     }
 
@@ -613,12 +649,15 @@ public partial class LayoutViewerControl : UserControl, ILayoutViewerContext
     public void Canvas_PointerPressed(object? sender, PointerPressedEventArgs e)
     {
         var point = e.GetCurrentPoint(RenderCanvas);
-        bool isPanningButton = point.Pointer.Type != PointerType.Mouse || (point.Properties.IsLeftButtonPressed || point.Properties.IsMiddleButtonPressed);
+        bool allowLeftMousePan = !(IsMeasureToolActive && point.Pointer.Type == PointerType.Mouse && point.Properties.IsLeftButtonPressed);
+        bool isPanningButton = point.Pointer.Type != PointerType.Mouse ||
+                               point.Properties.IsMiddleButtonPressed ||
+                               (point.Properties.IsLeftButtonPressed && allowLeftMousePan);
 
         if (isPanningButton)
             StopFling();
 
-        
+
         if (!_isPanning && isPanningButton && _currentPanSource == null)
         {
             if (point.Pointer.Type != PointerType.Mouse)
@@ -633,7 +672,7 @@ public partial class LayoutViewerControl : UserControl, ILayoutViewerContext
 
     protected override void OnKeyDown(KeyEventArgs e)
     {
-        
+
         if (e.Key == Key.Space && !_isPanning)
         {
             StopFling();
@@ -651,11 +690,11 @@ public partial class LayoutViewerControl : UserControl, ILayoutViewerContext
     {
         if (e.Key == Key.Space && _currentPanSource == PanSource.Spacebar)
         {
-            
+
             _currentPanSource = null;
             RenderCanvas.Cursor = new Cursor(StandardCursorType.Arrow);
             e.Handled = true;
-            
+
             if (_isPanning)
             {
                 var velocity = CalculateFlingVelocity();
@@ -663,7 +702,7 @@ public partial class LayoutViewerControl : UserControl, ILayoutViewerContext
                 if (velocity.Length > MinimumFlingVelocity)
                     StartFling(velocity);
             }
-            
+
         }
         base.OnKeyUp(e);
     }
@@ -678,18 +717,79 @@ public partial class LayoutViewerControl : UserControl, ILayoutViewerContext
             {
                 _isPanning = true;
                 _lastMousePosition = currentPosition;
-                //if (_currentPanSource == PanSource.Spacebar)
-                //    e.Pointer.Capture(LayoutGrid);
                 return;
             }
-            
+
             AddPositionToFlingHistory(currentPosition);
 
             var delta = currentPosition - _lastMousePosition;
             Translation += delta;
             _lastMousePosition = currentPosition;
+            return;
         }
 
+        UpdateSnappingPreview(e.GetPosition(this), e.KeyModifiers);
+    }
+
+    private void UpdateSnappingPreview(Point pointerPosition, KeyModifiers keyModifiers)
+    {
+        if (!IsMeasureToolActive || Layout == null || ActiveSnapFilters == SnapLineType.None || Zoom <= 0)
+        {
+            HideSnapPreview();
+            return;
+        }
+
+        var cursorInLayout = ScreenToLayout(pointerPosition);
+        var maxDistanceCm = SnapMaxDistancePx / (CmScaleFactor * Zoom);
+
+        //if (keyModifiers.HasFlag(KeyModifiers.Control) && measurementOverlay.HasStartPoint)
+        //{
+        //    cursorInLayout = SnapPointToAngleIncrement(measurementOverlay.StartPoint!.Value, cursorInLayout);
+        //}
+
+        var snapResult = Layout.SnapData.TrySnap(cursorInLayout, ActiveSnapFilters, maxDistanceCm);
+
+        bool allowNonSnappedPoint = keyModifiers.HasFlag(KeyModifiers.Alt);
+
+        VectorD previewPoint;
+        if (snapResult.IsSnapped)
+        {
+            _currentSnapResult = snapResult;
+            previewPoint = snapResult.Position;
+        }
+        else if (allowNonSnappedPoint)
+        {
+            _currentSnapResult = LayoutSnapResult.None;
+            previewPoint = cursorInLayout;
+        }
+        else
+        {
+            HideSnapPreview();
+            return;
+        }
+
+        measurementOverlay.SetSnapPreview(previewPoint, true);
+    }
+
+    private void HideSnapPreview()
+    {
+        _currentSnapResult = LayoutSnapResult.None;
+        measurementOverlay.SetSnapPreview(null, false);
+    }
+
+    private VectorD ScreenToLayout(Point point)
+    {
+        var translated = point - new Point(_centerTransform.X + Translation.X, _centerTransform.Y + Translation.Y);
+        var scale = CmScaleFactor * Zoom;
+        if (scale <= 0)
+            return VectorD.Empty;
+
+        return Orientation switch
+        {
+            LayoutOrientation.HorizontalNutRight => new VectorD(translated.Y / scale, translated.X / scale),
+            LayoutOrientation.HorizontalNutLeft => new VectorD(-translated.Y / scale, -translated.X / scale),
+            _ => new VectorD(translated.X / scale, -translated.Y / scale),
+        };
     }
 
     private bool MatchPanSource(PointerReleasedEventArgs eventArgs)
@@ -706,6 +806,13 @@ public partial class LayoutViewerControl : UserControl, ILayoutViewerContext
 
     public void Canvas_PointerReleased(object? sender, PointerReleasedEventArgs e)
     {
+        if (IsMeasureToolActive && e.InitialPressMouseButton == MouseButton.Left && _currentPanSource == null
+            && !measurementOverlay.IsOwnedControl(e.Source))
+        {
+            HandleMeasureClick(e.GetPosition(this), e.KeyModifiers);
+            return;
+        }
+
         if (_isPanning && MatchPanSource(e))
         {
             _isPanning = false;
@@ -732,32 +839,81 @@ public partial class LayoutViewerControl : UserControl, ILayoutViewerContext
         ZoomAtPoint(e.GetPosition(this), factor);
     }
 
+    #region Pinch Handling
+
     private double lastPinchScale = 1.0;
 
     private void Canvas_PinchGesture(object? sender, PinchEventArgs e)
     {
-        // e.Scale gives the scale delta since last event
         var center = e.ScaleOrigin;
         var scaleFactor = e.Scale;
         double scaleDelta = scaleFactor - lastPinchScale;
 
         if (Math.Abs(scaleDelta) < 0.01)
-            return; // Ignore very small scale changes
+            return;
 
         Trace.WriteLine($"e.Scale = {e.Scale} delta = {scaleDelta}");
         bool isZoomingIn = scaleDelta > 0;
         scaleDelta = isZoomingIn ? (scaleDelta + 1d) : 1d / (Math.Abs(scaleDelta) + 1d);
-        
-       
 
         lastPinchScale = e.Scale;
-        
+
         ZoomAtPoint(center, scaleDelta);
     }
 
     private void Canvas_PinchGestureEnded(object? sender, PinchEndedEventArgs e)
     {
         lastPinchScale = 1;
+    }
+
+    #endregion
+
+
+
+    private void HandleMeasureClick(Point pointerPosition, KeyModifiers keyModifiers)
+    {
+        if (Layout == null)
+            return;
+
+        bool allowNonSnappedPoint = keyModifiers.HasFlag(KeyModifiers.Alt);
+
+        VectorD selectedPoint = _currentSnapResult.IsSnapped ? _currentSnapResult.Position : ScreenToLayout(pointerPosition);
+
+
+        if (measurementOverlay.HasCompletedMeasurement)
+        {
+            if (!_currentSnapResult.IsSnapped && !allowNonSnappedPoint)
+            {
+                measurementOverlay.Clear();
+                return;
+            }
+
+            measurementOverlay.SetStartPoint(selectedPoint);
+        }
+        else if (!measurementOverlay.HasStartPoint)
+        {
+            measurementOverlay.SetStartPoint(selectedPoint);
+        }
+        else
+        {
+            measurementOverlay.SetEndPoint(selectedPoint);
+        }
+    }
+
+    private static VectorD SnapPointToAngleIncrement(VectorD origin, VectorD target)
+    {
+        var delta = target - origin;
+        var length = delta.Length();
+        if (length <= double.Epsilon)
+            return target;
+
+        const double angleStep = Math.PI / 12d;
+        var angle = Math.Atan2(delta.Y, delta.X);
+        var snappedAngle = Math.Round(angle / angleStep) * angleStep;
+
+        return new VectorD(
+            origin.X + Math.Cos(snappedAngle) * length,
+            origin.Y + Math.Sin(snappedAngle) * length);
     }
 
     #endregion
@@ -772,7 +928,7 @@ public partial class LayoutViewerControl : UserControl, ILayoutViewerContext
         OverlayCanvas.Children.Clear();
 
         if (Layout == null) return;
-        
+
         var layoutBounds = Layout.Bounds!;
 
         LayoutGrid.LayoutBounds = layoutBounds;
@@ -828,29 +984,13 @@ public partial class LayoutViewerControl : UserControl, ILayoutViewerContext
         }
     }
 
-    private void HideAllOverlays()
-    {
-        foreach (var overlay in OverlayCanvas.Children.OfType<LayoutOverlayBase>())
-        {
-            overlay.IsVisible = false;
-        }
-    }
-
-    private void ShowAllOverlays()
-    {
-        foreach (var overlay in OverlayCanvas.Children.OfType<LayoutOverlayBase>())
-        {
-            overlay.IsVisible = true;
-        }
-    }
-
     Point ILayoutViewerContext.VectorToScreen(VectorD point)
     {
         if (Orientation == LayoutOrientation.HorizontalNutRight)
         {
             return new Point((double)point.Y * CmScaleFactor * Zoom, (double)point.X * CmScaleFactor * Zoom);
         }
-        
+
         if (Orientation == LayoutOrientation.HorizontalNutLeft)
         {
             return new Point(-(double)point.Y * CmScaleFactor * Zoom, -(double)point.X * CmScaleFactor * Zoom);
@@ -865,10 +1005,10 @@ public partial class LayoutViewerControl : UserControl, ILayoutViewerContext
     {
         if (Layout == null) return;
 
-        //var helper = new OverlayPositionHelper(Layout, Zoom, Orientation);
         OverlayCanvas.Children.Add(fretNumberOverlay);
-        // Pass theme to overlays (will refactor overlays next)
-        //FretNumberOverlay.CreateElements(helper, OverlayCanvas, RenderSettings);
+
+        measurementOverlay.Attach(OverlayCanvas);
+        measurementOverlay.Reposition();
     }
 
     private void RepositionOverlays()
@@ -885,6 +1025,8 @@ public partial class LayoutViewerControl : UserControl, ILayoutViewerContext
             //((Control)overlay).IsVisible = true; // Ensure overlay is visible
             overlay.Reposition(helper);
         }
+
+        measurementOverlay.Reposition();
     }
 
 
@@ -892,14 +1034,35 @@ public partial class LayoutViewerControl : UserControl, ILayoutViewerContext
 
     #region UI Handlers
 
-    private void Button1_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
-    {
-        CreateLayoutVisualsAndOverlays();
-    }
-
     private void ResetViewButton_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
     {
         ResetZoomAndTranslation();
+    }
+
+    private void SnapFilter_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        if (sender is MenuItem menuItem && menuItem.Tag is SnapLineType flagToToggle)
+        {
+            // Toggle the flag
+            if (ActiveSnapFilters.HasFlag(flagToToggle))
+                ActiveSnapFilters &= ~flagToToggle;
+            else
+                ActiveSnapFilters |= flagToToggle;
+        }
+    }
+
+    private void SnapMenuFlyout_Opening(object? sender, EventArgs e)
+    {
+        if (sender is MenuFlyout flyout)
+        {
+            foreach (var item in flyout.Items.OfType<MenuItem>())
+            {
+                if (item.Tag is SnapLineType flag)
+                {
+                    item.IsChecked = ActiveSnapFilters.HasFlag(flag);
+                }
+            }
+        }
     }
 
     #endregion
@@ -910,6 +1073,8 @@ public partial class LayoutViewerControl : UserControl, ILayoutViewerContext
 
         BorderContainer.Background = new SolidColorBrush(RenderSettings.BackgroundColor);
         LayoutGrid.UpdateTheme(RenderSettings);
+
+        measurementOverlay.UpdateTheme(RenderSettings);
 
         // Efficiently update theme for visuals and overlays
         foreach (var child in RenderCanvas.Children)
@@ -923,7 +1088,10 @@ public partial class LayoutViewerControl : UserControl, ILayoutViewerContext
         }
 
         double luminance = RenderSettings.BackgroundColor.RelativeLuminance();
-        if (luminance > 0.5)
+        bool isLightBackground = luminance > 0.5;
+        measurementOverlay.SetTextBoxContrastTheme(isLightBackground);
+
+        if (isLightBackground)
         {
             ZoomPanelThemeVariant.RequestedThemeVariant = ThemeVariant.Light;
         }
@@ -931,5 +1099,9 @@ public partial class LayoutViewerControl : UserControl, ILayoutViewerContext
         {
             ZoomPanelThemeVariant.RequestedThemeVariant = ThemeVariant.Dark;
         }
+    }
+
+    private void MenuFlyout_Opening(object? sender, EventArgs e)
+    {
     }
 }

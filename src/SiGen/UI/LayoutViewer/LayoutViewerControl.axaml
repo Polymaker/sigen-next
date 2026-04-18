@@ -1,13 +1,56 @@
 <UserControl xmlns="https://github.com/avaloniaui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="SiGen.UI.LayoutViewer.LayoutViewerControl"
-			 xmlns:ui="using:SiGen.UI"
-			 xmlns:lv="using:SiGen.UI.LayoutViewer"
-			 xmlns:materialIcons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
-			 >
+           xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+           xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+           xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+           mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+           x:Class="SiGen.UI.LayoutViewer.LayoutViewerControl"
+xmlns:ui="using:SiGen.UI"
+xmlns:lv="using:SiGen.UI.LayoutViewer"
+xmlns:conv="using:SiGen.Converters"
+xmlns:snap="using:SiGen.Layouts.Snapping"
+xmlns:lang="using:SiGen.Lang"
+xmlns:materialIcons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+>
+<UserControl.Resources>
+  <conv:FlagsEnumConverter x:Key="FlagsEnumConverter" />
+</UserControl.Resources>
+
+<UserControl.Styles>
+    <Style Selector="TextBox.measure-overlay-dark">
+      <Setter Property="Foreground" Value="#FFF5F5F5" />
+      <Setter Property="SelectionBrush" Value="#55FFFFFF" />
+    </Style>
+    <Style Selector="TextBox.measure-overlay-dark /template/ Border#PART_BorderElement">
+      <Setter Property="Background" Value="#C8101010" />
+    </Style>
+    <Style Selector="TextBox.measure-overlay-dark:pointerover /template/ Border#PART_BorderElement">
+      <Setter Property="Background" Value="#C8101010" />
+    </Style>
+    <Style Selector="TextBox.measure-overlay-dark:focus /template/ Border#PART_BorderElement">
+      <Setter Property="Background" Value="#C8101010" />
+    </Style>
+    <Style Selector="TextBox.measure-overlay-dark:focus-within /template/ Border#PART_BorderElement">
+      <Setter Property="Background" Value="#C8101010" />
+    </Style>
+
+    <Style Selector="TextBox.measure-overlay-light">
+      <Setter Property="Foreground" Value="#FF111111" />
+      <Setter Property="SelectionBrush" Value="#55336699" />
+    </Style>
+    <Style Selector="TextBox.measure-overlay-light /template/ Border#PART_BorderElement">
+      <Setter Property="Background" Value="#EAF3F8FF" />
+    </Style>
+    <Style Selector="TextBox.measure-overlay-light:pointerover /template/ Border#PART_BorderElement">
+      <Setter Property="Background" Value="#EAF3F8FF" />
+    </Style>
+    <Style Selector="TextBox.measure-overlay-light:focus /template/ Border#PART_BorderElement">
+      <Setter Property="Background" Value="#EAF3F8FF" />
+    </Style>
+    <Style Selector="TextBox.measure-overlay-light:focus-within /template/ Border#PART_BorderElement">
+      <Setter Property="Background" Value="#EAF3F8FF" />
+    </Style>
+  </UserControl.Styles>
+
   <Grid>
 	  <Grid.RowDefinitions>
 		  <RowDefinition Height="auto" />
@@ -54,14 +97,65 @@
 
 	  <Border Grid.Row="2"  ZIndex="10" Padding="4">
 		  <ThemeVariantScope x:Name="ZoomPanelThemeVariant" RequestedThemeVariant="Default">
-			  <StackPanel Orientation="Horizontal"
-					  HorizontalAlignment="Right"
-					  Spacing="4">
-				  <TextBox x:Name="ZoomTextBox" MinHeight="0" FontSize="12"/>
-				  <Button x:Name="ResetViewButton" ToolTip.Tip="Reset View" Click="ResetViewButton_Click">
-					  <materialIcons:MaterialIcon Kind="ImageFilterCenterFocusStrong" IconSize="18" />
-				  </Button>
-			  </StackPanel>
+			  <Grid ColumnDefinitions="Auto,*">
+				  <StackPanel Grid.Column="0"
+							  Orientation="Horizontal"
+							  HorizontalAlignment="Left"
+							  Spacing="4">
+					  <ToggleSplitButton IsChecked="{Binding IsMeasureToolActive, RelativeSource={RelativeSource AncestorType=lv:LayoutViewerControl}, Mode=TwoWay}"
+									ToolTip.Tip="{x:Static lang:Resources.MeasureTool_Tooltip}">
+						  <materialIcons:MaterialIcon Kind="Ruler" IconSize="18" />
+						   <!--<materialIcons:MaterialIcon Kind="RulerSquare" IconSize="18" />-->
+
+						   <SplitButton.Flyout>
+							  <MenuFlyout Opening="SnapMenuFlyout_Opening" Placement="RightEdgeAlignedBottom">
+								  <MenuItem Header="{x:Static lang:Resources.MeasureTool_SnapToLabel}" FontWeight="SemiBold" IsHitTestVisible="False" />
+								  <MenuItem Header="{x:Static lang:Resources.MeasureTool_SnapFilter_Frets}" 
+											Click="SnapFilter_Click"
+											StaysOpenOnClick="True"
+											ToggleType="CheckBox"
+											IsChecked="{Binding ActiveSnapFilters, RelativeSource={RelativeSource AncestorType=lv:LayoutViewerControl}, Converter={StaticResource FlagsEnumConverter}, ConverterParameter={x:Static snap:SnapLineType.Fret}, Mode=OneWay}"
+											Tag="{x:Static snap:SnapLineType.Fret}">
+								  </MenuItem>
+								  <MenuItem Header="{x:Static lang:Resources.MeasureTool_SnapFilter_Strings}" 
+											Click="SnapFilter_Click" 
+											StaysOpenOnClick="True"
+											ToggleType="CheckBox"
+											IsChecked="{Binding ActiveSnapFilters, RelativeSource={RelativeSource AncestorType=lv:LayoutViewerControl}, Converter={StaticResource FlagsEnumConverter}, ConverterParameter={x:Static snap:SnapLineType.String}, Mode=OneWay}"
+											Tag="{x:Static snap:SnapLineType.String}">
+									  
+								  </MenuItem>
+								  <MenuItem Header="{x:Static lang:Resources.MeasureTool_SnapFilter_Fingerboard}" 
+											Click="SnapFilter_Click" 
+											StaysOpenOnClick="True"
+											ToggleType="CheckBox" 
+											IsChecked="{Binding ActiveSnapFilters, RelativeSource={RelativeSource AncestorType=lv:LayoutViewerControl}, Converter={StaticResource FlagsEnumConverter}, ConverterParameter={x:Static snap:SnapLineType.Fingerboard}, Mode=OneWay}" 
+											Tag="{x:Static snap:SnapLineType.Fingerboard}">
+								  </MenuItem>
+								  <MenuItem Header="{x:Static lang:Resources.MeasureTool_SnapFilter_CenterLine}" 
+											Click="SnapFilter_Click"
+											StaysOpenOnClick="True"
+											ToggleType="CheckBox"
+											IsChecked="{Binding ActiveSnapFilters, RelativeSource={RelativeSource AncestorType=lv:LayoutViewerControl}, Converter={StaticResource FlagsEnumConverter}, ConverterParameter={x:Static snap:SnapLineType.CenterLine}, Mode=OneWay}"
+											Tag="{x:Static snap:SnapLineType.CenterLine}">
+								  </MenuItem>
+							  </MenuFlyout >
+						  </SplitButton.Flyout>
+						 
+					  </ToggleSplitButton>
+
+				  </StackPanel>
+
+				  <StackPanel Grid.Column="1"
+							  Orientation="Horizontal"
+							  HorizontalAlignment="Right"
+							  Spacing="4">
+					  <TextBox x:Name="ZoomTextBox" MinHeight="0" />
+					  <Button x:Name="ResetViewButton" ToolTip.Tip="Reset View" Click="ResetViewButton_Click">
+						  <materialIcons:MaterialIcon Kind="ImageFilterCenterFocusStrong" IconSize="18" />
+					  </Button>
+				  </StackPanel>
+			  </Grid>
 		  </ThemeVariantScope>
 
 	  </Border>

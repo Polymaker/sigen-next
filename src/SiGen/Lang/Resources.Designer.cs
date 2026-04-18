@@ -367,6 +367,96 @@ namespace SiGen.Lang {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Actions.
+        /// </summary>
+        public static string EditStringsDialog_ActionsHeader {
+            get {
+                return ResourceManager.GetString("EditStringsDialog.ActionsHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Add another string to this course.
+        /// </summary>
+        public static string EditStringsDialog_AddStringTooltip {
+            get {
+                return ResourceManager.GetString("EditStringsDialog.AddStringTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Convert this string into a course.
+        /// </summary>
+        public static string EditStringsDialog_ConvertToCourseTooltip {
+            get {
+                return ResourceManager.GetString("EditStringsDialog.ConvertToCourseTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Edit spacing between strings in this course.
+        /// </summary>
+        public static string EditStringsDialog_EditSpacingTooltip {
+            get {
+                return ResourceManager.GetString("EditStringsDialog.EditSpacingTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Gauge.
+        /// </summary>
+        public static string EditStringsDialog_GaugeHeader {
+            get {
+                return ResourceManager.GetString("EditStringsDialog.GaugeHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Material.
+        /// </summary>
+        public static string EditStringsDialog_MaterialHeader {
+            get {
+                return ResourceManager.GetString("EditStringsDialog.MaterialHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Preview.
+        /// </summary>
+        public static string EditStringsDialog_PreviewHeader {
+            get {
+                return ResourceManager.GetString("EditStringsDialog.PreviewHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove this string.
+        /// </summary>
+        public static string EditStringsDialog_RemoveSingleStringTooltip {
+            get {
+                return ResourceManager.GetString("EditStringsDialog.RemoveSingleStringTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Remove this string from the course.
+        /// </summary>
+        public static string EditStringsDialog_RemoveStringFromCourseTooltip {
+            get {
+                return ResourceManager.GetString("EditStringsDialog.RemoveStringFromCourseTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to String.
+        /// </summary>
+        public static string EditStringsDialog_StringHeader {
+            get {
+                return ResourceManager.GetString("EditStringsDialog.StringHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Apply.
         /// </summary>
         public static string EditTuningDialog_ApplyPresetButton {
@@ -403,11 +493,38 @@ namespace SiGen.Lang {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Tension.
+        /// </summary>
+        public static string EditTuningDialog_TensionHeader {
+            get {
+                return ResourceManager.GetString("EditTuningDialog.TensionHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to String tension values are estimated based on tuning, scale length, and string gauge. These are approximate values to help you balance tension across strings..
+        /// </summary>
+        public static string EditTuningDialog_TensionToolTip {
+            get {
+                return ResourceManager.GetString("EditTuningDialog.TensionToolTip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Tuning Configuration.
         /// </summary>
         public static string EditTuningDialog_Title {
             get {
                 return ResourceManager.GetString("EditTuningDialog.Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tuning.
+        /// </summary>
+        public static string EditTuningDialog_TuningHeader {
+            get {
+                return ResourceManager.GetString("EditTuningDialog.TuningHeader", resourceCulture);
             }
         }
         
@@ -547,7 +664,7 @@ namespace SiGen.Lang {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Design and export precision stringed instrument layouts — from a standard Strat to a fanned-fret 8-string.
+        ///   Looks up a localized string similar to Design and export precision stringed instrument layouts � from a standard Strat to a fanned-fret 8-string.
         ///Open a recent file or start from a template..
         /// </summary>
         public static string HomePageView_WelcomeText {
@@ -701,6 +818,60 @@ namespace SiGen.Lang {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Center Line.
+        /// </summary>
+        public static string MeasureTool_SnapFilter_CenterLine {
+            get {
+                return ResourceManager.GetString("MeasureTool.SnapFilter.CenterLine", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fingerboard.
+        /// </summary>
+        public static string MeasureTool_SnapFilter_Fingerboard {
+            get {
+                return ResourceManager.GetString("MeasureTool.SnapFilter.Fingerboard", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Frets.
+        /// </summary>
+        public static string MeasureTool_SnapFilter_Frets {
+            get {
+                return ResourceManager.GetString("MeasureTool.SnapFilter.Frets", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Strings.
+        /// </summary>
+        public static string MeasureTool_SnapFilter_Strings {
+            get {
+                return ResourceManager.GetString("MeasureTool.SnapFilter.Strings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Snap to:.
+        /// </summary>
+        public static string MeasureTool_SnapToLabel {
+            get {
+                return ResourceManager.GetString("MeasureTool.SnapToLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Measure distances on the layout. Click to set start and end points. Use Alt to place points without snapping..
+        /// </summary>
+        public static string MeasureTool_Tooltip {
+            get {
+                return ResourceManager.GetString("MeasureTool.Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to New Layout.
         /// </summary>
         public static string NewDocumentName {
@@ -836,6 +1007,51 @@ namespace SiGen.Lang {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Bronze Wound.
+        /// </summary>
+        public static string StringMaterialType_BronzeWound {
+            get {
+                return ResourceManager.GetString("StringMaterialType.BronzeWound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nickel Wound.
+        /// </summary>
+        public static string StringMaterialType_NickelWound {
+            get {
+                return ResourceManager.GetString("StringMaterialType.NickelWound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Plain Nylon.
+        /// </summary>
+        public static string StringMaterialType_NylonPlain {
+            get {
+                return ResourceManager.GetString("StringMaterialType.NylonPlain", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Silver Plated Wound.
+        /// </summary>
+        public static string StringMaterialType_SilverPlatedWound {
+            get {
+                return ResourceManager.GetString("StringMaterialType.SilverPlatedWound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Plain Steel.
+        /// </summary>
+        public static string StringMaterialType_SteelPlain {
+            get {
+                return ResourceManager.GetString("StringMaterialType.SteelPlain", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Common number of frets.
         /// </summary>
         public static string StringsFretsEditorPanel_CommonFretsPresetHeader {
@@ -908,7 +1124,7 @@ namespace SiGen.Lang {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Configure….
+        ///   Looks up a localized string similar to Configure�.
         /// </summary>
         public static string StringSpacingEditorPanel_ConfigureSpacingButton {
             get {
@@ -967,6 +1183,42 @@ namespace SiGen.Lang {
         public static string StringSpacingEditorPanel_SpreadHeader {
             get {
                 return ResourceManager.GetString("StringSpacingEditorPanel.SpreadHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Balanced.
+        /// </summary>
+        public static string TensionBalanceState_Balanced {
+            get {
+                return ResourceManager.GetString("TensionBalanceState.Balanced", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Over-tensioned.
+        /// </summary>
+        public static string TensionBalanceState_OverTensioned {
+            get {
+                return ResourceManager.GetString("TensionBalanceState.OverTensioned", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Under-tensioned.
+        /// </summary>
+        public static string TensionBalanceState_UnderTensioned {
+            get {
+                return ResourceManager.GetString("TensionBalanceState.UnderTensioned", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unknown.
+        /// </summary>
+        public static string TensionBalanceState_Unknown {
+            get {
+                return ResourceManager.GetString("TensionBalanceState.Unknown", resourceCulture);
             }
         }
     }

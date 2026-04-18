@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
 		Microsoft ResX Schema
@@ -233,7 +233,7 @@
     <value>Centering</value>
   </data>
   <data name="StringSpacingEditorPanel.ConfigureSpacingButton" xml:space="preserve">
-    <value>Configure…</value>
+    <value>Configure�</value>
   </data>
   <data name="ScaleLengthEditorPanel.BassTrebleSkew" xml:space="preserve">
     <value>Skew</value>
@@ -272,7 +272,7 @@
     <value>START FROM A TEMPLATE</value>
   </data>
   <data name="HomePageView.WelcomeText" xml:space="preserve">
-    <value>Design and export precision stringed instrument layouts — from a standard Strat to a fanned-fret 8-string.
+    <value>Design and export precision stringed instrument layouts � from a standard Strat to a fanned-fret 8-string.
 Open a recent file or start from a template.</value>
   </data>
   <data name="InstrumentInfoEditorPanel.LayoutName" xml:space="preserve">
@@ -400,5 +400,89 @@ Open a recent file or start from a template.</value>
   </data>
   <data name="EditFretsDialog.StartingFretTooltip" xml:space="preserve">
     <value>Starting fret index for this string or course. 0 means the nut is the starting position. Positive values start after the nut. Negative values add one or more frets before the nut.</value>
+  </data>
+  <data name="EditTuningDialog.TensionToolTip" xml:space="preserve">
+    <value>String tension values are estimated based on tuning, scale length, and string gauge. These are approximate values to help you balance tension across strings.</value>
+  </data>
+  <data name="EditTuningDialog.TensionHeader" xml:space="preserve">
+    <value>Tension</value>
+  </data>
+  <data name="EditTuningDialog.TuningHeader" xml:space="preserve">
+    <value>Tuning</value>
+  </data>
+  <data name="TensionBalanceState.Unknown" xml:space="preserve">
+    <value>Unknown</value>
+  </data>
+  <data name="TensionBalanceState.UnderTensioned" xml:space="preserve">
+    <value>Under-tensioned</value>
+  </data>
+  <data name="TensionBalanceState.Balanced" xml:space="preserve">
+    <value>Balanced</value>
+  </data>
+  <data name="TensionBalanceState.OverTensioned" xml:space="preserve">
+    <value>Over-tensioned</value>
+  </data>
+  <data name="EditStringsDialog.StringHeader" xml:space="preserve">
+    <value>String</value>
+  </data>
+  <data name="EditStringsDialog.GaugeHeader" xml:space="preserve">
+    <value>Gauge</value>
+  </data>
+  <data name="EditStringsDialog.MaterialHeader" xml:space="preserve">
+    <value>Material</value>
+  </data>
+  <data name="EditStringsDialog.PreviewHeader" xml:space="preserve">
+    <value>Preview</value>
+  </data>
+  <data name="EditStringsDialog.ActionsHeader" xml:space="preserve">
+    <value>Actions</value>
+  </data>
+  <data name="StringMaterialType.SteelPlain" xml:space="preserve">
+    <value>Plain Steel</value>
+  </data>
+  <data name="StringMaterialType.NickelWound" xml:space="preserve">
+    <value>Nickel Wound</value>
+  </data>
+  <data name="StringMaterialType.BronzeWound" xml:space="preserve">
+    <value>Bronze Wound</value>
+  </data>
+  <data name="StringMaterialType.NylonPlain" xml:space="preserve">
+    <value>Plain Nylon</value>
+  </data>
+  <data name="StringMaterialType.SilverPlatedWound" xml:space="preserve">
+    <value>Silver Plated Wound</value>
+  </data>
+  <data name="EditStringsDialog.EditSpacingTooltip" xml:space="preserve">
+    <value>Edit spacing between strings in this course</value>
+  </data>
+  <data name="EditStringsDialog.RemoveStringFromCourseTooltip" xml:space="preserve">
+    <value>Remove this string from the course</value>
+  </data>
+  <data name="EditStringsDialog.RemoveSingleStringTooltip" xml:space="preserve">
+    <value>Remove this string</value>
+  </data>
+  <data name="EditStringsDialog.AddStringTooltip" xml:space="preserve">
+    <value>Add another string to this course</value>
+  </data>
+  <data name="EditStringsDialog.ConvertToCourseTooltip" xml:space="preserve">
+    <value>Convert this string into a course</value>
+  </data>
+  <data name="MeasureTool.SnapToLabel" xml:space="preserve">
+    <value>Snap to:</value>
+  </data>
+  <data name="MeasureTool.Tooltip" xml:space="preserve">
+    <value>Measure distances on the layout</value>
+  </data>
+  <data name="MeasureTool.SnapFilter.Frets" xml:space="preserve">
+    <value>Frets</value>
+  </data>
+  <data name="MeasureTool.SnapFilter.Strings" xml:space="preserve">
+    <value>Strings</value>
+  </data>
+  <data name="MeasureTool.SnapFilter.Fingerboard" xml:space="preserve">
+    <value>Fingerboard</value>
+  </data>
+  <data name="MeasureTool.SnapFilter.CenterLine" xml:space="preserve">
+    <value>Center Line</value>
   </data>
 </root>

@@ -35,6 +35,13 @@
 		</ResourceDictionary>
 	</UserControl.Resources>
 
+	<UserControl.Styles>
+		<Style Selector="TextBox">
+			<!-- Base padding has 10px left and 6px right so text is not centered correctly -->
+			<Setter Property="Padding" Value="6,6,6,5" /> 
+		</Style>
+	</UserControl.Styles>
+
 	<Grid RowDefinitions="Auto,*,Auto" Margin="3">
 		<Border Grid.Row="0"
 				Margin="3"

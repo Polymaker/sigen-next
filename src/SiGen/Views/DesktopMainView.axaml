@@ -52,11 +52,11 @@
 		<DockPanel>
 			<Menu DockPanel.Dock="Top" Background="{DynamicResource MenuBackground}">
 				<MenuItem Header="_File">
-					<MenuItem Header="_Open..." Command="{Binding OpenCommand}" HotKey="Ctrl+O" />
-					<MenuItem Header="_Home Page" Command="{Binding OpenHomeCommand}"  />
+					<MenuItem Header="_Open..." Command="{Binding OpenCommand}" InputGesture="Ctrl+O" HotKey="Ctrl+O" />
+					<MenuItem Header="_Home Page" Command="{Binding OpenHomeCommand}" InputGesture="Ctrl+H" HotKey="Ctrl+H" />
 					<Separator/>
-					<MenuItem Header="_Save..." Command="{Binding SaveCommand}" HotKey="Ctrl+S"/>
-					<MenuItem Header="_Save As..." Command="{Binding SaveAsCommand}" HotKey="Ctrl+S" />
+					<MenuItem Header="_Save..." Command="{Binding SaveCommand}" InputGesture="Ctrl+S" HotKey="Ctrl+S"/>
+					<MenuItem Header="_Save As..." Command="{Binding SaveAsCommand}" InputGesture="Ctrl+Alt+S" HotKey="Ctrl+Alt+S" />
 					<Separator/>
 					<MenuItem Header="Recent files" x:Name="RecentFilesMenu" ItemsSource="{Binding RecentFiles}">
 						<MenuItem.ItemTemplate>
@@ -77,7 +77,7 @@
 					</MenuItem>
 					
 					<Separator/>
-					<MenuItem Header="_Exit"/>
+					<MenuItem Header="_Exit" InputGesture="Alt+F4"/>
 				</MenuItem>
 				<MenuItem Header="_Edit">
 					<MenuItem Header="Copy" Command="{Binding TestCommand}"/>

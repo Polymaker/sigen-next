@@ -69,7 +69,20 @@ namespace SiGen.Paths
 
         public static bool IsIntersectionValid(VectorD uv)
         {
-            return uv.X >= 0 && uv.X <= 1 && uv.Y >= 0 && uv.Y <= 1;
+            return IsIntersectionValid(uv, 0d, 0d);
+        }
+
+        public static bool IsIntersectionValid(VectorD uv, double threshold)
+        {
+            threshold = Math.Abs(threshold);
+            return IsIntersectionValid(uv, threshold, threshold);
+        }
+
+        public static bool IsIntersectionValid(VectorD uv, double uThreshold, double vThreshold)
+        {
+            uThreshold = Math.Abs(uThreshold);
+            vThreshold = Math.Abs(vThreshold);
+            return uv.X >= -uThreshold && uv.X <= 1 + uThreshold && uv.Y >= -vThreshold && uv.Y <= 1 + vThreshold;
         }
 
         /// <summary>
@@ -82,13 +95,29 @@ namespace SiGen.Paths
         /// <returns></returns>
         public static bool Intersects(LinearPath line1, LinearPath line2, out VectorD intersection, bool allowOutside = false)
         {
+            return Intersects(line1, line2, out intersection, allowOutside, 0d);
+        }
+
+        public static bool Intersects(LinearPath line1, LinearPath line2, out VectorD intersection, double threshold)
+        {
+            return Intersects(line1, line2, out intersection, false, threshold);
+        }
+
+        public static bool Intersects(LinearPath line1, LinearPath line2, out VectorD intersection, bool allowOutside, double threshold)
+        {
             intersection = default;
 
             if (GetIntersectionDistance(line1, line2, out VectorD uv))
             {
                 intersection = line1.Start + line1.Direction * line1.Length * uv.X;
 
-                return allowOutside || IsIntersectionValid(uv);
+                if (allowOutside)
+                    return true;
+
+                threshold = Math.Abs(threshold);
+                double uThreshold = line1.Length > double.Epsilon ? threshold / line1.Length : 0d;
+                double vThreshold = line2.Length > double.Epsilon ? threshold / line2.Length : 0d;
+                return IsIntersectionValid(uv, uThreshold, vThreshold);
             }
 
             return false;
@@ -96,12 +125,22 @@ namespace SiGen.Paths
 
         public bool Intersects(LinearPath line, out VectorD intersection, bool allowOutside = false)
         {
-            return Intersects(this, line, out intersection, allowOutside);
+            return Intersects(this, line, out intersection, allowOutside, 0d);
+        }
+
+        public bool Intersects(LinearPath line, out VectorD intersection, double threshold)
+        {
+            return Intersects(this, line, out intersection, false, threshold);
+        }
+
+        public bool Intersects(LinearPath line, out VectorD intersection, bool allowOutside, double threshold)
+        {
+            return Intersects(this, line, out intersection, allowOutside, threshold);
         }
 
         public override bool Intersects(LinearPath line, out VectorD intersection)
         {
-            return Intersects(this, line, out intersection, false);
+            return Intersects(this, line, out intersection, false, 0d);
         }
 
         public LineD GetEquation() => LineD.FromPoints(Start, End);

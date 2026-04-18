@@ -8,6 +8,7 @@ using SiGen.Measuring;
 using SiGen.Services;
 using SiGen.UI.LayoutViewer;
 using SiGen.ViewModels.EditorPanels;
+using SiGen.Layouts.Snapping;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -52,6 +53,12 @@ namespace SiGen.ViewModels
 
         [ObservableProperty]
         private UnitMode layoutUnitMode = UnitMode.Metric;
+
+        [ObservableProperty]
+        private SnapLineType activeSnapFilters = SnapLineType.Fret | SnapLineType.String | SnapLineType.Fingerboard | SnapLineType.CenterLine;
+
+        [ObservableProperty]
+        private bool isMeasureToolEnabled;
 
         public bool IsZoomToFit { get; set; } = true;
 
