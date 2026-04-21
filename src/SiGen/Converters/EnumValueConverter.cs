@@ -3,7 +3,9 @@ using SiGen.Data.Common;
 using SiGen.Layouts.Configuration;
 using SiGen.Layouts.Data;
 using SiGen.Localization;
+using SiGen.Measuring;
 using SiGen.Physics;
+using SiGen.Settings;
 using SiGen.ViewModels.Dialogs;
 using System;
 using System.Collections.Generic;
@@ -56,6 +58,37 @@ namespace SiGen.Converters
             else if (value is StringMaterialType materialType)
             {
                 string key = $"StringMaterialType.{materialType}";
+                return Lang.Resources.ResourceManager.GetString(key, Lang.Resources.Culture) ?? key;
+            }
+            else if (value is AppTheme theme)
+            {
+                string key = $"AppTheme.{theme}";
+                return Lang.Resources.ResourceManager.GetString(key, Lang.Resources.Culture) ?? key;
+            }
+            else if (value is AppLanguage language)
+            {
+
+                if (language == AppLanguage.System)
+                {
+                    var systemText = Lang.Resources.ResourceManager.GetString("AppLanguage.System", Lang.Resources.Culture) ?? "System";
+                    string languageName = CultureInfo.InstalledUICulture.NativeName;
+                    if (languageName.Contains('('))
+                        languageName = languageName.Substring(0, languageName.IndexOf('(')).Trim();
+                    return $"{systemText} ({languageName})";
+                }
+                //CultureInfo.InstalledUICulture.DisplayName
+                string key = $"AppLanguage.{language}";
+                
+                return Lang.Resources.ResourceManager.GetString(key, Lang.Resources.Culture) ?? key;
+            }
+            else if (value is UnitSystem unitSystem)
+            {
+                string key = $"UnitSystem.{unitSystem}";
+                return Lang.Resources.ResourceManager.GetString(key, Lang.Resources.Culture) ?? key;
+            }
+            else if (value is LayoutViewerPreset viewerPreset)
+            {
+                string key = $"LayoutViewerPreset.{viewerPreset}";
                 return Lang.Resources.ResourceManager.GetString(key, Lang.Resources.Culture) ?? key;
             }
             return value?.ToString();

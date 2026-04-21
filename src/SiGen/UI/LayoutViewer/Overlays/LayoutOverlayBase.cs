@@ -6,15 +6,18 @@ namespace SiGen.UI.LayoutViewer.Overlays
 {
     public abstract class LayoutOverlayBase : Panel, ILayoutOverlay
     {
-        protected ThemeRenderSettings ThemeRenderSettings { get; private set; }
-        protected LayoutOverlayBase(ThemeRenderSettings themeRenderSettings)
+        protected LayoutViewerColorScheme ColorScheme { get; private set; }
+
+        protected LayoutOverlayBase(LayoutViewerColorScheme colorScheme)
         {
-            ThemeRenderSettings = themeRenderSettings ?? throw new ArgumentNullException(nameof(themeRenderSettings));
+            ColorScheme = colorScheme ?? throw new ArgumentNullException(nameof(colorScheme));
         }
+
         public abstract void Reposition(IOverlayPositionHelper positionHelper);
-        public virtual void UpdateTheme(ThemeRenderSettings theme)
+
+        public virtual void UpdateTheme(LayoutViewerColorScheme theme)
         {
-            ThemeRenderSettings = theme;
+            ColorScheme = theme;
             // Derived overlays should update brushes/colors here
         }
     }

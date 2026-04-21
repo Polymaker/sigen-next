@@ -222,9 +222,6 @@
   <data name="FretLabel" xml:space="preserve">
     <value>Frette</value>
   </data>
-  <data name="StringGroupLabel" xml:space="preserve">
-    <value>Groupe de cordes</value>
-  </data>
   <data name="StringSpacingEditorPanel.Header" xml:space="preserve">
     <value>Disposition des cordes</value>
   </data>
@@ -306,9 +303,6 @@ Ouvrez un fichier récent ou partez d'un modèle.</value>
   </data>
   <data name="StringSpacingEditorPanel.SpacingPresetHeader" xml:space="preserve">
     <value>Espacements communs</value>
-  </data>
-  <data name="StringCourseLabel" xml:space="preserve">
-    <value>Chœur de cordes</value>
   </data>
   <data name="FingerboardEnd.Nut" xml:space="preserve">
     <value>Sillet</value>
@@ -488,7 +482,7 @@ Ouvrez un fichier récent ou partez d'un modèle.</value>
     <value>Convertir cette corde en chœur</value>
   </data>
   <data name="MeasureTool.SnapToLabel" xml:space="preserve">
-    <value>Accrocher à :</value>
+    <value>Aligner sur :</value>
   </data>
   <data name="MeasureTool.Tooltip" xml:space="preserve">
     <value>Mesurer les distances sur le plan</value>
@@ -504,5 +498,153 @@ Ouvrez un fichier récent ou partez d'un modèle.</value>
   </data>
   <data name="MeasureTool.SnapFilter.CenterLine" xml:space="preserve">
     <value>Ligne centrale</value>
+  </data>
+  <data name="StringsFretsEditorPanel.AdvancedSettings" xml:space="preserve">
+    <value>Paramètres avancés</value>
+  </data>
+  <data name="StringsFretsEditorPanel.EditStringsTooltip" xml:space="preserve">
+    <value>Configurer le calibre et le matériau de chaque corde</value>
+  </data>
+  <data name="StringsFretsEditorPanel.EditFretsTooltip" xml:space="preserve">
+    <value>Configurer le nombre de frettes et le tempérament par corde</value>
+  </data>
+  <data name="StringsFretsEditorPanel.EditTuningTooltip" xml:space="preserve">
+    <value>Définir l'accordage de chaque corde et estimer la tension</value>
+  </data>
+  <data name="Dialog.SaveChanges.Title" xml:space="preserve">
+    <value>Modifications non enregistrées</value>
+  </data>
+  <data name="Dialog.SaveChanges.Message" xml:space="preserve">
+    <value>Voulez-vous enregistrer les modifications de "{0}" avant de fermer ?</value>
+  </data>
+  <data name="Dialog.Button.OK" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="Dialog.Button.Yes" xml:space="preserve">
+    <value>Oui</value>
+  </data>
+  <data name="Dialog.Button.No" xml:space="preserve">
+    <value>Non</value>
+  </data>
+  <data name="Dialog.Button.Cancel" xml:space="preserve">
+    <value>Annuler</value>
+  </data>
+  <data name="SettingsDialog_Title" xml:space="preserve">
+    <value>Paramètres</value>
+  </data>
+  <data name="SettingsDialog_AppearanceSection" xml:space="preserve">
+    <value>Apparence</value>
+  </data>
+  <data name="SettingsDialog_ThemeLabel" xml:space="preserve">
+    <value>Thème :</value>
+  </data>
+  <data name="SettingsDialog_LanguageLabel" xml:space="preserve">
+    <value>Langue :</value>
+  </data>
+  <data name="SettingsDialog_UnitsSection" xml:space="preserve">
+    <value>Unités</value>
+  </data>
+  <data name="SettingsDialog_UnitSystemLabel" xml:space="preserve">
+    <value>Système d'unités :</value>
+  </data>
+  <data name="SettingsDialog_LayoutViewerSection" xml:space="preserve">
+    <value>Visualiseur de plan</value>
+  </data>
+  <data name="SettingsDialog_ColorSchemeLabel" xml:space="preserve">
+    <value>Palette de couleurs :</value>
+  </data>
+  <data name="Menu_File" xml:space="preserve">
+    <value>_Fichier</value>
+  </data>
+  <data name="Menu_File_Open" xml:space="preserve">
+    <value>_Ouvrir...</value>
+  </data>
+  <data name="Menu_File_HomePage" xml:space="preserve">
+    <value>_Page d'accueil</value>
+  </data>
+  <data name="Menu_File_Save" xml:space="preserve">
+    <value>_Enregistrer...</value>
+  </data>
+  <data name="Menu_File_SaveAs" xml:space="preserve">
+    <value>_Enregistrer sous...</value>
+  </data>
+  <data name="Menu_File_RecentFiles" xml:space="preserve">
+    <value>Fichiers récents</value>
+  </data>
+  <data name="Menu_File_Settings" xml:space="preserve">
+    <value>_Paramètres...</value>
+  </data>
+  <data name="Menu_File_Exit" xml:space="preserve">
+    <value>_Quitter</value>
+  </data>
+  <data name="AppTheme.System" xml:space="preserve">
+    <value>Système</value>
+  </data>
+  <data name="AppTheme.Light" xml:space="preserve">
+    <value>Clair</value>
+  </data>
+  <data name="AppTheme.Dark" xml:space="preserve">
+    <value>Sombre</value>
+  </data>
+  <data name="AppLanguage.System" xml:space="preserve">
+    <value>Système</value>
+  </data>
+  <data name="AppLanguage.English" xml:space="preserve">
+    <value>Anglais</value>
+  </data>
+  <data name="AppLanguage.French" xml:space="preserve">
+    <value>Français</value>
+  </data>
+  <data name="AppLanguage.Spanish" xml:space="preserve">
+    <value>Espagnol</value>
+  </data>
+  <data name="AppLanguage.German" xml:space="preserve">
+    <value>Allemand</value>
+  </data>
+  <data name="UnitSystem.Metric" xml:space="preserve">
+    <value>Métrique</value>
+  </data>
+  <data name="UnitSystem.Imperial" xml:space="preserve">
+    <value>Impérial</value>
+  </data>
+  <data name="LayoutViewerPreset.Light" xml:space="preserve">
+    <value>Clair</value>
+  </data>
+  <data name="LayoutViewerPreset.Dark" xml:space="preserve">
+    <value>Sombre</value>
+  </data>
+  <data name="LayoutViewerPreset.Blueprint" xml:space="preserve">
+    <value>Schéma technique</value>
+  </data>
+  <data name="LayoutViewerPreset.Custom" xml:space="preserve">
+    <value>Personnalisé</value>
+  </data>
+  <data name="SettingsDialog_LanguageChangeMessage" xml:space="preserve">
+    <value>Certains éléments de l'interface nécessiteront un redémarrage de l'application pour s'afficher dans la nouvelle langue.</value>
+  </data>
+  <data name="HomePage_Title" xml:space="preserve">
+    <value>Accueil</value>
+  </data>
+  <data name="OpenDocument_FileNotFound_Title" xml:space="preserve">
+    <value>Fichier introuvable</value>
+  </data>
+  <data name="OpenDocument_FileNotFound_Message" xml:space="preserve">
+    <value>Le fichier est introuvable. Il a peut-être été déplacé, renommé ou supprimé.
+
+{0}</value>
+  </data>
+  <data name="OpenDocument_LoadError_Title" xml:space="preserve">
+    <value>Impossible d'ouvrir le fichier</value>
+  </data>
+  <data name="OpenDocument_LoadError_Message" xml:space="preserve">
+    <value>Le fichier n'a pas pu être ouvert. Le fichier est peut-être corrompu ou incompatible avec cette version de SiGen.
+
+Erreur : {0}</value>
+  </data>
+  <data name="OpenDocument_FileMigrated_Title" xml:space="preserve">
+    <value>Fichier migré</value>
+  </data>
+  <data name="OpenDocument_FileMigrated_Message" xml:space="preserve">
+    <value>Ce fichier a été créé avec une version antérieure de SiGen et a été automatiquement migré. Veuillez vérifier la disposition et enregistrer le fichier pour le mettre à jour vers le format actuel.</value>
   </data>
 </root>

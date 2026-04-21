@@ -130,6 +130,31 @@ namespace SiGen.Layouts.Configuration
             return GetString(side == FingerboardSide.Bass ? index : NumberOfStrings - 1 - index);
         }
 
+        public StringProperties? GetStringProperties(int courseIndex, int? subIndex)
+        {
+            if (courseIndex < 0 || courseIndex >= StringConfigurations.Count)
+                return null;
+
+            var stringConfig = StringConfigurations[courseIndex];
+
+            if (stringConfig is SingleStringConfiguration singleString)
+            {
+                // Single string - subIndex should be null or 0
+                if (subIndex == null || subIndex == 0)
+                    return singleString.Properties;
+                return null;
+            }
+            else if (stringConfig is StringGroupConfiguration stringGroup)
+            {
+                // String group - subIndex must be provided and valid
+                if (subIndex == null || subIndex < 0 || subIndex >= stringGroup.Strings.Count)
+                    return null;
+                return stringGroup.Strings[subIndex.Value];
+            }
+
+            return null;
+        }
+
         public void InitializeStringConfigs()
         {
             if (StringConfigurations.Count != NumberOfStrings)

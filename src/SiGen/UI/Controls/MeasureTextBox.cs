@@ -210,7 +210,7 @@ namespace SiGen.UI.Controls
                 ValidateTextInput();
         }
 
-        private void OnGotFocus(object? sender, GotFocusEventArgs e)
+        private void OnGotFocus(object? sender, RoutedEventArgs e)
         {
             if (Value is not null)
                 Text = Value.Value.ToStringFormatted();

@@ -61,6 +61,78 @@ namespace SiGen.Lang {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to English.
+        /// </summary>
+        public static string AppLanguage_English {
+            get {
+                return ResourceManager.GetString("AppLanguage.English", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to French.
+        /// </summary>
+        public static string AppLanguage_French {
+            get {
+                return ResourceManager.GetString("AppLanguage.French", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to German.
+        /// </summary>
+        public static string AppLanguage_German {
+            get {
+                return ResourceManager.GetString("AppLanguage.German", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Spanish.
+        /// </summary>
+        public static string AppLanguage_Spanish {
+            get {
+                return ResourceManager.GetString("AppLanguage.Spanish", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to System.
+        /// </summary>
+        public static string AppLanguage_System {
+            get {
+                return ResourceManager.GetString("AppLanguage.System", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Dark.
+        /// </summary>
+        public static string AppTheme_Dark {
+            get {
+                return ResourceManager.GetString("AppTheme.Dark", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Light.
+        /// </summary>
+        public static string AppTheme_Light {
+            get {
+                return ResourceManager.GetString("AppTheme.Light", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to System.
+        /// </summary>
+        public static string AppTheme_System {
+            get {
+                return ResourceManager.GetString("AppTheme.System", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cancel.
         /// </summary>
         public static string Common_Cancel {
@@ -102,6 +174,60 @@ namespace SiGen.Lang {
         public static string DateLabel_Yesterday {
             get {
                 return ResourceManager.GetString("DateLabel.Yesterday", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cancel.
+        /// </summary>
+        public static string Dialog_Button_Cancel {
+            get {
+                return ResourceManager.GetString("Dialog.Button.Cancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No.
+        /// </summary>
+        public static string Dialog_Button_No {
+            get {
+                return ResourceManager.GetString("Dialog.Button.No", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to OK.
+        /// </summary>
+        public static string Dialog_Button_OK {
+            get {
+                return ResourceManager.GetString("Dialog.Button.OK", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Yes.
+        /// </summary>
+        public static string Dialog_Button_Yes {
+            get {
+                return ResourceManager.GetString("Dialog.Button.Yes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do you want to save changes to &quot;{0}&quot; before closing?.
+        /// </summary>
+        public static string Dialog_SaveChanges_Message {
+            get {
+                return ResourceManager.GetString("Dialog.SaveChanges.Message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unsaved Changes.
+        /// </summary>
+        public static string Dialog_SaveChanges_Title {
+            get {
+                return ResourceManager.GetString("Dialog.SaveChanges.Title", resourceCulture);
             }
         }
         
@@ -619,6 +745,15 @@ namespace SiGen.Lang {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Home.
+        /// </summary>
+        public static string HomePage_Title {
+            get {
+                return ResourceManager.GetString("HomePage_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Design, Customize, and Create Instrument Layouts.
         /// </summary>
         public static string HomePageView_Header {
@@ -664,7 +799,7 @@ namespace SiGen.Lang {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Design and export precision stringed instrument layouts � from a standard Strat to a fanned-fret 8-string.
+        ///   Looks up a localized string similar to Design and export precision stringed instrument layouts – from a standard Strat to a fanned-fret 8-string.
         ///Open a recent file or start from a template..
         /// </summary>
         public static string HomePageView_WelcomeText {
@@ -809,6 +944,42 @@ namespace SiGen.Lang {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Blueprint.
+        /// </summary>
+        public static string LayoutViewerPreset_Blueprint {
+            get {
+                return ResourceManager.GetString("LayoutViewerPreset.Blueprint", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Custom.
+        /// </summary>
+        public static string LayoutViewerPreset_Custom {
+            get {
+                return ResourceManager.GetString("LayoutViewerPreset.Custom", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Dark.
+        /// </summary>
+        public static string LayoutViewerPreset_Dark {
+            get {
+                return ResourceManager.GetString("LayoutViewerPreset.Dark", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Light.
+        /// </summary>
+        public static string LayoutViewerPreset_Light {
+            get {
+                return ResourceManager.GetString("LayoutViewerPreset.Light", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Length.
         /// </summary>
         public static string Length {
@@ -818,7 +989,7 @@ namespace SiGen.Lang {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Center Line.
+        ///   Looks up a localized string similar to Centerline.
         /// </summary>
         public static string MeasureTool_SnapFilter_CenterLine {
             get {
@@ -863,11 +1034,83 @@ namespace SiGen.Lang {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Measure distances on the layout. Click to set start and end points. Use Alt to place points without snapping..
+        ///   Looks up a localized string similar to Measure distances on the layout.
         /// </summary>
         public static string MeasureTool_Tooltip {
             get {
                 return ResourceManager.GetString("MeasureTool.Tooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to _File.
+        /// </summary>
+        public static string Menu_File {
+            get {
+                return ResourceManager.GetString("Menu_File", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to E_xit.
+        /// </summary>
+        public static string Menu_File_Exit {
+            get {
+                return ResourceManager.GetString("Menu_File_Exit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to _Home Page.
+        /// </summary>
+        public static string Menu_File_HomePage {
+            get {
+                return ResourceManager.GetString("Menu_File_HomePage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to _Open....
+        /// </summary>
+        public static string Menu_File_Open {
+            get {
+                return ResourceManager.GetString("Menu_File_Open", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Recent files.
+        /// </summary>
+        public static string Menu_File_RecentFiles {
+            get {
+                return ResourceManager.GetString("Menu_File_RecentFiles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to _Save....
+        /// </summary>
+        public static string Menu_File_Save {
+            get {
+                return ResourceManager.GetString("Menu_File_Save", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to _Save As....
+        /// </summary>
+        public static string Menu_File_SaveAs {
+            get {
+                return ResourceManager.GetString("Menu_File_SaveAs", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Se_ttings....
+        /// </summary>
+        public static string Menu_File_Settings {
+            get {
+                return ResourceManager.GetString("Menu_File_Settings", resourceCulture);
             }
         }
         
@@ -877,6 +1120,64 @@ namespace SiGen.Lang {
         public static string NewDocumentName {
             get {
                 return ResourceManager.GetString("NewDocumentName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This file was created with an older version of SiGen and has been automatically migrated. Please review the layout and save the file to update it to the current format..
+        /// </summary>
+        public static string OpenDocument_FileMigrated_Message {
+            get {
+                return ResourceManager.GetString("OpenDocument_FileMigrated_Message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to File Migrated.
+        /// </summary>
+        public static string OpenDocument_FileMigrated_Title {
+            get {
+                return ResourceManager.GetString("OpenDocument_FileMigrated_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The file could not be found. It may have been moved, renamed, or deleted.
+        ///
+        ///{0}.
+        /// </summary>
+        public static string OpenDocument_FileNotFound_Message {
+            get {
+                return ResourceManager.GetString("OpenDocument_FileNotFound_Message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to File Not Found.
+        /// </summary>
+        public static string OpenDocument_FileNotFound_Title {
+            get {
+                return ResourceManager.GetString("OpenDocument_FileNotFound_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The file could not be opened. The file may be corrupted or incompatible with this version of SiGen.
+        ///
+        ///Error: {0}.
+        /// </summary>
+        public static string OpenDocument_LoadError_Message {
+            get {
+                return ResourceManager.GetString("OpenDocument_LoadError_Message", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unable to Open File.
+        /// </summary>
+        public static string OpenDocument_LoadError_Title {
+            get {
+                return ResourceManager.GetString("OpenDocument_LoadError_Title", resourceCulture);
             }
         }
         
@@ -944,6 +1245,87 @@ namespace SiGen.Lang {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Appearance.
+        /// </summary>
+        public static string SettingsDialog_AppearanceSection {
+            get {
+                return ResourceManager.GetString("SettingsDialog_AppearanceSection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Color Scheme:.
+        /// </summary>
+        public static string SettingsDialog_ColorSchemeLabel {
+            get {
+                return ResourceManager.GetString("SettingsDialog_ColorSchemeLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Some UI elements will require an application restart to display in the new language..
+        /// </summary>
+        public static string SettingsDialog_LanguageChangeMessage {
+            get {
+                return ResourceManager.GetString("SettingsDialog_LanguageChangeMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Language:.
+        /// </summary>
+        public static string SettingsDialog_LanguageLabel {
+            get {
+                return ResourceManager.GetString("SettingsDialog_LanguageLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Layout Viewer.
+        /// </summary>
+        public static string SettingsDialog_LayoutViewerSection {
+            get {
+                return ResourceManager.GetString("SettingsDialog_LayoutViewerSection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Theme:.
+        /// </summary>
+        public static string SettingsDialog_ThemeLabel {
+            get {
+                return ResourceManager.GetString("SettingsDialog_ThemeLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Settings.
+        /// </summary>
+        public static string SettingsDialog_Title {
+            get {
+                return ResourceManager.GetString("SettingsDialog_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Units.
+        /// </summary>
+        public static string SettingsDialog_UnitsSection {
+            get {
+                return ResourceManager.GetString("SettingsDialog_UnitsSection", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unit System:.
+        /// </summary>
+        public static string SettingsDialog_UnitSystemLabel {
+            get {
+                return ResourceManager.GetString("SettingsDialog_UnitSystemLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add a string on the bass side.
         /// </summary>
         public static string StringCountControl_AddBassTooltip {
@@ -976,24 +1358,6 @@ namespace SiGen.Lang {
         public static string StringCountControl_RemoveTrebleTooltip {
             get {
                 return ResourceManager.GetString("StringCountControl_RemoveTrebleTooltip", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to String course.
-        /// </summary>
-        public static string StringCourseLabel {
-            get {
-                return ResourceManager.GetString("StringCourseLabel", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to String group.
-        /// </summary>
-        public static string StringGroupLabel {
-            get {
-                return ResourceManager.GetString("StringGroupLabel", resourceCulture);
             }
         }
         
@@ -1052,11 +1416,47 @@ namespace SiGen.Lang {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Advanced Settings.
+        /// </summary>
+        public static string StringsFretsEditorPanel_AdvancedSettings {
+            get {
+                return ResourceManager.GetString("StringsFretsEditorPanel.AdvancedSettings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Common number of frets.
         /// </summary>
         public static string StringsFretsEditorPanel_CommonFretsPresetHeader {
             get {
                 return ResourceManager.GetString("StringsFretsEditorPanel.CommonFretsPresetHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Configure number of frets and temperament per string.
+        /// </summary>
+        public static string StringsFretsEditorPanel_EditFretsTooltip {
+            get {
+                return ResourceManager.GetString("StringsFretsEditorPanel.EditFretsTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Configure string gauge and material for each string.
+        /// </summary>
+        public static string StringsFretsEditorPanel_EditStringsTooltip {
+            get {
+                return ResourceManager.GetString("StringsFretsEditorPanel.EditStringsTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Set tuning for each string and estimate tension.
+        /// </summary>
+        public static string StringsFretsEditorPanel_EditTuningTooltip {
+            get {
+                return ResourceManager.GetString("StringsFretsEditorPanel.EditTuningTooltip", resourceCulture);
             }
         }
         
@@ -1124,7 +1524,7 @@ namespace SiGen.Lang {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Configure�.
+        ///   Looks up a localized string similar to Configure….
         /// </summary>
         public static string StringSpacingEditorPanel_ConfigureSpacingButton {
             get {
@@ -1219,6 +1619,24 @@ namespace SiGen.Lang {
         public static string TensionBalanceState_Unknown {
             get {
                 return ResourceManager.GetString("TensionBalanceState.Unknown", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Imperial.
+        /// </summary>
+        public static string UnitSystem_Imperial {
+            get {
+                return ResourceManager.GetString("UnitSystem.Imperial", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Metric.
+        /// </summary>
+        public static string UnitSystem_Metric {
+            get {
+                return ResourceManager.GetString("UnitSystem.Metric", resourceCulture);
             }
         }
     }

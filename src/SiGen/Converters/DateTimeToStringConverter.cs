@@ -24,7 +24,7 @@ namespace SiGen.Converters
 
         private static string FormatRecentDateLabel(DateTime dateTime, CultureInfo culture)
         {
-            var uiCulture = Resources.Culture ?? culture ?? CultureInfo.CurrentUICulture;
+            var uiCulture = /*Resources.Culture ?? culture ?? */CultureInfo.CurrentUICulture;
             var now = DateTime.Now;
             var time = dateTime.ToString("HH:mm", uiCulture);
 

@@ -1,13 +1,8 @@
 ﻿using Avalonia.Media;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace SiGen.Settings
+namespace SiGen.UI.LayoutViewer
 {
-    public class ThemeRenderSettings
+    public class LayoutViewerColorScheme
     {
         public Color BackgroundColor { get; set; } = Colors.White;
         public Color GridColor { get; set; } = Colors.LightGray;
@@ -25,13 +20,13 @@ namespace SiGen.Settings
 
         #endregion
 
-        public static ThemeRenderSettings Blueprint
+        public static LayoutViewerColorScheme Blueprint
         {
             get
             {
-                return new ThemeRenderSettings
+                return new LayoutViewerColorScheme
                 {
-                    BackgroundColor = Color.Parse("#1E3250"),
+                    BackgroundColor = Color.Parse("#234475"),
                     GridColor = Color.Parse("#EFEFEF"),
                     MajorAxisColor = Colors.White,
                     OverlayTextColor = Colors.White,
@@ -45,11 +40,11 @@ namespace SiGen.Settings
             }
         }
 
-        public static ThemeRenderSettings LightBlueprint
+        public static LayoutViewerColorScheme LightBlueprint
         {
             get
             {
-                return new ThemeRenderSettings
+                return new LayoutViewerColorScheme
                 {
                     BackgroundColor = Color.Parse("#234475"),//234475  2E5489
                     GridColor = Color.Parse("#EFEFEF"),
@@ -65,11 +60,11 @@ namespace SiGen.Settings
             }
         }
 
-        public static ThemeRenderSettings DarkMode
+        public static LayoutViewerColorScheme DarkMode
         {
             get
             {
-                return new ThemeRenderSettings
+                return new LayoutViewerColorScheme
                 {
                     BackgroundColor = Color.Parse("#242438"),
                     GridColor = Colors.White,
@@ -85,11 +80,11 @@ namespace SiGen.Settings
             }
         }
 
-        public static ThemeRenderSettings LightMode
+        public static LayoutViewerColorScheme LightMode
         {
             get
             {
-                return new ThemeRenderSettings
+                return new LayoutViewerColorScheme
                 {
                     BackgroundColor = Colors.White,
                     GridColor = Colors.Gray,

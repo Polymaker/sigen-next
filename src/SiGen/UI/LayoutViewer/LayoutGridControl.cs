@@ -2,29 +2,28 @@
 using Avalonia.Controls;
 using Avalonia.Media;
 using SiGen.Measuring;
-using SiGen.Settings;
 using System;
 using System.Globalization;
 
-namespace SiGen.UI
+namespace SiGen.UI.LayoutViewer
 {
     public class LayoutGridControl : Control
     {
         public static readonly StyledProperty<double> ZoomProperty =
             AvaloniaProperty.Register<LayoutGridControl, double>(nameof(Zoom), 1);
 
-        public static readonly StyledProperty<UnitMode> UnitModeProperty =
-            AvaloniaProperty.Register<LayoutGridControl, UnitMode>(nameof(UnitMode), UnitMode.Metric);
+        public static readonly StyledProperty<UnitSystem> UnitModeProperty =
+            AvaloniaProperty.Register<LayoutGridControl, UnitSystem>(nameof(UnitMode), UnitSystem.Metric);
 
         public static readonly StyledProperty<RectangleM?> LayoutBoundsProperty =
             AvaloniaProperty.Register<LayoutGridControl, RectangleM?>(nameof(LayoutBounds));
 
         // Main grid interval (cm or inch)
-        private double GridSize => UnitMode == UnitMode.Metric ? 37.7952755906 : 96;
+        private double GridSize => UnitMode == UnitSystem.Metric ? 37.7952755906 : 96;
         // Number of main grid cells per major grid cell
-        private int MajorGridDivisions => UnitMode == UnitMode.Metric ? 5 : 6;
+        private int MajorGridDivisions => UnitMode == UnitSystem.Metric ? 5 : 6;
 
-        protected ThemeRenderSettings ThemeRenderSettings { get; private set; } = new ();
+        protected LayoutViewerColorScheme ColorScheme { get; private set; } = new ();
 
         public double Zoom
         {
@@ -32,7 +31,7 @@ namespace SiGen.UI
             set => SetValue(ZoomProperty, value);
         }
 
-        public UnitMode UnitMode
+        public UnitSystem UnitMode
         {
             get => GetValue(UnitModeProperty);
             set => SetValue(UnitModeProperty, value);
@@ -56,9 +55,9 @@ namespace SiGen.UI
 
         private Rect blueprintGridRect = new Rect();
 
-        public virtual void UpdateTheme(ThemeRenderSettings theme)
+        public virtual void UpdateTheme(LayoutViewerColorScheme theme)
         {
-            ThemeRenderSettings = theme;
+            ColorScheme = theme;
             InvalidateVisual();
         }
 
@@ -66,12 +65,12 @@ namespace SiGen.UI
         {
             if (blueprintGridRect.Height > 0)
             {
-                bool showSubUnits = UnitMode == UnitMode.Metric ? Zoom >= 4 : true;
+                bool showSubUnits = UnitMode == UnitSystem.Metric ? Zoom >= 4 : true;
                 var gridBrush = CreateGridBrush(showSubUnits);
                 context.FillRectangle(gridBrush, blueprintGridRect);
 
                 double majorPenSize = Math.Max(3 / Zoom, 0.45);
-                var majorPen = new Pen(new SolidColorBrush(Color.FromArgb(120, ThemeRenderSettings.GridColor.R, ThemeRenderSettings.GridColor.G, ThemeRenderSettings.GridColor.B)), majorPenSize);
+                var majorPen = new Pen(new SolidColorBrush(Color.FromArgb(120, ColorScheme.GridColor.R, ColorScheme.GridColor.G, ColorScheme.GridColor.B)), majorPenSize);
                 context.DrawLine(majorPen, new Point(centerLineOffsetX, blueprintGridRect.Top), new Point(centerLineOffsetX, blueprintGridRect.Bottom));
                 context.DrawLine(majorPen, new Point(blueprintGridRect.Left, centerLineOffsetY), new Point(blueprintGridRect.Right, centerLineOffsetY));
             }
@@ -99,7 +98,7 @@ namespace SiGen.UI
         public void SetBluePrintBounds(RectangleM bounds)
         {
             double scale = LayoutViewer.LayoutViewerControl.CmScaleFactor;
-            int padding = UnitMode == UnitMode.Metric ? 20 : 8;
+            int padding = UnitMode == UnitSystem.Metric ? 20 : 8;
             int columnCount = (int)Math.Ceiling((double)(bounds.Top - bounds.Bottom).NormalizedValue * scale / GridSize) + padding;
             columnCount = (int)Math.Ceiling(Math.Floor(columnCount / (double)MajorGridDivisions) / 2d) * 2 * MajorGridDivisions;
             blueprintGridRect = new Rect(0, 0, columnCount * GridSize, columnCount * GridSize);
@@ -116,16 +115,16 @@ namespace SiGen.UI
             // Size of a major grid cell (group of main grid cells)
             var majorGridSize = GridSize * MajorGridDivisions;
             // Subdivision grid (mm or fractional inch)
-            int subGridDivisions = UnitMode == UnitMode.Metric ? 10 : (Zoom > 4 ? 16 : (Zoom > 1 ? 8 : 4));
+            int subGridDivisions = UnitMode == UnitSystem.Metric ? 10 : (Zoom > 4 ? 16 : (Zoom > 1 ? 8 : 4));
             var subGridSize = GridSize / subGridDivisions;
             var drawingGroup = new DrawingGroup();
             double subPenSize = Math.Max(0.75 / Zoom, 0.1);
             double minorPenSize = Math.Max(1 / Zoom, 0.2);
             double majorPenSize = Math.Max(2 / Zoom, 0.3);
             // Hardcoded alpha values
-            var subColor = Color.FromArgb(20, ThemeRenderSettings.GridColor.R, ThemeRenderSettings.GridColor.G, ThemeRenderSettings.GridColor.B);
-            var minorColor = Color.FromArgb(40, ThemeRenderSettings.GridColor.R, ThemeRenderSettings.GridColor.G, ThemeRenderSettings.GridColor.B);
-            var majorColor = Color.FromArgb(90, ThemeRenderSettings.MajorAxisColor.R, ThemeRenderSettings.MajorAxisColor.G, ThemeRenderSettings.MajorAxisColor.B);
+            var subColor = Color.FromArgb(20, ColorScheme.GridColor.R, ColorScheme.GridColor.G, ColorScheme.GridColor.B);
+            var minorColor = Color.FromArgb(40, ColorScheme.GridColor.R, ColorScheme.GridColor.G, ColorScheme.GridColor.B);
+            var majorColor = Color.FromArgb(90, ColorScheme.MajorAxisColor.R, ColorScheme.MajorAxisColor.G, ColorScheme.MajorAxisColor.B);
             var subPen = new Pen(new SolidColorBrush(subColor), subPenSize);
             var minorPen = new Pen(new SolidColorBrush(minorColor), minorPenSize);
             var majorPen = new Pen(new SolidColorBrush(majorColor), majorPenSize);

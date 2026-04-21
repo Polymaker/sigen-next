@@ -202,9 +202,6 @@
   <data name="FretLabel" xml:space="preserve">
     <value>Fret</value>
   </data>
-  <data name="StringGroupLabel" xml:space="preserve">
-    <value>String group</value>
-  </data>
   <data name="ScaleLengthEditorPanel.Header" xml:space="preserve">
     <value>Scale length configuration</value>
   </data>
@@ -233,7 +230,7 @@
     <value>Centering</value>
   </data>
   <data name="StringSpacingEditorPanel.ConfigureSpacingButton" xml:space="preserve">
-    <value>Configure�</value>
+    <value>Configure…</value>
   </data>
   <data name="ScaleLengthEditorPanel.BassTrebleSkew" xml:space="preserve">
     <value>Skew</value>
@@ -272,7 +269,7 @@
     <value>START FROM A TEMPLATE</value>
   </data>
   <data name="HomePageView.WelcomeText" xml:space="preserve">
-    <value>Design and export precision stringed instrument layouts � from a standard Strat to a fanned-fret 8-string.
+    <value>Design and export precision stringed instrument layouts – from a standard Strat to a fanned-fret 8-string.
 Open a recent file or start from a template.</value>
   </data>
   <data name="InstrumentInfoEditorPanel.LayoutName" xml:space="preserve">
@@ -286,9 +283,6 @@ Open a recent file or start from a template.</value>
   </data>
   <data name="StringSpacingEditorPanel.SpacingPresetHeader" xml:space="preserve">
     <value>Common spacings</value>
-  </data>
-  <data name="StringCourseLabel" xml:space="preserve">
-    <value>String course</value>
   </data>
   <data name="FingerboardEnd.Nut" xml:space="preserve">
     <value>Nut</value>
@@ -483,6 +477,154 @@ Open a recent file or start from a template.</value>
     <value>Fingerboard</value>
   </data>
   <data name="MeasureTool.SnapFilter.CenterLine" xml:space="preserve">
-    <value>Center Line</value>
+    <value>Centerline</value>
+  </data>
+  <data name="StringsFretsEditorPanel.AdvancedSettings" xml:space="preserve">
+    <value>Advanced Settings</value>
+  </data>
+  <data name="StringsFretsEditorPanel.EditStringsTooltip" xml:space="preserve">
+    <value>Configure string gauge and material for each string</value>
+  </data>
+  <data name="StringsFretsEditorPanel.EditFretsTooltip" xml:space="preserve">
+    <value>Configure number of frets and temperament per string</value>
+  </data>
+  <data name="StringsFretsEditorPanel.EditTuningTooltip" xml:space="preserve">
+    <value>Set tuning for each string and estimate tension</value>
+  </data>
+  <data name="Dialog.SaveChanges.Title" xml:space="preserve">
+    <value>Unsaved Changes</value>
+  </data>
+  <data name="Dialog.SaveChanges.Message" xml:space="preserve">
+    <value>Do you want to save changes to "{0}" before closing?</value>
+  </data>
+  <data name="Dialog.Button.OK" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="Dialog.Button.Yes" xml:space="preserve">
+    <value>Yes</value>
+  </data>
+  <data name="Dialog.Button.No" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="Dialog.Button.Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="SettingsDialog_Title" xml:space="preserve">
+    <value>Settings</value>
+  </data>
+  <data name="SettingsDialog_AppearanceSection" xml:space="preserve">
+    <value>Appearance</value>
+  </data>
+  <data name="SettingsDialog_ThemeLabel" xml:space="preserve">
+    <value>Theme:</value>
+  </data>
+  <data name="SettingsDialog_LanguageLabel" xml:space="preserve">
+    <value>Language:</value>
+  </data>
+  <data name="SettingsDialog_UnitsSection" xml:space="preserve">
+    <value>Units</value>
+  </data>
+  <data name="SettingsDialog_UnitSystemLabel" xml:space="preserve">
+    <value>Unit System:</value>
+  </data>
+  <data name="SettingsDialog_LayoutViewerSection" xml:space="preserve">
+    <value>Layout Viewer</value>
+  </data>
+  <data name="SettingsDialog_ColorSchemeLabel" xml:space="preserve">
+    <value>Color Scheme:</value>
+  </data>
+  <data name="Menu_File" xml:space="preserve">
+    <value>_File</value>
+  </data>
+  <data name="Menu_File_Open" xml:space="preserve">
+    <value>_Open...</value>
+  </data>
+  <data name="Menu_File_HomePage" xml:space="preserve">
+    <value>_Home Page</value>
+  </data>
+  <data name="Menu_File_Save" xml:space="preserve">
+    <value>_Save...</value>
+  </data>
+  <data name="Menu_File_SaveAs" xml:space="preserve">
+    <value>_Save As...</value>
+  </data>
+  <data name="Menu_File_RecentFiles" xml:space="preserve">
+    <value>Recent files</value>
+  </data>
+  <data name="Menu_File_Settings" xml:space="preserve">
+    <value>Se_ttings...</value>
+  </data>
+  <data name="Menu_File_Exit" xml:space="preserve">
+    <value>E_xit</value>
+  </data>
+  <data name="AppTheme.System" xml:space="preserve">
+    <value>System</value>
+  </data>
+  <data name="AppTheme.Light" xml:space="preserve">
+    <value>Light</value>
+  </data>
+  <data name="AppTheme.Dark" xml:space="preserve">
+    <value>Dark</value>
+  </data>
+  <data name="AppLanguage.System" xml:space="preserve">
+    <value>System</value>
+  </data>
+  <data name="AppLanguage.English" xml:space="preserve">
+    <value>English</value>
+  </data>
+  <data name="AppLanguage.French" xml:space="preserve">
+    <value>French</value>
+  </data>
+  <data name="AppLanguage.Spanish" xml:space="preserve">
+    <value>Spanish</value>
+  </data>
+  <data name="AppLanguage.German" xml:space="preserve">
+    <value>German</value>
+  </data>
+  <data name="UnitSystem.Metric" xml:space="preserve">
+    <value>Metric</value>
+  </data>
+  <data name="UnitSystem.Imperial" xml:space="preserve">
+    <value>Imperial</value>
+  </data>
+  <data name="LayoutViewerPreset.Light" xml:space="preserve">
+    <value>Light</value>
+  </data>
+  <data name="LayoutViewerPreset.Dark" xml:space="preserve">
+    <value>Dark</value>
+  </data>
+  <data name="LayoutViewerPreset.Blueprint" xml:space="preserve">
+    <value>Blueprint</value>
+  </data>
+  <data name="LayoutViewerPreset.Custom" xml:space="preserve">
+    <value>Custom</value>
+  </data>
+  <data name="SettingsDialog_LanguageChangeMessage" xml:space="preserve">
+    <value>Some UI elements will require an application restart to display in the new language.</value>
+  </data>
+  <data name="HomePage_Title" xml:space="preserve">
+    <value>Home</value>
+  </data>
+  <data name="OpenDocument_FileNotFound_Title" xml:space="preserve">
+    <value>File Not Found</value>
+  </data>
+  <data name="OpenDocument_FileNotFound_Message" xml:space="preserve">
+    <value>The file could not be found. It may have been moved, renamed, or deleted.
+
+{0}</value>
+  </data>
+  <data name="OpenDocument_LoadError_Title" xml:space="preserve">
+    <value>Unable to Open File</value>
+  </data>
+  <data name="OpenDocument_LoadError_Message" xml:space="preserve">
+    <value>The file could not be opened. The file may be corrupted or incompatible with this version of SiGen.
+
+Error: {0}</value>
+  </data>
+  <data name="OpenDocument_FileMigrated_Title" xml:space="preserve">
+    <value>File Migrated</value>
+  </data>
+  <data name="OpenDocument_FileMigrated_Message" xml:space="preserve">
+    <value>This file was created with an older version of SiGen and has been automatically migrated. Please review the layout and save the file to update it to the current format.</value>
   </data>
 </root>

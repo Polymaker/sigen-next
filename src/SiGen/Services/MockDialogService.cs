@@ -28,10 +28,6 @@ namespace SiGen.Services
             return Task.FromResult<string?>(null);
         }
 
-        public Task<SaveChangesResult> ShowSaveChangesAsync(string documentName)
-        {
-            throw new NotImplementedException();
-        }
 
         public Task<List<Measure>?> ShowSpacingDialog(InstrumentLayoutConfiguration layoutConfiguration, FingerboardEnd end)
         {
@@ -51,6 +47,36 @@ namespace SiGen.Services
         public Task<EditFretsResult?> ShowFretsDialog(ILayoutDocumentContext context)
         {
             throw new NotImplementedException();
+        }
+
+        public Task<bool> ShowUserSettingsDialogAsync()
+        {
+            return Task.FromResult(false);
+        }
+
+        public Task ShowErrorAsync(string message, string title = "Error")
+        {
+            return Task.CompletedTask;
+        }
+
+        public Task ShowInfoAsync(string message, string title = "Information")
+        {
+            return Task.CompletedTask;
+        }
+
+        public Task ShowWarningAsync(string message, string title = "Warning")
+        {
+            return Task.CompletedTask;
+        }
+
+        public Task<bool> ShowConfirmAsync(string message, string title = "Confirm")
+        {
+            return Task.FromResult(false);
+        }
+
+        public Task<MessageBoxResult> ShowMessageBoxAsync(string message, string title, MessageBoxButtons buttons = MessageBoxButtons.Ok, MessageBoxIcon icon = MessageBoxIcon.None)
+        {
+            return Task.FromResult(MessageBoxResult.None);
         }
     }
 }

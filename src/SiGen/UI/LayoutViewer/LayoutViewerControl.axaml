@@ -13,6 +13,7 @@ xmlns:materialIcons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Ico
 >
 <UserControl.Resources>
   <conv:FlagsEnumConverter x:Key="FlagsEnumConverter" />
+  <conv:ZoomPercentageConverter x:Key="ZoomPercentageConverter" />
 </UserControl.Resources>
 
 <UserControl.Styles>
@@ -74,25 +75,11 @@ xmlns:materialIcons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Ico
 		  <Grid>
 			  
 			  <Canvas x:Name="RenderCanvas" >
-				  <ui:LayoutGridControl Width="50" Height="50" x:Name="LayoutGrid" />
+				  <lv:LayoutGridControl Width="50" Height="50" x:Name="LayoutGrid" />
 			  </Canvas>
 			  <Canvas x:Name="OverlayCanvas" />
 		  </Grid>
 		 
-	  </Border>
-
-	  <Border	
-				Background="#77000000"
-				ZIndex="10" Grid.Row="0"  
-				HorizontalAlignment="Stretch" IsVisible="False">
-		  <StackPanel Orientation="Horizontal" Spacing="4" 
-					  HorizontalAlignment="Center"
-					  Margin="4" >
-			  <Button Content="Test" x:Name="Button1" />
-			  <Button Content="Test" x:Name="Button2" />
-			  <Button Content="Test" x:Name="Button3" />
-			  <TextBlock x:Name="DebugText"  />
-		  </StackPanel>
 	  </Border>
 
 	  <Border Grid.Row="2"  ZIndex="10" Padding="4">
@@ -150,7 +137,9 @@ xmlns:materialIcons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Ico
 							  Orientation="Horizontal"
 							  HorizontalAlignment="Right"
 							  Spacing="4">
-					  <TextBox x:Name="ZoomTextBox" MinHeight="0" />
+					  <TextBox x:Name="ZoomTextBox"
+                               MinHeight="0"
+                               Text="{Binding Zoom, RelativeSource={RelativeSource AncestorType=lv:LayoutViewerControl}, Mode=TwoWay, Converter={StaticResource ZoomPercentageConverter}, UpdateSourceTrigger=LostFocus}" />
 					  <Button x:Name="ResetViewButton" ToolTip.Tip="Reset View" Click="ResetViewButton_Click">
 						  <materialIcons:MaterialIcon Kind="ImageFilterCenterFocusStrong" IconSize="18" />
 					  </Button>

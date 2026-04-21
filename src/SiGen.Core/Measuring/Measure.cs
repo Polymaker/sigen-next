@@ -378,7 +378,7 @@ namespace SiGen.Measuring
         Ft
     }
 
-    public enum UnitMode
+    public enum UnitSystem
     {
         Metric,
         Imperial

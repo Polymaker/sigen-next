@@ -8,6 +8,7 @@ using SiGen.Export;
 using SiGen.Layouts.Configuration;
 using SiGen.Measuring;
 using SiGen.Serialization;
+using SiGen.Serialization.Layouts;
 using SiGen.Services;
 using SiGen.Settings;
 using SiGen.Utilities;
@@ -16,6 +17,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
@@ -36,12 +38,9 @@ namespace SiGen.ViewModels
         public RelayCommand SaveCommand { get; }
         public RelayCommand SaveAsCommand { get; }
         public ICommand OpenCommand { get; }
-        public ICommand TestCommand { get; }
         public RelayCommand<IDocumentTabViewModel> CloseDocumentCommand { get; }
 
-        public RelayCommand CycleLanguagesCommand { get; }
-        private readonly string[] languages = new[] { "en", "fr", "de", "es" };
-        private int currentLangIndex = 0;
+        public RelayCommand ShowSettingsCommand { get; }
 
 
         public ObservableCollection<IDocumentTabViewModel> OpenDocuments { get; } = new ObservableCollection<IDocumentTabViewModel>();
@@ -56,86 +55,30 @@ namespace SiGen.ViewModels
             this.dialogService = dialogService;
             this.settingsService = settingsService;
             this.documentFactory = documentFactory;
+
             SaveCommand = new RelayCommand(OnSave, CanSave);
             SaveAsCommand = new RelayCommand(OnSaveAs, CanSave);
             OpenCommand = new RelayCommand(OnOpen);
             CloseDocumentCommand = new RelayCommand<IDocumentTabViewModel>(CloseDocument, CanCloseDocument);
-            TestCommand = new RelayCommand(() =>
-            {
-                // For testing purposes only
-                //App.Current!.RequestedThemeVariant = ThemeVariant.Light;
-                if (SelectedDocument is LayoutDocumentViewModel layoutDoc)
-                {
-                    //var exporter = new DxfLayoutExporter(new DxfExportOptions
-                    //{
-                    //    ExportFrets = true,
-                    //    ExportStrings = true,
-                    //    ExportCenterLine = true,
-                    //    ExportFingerboard = true,
-                    //    UseStringThickness = true
-                    //}, layoutDoc.Layout!);
-                    //exporter.ExportLayout("D:\\Programming\\C#\\sigen-next\\tests\\" + layoutDoc.Title + ".dxf");
-                    var exporter = new SvgLayoutExporter(new SvgExportOptions
-                    {
-                        ExportFrets = true,
-                        ExportStrings = true,
-                        ExportCenterLine = true,
-                        ExportFingerboard = true,
-                        UseStringThickness = true,
-                    }, layoutDoc.Layout!);
-                    exporter.ExportLayout("D:\\Programming\\C#\\sigen-next\\tests\\" + layoutDoc.Title + ".svg");
-                }
-                //OpenDocument(new LayoutDocumentViewModel("Test Layout", null, LayoutTemplates.CreateSingleScaleConfig()));
-            });
             OpenHomeCommand = new RelayCommand(OpenHomePage);
             OpenFileCommand = new RelayCommand<string>(OpenDocumentFile);
+            ShowSettingsCommand = new RelayCommand(async () => await ShowSettingsAsync());
 
-            // Create cycle languages command
-            CycleLanguagesCommand = new RelayCommand(CycleLanguages);
+            // Subscribe to recent files changes
+            settingsService.RecentFilesChanged += OnRecentFilesChanged;
 
-            // initialize currentLangIndex from current UI culture
-            var curTwo = CultureInfo.CurrentUICulture.TwoLetterISOLanguageName;
-            var idx = Array.IndexOf(languages, curTwo);
-            currentLangIndex = idx >= 0 ? idx : 0;
-
-
+            // Initial menu build
             RebuildRecentFilesMenu();
         }
 
-        private void CycleLanguages()
+        private void OnRecentFilesChanged(object? sender, EventArgs e)
         {
-            // advance index
-            currentLangIndex = (currentLangIndex + 1) % languages.Length;
-            var code = languages[currentLangIndex];
+            RebuildRecentFilesMenu();
+        }
 
-            var culture = new CultureInfo(code);
-
-            // Set cultures for current thread and default for new threads
-            CultureInfo.DefaultThreadCurrentCulture = culture;
-            CultureInfo.DefaultThreadCurrentUICulture = culture;
-            CultureInfo.CurrentCulture = culture;
-            CultureInfo.CurrentUICulture = culture;
-
-            // Light UI refresh: invalidate visuals on all windows to encourage re-evaluation.
-            // This is intentionally simple for testing; a full resource reload may require re-creating windows or controls.
-            Dispatcher.UIThread.Post(() =>
-            {
-                var app = App.Current;
-                if (app?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
-                {
-
-                    foreach (var w in desktop.Windows)
-                    {
-                        try
-                        {
-                            
-                            w.InvalidateArrange();
-                            w.InvalidateVisual();
-                        }
-                        catch { }
-                    }
-                }
-            });
+        private async Task ShowSettingsAsync()
+        {
+            await dialogService.ShowUserSettingsDialogAsync();
         }
 
         public void ReorderDocuments(int oldIndex, int newIndex)
@@ -154,18 +97,13 @@ namespace SiGen.ViewModels
         {
             SaveCommand.NotifyCanExecuteChanged();
             SaveAsCommand.NotifyCanExecuteChanged();
-            if (SelectedDocument is HomePageViewModel home)
-            {
-                //todo: only refresh if the recent files have changed since the last time the home page was shown
-                //home.ReloadRecentDocuments();
-            }
         }
 
         private bool CanSave() => SelectedDocument != null && SelectedDocument is LayoutDocumentViewModel;
 
         private bool CanCloseDocument(IDocumentTabViewModel? document) => document != null;
 
-        private void OnSave()
+        private async void OnSave()
         {
             if (SelectedDocument is not LayoutDocumentViewModel layoutDocument)
                 return;
@@ -173,7 +111,7 @@ namespace SiGen.ViewModels
             if (string.IsNullOrEmpty(layoutDocument.FilePath))
                 OnSaveAs();
             else
-                SaveDocument(layoutDocument, layoutDocument.FilePath);
+                await SaveDocumentAsync(layoutDocument, layoutDocument.FilePath);
         }
 
         private async void OnSaveAs()
@@ -184,27 +122,32 @@ namespace SiGen.ViewModels
             var filePath = await dialogService.ShowSaveFileDialogAsync(defaultFileName: SelectedDocument.Title, filters: [
                 new FileDialogFilter {
                     Name = "SiGen Layout Files",
-                    Extensions = new List<string> { "json" }
+                    Extensions = new List<string> { "sil" }
                 }]);
 
             if (!string.IsNullOrEmpty(filePath))
-                SaveDocument(layoutDocument, filePath);
+                await SaveDocumentAsync(layoutDocument, filePath);
         }
 
-        private void SaveDocument(LayoutDocumentViewModel document, string filePath)
+        private async Task SaveDocumentAsync(LayoutDocumentViewModel document, string filePath)
         {
             try
             {
-                using var stream = System.IO.File.Create(filePath);
-                JsonSerializer.Serialize(stream, document.Configuration, SiGenJsonOptions.Default);
+                await LayoutFileSerializer.SaveAsync(document.Configuration, filePath);
                 document.Title = System.IO.Path.GetFileNameWithoutExtension(filePath);
                 document.HasUnsavedChanges = false;
                 document.FilePath = filePath;
             }
-            catch
+            catch (Exception ex)
             {
-
+                await dialogService.ShowErrorAsync($"Failed to save file:\n{ex.Message}", "Save Error");
             }
+        }
+
+        private void SaveDocument(LayoutDocumentViewModel document, string filePath)
+        {
+            // Synchronous wrapper for backward compatibility
+            _ = SaveDocumentAsync(document, filePath);
         }
 
         public void OpenHomePage()
@@ -231,20 +174,16 @@ namespace SiGen.ViewModels
             var filePath = await dialogService.ShowOpenFileDialogAsync("Open layout", [
                 new FileDialogFilter {
                     Name = "SiGen Layout Files",
-                    Extensions = new List<string> { "json" }
-                },
-                new FileDialogFilter {
-                    Name = "SiGen V1 Files",
-                    Extensions = new List<string> { "sil" }
+                    Extensions = new List<string> { "sil", "json" }
                 }
             ]
             );
 
             if (!string.IsNullOrEmpty(filePath))
-                OpenDocumentFile(filePath);
+                await OpenDocumentFileAsync(filePath);
         }
 
-        public void OpenDocumentFile(string? filePath)
+        public async Task OpenDocumentFileAsync(string? filePath)
         {
             if (string.IsNullOrEmpty(filePath))
                 throw new ArgumentNullException(nameof(filePath));
@@ -257,29 +196,60 @@ namespace SiGen.ViewModels
                 return;
             }
 
+            if (!File.Exists(filePath))
+            {
+                var message = string.Format(Lang.Resources.OpenDocument_FileNotFound_Message, filePath);
+                await dialogService.ShowErrorAsync(message, Lang.Resources.OpenDocument_FileNotFound_Title);
+                return;
+            }
+
             InstrumentLayoutConfiguration? config = null;
 
             try
             {
-                config = JsonSerializer.Deserialize<InstrumentLayoutConfiguration>(
-                    System.IO.File.ReadAllText(filePath), SiGenJsonOptions.Default);
-
+                config = await LayoutFileSerializer.LoadAsync(filePath);
             }
-            catch //(Exception ex)
+            catch (Exception ex)
             {
-                //todo: show error message
+                var message = string.Format(Lang.Resources.OpenDocument_LoadError_Message, ex.Message);
+                await dialogService.ShowErrorAsync(message, Lang.Resources.OpenDocument_LoadError_Title);
             }
 
             if (config == null) return;
 
+            // Check if the file was migrated (old version loaded)
+            bool wasMigrated = config.Version < LayoutFileSerializer.CurrentVersion;
+
+            // Update to current version now that we've detected migration
+            if (wasMigrated)
+            {
+                config.Version = LayoutFileSerializer.CurrentVersion;
+            }
 
             var document = documentFactory.CreateLayoutDocumentViewModel(filePath, config);
+
+            // Mark as unsaved if migration occurred
+            if (wasMigrated)
+            {
+                document.HasUnsavedChanges = true;
+            }
 
             settingsService.AddRecentFile(document);
             OpenDocuments.Add(document);
             SelectedDocument = document;
 
-            RebuildRecentFilesMenu();
+            if (wasMigrated)
+            {
+                await dialogService.ShowWarningAsync(
+                    Lang.Resources.OpenDocument_FileMigrated_Message,
+                    Lang.Resources.OpenDocument_FileMigrated_Title);
+            }
+        }
+
+        public void OpenDocumentFile(string? filePath)
+        {
+            // Synchronous wrapper for backward compatibility
+            _ = OpenDocumentFileAsync(filePath);
         }
 
         public void OpenDocument(LayoutDocumentViewModel document)
@@ -305,32 +275,38 @@ namespace SiGen.ViewModels
         {
             if (document == null)
                 throw new ArgumentNullException(nameof(document));
-
-            if (OpenDocuments.Contains(document))
+            int documentIndex = OpenDocuments.IndexOf(document);
+            if (documentIndex >= 0)
             {
+                bool documentIsSelected = SelectedDocument == document;
                 if (document is LayoutDocumentViewModel layoutDocument && document.HasUnsavedChanges)
                 {
                     if (SelectedDocument != document)
                         SelectedDocument = document;
 
-                    var result = await dialogService.ShowSaveChangesAsync(document.Title);
-                    if (result == SaveChangesResult.Cancel)
+                    var message = string.Format(Lang.Resources.Dialog_SaveChanges_Message, document.Title);
+                    var result = await dialogService.ShowMessageBoxAsync(
+                        message, 
+                        Lang.Resources.Dialog_SaveChanges_Title, 
+                        MessageBoxButtons.YesNoCancel, 
+                        MessageBoxIcon.Question);
+                    
+                    if (result == MessageBoxResult.Cancel)
                         return;
 
-                    if (result == SaveChangesResult.Save)
+                    if (result == MessageBoxResult.Yes)
                     {
                         OnSave();
-                        if (string.IsNullOrEmpty(layoutDocument.FilePath))
+                        if (string.IsNullOrEmpty(layoutDocument.FilePath)) //user canceled save as dialog
                             return;
                     }
                 }
-                
+                //select the next document if the closed one is currently selected, preferring the previous one in the list
+                //we do this before removing the document from the list otherwise it will select the first document
+                if (documentIsSelected)
+                    SelectedDocument = OpenDocuments.Take(documentIndex).LastOrDefault();
+
                 OpenDocuments.Remove(document);
-                if (SelectedDocument == document)
-                {
-                    //todo, select the next document or the previous one
-                    SelectedDocument = OpenDocuments.FirstOrDefault();
-                }
             }
         }
 

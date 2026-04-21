@@ -10,8 +10,8 @@ namespace SiGen.Layouts.Elements
         public const string ELEMENT_TYPE_ID = "STRING";
         private BaseStringConfiguration? _configuration;
 
-        public int StringIndex { get; set; }
-        public int? GroupIndex { get; set; }
+        public int CourseIndex { get; set; }
+        public int? SubIndex { get; set; }
         public PointM StartPoint { get; set; }
         public PointM NutPoint { get; set; }
         public PointM BridgePoint { get; set; }
@@ -28,9 +28,11 @@ namespace SiGen.Layouts.Elements
             }
         }
 
+        //public StringProperties StringProperties => Configuration?.string(StringIndex) ?? new StringProperties();
+
         public StringElement(int stringIndex, PointM p1, PointM p2)
         {
-            StringIndex = stringIndex;
+            CourseIndex = stringIndex;
             StartPoint = NutPoint = p1;
             BridgePoint = p2;
             Path = new LinearPath(p1.ToVector(), p2.ToVector());
@@ -38,16 +40,16 @@ namespace SiGen.Layouts.Elements
 
         public StringElement(int stringIndex, LinearPath linePath)
         {
-            StringIndex = stringIndex;
+            CourseIndex = stringIndex;
             StartPoint = NutPoint = PointM.FromVector(linePath.Start);
             BridgePoint = PointM.FromVector(linePath.End);
             Path = linePath;
         }
 
-        public StringElement(int stringIndex, int groupIndex, LinearPath linePath)
+        public StringElement(int stringIndex, int subIndex, LinearPath linePath)
         {
-            StringIndex = stringIndex;
-            GroupIndex = groupIndex;
+            CourseIndex = stringIndex;
+            SubIndex = subIndex;
             StartPoint = NutPoint = PointM.FromVector(linePath.Start);
             BridgePoint = PointM.FromVector(linePath.End);
             Path = linePath;
@@ -55,7 +57,7 @@ namespace SiGen.Layouts.Elements
 
         public BaseStringConfiguration? GetConfiguration()
         {
-            return Layout?.Configuration?.GetString(StringIndex);
+            return Layout?.Configuration?.GetString(CourseIndex);
         }
 
         protected override RectangleM? CalculateBoundsCore()
@@ -68,7 +70,7 @@ namespace SiGen.Layouts.Elements
             if (Configuration is SingleStringConfiguration stringConfiguration)
                 return stringConfiguration.Gauge;
             else if (Configuration is StringGroupConfiguration groupedStringConfiguration)
-                return groupedStringConfiguration.GetGauge(GroupIndex ?? 0);
+                return groupedStringConfiguration.GetGauge(SubIndex ?? 0);
             else
                 return null;    
         }

@@ -11,18 +11,18 @@
         
         CanResize="False"
         SystemDecorations="None"
+        
         Title="{Binding Title}">
     <Window.DataContext>
         <vm:MockDialogViewModel />
     </Window.DataContext>
 
-    <Grid>
-        <Grid Margin="2" RowDefinitions="Auto,*">
-            <Border Grid.RowSpan="2"
-                     />
+    <Grid Background="{DynamicResource PanelBackgroundBrush}">
+        <Grid  RowDefinitions="Auto,*">
+            
 
             <Grid x:Name="CustomTitleBar"
-                  Grid.Row="0" Margin="-2,-2,-2,0"
+                  Grid.Row="0" 
                   Background="{DynamicResource SystemAccentColor}"
                   IsVisible="{Binding ShowTitleBar}"
                   ColumnDefinitions="*, Auto"
@@ -41,6 +41,11 @@
             </Grid>
 
             <ContentPresenter Grid.Row="1" Name="DialogContent" />
+
+            <Border Grid.RowSpan="2"
+                    BorderBrush="{DynamicResource SystemAccentColor}"
+                    BorderThickness="1"
+                     />
         </Grid>
 
         <Border Background="Transparent" IsVisible="{Binding Resizable}"

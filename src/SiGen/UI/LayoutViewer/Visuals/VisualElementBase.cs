@@ -13,9 +13,9 @@ namespace SiGen.UI.LayoutViewer.Visuals
     {
         public T Element { get; private set; }
         protected StringedInstrumentLayout Layout => Element.Layout!;
-        protected ThemeRenderSettings ThemeRenderSettings { get; private set; }
+        protected LayoutViewerColorScheme ThemeRenderSettings { get; private set; }
 
-        protected VisualElementBase(T element, ThemeRenderSettings themeRenderSettings)
+        protected VisualElementBase(T element, LayoutViewerColorScheme themeRenderSettings)
         {
             Element = element ?? throw new ArgumentNullException(nameof(element));
             ThemeRenderSettings = themeRenderSettings ?? throw new ArgumentNullException(nameof(themeRenderSettings));
@@ -24,7 +24,7 @@ namespace SiGen.UI.LayoutViewer.Visuals
 
         protected abstract void GenerateVisuals();
 
-        public virtual void UpdateTheme(ThemeRenderSettings theme)
+        public virtual void UpdateTheme(LayoutViewerColorScheme theme)
         {
             ThemeRenderSettings = theme;
             // Derived classes should update brushes/colors here

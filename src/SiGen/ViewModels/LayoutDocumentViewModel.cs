@@ -52,7 +52,7 @@ namespace SiGen.ViewModels
         private LayoutOrientation layoutOrientation = LayoutOrientation.HorizontalNutRight;
 
         [ObservableProperty]
-        private UnitMode layoutUnitMode = UnitMode.Metric;
+        private UnitSystem layoutUnitMode = UnitSystem.Metric;
 
         [ObservableProperty]
         private SnapLineType activeSnapFilters = SnapLineType.Fret | SnapLineType.String | SnapLineType.Fingerboard | SnapLineType.CenterLine;

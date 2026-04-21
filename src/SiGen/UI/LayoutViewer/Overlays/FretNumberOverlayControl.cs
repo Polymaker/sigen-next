@@ -21,12 +21,12 @@ namespace SiGen.UI.LayoutViewer.Overlays
     {
         private ILayoutViewerContext ViewerContext { get; }
         private StringedInstrumentLayout? Layout => ViewerContext.Layout;
-        public ThemeRenderSettings RenderSettings => ViewerContext.RenderSettings;
+        public LayoutViewerColorScheme RenderSettings => ViewerContext.ColorScheme;
 
         public FretNumberOverlayControl(ILayoutViewerContext context)
         {
             ViewerContext = context;
-            context.RenderSettingsChanged += (s, e) =>
+            context.ColorSchemeChanged += (s, e) =>
             {
                 InvalidateVisual();
             };

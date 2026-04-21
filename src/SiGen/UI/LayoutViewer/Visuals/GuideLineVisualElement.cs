@@ -12,7 +12,7 @@ namespace SiGen.UI.LayoutViewer.Visuals
     {
         private Line? _line;
 
-        public GuideLineVisualElement(GuideLineElement element, ThemeRenderSettings theme)
+        public GuideLineVisualElement(GuideLineElement element, LayoutViewerColorScheme theme)
             : base(element, theme)
         {
             
@@ -32,7 +32,7 @@ namespace SiGen.UI.LayoutViewer.Visuals
             Children.Add(_line);
         }
 
-        public override void UpdateTheme(ThemeRenderSettings theme)
+        public override void UpdateTheme(LayoutViewerColorScheme theme)
         {
             base.UpdateTheme(theme);
             if (_line != null)

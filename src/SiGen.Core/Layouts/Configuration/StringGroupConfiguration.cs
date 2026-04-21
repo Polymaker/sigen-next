@@ -17,7 +17,7 @@ namespace SiGen.Layouts.Configuration
 
         [JsonIgnore]
         public override int NumberOfStrings => Strings.Count;
-
+        [JsonIgnore]
         public override bool IsStringCourse => true;
 
         public Measure? GetGauge(int index)

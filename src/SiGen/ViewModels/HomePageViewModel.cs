@@ -19,7 +19,7 @@ namespace SiGen.ViewModels
         private readonly ISettingsService settingsService;
         private readonly IDocumentManager documentManager;
 
-        public string Title => "Home";
+        public string Title => Lang.Resources.HomePage_Title;
 
         bool IDocumentTabViewModel.HasUnsavedChanges => false;
 
@@ -48,7 +48,16 @@ namespace SiGen.ViewModels
             this.settingsService = settingsService;
             this.documentManager = documentManager;
             OpenRecentFileCommand = new RelayCommand<RecentFileModel>(OpenRecentFile);
+            
+            // Subscribe to recent files changes
+            settingsService.RecentFilesChanged += OnRecentFilesChanged;
+            
             RebuildTemplates();
+        }
+
+        private void OnRecentFilesChanged(object? sender, EventArgs e)
+        {
+            ReloadRecentDocuments();
         }
 
         partial void OnSearchTextChanged(string value)

@@ -45,7 +45,7 @@ namespace SiGen.ViewModels
         {
             get
             {
-                var model = new HomePageViewModel(new SettingsService(), new MockDocumentManager());
+                var model = new HomePageViewModel(new MockSettingsService(), new MockDocumentManager());
                 return model;
             }
         }

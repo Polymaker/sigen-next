@@ -43,8 +43,10 @@ namespace SiGen.Layouts.Configuration
             }
         }
 
+        [JsonIgnore]
         public override bool IsStringCourse => false;
 
+        [JsonIgnore]
         public override int NumberOfStrings => 1;
 
         [JsonIgnore]

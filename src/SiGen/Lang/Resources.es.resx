@@ -211,7 +211,7 @@
     <value>Número de trastes</value>
   </data>
   <data name="StringSpacingEditorPanel.SpacingHeader" xml:space="preserve">
-    <value>Espacio</value>
+    <value>Espaciado</value>
   </data>
   <data name="StringSpacingEditorPanel.SpreadHeader" xml:space="preserve">
     <value>Separación</value>
@@ -233,9 +233,6 @@
   </data>
   <data name="StringSpacingEditorPanel.ConfigureSpacingButton" xml:space="preserve">
     <value>Configurar…</value>
-  </data>
-  <data name="StringGroupLabel" xml:space="preserve">
-    <value>Grupo de cuerdas</value>
   </data>
   <data name="Length" xml:space="preserve">
     <value>Longitud</value>
@@ -295,17 +292,14 @@
     <value>COMENZAR DESDE UNA PLANTILLA</value>
   </data>
   <data name="HomePageView.WelcomeText" xml:space="preserve">
-    <value>SiGen te ayuda a diseñar y personalizar diseños de instrumentos de cuerda con precisión.
-Abre un archivo reciente para continuar tu trabajo o crea un nuevo diseño con una de nossas plantillas.</value>
+    <value>Diseña y exporta planos precisos de instrumentos de cuerda, desde una Strat estándar hasta una guitarra de 8 cuerdas con trastes en abanico.
+Abre un archivo reciente o empieza con una de nuestras plantillas.</value>
   </data>
   <data name="FingerboardEditorPanel.Header" xml:space="preserve">
     <value>Márgenes del diapasón</value>
   </data>
   <data name="StringSpacingEditorPanel.SpacingPresetHeader" xml:space="preserve">
     <value>Espaciamientos comunes</value>
-  </data>
-  <data name="StringCourseLabel" xml:space="preserve">
-    <value>Orden</value>
   </data>
   <data name="FingerboardEnd.Nut" xml:space="preserve">
     <value>Cejuela</value>
@@ -323,7 +317,7 @@ Abre un archivo reciente para continuar tu trabajo o crea un nuevo diseño con u
     <value>Uniforme</value>
   </data>
   <data name="CourseLabel" xml:space="preserve">
-    <value>Orden</value>
+    <value>Curso</value>
   </data>
   <data name="EditTuningDialog.Title" xml:space="preserve">
     <value>Configuración de afinación</value>
@@ -461,16 +455,16 @@ Abre un archivo reciente para continuar tu trabajo o crea un nuevo diseño con u
     <value>Acero liso</value>
   </data>
   <data name="StringMaterialType.NickelWound" xml:space="preserve">
-    <value>Níquel entorchada</value>
+    <value>Entorchado de níquel</value>
   </data>
   <data name="StringMaterialType.BronzeWound" xml:space="preserve">
-    <value>Bronce entorchada</value>
+    <value>Entorchado de bronce</value>
   </data>
   <data name="StringMaterialType.NylonPlain" xml:space="preserve">
     <value>Nailon liso</value>
   </data>
   <data name="StringMaterialType.SilverPlatedWound" xml:space="preserve">
-    <value>Plateada entorchada</value>
+    <value>Entorchado plateado</value>
   </data>
   <data name="EditStringsDialog.EditSpacingTooltip" xml:space="preserve">
     <value>Editar el espaciado entre cuerdas de este orden</value>
@@ -503,6 +497,154 @@ Abre un archivo reciente para continuar tu trabajo o crea un nuevo diseño con u
     <value>Diapasón</value>
   </data>
   <data name="MeasureTool.SnapFilter.CenterLine" xml:space="preserve">
-    <value>Línea central</value>
+    <value>Eje central</value>
+  </data>
+  <data name="StringsFretsEditorPanel.AdvancedSettings" xml:space="preserve">
+    <value>Configuración avanzada</value>
+  </data>
+  <data name="StringsFretsEditorPanel.EditStringsTooltip" xml:space="preserve">
+    <value>Configurar calibre y material para cada cuerda</value>
+  </data>
+  <data name="StringsFretsEditorPanel.EditFretsTooltip" xml:space="preserve">
+    <value>Configurar número de trastes y temperamento por cuerda</value>
+  </data>
+  <data name="StringsFretsEditorPanel.EditTuningTooltip" xml:space="preserve">
+    <value>Establecer afinación para cada cuerda y estimar tensión</value>
+  </data>
+  <data name="Dialog.SaveChanges.Title" xml:space="preserve">
+    <value>Cambios sin guardar</value>
+  </data>
+  <data name="Dialog.SaveChanges.Message" xml:space="preserve">
+    <value>¿Desea guardar los cambios en "{0}" antes de cerrar?</value>
+  </data>
+  <data name="Dialog.Button.OK" xml:space="preserve">
+    <value>Aceptar</value>
+  </data>
+  <data name="Dialog.Button.Yes" xml:space="preserve">
+    <value>Sí</value>
+  </data>
+  <data name="Dialog.Button.No" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="Dialog.Button.Cancel" xml:space="preserve">
+    <value>Cancelar</value>
+  </data>
+  <data name="SettingsDialog_Title" xml:space="preserve">
+    <value>Configuración</value>
+  </data>
+  <data name="SettingsDialog_AppearanceSection" xml:space="preserve">
+    <value>Apariencia</value>
+  </data>
+  <data name="SettingsDialog_ThemeLabel" xml:space="preserve">
+    <value>Tema:</value>
+  </data>
+  <data name="SettingsDialog_LanguageLabel" xml:space="preserve">
+    <value>Idioma:</value>
+  </data>
+  <data name="SettingsDialog_UnitsSection" xml:space="preserve">
+    <value>Unidades</value>
+  </data>
+  <data name="SettingsDialog_UnitSystemLabel" xml:space="preserve">
+    <value>Sistema de unidades:</value>
+  </data>
+  <data name="SettingsDialog_LayoutViewerSection" xml:space="preserve">
+    <value>Visor de diseño</value>
+  </data>
+  <data name="SettingsDialog_ColorSchemeLabel" xml:space="preserve">
+    <value>Esquema de colores:</value>
+  </data>
+  <data name="Menu_File" xml:space="preserve">
+    <value>_Archivo</value>
+  </data>
+  <data name="Menu_File_Open" xml:space="preserve">
+    <value>_Abrir...</value>
+  </data>
+  <data name="Menu_File_HomePage" xml:space="preserve">
+    <value>_Página de inicio</value>
+  </data>
+  <data name="Menu_File_Save" xml:space="preserve">
+    <value>_Guardar...</value>
+  </data>
+  <data name="Menu_File_SaveAs" xml:space="preserve">
+    <value>_Guardar como...</value>
+  </data>
+  <data name="Menu_File_RecentFiles" xml:space="preserve">
+    <value>Archivos recientes</value>
+  </data>
+  <data name="Menu_File_Settings" xml:space="preserve">
+    <value>_Configuración...</value>
+  </data>
+  <data name="Menu_File_Exit" xml:space="preserve">
+    <value>_Salir</value>
+  </data>
+  <data name="AppTheme.System" xml:space="preserve">
+    <value>Sistema</value>
+  </data>
+  <data name="AppTheme.Light" xml:space="preserve">
+    <value>Claro</value>
+  </data>
+  <data name="AppTheme.Dark" xml:space="preserve">
+    <value>Oscuro</value>
+  </data>
+  <data name="AppLanguage.System" xml:space="preserve">
+    <value>Sistema</value>
+  </data>
+  <data name="AppLanguage.English" xml:space="preserve">
+    <value>Inglés</value>
+  </data>
+  <data name="AppLanguage.French" xml:space="preserve">
+    <value>Francés</value>
+  </data>
+  <data name="AppLanguage.Spanish" xml:space="preserve">
+    <value>Español</value>
+  </data>
+  <data name="AppLanguage.German" xml:space="preserve">
+    <value>Alemán</value>
+  </data>
+  <data name="UnitSystem.Metric" xml:space="preserve">
+    <value>Métrico</value>
+  </data>
+  <data name="UnitSystem.Imperial" xml:space="preserve">
+    <value>Imperial</value>
+  </data>
+  <data name="LayoutViewerPreset.Light" xml:space="preserve">
+    <value>Claro</value>
+  </data>
+  <data name="LayoutViewerPreset.Dark" xml:space="preserve">
+    <value>Oscuro</value>
+  </data>
+  <data name="LayoutViewerPreset.Blueprint" xml:space="preserve">
+    <value>Plano técnico</value>
+  </data>
+  <data name="LayoutViewerPreset.Custom" xml:space="preserve">
+    <value>Personalizado</value>
+  </data>
+  <data name="SettingsDialog_LanguageChangeMessage" xml:space="preserve">
+    <value>Algunos elementos de la interfaz requerirán reiniciar la aplicación para mostrarse en el nuevo idioma.</value>
+  </data>
+  <data name="HomePage_Title" xml:space="preserve">
+    <value>Inicio</value>
+  </data>
+  <data name="OpenDocument_FileNotFound_Title" xml:space="preserve">
+    <value>Archivo no encontrado</value>
+  </data>
+  <data name="OpenDocument_FileNotFound_Message" xml:space="preserve">
+    <value>No se pudo encontrar el archivo. Es posible que haya sido movido, renombrado o eliminado.
+
+{0}</value>
+  </data>
+  <data name="OpenDocument_LoadError_Title" xml:space="preserve">
+    <value>No se puede abrir el archivo</value>
+  </data>
+  <data name="OpenDocument_LoadError_Message" xml:space="preserve">
+    <value>No se pudo abrir el archivo. El archivo puede estar dañado o ser incompatible con esta versión de SiGen.
+
+Error: {0}</value>
+  </data>
+  <data name="OpenDocument_FileMigrated_Title" xml:space="preserve">
+    <value>Archivo migrado</value>
+  </data>
+  <data name="OpenDocument_FileMigrated_Message" xml:space="preserve">
+    <value>Este archivo fue creado con una versión anterior de SiGen y ha sido migrado automáticamente. Por favor, revise el diseño y guarde el archivo para actualizarlo al formato actual.</value>
   </data>
 </root>

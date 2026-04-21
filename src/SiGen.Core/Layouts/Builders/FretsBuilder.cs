@@ -247,7 +247,7 @@ namespace SiGen.Layouts.Builders
 
                 int startingFret = stringConfig.Frets?.StartingFret ?? 0;
 
-                var stringElem = Layout.Strings.First(x => x.StringIndex == i);
+                var stringElem = Layout.Strings.First(x => x.CourseIndex == i);
 
                 var rootNote = stringConfig.GetPrimaryNote() ?? new NoteAndOctave(NoteName.C, 1);
 

@@ -12,6 +12,7 @@
 			 Design.DataContext="{x:Static vm:DesignData.DesktopMainViewModel}"
 			 xmlns:materialIcons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
 			 xmlns:settings="using:SiGen.Settings"
+			 xmlns:lang="using:SiGen.Lang"
 			 Name="MainView"
 			 >
 	<UserControl.Resources>
@@ -51,14 +52,14 @@
 		
 		<DockPanel>
 			<Menu DockPanel.Dock="Top" Background="{DynamicResource MenuBackground}">
-				<MenuItem Header="_File">
-					<MenuItem Header="_Open..." Command="{Binding OpenCommand}" InputGesture="Ctrl+O" HotKey="Ctrl+O" />
-					<MenuItem Header="_Home Page" Command="{Binding OpenHomeCommand}" InputGesture="Ctrl+H" HotKey="Ctrl+H" />
+				<MenuItem Header="{x:Static lang:Resources.Menu_File}">
+					<MenuItem Header="{x:Static lang:Resources.Menu_File_Open}" Command="{Binding OpenCommand}" InputGesture="Ctrl+O" HotKey="Ctrl+O" />
+					<MenuItem Header="{x:Static lang:Resources.Menu_File_HomePage}" Command="{Binding OpenHomeCommand}" InputGesture="Ctrl+H" HotKey="Ctrl+H" />
 					<Separator/>
-					<MenuItem Header="_Save..." Command="{Binding SaveCommand}" InputGesture="Ctrl+S" HotKey="Ctrl+S"/>
-					<MenuItem Header="_Save As..." Command="{Binding SaveAsCommand}" InputGesture="Ctrl+Alt+S" HotKey="Ctrl+Alt+S" />
+					<MenuItem Header="{x:Static lang:Resources.Menu_File_Save}" Command="{Binding SaveCommand}" InputGesture="Ctrl+S" HotKey="Ctrl+S"/>
+					<MenuItem Header="{x:Static lang:Resources.Menu_File_SaveAs}" Command="{Binding SaveAsCommand}" InputGesture="Ctrl+Shift+S" HotKey="Ctrl+Shift+S" />
 					<Separator/>
-					<MenuItem Header="Recent files" x:Name="RecentFilesMenu" ItemsSource="{Binding RecentFiles}">
+					<MenuItem Header="{x:Static lang:Resources.Menu_File_RecentFiles}" x:Name="RecentFilesMenu" ItemsSource="{Binding RecentFiles}">
 						<MenuItem.ItemTemplate>
 							<DataTemplate x:DataType="vm:RecentFileMenuModel">
 								<MenuItem Padding="0"
@@ -76,14 +77,17 @@
 						</MenuItem.ItemTemplate>
 					</MenuItem>
 					
+					
 					<Separator/>
-					<MenuItem Header="_Exit" InputGesture="Alt+F4"/>
+					<MenuItem Header="{x:Static lang:Resources.Menu_File_Settings}" Command="{Binding ShowSettingsCommand}" InputGesture="Ctrl+," HotKey="Ctrl+OemComma" />
+					<Separator/>
+					<MenuItem Header="{x:Static lang:Resources.Menu_File_Exit}" InputGesture="Alt+F4"/>
 				</MenuItem>
-				<MenuItem Header="_Edit">
-					<MenuItem Header="Copy" Command="{Binding TestCommand}"/>
+				<!--<MenuItem Header="_Edit">
+					<MenuItem Header="Copy" />
 					<MenuItem Header="Paste"/>
-					<MenuItem Header="Cycle Languages" Command="{Binding CycleLanguagesCommand}"/>
-				</MenuItem>
+					
+				</MenuItem>-->
 				<!--<Menu.Effect>
 					<DropShadowEffect OffsetY="2" Opacity="0.5" OffsetX="-1" />
 				</Menu.Effect>-->

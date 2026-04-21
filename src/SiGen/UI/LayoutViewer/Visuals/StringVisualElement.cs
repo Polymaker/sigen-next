@@ -5,25 +5,14 @@ using Avalonia.Controls;
 using Avalonia.Controls.Documents;
 using Avalonia.Controls.Shapes;
 using Avalonia.Input;
-using Avalonia.Interactivity;
 using Avalonia.Media;
-using Avalonia.Media.TextFormatting;
 using Avalonia.Styling;
-using Avalonia.Threading;
 using SiGen.Layouts.Elements;
 using SiGen.Maths;
-using SiGen.Measuring;
 using SiGen.Paths;
-using SiGen.Settings;
 using SiGen.Utilities;
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace SiGen.UI.LayoutViewer.Visuals
 {
@@ -41,7 +30,7 @@ namespace SiGen.UI.LayoutViewer.Visuals
         /// </summary>
         /// <param name="element">The string element to visualize.</param>
         /// <param name="themeRenderSettings">Theme settings for rendering.</param>
-        public StringVisualElement(StringElement element, ThemeRenderSettings themeRenderSettings)
+        public StringVisualElement(StringElement element, LayoutViewerColorScheme themeRenderSettings)
             : base(element, themeRenderSettings)
         {
             BuildTooltip();
@@ -122,20 +111,20 @@ namespace SiGen.UI.LayoutViewer.Visuals
 
         private void BuildTooltip()
         {
-            if (Element.GroupIndex.HasValue)
+            if (Element.SubIndex.HasValue)
             {
                 var textBlock = new TextBlock();
                 textBlock.Inlines = new InlineCollection();
-                textBlock.Inlines!.Add(new Run($"{Lang.Resources.StringCourseLabel} {Element.StringIndex + 1}"));
+                textBlock.Inlines!.Add(new Run($"{Lang.Resources.CourseLabel} {Element.CourseIndex + 1}"));
                 textBlock.Inlines.Add(new LineBreak());
-                textBlock.Inlines.Add(new Run($"{Lang.Resources.StringLabel} {Element.GroupIndex.Value + 1}"));
+                textBlock.Inlines.Add(new Run($"{Lang.Resources.StringLabel} {Element.SubIndex.Value + 1}"));
                 ToolTip.SetTip(this, textBlock);
             }
             else
-                ToolTip.SetTip(this, $"{Lang.Resources.StringLabel} {Element.StringIndex + 1}");
+                ToolTip.SetTip(this, $"{Lang.Resources.StringLabel} {Element.CourseIndex + 1}");
         }
 
-        public override void UpdateTheme(ThemeRenderSettings theme)
+        public override void UpdateTheme(LayoutViewerColorScheme theme)
         {
             base.UpdateTheme(theme);
             if (_mainStringLine != null)
@@ -242,7 +231,7 @@ namespace SiGen.UI.LayoutViewer.Visuals
                 return null;
 
             var nutBridgeFrets = Element.Layout.Elements.OfType<FretSegmentElement>()
-                .Where(x => x.ContainsString(Element.StringIndex) && (x.IsNut || x.IsBridge)).ToList();
+                .Where(x => x.ContainsString(Element.CourseIndex) && (x.IsNut || x.IsBridge)).ToList();
 
             var pathGeometry = new PathGeometry();
             var ctx = pathGeometry.Open();
@@ -268,13 +257,6 @@ namespace SiGen.UI.LayoutViewer.Visuals
 
         private const double CmScaleFactor = 37.7952755906; // 1 cm in pixels at 96 DPI
 
- 
-
-        protected override void OnPointerPressed(PointerPressedEventArgs e)
-        {
-            base.OnPointerPressed(e);
-            Trace.WriteLine($"Clicked on string {Element.StringIndex}");
-        }
 
         /// <summary>
         /// Creates a brush for wound string rendering.

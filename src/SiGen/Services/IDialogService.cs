@@ -14,11 +14,6 @@ namespace SiGen.Services
     /// </summary>
     public interface IDialogService
     {
-        /// <summary>
-        /// Shows a confirmation dialog asking if the user wants to close a document without saving.
-        /// Returns true if the user confirms, false otherwise.
-        /// </summary>
-        Task<SaveChangesResult> ShowSaveChangesAsync(string documentName);
 
         // For saving files
         Task<string?> ShowSaveFileDialogAsync(string? title = null, string? defaultFileName = null, IEnumerable<FileDialogFilter>? filters = null);
@@ -34,6 +29,42 @@ namespace SiGen.Services
         Task<EditStringsResult?> ShowStringsDialog(ILayoutDocumentContext context);
 
         Task<EditFretsResult?> ShowFretsDialog(ILayoutDocumentContext context);
+
+        /// <summary>
+        /// Shows the user settings dialog.
+        /// Returns true if settings were saved, false if cancelled.
+        /// </summary>
+        Task<bool> ShowUserSettingsDialogAsync();
+
+        #endregion
+
+        #region Simple Message Dialogs
+
+        /// <summary>
+        /// Shows an error message dialog.
+        /// </summary>
+        Task ShowErrorAsync(string message, string title = "Error");
+
+        /// <summary>
+        /// Shows an informational message dialog.
+        /// </summary>
+        Task ShowInfoAsync(string message, string title = "Information");
+
+        /// <summary>
+        /// Shows a warning message dialog.
+        /// </summary>
+        Task ShowWarningAsync(string message, string title = "Warning");
+
+        /// <summary>
+        /// Shows a confirmation dialog with Yes/No buttons.
+        /// Returns true if the user clicked Yes, false if No.
+        /// </summary>
+        Task<bool> ShowConfirmAsync(string message, string title = "Confirm");
+
+        /// <summary>
+        /// Shows a generic message box with custom buttons and icon.
+        /// </summary>
+        Task<MessageBoxResult> ShowMessageBoxAsync(string message, string title, MessageBoxButtons buttons = MessageBoxButtons.Ok, MessageBoxIcon icon = MessageBoxIcon.None);
 
         #endregion
     }

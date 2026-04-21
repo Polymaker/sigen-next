@@ -18,7 +18,7 @@ namespace SiGen.UI.LayoutViewer.Visuals
     {
         private Shape? _edgeLine;
 
-        public FingerboardEdgeVisualElement(FingerboardEdgeElement element, ThemeRenderSettings themeRenderSettings)
+        public FingerboardEdgeVisualElement(FingerboardEdgeElement element, LayoutViewerColorScheme themeRenderSettings)
             : base(element, themeRenderSettings)
         {
         }
@@ -60,7 +60,7 @@ namespace SiGen.UI.LayoutViewer.Visuals
         /// <summary>
         /// Updates the theme for the fingerboard side visual.
         /// </summary>
-        public override void UpdateTheme(ThemeRenderSettings theme)
+        public override void UpdateTheme(LayoutViewerColorScheme theme)
         {
             base.UpdateTheme(theme);
             if (_edgeLine != null)

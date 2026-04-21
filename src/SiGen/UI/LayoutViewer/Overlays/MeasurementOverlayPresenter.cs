@@ -28,7 +28,7 @@ namespace SiGen.UI.LayoutViewer.Overlays
         private readonly Color _indicatorColor = Color.FromArgb(255, 255, 120, 20);
 
         private Canvas? _overlayCanvas;
-        private UnitMode _unitMode;
+        private Measuring.UnitSystem _unitMode;
 
         private VectorD? _startPoint;
         private VectorD? _endPoint;
@@ -49,7 +49,7 @@ namespace SiGen.UI.LayoutViewer.Overlays
         public bool HasCompletedMeasurement => _startPoint.HasValue && _endPoint.HasValue;
         public VectorD? StartPoint => _startPoint;
 
-        public MeasurementOverlayPresenter(Func<VectorD, Point> vectorToScreen, UnitMode unitMode, ThemeRenderSettings theme)
+        public MeasurementOverlayPresenter(Func<VectorD, Point> vectorToScreen, Measuring.UnitSystem unitMode, LayoutViewerColorScheme theme)
         {
             _vectorToScreen = vectorToScreen;
             _unitMode = unitMode;
@@ -106,7 +106,7 @@ namespace SiGen.UI.LayoutViewer.Overlays
             Reposition();
         }
 
-        public void SetUnitMode(UnitMode unitMode)
+        public void SetUnitMode(Measuring.UnitSystem unitMode)
         {
             _unitMode = unitMode;
             Reposition();
@@ -227,7 +227,7 @@ namespace SiGen.UI.LayoutViewer.Overlays
                 PositionLabelAwayFromTriangle(_yText, elbowScreen, endScreen, triangleCenter, LabelOverlapPushPx);
         }
 
-        public void UpdateTheme(ThemeRenderSettings theme)
+        public void UpdateTheme(LayoutViewerColorScheme theme)
         {
             _mainLine.Stroke = new SolidColorBrush(_mainColor);
             _xLine.Stroke = new SolidColorBrush(_xAxisColor);
@@ -351,7 +351,7 @@ namespace SiGen.UI.LayoutViewer.Overlays
 
         private string FormatMeasure(double normalizedCm)
         {
-            var unit = _unitMode == UnitMode.Imperial ? LengthUnit.In : LengthUnit.Mm;
+            var unit = _unitMode == Measuring.UnitSystem.Imperial ? LengthUnit.In : LengthUnit.Mm;
             return Measure.FromNormalizedValue(unit, normalizedCm).ToStringFormatted();
         }
 

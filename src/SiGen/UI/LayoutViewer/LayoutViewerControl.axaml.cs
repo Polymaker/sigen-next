@@ -1,6 +1,5 @@
 using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Controls.Shapes;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
@@ -9,10 +8,12 @@ using Avalonia.Reactive;
 using Avalonia.Styling;
 using Avalonia.Threading;
 using Material.Colors.ColorManipulation;
+using Microsoft.Extensions.DependencyInjection;
 using SiGen.Layouts;
 using SiGen.Layouts.Elements;
 using SiGen.Maths;
 using SiGen.Measuring;
+using SiGen.Services;
 using SiGen.Settings;
 using SiGen.UI.LayoutViewer.Overlays;
 using SiGen.UI.LayoutViewer.Visuals;
@@ -41,9 +42,9 @@ public partial class LayoutViewerControl : UserControl, ILayoutViewerContext
         AvaloniaProperty.Register<LayoutViewerControl, StringedInstrumentLayout?>(nameof(Layout));
 
     // Theme property
-    private ThemeRenderSettings _renderSettings = ThemeRenderSettings.LightBlueprint;
+    private LayoutViewerColorScheme _renderSettings = LayoutViewerColorScheme.Blueprint;
 
-    public ThemeRenderSettings RenderSettings
+    public LayoutViewerColorScheme ColorScheme
     {
         get => _renderSettings;
         set
@@ -51,12 +52,12 @@ public partial class LayoutViewerControl : UserControl, ILayoutViewerContext
             if (_renderSettings != value)
             {
                 _renderSettings = value;
-                OnRenderSettingsChanged();
+                OnColorSchemeChanged();
             }
         }
     }
 
-    public event EventHandler? RenderSettingsChanged;
+    public event EventHandler? ColorSchemeChanged;
 
     public LayoutOrientation Orientation
     {
@@ -82,8 +83,8 @@ public partial class LayoutViewerControl : UserControl, ILayoutViewerContext
         set => SetValue(LayoutProperty, value);
     }
 
-    public static readonly StyledProperty<UnitMode> UnitModeProperty =
-        AvaloniaProperty.Register<LayoutViewerControl, UnitMode>(nameof(UnitMode), UnitMode.Metric);
+    public static readonly StyledProperty<Measuring.UnitSystem> UnitModeProperty =
+        AvaloniaProperty.Register<LayoutViewerControl, Measuring.UnitSystem>(nameof(UnitMode), Measuring.UnitSystem.Metric);
 
     public static readonly StyledProperty<SnapLineType> ActiveSnapFiltersProperty =
         AvaloniaProperty.Register<LayoutViewerControl, SnapLineType>(nameof(ActiveSnapFilters), SnapLineType.Fret | SnapLineType.String | SnapLineType.Fingerboard | SnapLineType.CenterLine);
@@ -91,7 +92,7 @@ public partial class LayoutViewerControl : UserControl, ILayoutViewerContext
     public static readonly StyledProperty<bool> IsMeasureToolActiveProperty =
         AvaloniaProperty.Register<LayoutViewerControl, bool>(nameof(IsMeasureToolActive), false);
 
-    public UnitMode UnitMode
+    public Measuring.UnitSystem UnitMode
     {
         get => GetValue(UnitModeProperty);
         set => SetValue(UnitModeProperty, value);
@@ -120,6 +121,7 @@ public partial class LayoutViewerControl : UserControl, ILayoutViewerContext
     private TranslateTransform _translateTransform;
     private RotateTransform _orientationTransform;
 
+    private ISettingsService? _settingsService;
 
     public bool IsAssigningLayout { get; set; }
 
@@ -163,20 +165,10 @@ public partial class LayoutViewerControl : UserControl, ILayoutViewerContext
         BorderContainer.AddHandler(Gestures.PinchEndedEvent, Canvas_PinchGestureEnded, handledEventsToo: true);
 
 
-        //Button1.Click += Button1_Click;
-        Button2.Click += (s, e) =>
-        {
-            Orientation = (LayoutOrientation)(((int)Orientation + 1) % Enum.GetValues(typeof(LayoutOrientation)).Length);
-        };
-        Button3.Click += (s, e) =>
-        {
-            UnitMode = (UnitMode)(((int)UnitMode + 1) % 2);
-        };
-
         fretNumberOverlay = new FretNumberOverlayControl(this);
-        measurementOverlay = new MeasurementOverlayPresenter(v => ((ILayoutViewerContext)this).VectorToScreen(v), UnitMode, RenderSettings);
+        measurementOverlay = new MeasurementOverlayPresenter(v => ((ILayoutViewerContext)this).VectorToScreen(v), UnitMode, ColorScheme);
 
-        OnRenderSettingsChanged();
+        OnColorSchemeChanged();
         LayoutGrid.SetBluePrintBounds(new RectangleM(Measuring.Measure.Cm(-5), Measuring.Measure.Cm(-5), Measuring.Measure.Cm(10), Measuring.Measure.Cm(10)));
 
         zoomEndTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(200) };
@@ -260,6 +252,9 @@ public partial class LayoutViewerControl : UserControl, ILayoutViewerContext
         base.OnLoaded(e);
         hasLoaded = true;
 
+        // Initialize color scheme from settings
+        InitializeFromSettings();
+
         if (Layout != null)
         {
             CalculateTranslationBounds();
@@ -274,6 +269,49 @@ public partial class LayoutViewerControl : UserControl, ILayoutViewerContext
                 Zoom = ClampZoom(Zoom); // Ensure zoom is within bounds
             }
         }
+    }
+
+    protected override void OnUnloaded(RoutedEventArgs e)
+    {
+        base.OnUnloaded(e);
+
+        // Unsubscribe from settings changes to avoid memory leaks
+        if (_settingsService != null)
+        {
+            _settingsService.LayoutViewerColorSchemeChanged -= OnSettingsColorSchemeChanged;
+            _settingsService.UnitSystemChanged -= OnUnitSystemChanged;
+        }
+    }
+
+    private void InitializeFromSettings()
+    {
+        if (Application.Current is App app)
+        {
+            _settingsService = app.Services.GetService<ISettingsService>();
+            if (_settingsService != null)
+            {
+                // Apply current settings
+                ColorScheme = _settingsService.Settings.LayoutViewerColorScheme.ToColorScheme();
+
+                // Subscribe to future changes
+                _settingsService.LayoutViewerColorSchemeChanged += OnSettingsColorSchemeChanged;
+                _settingsService.UnitSystemChanged += OnUnitSystemChanged;
+            }
+        }
+    }
+
+    private void OnUnitSystemChanged(object? sender, UnitSystem e)
+    {
+        UnitMode = e;
+    }
+
+    private void OnSettingsColorSchemeChanged(object? sender, LayoutViewerColorSchemeSettings e)
+    {
+        // Ensure we're on the UI thread
+        Dispatcher.UIThread.Post(() =>
+        {
+            ColorScheme = e.ToColorScheme();
+        });
     }
 
     protected override void OnSizeChanged(SizeChangedEventArgs e)
@@ -435,8 +473,6 @@ public partial class LayoutViewerControl : UserControl, ILayoutViewerContext
         //DebugText.Text = $"Zoom: {Zoom:0.##}";
         //if (!isZooming)
         RepositionOverlays();
-
-        ZoomTextBox.Text = $"{Zoom:0%}";
     }
 
 
@@ -868,7 +904,7 @@ public partial class LayoutViewerControl : UserControl, ILayoutViewerContext
 
     #endregion
 
-
+    #region Measure Tool
 
     private void HandleMeasureClick(Point pointerPosition, KeyModifiers keyModifiers)
     {
@@ -880,17 +916,15 @@ public partial class LayoutViewerControl : UserControl, ILayoutViewerContext
         VectorD selectedPoint = _currentSnapResult.IsSnapped ? _currentSnapResult.Position : ScreenToLayout(pointerPosition);
 
 
-        if (measurementOverlay.HasCompletedMeasurement)
-        {
-            if (!_currentSnapResult.IsSnapped && !allowNonSnappedPoint)
-            {
-                measurementOverlay.Clear();
-                return;
-            }
+        if (!_currentSnapResult.IsSnapped && !allowNonSnappedPoint)
 
-            measurementOverlay.SetStartPoint(selectedPoint);
+        {
+            if (measurementOverlay.HasCompletedMeasurement)
+                measurementOverlay.Clear();
+            return;
         }
-        else if (!measurementOverlay.HasStartPoint)
+
+        if (!measurementOverlay.HasStartPoint || measurementOverlay.HasCompletedMeasurement)
         {
             measurementOverlay.SetStartPoint(selectedPoint);
         }
@@ -918,6 +952,10 @@ public partial class LayoutViewerControl : UserControl, ILayoutViewerContext
 
     #endregion
 
+
+
+    #endregion
+
     #region Visuals Elements
 
     internal const double CmScaleFactor = 37.7952755906; // 1 cm in pixels at 96 DPI
@@ -937,17 +975,17 @@ public partial class LayoutViewerControl : UserControl, ILayoutViewerContext
         GenerateOverlays();
 
         foreach (var median in Layout.Elements.OfType<GuideLineElement>())
-            RenderCanvas.Children.Add(new GuideLineVisualElement(median, RenderSettings));
+            RenderCanvas.Children.Add(new GuideLineVisualElement(median, ColorScheme));
 
         RenderCanvas.Children.Add(new FretRendererControl(this));
         //foreach (var fretSegment in Layout.Elements.OfType<FretSegmentElement>())
         //    RenderCanvas.Children.Add(new FretSegmentVisual(fretSegment, RenderSettings)); 
 
         foreach (var edge in Layout.Elements.OfType<FingerboardEdgeElement>())
-            RenderCanvas.Children.Add(new FingerboardEdgeVisualElement(edge, RenderSettings));
+            RenderCanvas.Children.Add(new FingerboardEdgeVisualElement(edge, ColorScheme));
 
         foreach (var @string in Layout.Strings)
-            RenderCanvas.Children.Add(new StringVisualElement(@string, RenderSettings));
+            RenderCanvas.Children.Add(new StringVisualElement(@string, ColorScheme));
     }
 
     #endregion
@@ -1067,27 +1105,27 @@ public partial class LayoutViewerControl : UserControl, ILayoutViewerContext
 
     #endregion
 
-    private void OnRenderSettingsChanged()
+    private void OnColorSchemeChanged()
     {
-        RenderSettingsChanged?.Invoke(this, EventArgs.Empty);
+        ColorSchemeChanged?.Invoke(this, EventArgs.Empty);
 
-        BorderContainer.Background = new SolidColorBrush(RenderSettings.BackgroundColor);
-        LayoutGrid.UpdateTheme(RenderSettings);
+        BorderContainer.Background = new SolidColorBrush(ColorScheme.BackgroundColor);
+        LayoutGrid.UpdateTheme(ColorScheme);
 
-        measurementOverlay.UpdateTheme(RenderSettings);
+        measurementOverlay.UpdateTheme(ColorScheme);
 
         // Efficiently update theme for visuals and overlays
         foreach (var child in RenderCanvas.Children)
         {
             if (child is VisualElementBase<Layouts.LayoutElement> visual)
-                visual.UpdateTheme(RenderSettings);
+                visual.UpdateTheme(ColorScheme);
         }
         foreach (var overlay in OverlayCanvas.Children.OfType<LayoutOverlayBase>())
         {
-            overlay.UpdateTheme(RenderSettings);
+            overlay.UpdateTheme(ColorScheme);
         }
 
-        double luminance = RenderSettings.BackgroundColor.RelativeLuminance();
+        double luminance = ColorScheme.BackgroundColor.RelativeLuminance();
         bool isLightBackground = luminance > 0.5;
         measurementOverlay.SetTextBoxContrastTheme(isLightBackground);
 
@@ -1099,9 +1137,5 @@ public partial class LayoutViewerControl : UserControl, ILayoutViewerContext
         {
             ZoomPanelThemeVariant.RequestedThemeVariant = ThemeVariant.Dark;
         }
-    }
-
-    private void MenuFlyout_Opening(object? sender, EventArgs e)
-    {
     }
 }

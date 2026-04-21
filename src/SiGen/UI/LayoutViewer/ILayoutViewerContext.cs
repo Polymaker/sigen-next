@@ -17,9 +17,9 @@ namespace SiGen.UI.LayoutViewer
         double Zoom { get; }
         Point Translation { get; }
         LayoutOrientation Orientation { get; }
-        ThemeRenderSettings RenderSettings { get; }
+        LayoutViewerColorScheme ColorScheme { get; }
 
-        event EventHandler? RenderSettingsChanged;
+        event EventHandler? ColorSchemeChanged;
 
         Point PointToScreen(PointM point) => VectorToScreen(point.ToVector());
 

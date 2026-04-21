@@ -51,13 +51,13 @@ namespace SiGen.Layouts
 
         public StringElement GetStringElement(int stringIndex)
         {
-            return Elements.OfType<StringElement>().First(x => x.StringIndex == stringIndex);
+            return Elements.OfType<StringElement>().First(x => x.CourseIndex == stringIndex);
         }
 
         public StringElement GetStringElement(FingerboardSide side, int offset = 0)
         {
             int index = side == FingerboardSide.Bass ? (0 + offset) : ((Configuration?.NumberOfStrings ?? Strings.Count()) - 1 - offset);
-            return Elements.OfType<StringElement>().First(x => x.StringIndex == index);
+            return Elements.OfType<StringElement>().First(x => x.CourseIndex == index);
         }
 
         public IEnumerable<FretSegmentElement> GetFretSegments()

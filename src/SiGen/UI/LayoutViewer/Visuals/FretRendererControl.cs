@@ -19,14 +19,14 @@ namespace SiGen.UI.LayoutViewer.Visuals
     {
         private ILayoutViewerContext ViewerContext { get; }
         private StringedInstrumentLayout? Layout => ViewerContext.Layout;
-        public ThemeRenderSettings RenderSettings => ViewerContext.RenderSettings;
+        public LayoutViewerColorScheme RenderSettings => ViewerContext.ColorScheme;
 
         private readonly Dictionary<(int Bass, int Treble), Geometry> _clipGeometryCache = new();
 
         public FretRendererControl(ILayoutViewerContext context)
         {
             ViewerContext = context;
-            context.RenderSettingsChanged += (s, e) =>
+            context.ColorSchemeChanged += (s, e) =>
             {
                 InvalidateVisual();
             };

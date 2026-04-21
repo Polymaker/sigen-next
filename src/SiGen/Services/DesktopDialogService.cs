@@ -1,5 +1,6 @@
 using Avalonia.Controls;
 using Avalonia.Platform.Storage;
+using Microsoft.Extensions.DependencyInjection;
 using SiGen.Layouts.Configuration;
 using SiGen.Layouts.Data;
 using SiGen.Measuring;
@@ -24,12 +25,7 @@ namespace SiGen.Services
             _serviceProvider = serviceProvider;
         }
 
-        public Task<SaveChangesResult> ShowSaveChangesAsync(string documentName)
-        {
-            var viewModel = new SaveChangesDialogViewModel(documentName);
-            var dialogControl = new ConfirmCloseDocumentView();
-            return ShowDialogAsync(dialogControl, viewModel) ;
-        }
+        
 
         private async Task<TResult?> ShowDialogAsync<TResult>(UserControl dialogControl, DialogViewModelBase<TResult> viewModel)
         {
@@ -100,6 +96,18 @@ namespace SiGen.Services
             return await ShowDialogAsync(dialogControl, viewModel);
         }
 
+        public async Task<bool> ShowUserSettingsDialogAsync()
+        {
+            var settingsService = _serviceProvider.GetService<ISettingsService>();
+            if (settingsService == null)
+                return false;
+
+            var viewModel = new UserSettingsDialogViewModel(settingsService);
+            var dialogControl = new UserSettingsDialogView();
+            var result = await ShowDialogAsync(dialogControl, viewModel);
+            return result;
+        }
+
         #endregion
 
         #region Open / Save
@@ -145,6 +153,39 @@ namespace SiGen.Services
             });
 
             return files.FirstOrDefault()?.Path.LocalPath;
+        }
+
+        #endregion
+
+        #region Simple Message Dialogs
+
+        public async Task ShowErrorAsync(string message, string title = "Error")
+        {
+            await ShowMessageBoxAsync(message, title, MessageBoxButtons.Ok, MessageBoxIcon.Error);
+        }
+
+        public async Task ShowInfoAsync(string message, string title = "Information")
+        {
+            await ShowMessageBoxAsync(message, title, MessageBoxButtons.Ok, MessageBoxIcon.Information);
+        }
+
+        public async Task ShowWarningAsync(string message, string title = "Warning")
+        {
+            await ShowMessageBoxAsync(message, title, MessageBoxButtons.Ok, MessageBoxIcon.Warning);
+        }
+
+        public async Task<bool> ShowConfirmAsync(string message, string title = "Confirm")
+        {
+            var result = await ShowMessageBoxAsync(message, title, MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            return result == MessageBoxResult.Yes;
+        }
+
+        public async Task<MessageBoxResult> ShowMessageBoxAsync(string message, string title, MessageBoxButtons buttons = MessageBoxButtons.Ok, MessageBoxIcon icon = MessageBoxIcon.None)
+        {
+            var viewModel = new MessageBoxViewModel(message, title, buttons, icon);
+            var dialogControl = new MessageBoxView();
+            var result = await ShowDialogAsync(dialogControl, viewModel);
+            return result;
         }
 
         #endregion

@@ -254,7 +254,7 @@ public partial class StringCountControl : UserControl
                     TextAlignment = TextAlignment.Center,
                     IsHitTestVisible = false,
                 });
-                ToolTip.SetTip(dotContainer, $"{Lang.Resources.StringCourseLabel} {i + 1}");
+                ToolTip.SetTip(dotContainer, $"{Lang.Resources.CourseLabel} {i + 1}");
                 return dotContainer;
             }
             ToolTip.SetTip(dot, $"{Lang.Resources.StringLabel} {i + 1}");
