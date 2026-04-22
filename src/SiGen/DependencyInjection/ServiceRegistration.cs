@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using SiGen.Data.Entities;
 using SiGen.Services;
+using SiGen.Services.Audio;
 using SiGen.ViewModels;
 using SiGen.ViewModels.EditorPanels;
 using System;
@@ -27,6 +28,8 @@ namespace SiGen.DependencyInjection
             services.AddSingleton<ViewModelFactory>();
             services.AddSingleton<IStringDataService, StringDataService>();
             services.AddTransient<IStringMaterialEstimationService, StringMaterialEstimationService>();
+
+            services.AddSingleton<AudioService>();
 
             services.AddSingleton<HomePageViewModel>();
             services.AddSingleton<DesktopMainViewModel>();

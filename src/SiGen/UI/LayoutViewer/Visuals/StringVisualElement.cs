@@ -7,9 +7,12 @@ using Avalonia.Controls.Shapes;
 using Avalonia.Input;
 using Avalonia.Media;
 using Avalonia.Styling;
+using Microsoft.Extensions.DependencyInjection;
 using SiGen.Layouts.Elements;
 using SiGen.Maths;
 using SiGen.Paths;
+using SiGen.Physics;
+using SiGen.Services.Audio;
 using SiGen.Utilities;
 using System;
 using System.Linq;
@@ -107,7 +110,6 @@ namespace SiGen.UI.LayoutViewer.Visuals
                 Clip = stringClipGeometry
             });
         }
-
 
         private void BuildTooltip()
         {
@@ -257,6 +259,124 @@ namespace SiGen.UI.LayoutViewer.Visuals
 
         private const double CmScaleFactor = 37.7952755906; // 1 cm in pixels at 96 DPI
 
+        protected override void OnPointerReleased(PointerReleasedEventArgs e)
+        {
+            base.OnPointerReleased(e);
+            TryPlayFretSound(e.GetPosition(this));
+        }
+
+        private void TryPlayFretSound(Point pointerPosition)
+        {
+            if (Element.Layout?.Configuration == null) return;
+
+            var properties = Element.Layout.Configuration.GetStringProperties(Element.CourseIndex, Element.SubIndex);
+            if (properties == null || !properties.Tuning.HasValue) return;
+
+            // Get click position in layout coordinates (cm)
+            var clickPosInControl = pointerPosition;
+            var clickPosInLayout = ControlToLayoutCoordinates(clickPosInControl);
+
+            // Find the closest fret segment (preferring bridge-side for fretting)
+            var fretSegment = FindClosestFretSegment(clickPosInLayout);
+            var temperament = Element.Configuration.Frets?.Temperament ?? Layout?.Configuration?.Frets?.Temperament ?? Temperament.Equal;
+            // Calculate the pitch interval
+            PitchInterval pitch;
+
+            if (fretSegment != null && !fretSegment.IsNut)
+            {
+                // Get fret point for this string
+                var fretPoint = fretSegment.GetFretPoint(Element.CourseIndex);
+                if (fretPoint != null)
+                {
+                    // Open string tuning + fret interval
+                    pitch = PitchInterval.FromNote(properties.Tuning.Value, temperament) + fretPoint.Interval;
+                }
+                else
+                {
+                    // Fallback to open string
+                    pitch = PitchInterval.FromNote(properties.Tuning.Value, temperament);
+                }
+            }
+            else
+            {
+                // Open string (click before first fret or on nut)
+                pitch = PitchInterval.FromNote(properties.Tuning.Value);
+            }
+            if (Application.Current is App app)
+            {
+                var audioService = app.Services.GetRequiredService<AudioService>();
+                // Play the note
+                var profile = audioService?.SelectProfile(
+                    Element.Layout.Configuration.InstrumentType,
+                    Element.GetGauge()
+                );
+                audioService?.PlayNote(pitch, profile);
+            }
+
+        }
+
+        /// <summary>
+        /// Converts a point from control coordinates to layout coordinates (in cm).
+        /// </summary>
+        private VectorD ControlToLayoutCoordinates(Point controlPoint)
+        {
+
+
+            return new VectorD(controlPoint.X / CmScaleFactor, controlPoint.Y / CmScaleFactor);
+        }
+
+        /// <summary>
+        /// Finds the fret segment where the string is fretted (closest fret toward the bridge from click position).
+        /// </summary>
+        /// <param name="clickPosition">Click position in layout coordinates (cm).</param>
+        /// <returns>The fret segment to use for note calculation, or null for open string.</returns>
+        private FretSegmentElement? FindClosestFretSegment(VectorD clickPosition)
+        {
+            if (Element.Layout == null) return null;
+
+            // Get all fret segments that contain this string
+            var fretSegments = Element.Layout.Elements
+                .OfType<FretSegmentElement>()
+                .Where(x => x.ContainsString(Element.CourseIndex) && !x.IsNut && !x.IsBridge)
+                .ToList();
+
+            if (fretSegments.Count == 0) return null;
+
+            // Calculate distance along the string from nut to bridge
+            var nutPosition = Element.NutPoint.ToVector();
+            var bridgePosition = Element.BridgePoint.ToVector();
+            var stringDirection = (bridgePosition - nutPosition).Normalized;
+
+            // Project click position onto string line
+            var clickDistanceFromNut = VectorD.Dot(clickPosition - nutPosition, stringDirection);
+
+            // Find fret closest to the click but toward the bridge (the fret being pressed)
+            FretSegmentElement? selectedFret = null;
+            double closestDistance = double.MaxValue;
+
+            foreach (var fret in fretSegments)
+            {
+                var fretPoint = fret.GetFretPoint(Element.CourseIndex);
+                if (fretPoint == null) continue;
+
+                var fretPosition = fretPoint.Position.ToVector();
+                var fretDistanceFromNut = VectorD.Dot(fretPosition - nutPosition, stringDirection);
+
+                // Only consider frets between click position and bridge (i.e., frets being pressed)
+                if (fretDistanceFromNut < clickDistanceFromNut)
+                    continue;
+
+                // Find the closest fret after the click (toward bridge)
+                var distance = fretDistanceFromNut - clickDistanceFromNut;
+                if (distance < closestDistance)
+                {
+                    closestDistance = distance;
+                    selectedFret = fret;
+                }
+            }
+
+            return selectedFret;
+        }
 
         /// <summary>
         /// Creates a brush for wound string rendering.

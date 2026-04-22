@@ -4,12 +4,19 @@
     <Nullable>enable</Nullable>
     <LangVersion>preview</LangVersion>
     <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   
   <ItemGroup>
-    <AvaloniaResource Include="Assets\**" />
+    <AvaloniaResource Include="Assets\**" Exclude="Assets\SoundFonts\**" />
   </ItemGroup>
-
+	
+  <ItemGroup>
+  	<None Include="Assets\SoundFonts\**">
+  		<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+  	</None>
+  </ItemGroup>
+	
   <ItemGroup>
     <PackageReference Include="Avalonia" />
     <PackageReference Include="Avalonia.Themes.Fluent" />
@@ -23,6 +30,8 @@
     <PackageReference Include="CommunityToolkit.Mvvm" />
     <PackageReference Include="Material.Avalonia" />
     <PackageReference Include="Material.Icons.Avalonia" />
+    <PackageReference Include="MeltySynth" />
+    <PackageReference Include="PortAudioSharp2" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" />
     <PackageReference Include="netDxf" />
     <PackageReference Include="Svg.Controls.Skia.Avalonia" />
@@ -44,21 +53,7 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Update="UI\Dialogs\EditSpacingDialogView.axaml.cs">
-      <DependentUpon>EditSpacingDialogView.axaml</DependentUpon>
-    </Compile>
-    <Compile Update="UI\Dialogs\EditTuningDialogView.axaml.cs">
-      <DependentUpon>EditTuningDialogView.axaml</DependentUpon>
-    </Compile>
-    <Compile Update="UI\Dialogs\EditStringsDialogView.axaml.cs">
-      <DependentUpon>EditStringsDialogView.axaml</DependentUpon>
-    </Compile>
-    <Compile Update="UI\EditorPanels\InstrumentInfoEditorPanel.axaml.cs">
-      <DependentUpon>InstrumentInfoEditorPanel.axaml</DependentUpon>
-    </Compile>
-    <Compile Update="UI\LayoutViewer\LayoutViewerControl.axaml.cs">
-      <DependentUpon>LayoutViewerControl.axaml</DependentUpon>
-    </Compile>
+
   </ItemGroup>
 
   <ItemGroup>
