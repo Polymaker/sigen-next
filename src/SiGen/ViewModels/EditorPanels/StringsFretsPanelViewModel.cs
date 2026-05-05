@@ -30,11 +30,20 @@ namespace SiGen.ViewModels.EditorPanels
         public ICommand EditStringsCommand { get; }
         public ICommand EditFretsCommand { get; }
 
-        public StringsFretsPanelViewModel()
+        private readonly IDialogService _dialogService;
+
+        //for design mode only
+        public StringsFretsPanelViewModel() : this(new MockDialogService())
+        {
+        }
+
+        [ActivatorUtilitiesConstructor]
+        public StringsFretsPanelViewModel(IDialogService dialogService)
         {
             EditTuningCommand = new RelayCommand(EditTuning);
             EditStringsCommand = new RelayCommand(EditStrings);
             EditFretsCommand = new RelayCommand(EditFrets);
+            _dialogService = dialogService;
         }
 
 
@@ -222,10 +231,7 @@ namespace SiGen.ViewModels.EditorPanels
     
         public async void EditTuning()
         {
-            if (LayoutDocumentContext.DialogService == null)
-                return;
-
-            var result = await LayoutDocumentContext.DialogService.ShowTuningDialog(LayoutDocumentContext);
+            var result = await _dialogService.ShowTuningDialog(LayoutDocument);
             if (result != null)
             {
                 UpdateConfiguration("Tuning edited", result.Apply);
@@ -235,10 +241,7 @@ namespace SiGen.ViewModels.EditorPanels
 
         public async void EditStrings()
         {
-            if (LayoutDocumentContext.DialogService == null)
-                return;
-
-            var result = await LayoutDocumentContext.DialogService.ShowStringsDialog(LayoutDocumentContext);
+            var result = await _dialogService.ShowStringsDialog(LayoutDocument);
             if (result != null)
             {
                 UpdateConfiguration("Edit Strings", result.Apply);
@@ -248,10 +251,7 @@ namespace SiGen.ViewModels.EditorPanels
 
         public async void EditFrets()
         {
-            if (LayoutDocumentContext.DialogService == null)
-                return;
-
-            var result = await LayoutDocumentContext.DialogService.ShowFretsDialog(LayoutDocumentContext);
+            var result = await _dialogService.ShowFretsDialog(LayoutDocument);
             if (result != null)
             {
                 UpdateConfiguration("Edit Frets", result.Apply);

@@ -1,24 +1,55 @@
-using Avalonia;
 using Avalonia.Controls;
-using Avalonia.Markup.Xaml;
+using Avalonia.Threading;
+using SiGen.Settings;
+using SiGen.UI.LayoutViewer;
 using SiGen.ViewModels.EditorPanels;
 using System;
-using System.Diagnostics;
-using System.Linq;
 
 namespace SiGen.Views;
 
 public partial class LayoutDocumentView : UserControl
 {
+    public ViewModels.LayoutDocumentViewModel? ViewModel => DataContext as ViewModels.LayoutDocumentViewModel;
+    private LayoutViewerColorScheme currentColorScheme = new LayoutViewerColorScheme();
+
     public LayoutDocumentView()
     {
         InitializeComponent();
+        //InitializeViewerColorScheme();
+    }
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        var settingsService = App.GetService<SiGen.Services.ISettingsService>();
+        currentColorScheme = settingsService.Settings.LayoutViewerColorScheme.ToColorScheme();
+        settingsService.ViewerThemeChanged += SettingsService_ViewerThemeChanged;
+
+        Viewer?.ColorScheme = currentColorScheme;
     }
 
     protected override void OnDataContextChanged(EventArgs e)
     {
         base.OnDataContextChanged(e);
+        //if (ViewModel != null && !initialized)
+        //{
+        //    currentColorScheme = ViewModel.SettingsService.Settings.LayoutViewerColorScheme.ToColorScheme();
+        //    Viewer.ColorScheme = currentColorScheme;
+        //    ViewModel.SettingsService.ViewerThemeChanged += SettingsService_ViewerThemeChanged;
+        //    initialized = true;
+        //}
         //Viewer.ResetZoomAndTranslation();
+    }
+
+    private void SettingsService_ViewerThemeChanged(object? sender, LayoutViewerColorSchemeSettings colorSchemeSettings)
+    {
+        if (Viewer == null) return;
+
+        currentColorScheme = colorSchemeSettings.ToColorScheme();
+        Dispatcher.UIThread.Post(() =>
+        {
+            Viewer.ColorScheme = currentColorScheme;
+        });
     }
 
     private ViewModels.LayoutDocumentViewModel? previousModel;
@@ -80,5 +111,13 @@ public partial class LayoutDocumentView : UserControl
     {
         if (DataContext is ViewModels.LayoutDocumentViewModel documentViewModel)
             Viewer.Layout = documentViewModel.Layout;
+    }
+
+    private void InitializeViewerColorScheme()
+    {
+        if (Viewer == null) return;
+
+        var settingsService = (App.Current as SiGen.App)?.Services.GetService(typeof(SiGen.Services.ISettingsService)) as SiGen.Services.ISettingsService;
+        Viewer.ColorScheme = settingsService!.Settings.LayoutViewerColorScheme.ToColorScheme();
     }
 }

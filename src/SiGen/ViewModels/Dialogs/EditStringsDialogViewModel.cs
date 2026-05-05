@@ -2,8 +2,10 @@
 using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.Extensions.DependencyInjection;
 using SiGen.Data.Common;
 using SiGen.Data.Entities;
+using SiGen.Lang;
 using SiGen.Layouts.Configuration;
 using SiGen.Measuring;
 using SiGen.Services;
@@ -33,7 +35,7 @@ namespace SiGen.ViewModels.Dialogs
 
         #endregion
 
-        public override string Title => "Strings Configuration";
+        public override string Title => Resources.EditStringsDialog_Title;
 
         [ObservableProperty]
         private int totalNumberOfStrings;
@@ -83,9 +85,10 @@ namespace SiGen.ViewModels.Dialogs
             //LoadAvailableStringSets().RunSynchronously();
         }
 
-        public EditStringsDialogViewModel(ILayoutDocumentContext layoutContext)
+        [ActivatorUtilitiesConstructor]
+        public EditStringsDialogViewModel(ILayoutDocument layoutContext, IStringDataService dataService)
         {
-            dataService = layoutContext.DataService;
+            this.dataService = dataService;
 
             //Strings = new ObservableCollection<StringItemModel>();
             LayoutConfiguration = layoutContext.Configuration;

@@ -74,22 +74,23 @@ namespace SiGen.Services
             //return Task.CompletedTask;
         }
 
-        public async Task<EditTuningResult?> ShowTuningDialog(ILayoutDocumentContext context)
+        public async Task<EditTuningResult?> ShowTuningDialog(ILayoutDocument document)
         {
-            var viewModel = new EditTuningDialogViewModel(context);
+            
+            var viewModel = ActivatorUtilities.CreateInstance<EditTuningDialogViewModel>(_serviceProvider, document);
             var dialogControl = new EditTuningDialogView();
             return await ShowDialogAsync(dialogControl, viewModel);
 
         }
 
-        public async Task<EditStringsResult?> ShowStringsDialog(ILayoutDocumentContext context)
+        public async Task<EditStringsResult?> ShowStringsDialog(ILayoutDocument document)
         {
-            var viewModel = new EditStringsDialogViewModel(context);
+            var viewModel = ActivatorUtilities.CreateInstance<EditStringsDialogViewModel>(_serviceProvider, document);
             var dialogControl = new EditStringsDialogView();
             return await ShowDialogAsync(dialogControl, viewModel);
         }
 
-        public async Task<EditFretsResult?> ShowFretsDialog(ILayoutDocumentContext context)
+        public async Task<EditFretsResult?> ShowFretsDialog(ILayoutDocument context)
         {
             var viewModel = new EditFretsDialogViewModel(context);
             var dialogControl = new EditFretsDialogView();

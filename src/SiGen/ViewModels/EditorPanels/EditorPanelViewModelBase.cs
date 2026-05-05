@@ -16,9 +16,9 @@ namespace SiGen.ViewModels.EditorPanels
 {
     public class EditorPanelViewModelBase : ObservableObject
     {
-        protected InstrumentLayoutConfiguration? Configuration => LayoutDocumentContext?.Configuration;
+        protected InstrumentLayoutConfiguration? Configuration => LayoutDocument?.Configuration;
 
-        public ILayoutDocumentContext LayoutDocumentContext { get; private set; }
+        public ILayoutDocument LayoutDocument { get; private set; }
 
         public int NumberOfStrings => Configuration?.NumberOfStrings ?? 0;
         protected bool IsLoading { get; private set; }
@@ -29,17 +29,17 @@ namespace SiGen.ViewModels.EditorPanels
 
         public EditorPanelViewModelBase()
         {
-            LayoutDocumentContext = new MockLayoutDocumentContext(); // For design mode, replace with actual context in production
+            LayoutDocument = new MockLayoutDocumentContext(); // For design mode, replace with actual context in production
             //LoadConfiguration(LayoutDocumentContext.Configuration);
             OnConfigurationChanged();
         }
 
-        public void AssignContext(ILayoutDocumentContext context)
+        public void AssignDocument(ILayoutDocument context)
         {
 
             //if (LayoutDocumentContext != null)
             //    throw new InvalidOperationException("This panel is already assigned to a document context.");
-            LayoutDocumentContext = context ?? throw new ArgumentNullException(nameof(context));
+            LayoutDocument = context ?? throw new ArgumentNullException(nameof(context));
             InitializeCore();
         }
 
@@ -68,7 +68,7 @@ namespace SiGen.ViewModels.EditorPanels
             if (IsLoading) return;
 
             isUpdatingConfig = true;
-            LayoutDocumentContext.UpdateConfiguration(reason, updateAction);
+            LayoutDocument.UpdateConfiguration(reason, updateAction);
             isUpdatingConfig = false;
         }
 

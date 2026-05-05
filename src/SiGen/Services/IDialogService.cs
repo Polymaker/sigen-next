@@ -24,11 +24,11 @@ namespace SiGen.Services
         #region Editor Dialogs
         Task<List<Measure>?> ShowSpacingDialog(InstrumentLayoutConfiguration layoutConfiguration, FingerboardEnd end);
 
-        Task<EditTuningResult?> ShowTuningDialog(ILayoutDocumentContext context);
+        Task<EditTuningResult?> ShowTuningDialog(ILayoutDocument context);
 
-        Task<EditStringsResult?> ShowStringsDialog(ILayoutDocumentContext context);
+        Task<EditStringsResult?> ShowStringsDialog(ILayoutDocument context);
 
-        Task<EditFretsResult?> ShowFretsDialog(ILayoutDocumentContext context);
+        Task<EditFretsResult?> ShowFretsDialog(ILayoutDocument context);
 
         /// <summary>
         /// Shows the user settings dialog.

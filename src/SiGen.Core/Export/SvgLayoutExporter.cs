@@ -7,6 +7,7 @@ using Svg.Pathing;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -23,21 +24,17 @@ namespace SiGen.Export
         {
             Document = new SvgDocument
             {
-                
+                X = new SvgUnit(0),
+                Y = new SvgUnit(0),
+                Width = GetDocumentUnit(layout.Bounds!.Width),
+                Height = GetDocumentUnit(layout.Bounds!.Height)
             };
-
-            Document.X = new SvgUnit(0);
-            Document.Y = new SvgUnit(0);
-            Document.Width = GetDocumentUnit(layout.Bounds!.Width);
-            Document.Height = GetDocumentUnit(layout.Bounds!.Height);
             Document.ViewBox = new SvgViewBox(0, 0, Document.Width, Document.Height);
             //Document.ViewBox = new SvgViewBox(0, 0, (float)layout.Bounds!.Width[Options.Unit], (float)layout.Bounds!.Height[Options.Unit]);
             ScaleFactor = Document.ViewBox.Height / (float)layout.Bounds.Height[Options.Unit];
 
             OriginOffset = new PointM(layout.Bounds.Location.X * -1, layout.Bounds.Location.Y * -1);
         }
-
-
 
         protected override void ExportElement(ElementType elementType, PathBase path, LineExportOptions lineOptions)
         {
@@ -129,6 +126,11 @@ namespace SiGen.Export
         protected override void SaveToFile(string filePath)
         {
             Document.Write(filePath);
+        }
+
+        protected override void SaveToStream(Stream stream)
+        {
+            Document.Write(stream);
         }
 
         private SvgUnit GetDocumentUnit(Measure value)

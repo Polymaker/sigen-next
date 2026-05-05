@@ -25,10 +25,17 @@ public partial class NoteUpDown : UserControl
     public NoteUpDown()
     {
         InitializeComponent();
-        this.GetObservable(ValueProperty).Subscribe(val => UpdateTextAndButtons(val));
         NoteInput.LostFocus += NoteInput_LostFocus;
         NoteInput.KeyUp += NoteInput_KeyUp;
         NoteInput.PointerWheelChanged += NoteInput_PointerWheelChanged;
+    }
+    protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
+    {
+        base.OnPropertyChanged(change);
+        if (change.Property == ValueProperty)
+        {
+            UpdateTextAndButtons((NoteAndOctave?)change.NewValue);
+        }
     }
 
     private void NoteInput_KeyUp(object? sender, KeyEventArgs e)

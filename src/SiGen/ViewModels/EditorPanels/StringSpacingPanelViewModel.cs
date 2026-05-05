@@ -87,10 +87,18 @@ namespace SiGen.ViewModels.EditorPanels
         public Array StringSpacingModes => Enum.GetValues(typeof(StringSpacingMode));
 
         public bool IsEditingBySlider { get; set; }
+        private readonly IDialogService _dialogService;
 
-        public StringSpacingPanelViewModel()
+        //for design mode only
+        public StringSpacingPanelViewModel() : this(new MockDialogService())
+        {
+        }
+
+        [ActivatorUtilitiesConstructor]
+        public StringSpacingPanelViewModel(IDialogService dialogService)
         {
             EditCustomSpacingCommand = new RelayCommand<FingerboardEnd>(EditCustomSpacing);
+            _dialogService = dialogService;
         }
 
         protected override void OnInitialize()
@@ -276,10 +284,7 @@ namespace SiGen.ViewModels.EditorPanels
 
         protected async void EditCustomSpacing(FingerboardEnd fingerboardEnd)
         {
-            if (LayoutDocumentContext.DialogService == null)
-                return;
-
-            var newDistances = await LayoutDocumentContext.DialogService.ShowSpacingDialog(Configuration!, fingerboardEnd);
+            var newDistances = await _dialogService.ShowSpacingDialog(Configuration!, fingerboardEnd);
             if (newDistances != null)
             {
                 

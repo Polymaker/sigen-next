@@ -18,11 +18,11 @@ using System.Threading.Tasks;
 
 namespace SiGen.ViewModels
 {
-    public partial class LayoutDocumentViewModel : ObservableObject, ILayoutDocumentContext, IDocumentTabViewModel
+    public partial class LayoutDocumentViewModel : ObservableObject, ILayoutDocument, IDocumentTabViewModel
     {
         [ObservableProperty]
         private string title;
-
+        private readonly IServiceProvider serviceProvider;
         [ObservableProperty]
         private InstrumentLayoutConfiguration _configuration;
 
@@ -36,6 +36,9 @@ namespace SiGen.ViewModels
         public partial StringedInstrumentLayout? Layout { get; private set; }
 
         public event EventHandler? LayoutChanged;
+
+        public bool IsHomePage => false;
+        public bool IsDocument => true;
 
         #region Layout Viewer Properties
 
@@ -64,11 +67,6 @@ namespace SiGen.ViewModels
 
         #endregion
 
-        // New property to expose dialog service to panels through the document context
-        public IDialogService? DialogService { get; private set; }
-        public IStringDataService DataService { get; }
-        public IStringMaterialEstimationService MaterialEstimationService { get; }
-
         private List<EditorPanelViewModelBase> PanelViewModels = new();
 
         protected IInstrumentValuesProviderFactory? InstrumentValuesProviderFactory { get; } 
@@ -78,14 +76,15 @@ namespace SiGen.ViewModels
 
         public bool IsBindingPanels { get; set; } = false;
 
+        //design-time constructor
         public LayoutDocumentViewModel(string title, string? filePath, InstrumentLayoutConfiguration configuration)
         {
             this.title = title;
             this.filePath = filePath;
             Configuration = configuration;
             InstrumentValuesProvider = new InstrumentValuesProviderFactory().CreateProvider(Configuration.InstrumentType);
-            DataService = new MockStringDataService();
-            MaterialEstimationService = new StringMaterialEstimationService(DataService);
+            serviceProvider = new ServiceCollection().BuildServiceProvider();
+
             InitializePanelViewModels();
         }
 
@@ -94,18 +93,14 @@ namespace SiGen.ViewModels
         public LayoutDocumentViewModel(string title, string? filePath, InstrumentLayoutConfiguration configuration, 
             //services
             IInstrumentValuesProviderFactory? instrumentValuesProviderFactory, 
-            IDialogService? dialogService,
-            IStringDataService dataService,
-            IStringMaterialEstimationService materialEstimationService)
+            IServiceProvider serviceProvider)
         {
             this.title = title;
             this.filePath = string.IsNullOrEmpty(filePath) ? null : filePath;
             Configuration = configuration;
             InstrumentValuesProviderFactory = instrumentValuesProviderFactory;
             InstrumentValuesProvider = instrumentValuesProviderFactory?.CreateProvider(Configuration.InstrumentType);
-            DialogService = dialogService;
-            DataService = dataService;
-            MaterialEstimationService = materialEstimationService;
+            this.serviceProvider = serviceProvider;
             InitializePanelViewModels();
         }
 
@@ -116,11 +111,17 @@ namespace SiGen.ViewModels
                 .ToList()
                 .ForEach(t =>
                 {
-                    if (Activator.CreateInstance(t) is EditorPanelViewModelBase panel)
+                    try
                     {
-                        panel.AssignContext(this);
-                        PanelViewModels.Add(panel);
+                        var panelModel = (EditorPanelViewModelBase)ActivatorUtilities.CreateInstance(serviceProvider, t);
+                        PanelViewModels.Add(panelModel);
+                        panelModel.AssignDocument(this);
                     }
+                    catch (Exception ex)
+                    {
+                        throw new Exception("Could not create panel type: "   + t.FullName, ex);
+                    }
+                    
                 });
         }
 
@@ -132,6 +133,7 @@ namespace SiGen.ViewModels
 
         partial void OnConfigurationChanged(InstrumentLayoutConfiguration value)
         {
+            if (IsBindingPanels) return;
             RebuildLayout();
         }
 

@@ -9,6 +9,8 @@ namespace SiGen.ViewModels
     public interface IDocumentTabViewModel
     {
         string Title { get; }
+        bool IsHomePage { get; }
+        bool IsDocument { get; }
         bool HasUnsavedChanges { get; }
         string? TabToolTip { get; }
     }

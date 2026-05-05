@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace SiGen.ViewModels
 {
-    public interface ILayoutDocumentContext
+    public interface ILayoutDocument
     {
         ///// <summary>
         ///// Gets the working (editable) configuration for the instrument layout.
@@ -43,12 +43,6 @@ namespace SiGen.ViewModels
         /// May be <c>null</c> if no provider is available.
         /// </summary>
         IInstrumentValuesProvider? InstrumentValuesProvider { get; }
-
-        IDialogService? DialogService { get; }
-
-        IStringDataService DataService { get; }
-
-        IStringMaterialEstimationService MaterialEstimationService { get; }
 
         /// <summary>
         /// Updates the working configuration and triggers layout regeneration and change notification.

@@ -266,12 +266,10 @@ namespace SiGen.Serialization.Layouts.Xml
                     var startingFret = ReadIntAttribute(fretElem, "StartingFret", 0);
                     var numberOfFrets = ReadIntAttribute(fretElem, "NumberOfFrets", 24);
 
-                    if (stringConfig.Frets == null)
-                        stringConfig.Frets = new FretConfiguration();
                     if (startingFret != 0)
-                        stringConfig.Frets.StartingFret = startingFret;
+                        stringConfig.SetStartingFret(startingFret);
                     if (numberOfFrets != config.NumberOfFrets)
-                        stringConfig.Frets.NumberOfFrets = numberOfFrets;
+                        stringConfig.SetNumberOfFrets(numberOfFrets);
                 }
 
                 var tuningElem = stringElem.Element("Tuning");

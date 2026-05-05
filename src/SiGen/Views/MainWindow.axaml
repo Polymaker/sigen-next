@@ -6,7 +6,17 @@
         xmlns:views="clr-namespace:SiGen.Views"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="SiGen.Views.MainWindow"
+		x:DataType="vm:DesktopMainViewModel"
         Icon="/Assets/SiGen16x32.ico" 
-        Title="SiGen">
+        Title="SiGen"
+        Closing="Window_Closing"
+        >
+    <Window.KeyBindings>
+		<KeyBinding Gesture="Ctrl+O" Command="{Binding OpenCommand}" />
+		<KeyBinding Gesture="Ctrl+H" Command="{Binding OpenHomeCommand}" />
+		<KeyBinding Gesture="Ctrl+S" Command="{Binding SaveCommand}" />
+		<KeyBinding Gesture="Ctrl+Shift+S" Command="{Binding SaveAsCommand}" />
+		<KeyBinding Gesture="Ctrl+," Command="{Binding ShowSettingsCommand}" />
+    </Window.KeyBindings>
 	<!--<views:DesktopMainView />-->
 </Window>

@@ -112,7 +112,7 @@ public partial class StringSpacingEditorPanel : UserControl
 
     private void RebuildPresetFlyouts()
     {
-        var provider = ViewModel?.LayoutDocumentContext.InstrumentValuesProvider;
+        var provider = ViewModel?.LayoutDocument.InstrumentValuesProvider;
 
         if (provider == null)
         {

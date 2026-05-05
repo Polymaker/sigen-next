@@ -82,7 +82,7 @@ public partial class StringsFretsEditorPanel : UserControl
         FretCountEditor.Margin = new Thickness(0);
         if (ViewModel != null)
         {
-            var provider = ViewModel.LayoutDocumentContext.InstrumentValuesProvider;
+            var provider = ViewModel.LayoutDocument.InstrumentValuesProvider;
             if (provider == null) return;
 
             var fretCountPresets = provider.GetCommonFretsCount();

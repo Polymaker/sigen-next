@@ -2,6 +2,7 @@
 using Avalonia.Controls;
 using Avalonia.Media;
 using SiGen.Measuring;
+using SiGen.Utilities;
 using System;
 using System.Globalization;
 
@@ -19,7 +20,7 @@ namespace SiGen.UI.LayoutViewer
             AvaloniaProperty.Register<LayoutGridControl, RectangleM?>(nameof(LayoutBounds));
 
         // Main grid interval (cm or inch)
-        private double GridSize => UnitMode == UnitSystem.Metric ? 37.7952755906 : 96;
+        private double GridSize => UnitMode == UnitSystem.Metric ? MeasureUtils.CmToPixels : 96;
         // Number of main grid cells per major grid cell
         private int MajorGridDivisions => UnitMode == UnitSystem.Metric ? 5 : 6;
 
@@ -97,7 +98,7 @@ namespace SiGen.UI.LayoutViewer
 
         public void SetBluePrintBounds(RectangleM bounds)
         {
-            double scale = LayoutViewer.LayoutViewerControl.CmScaleFactor;
+            double scale = MeasureUtils.CmToPixels;
             int padding = UnitMode == UnitSystem.Metric ? 20 : 8;
             int columnCount = (int)Math.Ceiling((double)(bounds.Top - bounds.Bottom).NormalizedValue * scale / GridSize) + padding;
             columnCount = (int)Math.Ceiling(Math.Floor(columnCount / (double)MajorGridDivisions) / 2d) * 2 * MajorGridDivisions;

@@ -101,14 +101,12 @@ xmlns:materialIcons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Ico
 											Click="SnapFilter_Click"
 											StaysOpenOnClick="True"
 											ToggleType="CheckBox"
-											IsChecked="{Binding ActiveSnapFilters, RelativeSource={RelativeSource AncestorType=lv:LayoutViewerControl}, Converter={StaticResource FlagsEnumConverter}, ConverterParameter={x:Static snap:SnapLineType.Fret}, Mode=OneWay}"
 											Tag="{x:Static snap:SnapLineType.Fret}">
 								  </MenuItem>
 								  <MenuItem Header="{x:Static lang:Resources.MeasureTool_SnapFilter_Strings}" 
 											Click="SnapFilter_Click" 
 											StaysOpenOnClick="True"
 											ToggleType="CheckBox"
-											IsChecked="{Binding ActiveSnapFilters, RelativeSource={RelativeSource AncestorType=lv:LayoutViewerControl}, Converter={StaticResource FlagsEnumConverter}, ConverterParameter={x:Static snap:SnapLineType.String}, Mode=OneWay}"
 											Tag="{x:Static snap:SnapLineType.String}">
 									  
 								  </MenuItem>
@@ -116,14 +114,12 @@ xmlns:materialIcons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Ico
 											Click="SnapFilter_Click" 
 											StaysOpenOnClick="True"
 											ToggleType="CheckBox" 
-											IsChecked="{Binding ActiveSnapFilters, RelativeSource={RelativeSource AncestorType=lv:LayoutViewerControl}, Converter={StaticResource FlagsEnumConverter}, ConverterParameter={x:Static snap:SnapLineType.Fingerboard}, Mode=OneWay}" 
 											Tag="{x:Static snap:SnapLineType.Fingerboard}">
 								  </MenuItem>
 								  <MenuItem Header="{x:Static lang:Resources.MeasureTool_SnapFilter_CenterLine}" 
 											Click="SnapFilter_Click"
 											StaysOpenOnClick="True"
 											ToggleType="CheckBox"
-											IsChecked="{Binding ActiveSnapFilters, RelativeSource={RelativeSource AncestorType=lv:LayoutViewerControl}, Converter={StaticResource FlagsEnumConverter}, ConverterParameter={x:Static snap:SnapLineType.CenterLine}, Mode=OneWay}"
 											Tag="{x:Static snap:SnapLineType.CenterLine}">
 								  </MenuItem>
 							  </MenuFlyout >

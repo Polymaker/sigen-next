@@ -17,7 +17,7 @@
         <vm:MockDialogViewModel />
     </Window.DataContext>
 
-    <Grid Background="{DynamicResource PanelBackgroundBrush}">
+    <Grid >
         <Grid  RowDefinitions="Auto,*">
             
 

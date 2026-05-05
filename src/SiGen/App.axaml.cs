@@ -30,6 +30,7 @@ public partial class App : Application
 
     public App()
     {
+        //add services here for design-time data contexts. These will be overridden at runtime in OnFrameworkInitializationCompleted
         var collection = new ServiceCollection();
         collection.AddSiGenServices();
         collection.AddSingleton<IDialogService, MockDialogService>();
@@ -50,8 +51,8 @@ public partial class App : Application
 
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
-            //DisableAvaloniaDataAnnotationValidation();
-            
+            DisableAvaloniaDataAnnotationValidation();
+
 
             var mainWindow = new MainWindow();
             collection.AddSingleton<IDialogService, DesktopDialogService>(sp => new DesktopDialogService(mainWindow, sp));
@@ -105,8 +106,11 @@ public partial class App : Application
         ApplyTheme(settings.Theme);
 
         // Subscribe to settings changes for live updates
-        settingsService.LanguageChanged += (s, language) => ApplyLanguage(language);
-        settingsService.ThemeChanged += (s, theme) => ApplyTheme(theme);
+        settingsService.LanguageChanged += (s, language) =>
+        {
+            Dispatcher.UIThread.Post(() => ApplyLanguage(language));
+        };
+        settingsService.AppThemeChanged += (s, theme) => ApplyTheme(theme);
     }
 
     private void ApplyLanguage(AppLanguage language)
@@ -131,18 +135,10 @@ public partial class App : Application
             culture = new CultureInfo(cultureCode);
         }
 
-        void ApplyCulture()
-        {
-            CultureInfo.DefaultThreadCurrentCulture = culture;
-            CultureInfo.DefaultThreadCurrentUICulture = culture;
-            CultureInfo.CurrentCulture = culture;
-            CultureInfo.CurrentUICulture = culture;
-        }
-
-        if (Dispatcher.UIThread.CheckAccess())
-            ApplyCulture();
-        else
-            Dispatcher.UIThread.Post(ApplyCulture);
+        CultureInfo.DefaultThreadCurrentCulture = culture;
+        CultureInfo.DefaultThreadCurrentUICulture = culture;
+        CultureInfo.CurrentCulture = culture;
+        CultureInfo.CurrentUICulture = culture;
     }
 
     private void ApplyTheme(AppTheme theme)
@@ -159,18 +155,27 @@ public partial class App : Application
         };
     }
 
-    //// Avoid duplicate validations from both Avalonia and the CommunityToolkit. 
-    //// More info: https://docs.avaloniaui.net/docs/guides/development-guides/data-validation#manage-validationplugins
-    //private void DisableAvaloniaDataAnnotationValidation()
-    //{
-    //    // Get an array of plugins to remove
-    //    var dataValidationPluginsToRemove =
-    //        BindingPlugins.DataValidators.OfType<DataAnnotationsValidationPlugin>().ToArray();
-        
-    //    // remove each entry found
-    //    foreach (var plugin in dataValidationPluginsToRemove)
-    //    {
-    //        BindingPlugins.DataValidators.Remove(plugin);
-    //    }
-    //}
+    internal static T GetService<T>() where T : class
+    {
+        if (Current is App app)
+        {
+            return app.Services.GetService<T>() ?? throw new InvalidOperationException($"Service of type {typeof(T).FullName} not found.");
+        }
+        throw new InvalidOperationException("Current application is not of type App.");
+    }
+
+    // Avoid duplicate validations from both Avalonia and the CommunityToolkit. 
+    // More info: https://docs.avaloniaui.net/docs/guides/development-guides/data-validation#manage-validationplugins
+    private void DisableAvaloniaDataAnnotationValidation()
+    {
+        // Get an array of plugins to remove
+        var dataValidationPluginsToRemove =
+            BindingPlugins.DataValidators.OfType<DataAnnotationsValidationPlugin>().ToArray();
+
+        // remove each entry found
+        foreach (var plugin in dataValidationPluginsToRemove)
+        {
+            BindingPlugins.DataValidators.Remove(plugin);
+        }
+    }
 }

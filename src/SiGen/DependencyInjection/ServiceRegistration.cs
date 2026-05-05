@@ -30,6 +30,7 @@ namespace SiGen.DependencyInjection
 
             services.AddSingleton<HomePageViewModel>();
             services.AddSingleton<DesktopMainViewModel>();
+            services.AddSingleton<IDocumentManager>(sp => sp.GetRequiredService<DesktopMainViewModel>());
 
             return services;
         }

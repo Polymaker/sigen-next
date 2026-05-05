@@ -28,7 +28,7 @@
 							  Orientation="Horizontal"
 						  LabelHorizontalAlignment="Left">
 			<ctrl:CustomFormField.Input>
-				<ctrl:TextBoxEx x:Name="LayoutNameBox" Text=""  
+				<ctrl:TextBoxEx x:Name="LayoutNameBox" Text="{Binding LayoutName, Mode=TwoWay,UpdateSourceTrigger=LostFocus}"  
 								HorizontalAlignment="Stretch"/>
 			</ctrl:CustomFormField.Input>
 		</ctrl:CustomFormField>

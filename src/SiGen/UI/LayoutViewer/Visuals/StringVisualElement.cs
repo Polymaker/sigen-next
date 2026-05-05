@@ -52,8 +52,8 @@ namespace SiGen.UI.LayoutViewer.Visuals
             var stringGauge = Element.GetGauge();
             double stringThicknessPx = !Measuring.Measure.IsNullOrEmpty(stringGauge) ? stringGauge.Value.ToPixels() : 1;
             var perpendicularLine = Element.Path.GetEquation().GetPerpendicular(Element.Path.Start);
-            var highlightStart = (Element.Path.Start - perpendicularLine.Vector * (stringThicknessPx / CmScaleFactor) * 0.5d).ToAvalonia();
-            var highlightEnd = (Element.Path.Start + perpendicularLine.Vector * (stringThicknessPx / CmScaleFactor) * 0.5d).ToAvalonia();
+            var highlightStart = (Element.Path.Start - perpendicularLine.Vector * (stringThicknessPx / MeasureUtils.CmToPixels) * 0.5d).ToAvalonia();
+            var highlightEnd = (Element.Path.Start + perpendicularLine.Vector * (stringThicknessPx / MeasureUtils.CmToPixels) * 0.5d).ToAvalonia();
             var extendedPath = (LinearPath)Element.Path.Extend(0.2)!;
 
             var stringGradientBrush = new LinearGradientBrush
@@ -124,9 +124,9 @@ namespace SiGen.UI.LayoutViewer.Visuals
                 ToolTip.SetTip(this, $"{Lang.Resources.StringLabel} {Element.CourseIndex + 1}");
         }
 
-        public override void UpdateTheme(LayoutViewerColorScheme theme)
+        public override void UpdateColorScheme(LayoutViewerColorScheme theme)
         {
-            base.UpdateTheme(theme);
+            base.UpdateColorScheme(theme);
             if (_mainStringLine != null)
                 _mainStringLine.Stroke = new SolidColorBrush(ThemeRenderSettings.StringColor);
         }
@@ -254,8 +254,6 @@ namespace SiGen.UI.LayoutViewer.Visuals
             var angleDegrees = angleRadians * 180.0 / Math.PI;
             return angleDegrees;
         }
-
-        private const double CmScaleFactor = 37.7952755906; // 1 cm in pixels at 96 DPI
 
 
         /// <summary>

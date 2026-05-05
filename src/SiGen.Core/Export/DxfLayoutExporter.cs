@@ -35,6 +35,11 @@ namespace SiGen.Export
             Document.Save(filePath);
         }
 
+        protected override void SaveToStream(Stream stream)
+        {
+            Document.Save(stream);
+        }
+
         protected override void ExportElement(ElementType elementType, PathBase path, LineExportOptions lineOptions)
         {
             var dxfEntity = GetEntityForPath(path);

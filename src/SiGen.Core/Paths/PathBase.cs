@@ -17,8 +17,19 @@ namespace SiGen.Paths
             return null;
         }
 
+        public virtual PathBase? TrimExtend(TrimExtendSide side, double amount) 
+        { return null; }
+
         public abstract bool Intersects(LinearPath line, out VectorD intersection);
 
         public abstract void FlipHorizontal();
+    }
+
+    [Flags]
+    public enum TrimExtendSide
+    {
+        None = 0,
+        Start,
+        End
     }
 }

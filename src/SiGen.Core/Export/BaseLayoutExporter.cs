@@ -10,6 +10,28 @@ using System.Threading.Tasks;
 
 namespace SiGen.Export
 {
+    public enum ExportTargetType
+    {
+        File, Stream
+    }
+
+    public class ExportTarget
+    {
+        public ExportTargetType Type { get; }
+        public string? FilePath { get; }
+        public Stream? Stream { get; }
+
+        private ExportTarget(ExportTargetType type, string? filePath = null, Stream? stream = null)
+        {
+            Type = type;
+            FilePath = filePath;
+            Stream = stream;
+        }
+
+        public static ExportTarget ToFile(string filePath) => new ExportTarget(ExportTargetType.File, filePath: filePath);
+        public static ExportTarget ToStream(Stream stream) => new ExportTarget(ExportTargetType.Stream, stream: stream);
+    }
+
     public abstract class BaseLayoutExporter<TOptions>
         where TOptions : BaseExportOptions
     {
@@ -24,6 +46,34 @@ namespace SiGen.Export
         }
 
         public void ExportLayout(string filePath)
+        {
+            ExportLayout(ExportTarget.ToFile(filePath));
+        }
+
+        public virtual void ExportLayout(ExportTarget target)
+        {
+            ExportElements();
+            SaveToTarget(target);
+        }
+
+        protected virtual void SaveToTarget(ExportTarget target)
+        {
+            switch (target.Type)
+            {
+                case ExportTargetType.File:
+                    SaveToFile(target.FilePath ?? throw new InvalidOperationException("File export target is missing a file path."));
+                    break;
+
+                case ExportTargetType.Stream:
+                    SaveToStream(target.Stream ?? throw new InvalidOperationException("Stream export target is missing a stream."));
+                    break;
+
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(target));
+            }
+        }
+
+        protected void ExportElements()
         {
             if (Options.ExportCenterLine)
             {
@@ -49,15 +99,11 @@ namespace SiGen.Export
 
             if (Options.ExportStrings)
                 ExportStrings();
-
-
-
-            SaveToFile(filePath);
         }
 
         private void ExportFrets()
         {
-
+            int lastStringIndex = Layout.NumberOfStrings - 1;
             foreach (var fretElement in Layout.GetFretSegments())
             {
                 if (fretElement.FretShape == null)
@@ -66,7 +112,10 @@ namespace SiGen.Export
                 var shape = fretElement.FretShape;
                 if (!(fretElement.IsBridge || fretElement.IsNut) && Options.ExtendFrets && !Measure.IsNullOrEmpty(Options.FretExtensionAmount))
                 {
-                    shape = shape.Extend(Options.FretExtensionAmount.Value.NormalizedValue) ?? fretElement.FretShape;
+                    TrimExtendSide sides = TrimExtendSide.None;
+                    if (fretElement.ContainsString(0)) sides |= TrimExtendSide.Start;
+                    if (fretElement.ContainsString(lastStringIndex)) sides |= TrimExtendSide.End;
+                    shape = shape.TrimExtend(sides, Options.FretExtensionAmount.Value.NormalizedValue) ?? fretElement.FretShape;
                 }
 
                 if (shape != null)
@@ -107,6 +156,11 @@ namespace SiGen.Export
         protected abstract void ExportElement(ElementType elementType, PathBase path, LineExportOptions lineOptions);
 
         protected abstract void SaveToFile(string filePath);
+
+        protected virtual void SaveToStream(Stream stream)
+        {
+            throw new NotSupportedException($"{GetType().Name} does not support exporting to a stream.");
+        }
     }
 
     public enum ElementType

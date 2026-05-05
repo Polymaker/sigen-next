@@ -33,7 +33,7 @@ namespace SiGen.Layouts.Configuration.Builders
         public LayoutConfigurationBuilder AddSingleString(
             Measure? gauge = null,
             NoteAndOctave? tuning = null,
-            FretConfiguration? frets = null,
+            StringFretConfiguration? frets = null,
             Measure? scaleLength = null,
             FingerboardSide side = FingerboardSide.Treble)
         {
@@ -195,7 +195,7 @@ namespace SiGen.Layouts.Configuration.Builders
 
         public StringCourseBuilder WithNumberOfFrets(int frets)
         {
-            _courseConfig.Frets ??= new FretConfiguration();
+            _courseConfig.Frets ??= new StringFretConfiguration();
             _courseConfig.Frets.NumberOfFrets = frets;
             return this;
         }
@@ -263,7 +263,7 @@ namespace SiGen.Layouts.Configuration.Builders
             return this;
         }
 
-        public SingleStringBuilder WithFrets(FretConfiguration? frets)
+        public SingleStringBuilder WithFrets(StringFretConfiguration? frets)
         {
             _stringConfig.Frets = frets;
             return this;
@@ -271,14 +271,14 @@ namespace SiGen.Layouts.Configuration.Builders
 
         public SingleStringBuilder WithNumberOfFrets(int frets)
         {
-            _stringConfig.Frets ??= new FretConfiguration();
+            _stringConfig.Frets ??= new StringFretConfiguration();
             _stringConfig.Frets.NumberOfFrets = frets;
             return this;
         }
 
         public SingleStringBuilder WithStartingFret(int fret)
         {
-            _stringConfig.Frets ??= new FretConfiguration();
+            _stringConfig.Frets ??= new StringFretConfiguration();
             _stringConfig.Frets.StartingFret = fret;
             return this;
         }

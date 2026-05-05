@@ -43,7 +43,7 @@ namespace SiGen.ViewModels.Dialogs
             Initialize();
         }
 
-        public EditFretsDialogViewModel(ILayoutDocumentContext context)
+        public EditFretsDialogViewModel(ILayoutDocument context)
         {
             layoutConfiguration = context.Configuration;
             SaveCommand = new RelayCommand(Save);
@@ -91,7 +91,7 @@ namespace SiGen.ViewModels.Dialogs
 
         private void Save()
         {
-            var globalFrets = new FretConfiguration
+            var globalFrets = new GlobalFretConfiguration
             {
                 NumberOfFrets = NormalizeWholeNumber(NumberOfFrets) ?? 0,
                 Temperament = Temperament,
@@ -187,13 +187,13 @@ namespace SiGen.ViewModels.Dialogs
             OnPropertyChanged(nameof(UsesEqualTemperament));
         }
 
-        public FretConfiguration? ToConfiguration()
+        public StringFretConfiguration? ToConfiguration()
         {
             var numberOfFrets = EditFretsDialogViewModel.NormalizeWholeNumber(NumberOfFrets);
             var startingFret = EditFretsDialogViewModel.NormalizeWholeNumber(StartingFret);
             var equalTemperamentSteps = EditFretsDialogViewModel.NormalizeWholeNumber(EqualTemperamentSteps);
 
-            var configuration = new FretConfiguration
+            var configuration = new StringFretConfiguration
             {
                 NumberOfFrets = numberOfFrets,
                 StartingFret = startingFret == 0 ? null : startingFret,
@@ -215,10 +215,10 @@ namespace SiGen.ViewModels.Dialogs
 
     public class EditFretsResult
     {
-        public FretConfiguration GlobalFrets { get; }
-        public FretConfiguration?[] StringFrets { get; }
+        public GlobalFretConfiguration GlobalFrets { get; }
+        public StringFretConfiguration?[] StringFrets { get; }
 
-        public EditFretsResult(FretConfiguration globalFrets, FretConfiguration?[] stringFrets)
+        public EditFretsResult(GlobalFretConfiguration globalFrets, StringFretConfiguration?[] stringFrets)
         {
             GlobalFrets = globalFrets;
             StringFrets = stringFrets;

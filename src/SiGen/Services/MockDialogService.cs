@@ -34,17 +34,17 @@ namespace SiGen.Services
             throw new NotImplementedException();
         }
 
-        public Task<EditTuningResult?> ShowTuningDialog(ILayoutDocumentContext context)
+        public Task<EditTuningResult?> ShowTuningDialog(ILayoutDocument context)
         {
             throw new NotImplementedException();
         }
 
-        public Task<EditStringsResult?> ShowStringsDialog(ILayoutDocumentContext context)
+        public Task<EditStringsResult?> ShowStringsDialog(ILayoutDocument context)
         {
             throw new NotImplementedException();
         }
 
-        public Task<EditFretsResult?> ShowFretsDialog(ILayoutDocumentContext context)
+        public Task<EditFretsResult?> ShowFretsDialog(ILayoutDocument context)
         {
             throw new NotImplementedException();
         }

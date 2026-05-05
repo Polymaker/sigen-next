@@ -149,9 +149,6 @@ Positive values angle the frets one way, negative values the other. Leave blank 
 • **Symmetric Fingerboard**: *(Multiscale only)* Like Symmetric Strings, but accounts for different bass/treble margins.
 • **Manual**: Set alignment manually (0 = bass side aligned, 1 = treble side aligned, 0.5 = centered).</value>
   </data>
-  <data name="SingleScale_Presets_Title" xml:space="preserve">
-    <value>Here are some common scale length used :</value>
-  </data>
   <data name="InstrumentType_Help" xml:space="preserve">
     <value>This value determines which kind of instrument you are designing. 
 Selecting an instrument type enables info buttons next to certain fields, showing common values and suggestions specific to that instrument.</value>

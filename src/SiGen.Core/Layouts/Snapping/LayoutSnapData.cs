@@ -64,6 +64,11 @@ namespace SiGen.Layouts.Snapping
                 }
                 return segments;
             }
+            else if (path is BezierSplinePath bezierSpline)
+            {
+                //var segments = new List<LinearPath>();
+
+            }
 
             return Array.Empty<LinearPath>();
         }

@@ -105,10 +105,8 @@ namespace SiGen.Utilities
             layoutConfig.Fingerboard.CompensateMarginsForStrings = true;
             layoutConfig.Fingerboard.ExtensionAfterLastFret = Measuring.Measure.Mm(12);
             layoutConfig.NumberOfFrets = 24;
-            layoutConfig.StringConfigurations[0].Frets ??= new FretConfiguration();
-            layoutConfig.StringConfigurations[0].Frets!.NumberOfFrets = 21;
-            layoutConfig.StringConfigurations[1].Frets ??= new FretConfiguration();
-            layoutConfig.StringConfigurations[1].Frets!.NumberOfFrets = 21;
+            layoutConfig.StringConfigurations[0].SetNumberOfFrets(21);
+            layoutConfig.StringConfigurations[1].SetNumberOfFrets(21);
             return layoutConfig;
         }
 
@@ -164,10 +162,8 @@ namespace SiGen.Utilities
                 });
                 layoutConfig.StringConfigurations.Add(stringConfig);
             }
-            layoutConfig.StringConfigurations[2].Frets ??= new FretConfiguration();
-            layoutConfig.StringConfigurations[2].Frets!.NumberOfFrets = 19;
-            layoutConfig.StringConfigurations[3].Frets ??= new FretConfiguration();
-            layoutConfig.StringConfigurations[3].Frets!.NumberOfFrets = 22;
+            layoutConfig.StringConfigurations[2].SetNumberOfFrets(19);
+            layoutConfig.StringConfigurations[3].SetNumberOfFrets(22);
             layoutConfig.InitializeStringConfigs();
 
             return layoutConfig;

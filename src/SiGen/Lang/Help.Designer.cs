@@ -160,15 +160,6 @@ namespace SiGen.Lang {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Here are some common scale length used :.
-        /// </summary>
-        public static string SingleScale_Presets_Title {
-            get {
-                return ResourceManager.GetString("SingleScale_Presets_Title", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Choose how strings are spaced on the instrument:
         ///• **Proportional**: Strings are spaced so the free space between each string is equal, taking into account the thickness (gauge) of each string.
         ///• **Center to Center**: Strings are spaced so the distance from the center of one string to the center of the next is equal, regardless of string gauge.

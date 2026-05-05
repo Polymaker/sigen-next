@@ -24,6 +24,9 @@ namespace SiGen.ViewModels.EditorPanels
         [ObservableProperty]
         private int? numberOfFrets;
 
+        [ObservableProperty]
+        private string layoutName = string.Empty;
+
         private List<BaseStringConfiguration> stringConfigurations = new();
 
         public bool RightHanded => !LeftHanded;
@@ -46,6 +49,7 @@ namespace SiGen.ViewModels.EditorPanels
             InstrumentType = Configuration.InstrumentType;
             NumberOfStrings = Configuration.NumberOfStrings;
             NumberOfFrets = Configuration.NumberOfFrets;
+            LayoutName = Configuration.Name ?? string.Empty;
 
             if (Configuration.StringConfigurations.Count == 0)
                 Configuration.InitializeStringConfigs();
@@ -66,9 +70,14 @@ namespace SiGen.ViewModels.EditorPanels
                 UpdateConfiguration("Change handedness", config => config.LeftHanded = LeftHanded);
             }  
 
-            if (e.PropertyName == nameof(InstrumentType) && InstrumentType.HasValue)
+            else if (e.PropertyName == nameof(InstrumentType) && InstrumentType.HasValue)
             {
                 UpdateConfiguration("Change Instrument Type", config => config.InstrumentType = InstrumentType.Value);
+            }
+
+            else if (e.PropertyName == nameof(LayoutName))
+            {
+                UpdateConfiguration("Change name", config => config.Name = LayoutName);
             }
         }
 

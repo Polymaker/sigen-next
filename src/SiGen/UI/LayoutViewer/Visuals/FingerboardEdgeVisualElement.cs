@@ -60,9 +60,9 @@ namespace SiGen.UI.LayoutViewer.Visuals
         /// <summary>
         /// Updates the theme for the fingerboard side visual.
         /// </summary>
-        public override void UpdateTheme(LayoutViewerColorScheme theme)
+        public override void UpdateColorScheme(LayoutViewerColorScheme theme)
         {
-            base.UpdateTheme(theme);
+            base.UpdateColorScheme(theme);
             if (_edgeLine != null)
                 _edgeLine.Stroke = new SolidColorBrush(ThemeRenderSettings.FingerBoardEdgeColor);
         }

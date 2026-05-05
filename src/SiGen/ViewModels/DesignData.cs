@@ -25,19 +25,22 @@ namespace SiGen.ViewModels
                 services.AddSingleton<IInstrumentValuesProviderFactory, InstrumentValuesProviderFactory>();
                 services.AddSingleton<IStringDataService, MockStringDataService>();
                 services.AddSingleton<IStringMaterialEstimationService, StringMaterialEstimationService>();
-                var provider = services.BuildServiceProvider();
+                services.AddSingleton<ISettingsService, MockSettingsService>();
+                services.AddSingleton<DesktopMainViewModel>();
+                services.AddSingleton<ViewModelFactory>();
+                services.AddSingleton<IDocumentManager>(sp => sp.GetRequiredService<DesktopMainViewModel>());
+                
 
-                var model = new DesktopMainViewModel(
-                    dialogSvc,
-                    new MockSettingsService(),
-                    new ViewModelFactory(provider));
-                model.OpenDocuments.Add(new LayoutDocumentViewModel("Untitled", null, LayoutTemplates.CreateBassGuitarMultiscaleLayout())
-                {
-                    HasUnsavedChanges = true
-                });
-                model.OpenDocuments.Add(new LayoutDocumentViewModel("Layout 1", null, LayoutTemplates.CreateMandolinLayout()));
-                model.SelectedDocument = model.OpenDocuments.FirstOrDefault();
-                return model;
+                var provider = services.BuildServiceProvider();
+                var mainModel = provider.GetRequiredService<DesktopMainViewModel>();
+
+                var document1 = ActivatorUtilities.CreateInstance<LayoutDocumentViewModel>(provider, "Untitled", string.Empty, LayoutTemplates.CreateBassGuitarMultiscaleLayout());
+                document1.HasUnsavedChanges = true;
+                mainModel.OpenDocuments.Add(document1);
+                var document2 = ActivatorUtilities.CreateInstance<LayoutDocumentViewModel>(provider, "Mandolin Layout", string.Empty, LayoutTemplates.CreateMandolinLayout());
+                mainModel.OpenDocuments.Add(document2);
+                mainModel.SelectedDocument = mainModel.OpenDocuments.FirstOrDefault();
+                return mainModel;
             }
         }
 

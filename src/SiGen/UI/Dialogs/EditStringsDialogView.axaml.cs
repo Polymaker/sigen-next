@@ -15,6 +15,7 @@ public partial class EditStringsDialogView : UserControl
     public EditStringsDialogView()
     {
         InitializeComponent();
+        
     }
 
     protected override void OnLoaded(RoutedEventArgs e)

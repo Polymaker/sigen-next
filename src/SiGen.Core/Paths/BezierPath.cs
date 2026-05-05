@@ -85,6 +85,17 @@ namespace SiGen.Paths
                 Math.Pow(t, 3d) * ControlPoints[3];
         }
 
+        public VectorD GetTangent(double t)
+        {
+            t = MathD.Clamp(t);
+
+            double omt = 1d - t;
+
+            return (3 * Math.Pow(omt, 2d) * (ControlPoints[1] - ControlPoints[0]) +
+                    6 * omt * t * (ControlPoints[2] - ControlPoints[1]) +
+                    3 * Math.Pow(t, 2d) * (ControlPoints[3] - ControlPoints[2])).Normalized;
+        }
+
         public override bool Intersects(LinearPath line, out VectorD intersection)
         {
             const int sampleCount = 50;

@@ -29,16 +29,26 @@ xmlns:materialIcons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Ico
 	</UserControl.Resources>
 
 	<Grid RowDefinitions="Auto,*,Auto" Margin="3">
-		<Grid Grid.Row="0" Margin="3" ColumnDefinitions="*,Auto">
-			<ComboBox x:Name="StringSetSelector" Grid.Column="0"
-					  ItemsSource="{Binding AvailableSets}" HorizontalAlignment="Stretch">
+
+		<Grid Grid.Row="0" Margin="3" ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto">
+			<Label Grid.Row="0" Grid.Column="0"
+				   Content="{x:Static lang:Resources.EditStringsDialog_StringSetsLabel}" 
+				   VerticalAlignment="Center" />
+
+			<ComboBox x:Name="StringSetSelector" 
+					  Grid.Row="1" Grid.Column="0"
+					  ItemsSource="{Binding AvailableSets}" 
+					  HorizontalAlignment="Stretch">
 				<ComboBox.ItemTemplate>
 					<DataTemplate>
 						<TextBlock Text="{Binding Name}" />
 					</DataTemplate>
 				</ComboBox.ItemTemplate>
 			</ComboBox>
-			<Button Grid.Column="1" Content="Apply" Margin="3,0,0,0" Padding="10,6"
+
+			<Button Grid.Row="1" Grid.Column="1" 
+					Content="{x:Static lang:Resources.Common_Apply}" 
+					Margin="3,0,0,0" Padding="10,6"
 					Command="{Binding ApplyStringSetCommand}"
 					CommandParameter="{Binding #StringSetSelector.SelectedItem}"/>
 		</Grid>
@@ -117,7 +127,6 @@ xmlns:materialIcons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Ico
 												<ctrl:SvgIcon SvgImage="/Assets/Icons/CourseSpacingIcon.svg" Height="24"/>
 											</Button>
 										</StackPanel>
-
 
 										<!--<Label Content="{Binding CourseIndex}" />-->
 										<ItemsControl ItemsSource="{Binding Strings}"

@@ -149,9 +149,6 @@ Les valeurs positives inclinent les frettes d'un côté, les valeurs négatives 
 • **Touche symétrique** : *(Multidiapason uniquement)* Comme Cordes symétriques, mais tient compte des marges graves/aigus différentes.
 • **Manuel** : Définit l'alignement manuellement (0 = côté grave aligné, 1 = côté aigu aligné, 0,5 = centré).</value>
   </data>
-  <data name="SingleScale_Presets_Title" xml:space="preserve">
-    <value>Voici quelques longueurs de diapason courantes utilisées :</value>
-  </data>
   <data name="InstrumentType_Help" xml:space="preserve">
     <value>Cette valeur détermine le type d'instrument que vous concevez.
 La sélection d'un type d'instrument active des boutons d'information à côté de certains champs, affichant des valeurs communes et des suggestions spécifiques à cet instrument.</value>

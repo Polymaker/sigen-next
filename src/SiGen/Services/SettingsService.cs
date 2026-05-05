@@ -15,7 +15,7 @@ public interface ISettingsService
     UserSettings Settings { get; }
     void Save();
     void Load();
-    void AddRecentFile(ILayoutDocumentContext document);
+    void AddRecentFile(ILayoutDocument document);
 
     /// <summary>
     /// Raised when the recent files list is updated.
@@ -25,7 +25,7 @@ public interface ISettingsService
     /// <summary>
     /// Raised when the application theme is changed.
     /// </summary>
-    event EventHandler<AppTheme>? ThemeChanged;
+    event EventHandler<AppTheme>? AppThemeChanged;
 
     /// <summary>
     /// Raised when the application language is changed.
@@ -40,10 +40,10 @@ public interface ISettingsService
     /// <summary>
     /// Raised when the layout viewer color scheme settings are changed.
     /// </summary>
-    event EventHandler<LayoutViewerColorSchemeSettings>? LayoutViewerColorSchemeChanged;
+    event EventHandler<LayoutViewerColorSchemeSettings>? ViewerThemeChanged;
 
     /// <summary>
-    /// Sets the application theme and raises the <see cref="ThemeChanged"/> event.
+    /// Sets the application theme and raises the <see cref="AppThemeChanged"/> event.
     /// </summary>
     void SetTheme(AppTheme theme);
 
@@ -58,7 +58,7 @@ public interface ISettingsService
     void SetUnitSystem(UnitSystem unitSystem);
 
     /// <summary>
-    /// Sets the layout viewer color scheme settings and raises the <see cref="LayoutViewerColorSchemeChanged"/> event.
+    /// Sets the layout viewer color scheme settings and raises the <see cref="ViewerThemeChanged"/> event.
     /// </summary>
     void SetLayoutViewerColorScheme(LayoutViewerColorSchemeSettings colorSchemeSettings);
 }
@@ -78,7 +78,7 @@ public class SettingsService : ISettingsService
     /// <summary>
     /// Raised when the application theme is changed.
     /// </summary>
-    public event EventHandler<AppTheme>? ThemeChanged;
+    public event EventHandler<AppTheme>? AppThemeChanged;
 
     /// <summary>
     /// Raised when the application language is changed.
@@ -93,7 +93,7 @@ public class SettingsService : ISettingsService
     /// <summary>
     /// Raised when the layout viewer color scheme settings are changed.
     /// </summary>
-    public event EventHandler<LayoutViewerColorSchemeSettings>? LayoutViewerColorSchemeChanged;
+    public event EventHandler<LayoutViewerColorSchemeSettings>? ViewerThemeChanged;
 
     public SettingsService()
     {
@@ -155,7 +155,7 @@ public class SettingsService : ISettingsService
     //    Save();
     //}
 
-    public void AddRecentFile(ILayoutDocumentContext document)
+    public void AddRecentFile(ILayoutDocument document)
     {
         if (string.IsNullOrWhiteSpace(document.FilePath))
             return;
@@ -186,7 +186,7 @@ public class SettingsService : ISettingsService
         {
             Settings.Theme = theme;
             Save();
-            ThemeChanged?.Invoke(this, theme);
+            AppThemeChanged?.Invoke(this, theme);
         }
     }
 
@@ -217,7 +217,7 @@ public class SettingsService : ISettingsService
     {
         Settings.LayoutViewerColorScheme = colorSchemeSettings;
         Save();
-        LayoutViewerColorSchemeChanged?.Invoke(this, colorSchemeSettings);
+        ViewerThemeChanged?.Invoke(this, colorSchemeSettings);
     }
 }
 
@@ -226,10 +226,10 @@ internal class MockSettingsService : ISettingsService
     public UserSettings Settings { get; private set; } = new UserSettings();
 
     public event EventHandler? RecentFilesChanged;
-    public event EventHandler<AppTheme>? ThemeChanged;
+    public event EventHandler<AppTheme>? AppThemeChanged;
     public event EventHandler<AppLanguage>? LanguageChanged;
     public event EventHandler<UnitSystem>? UnitSystemChanged;
-    public event EventHandler<LayoutViewerColorSchemeSettings>? LayoutViewerColorSchemeChanged;
+    public event EventHandler<LayoutViewerColorSchemeSettings>? ViewerThemeChanged;
 
     public MockSettingsService()
     {
@@ -252,7 +252,7 @@ internal class MockSettingsService : ISettingsService
         throw new NotImplementedException();
     }
 
-    public void AddRecentFile(ILayoutDocumentContext document)
+    public void AddRecentFile(ILayoutDocument document)
     {
         throw new NotImplementedException();
     }
@@ -270,7 +270,7 @@ internal class MockSettingsService : ISettingsService
     public void SetTheme(AppTheme theme)
     {
         Settings.Theme = theme;
-        ThemeChanged?.Invoke(this, theme);
+        AppThemeChanged?.Invoke(this, theme);
     }
 
     public void SetLanguage(AppLanguage language)
@@ -288,7 +288,7 @@ internal class MockSettingsService : ISettingsService
     public void SetLayoutViewerColorScheme(LayoutViewerColorSchemeSettings colorSchemeSettings)
     {
         Settings.LayoutViewerColorScheme = colorSchemeSettings;
-        LayoutViewerColorSchemeChanged?.Invoke(this, colorSchemeSettings);
+        ViewerThemeChanged?.Invoke(this, colorSchemeSettings);
     }
 }
 

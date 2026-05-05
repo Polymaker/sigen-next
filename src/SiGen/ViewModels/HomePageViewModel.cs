@@ -1,5 +1,7 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using Avalonia.Threading;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.Extensions.DependencyInjection;
 using SiGen.Data.Common;
 using SiGen.Data.Presets;
 using SiGen.Layouts.Configuration;
@@ -29,6 +31,9 @@ namespace SiGen.ViewModels
 
         public List<InstrumentTemplateGroupModel> InstrumentTemplates { get; } = new List<InstrumentTemplateGroupModel>();
 
+        public bool IsHomePage => true;
+        public bool IsDocument => false;
+
         [ObservableProperty]
         private string searchText = string.Empty;
 
@@ -40,6 +45,7 @@ namespace SiGen.ViewModels
 
         public RelayCommand<RecentFileModel> OpenRecentFileCommand { get; }
 
+        [ActivatorUtilitiesConstructor]
         public HomePageViewModel(ISettingsService settingsService, IDocumentManager documentManager)
         {
             RecentFiles.AddRange(settingsService.Settings.RecentFiles);
@@ -51,8 +57,16 @@ namespace SiGen.ViewModels
             
             // Subscribe to recent files changes
             settingsService.RecentFilesChanged += OnRecentFilesChanged;
-            
+            settingsService.LanguageChanged += OnLanguageChanged;
             RebuildTemplates();
+        }
+
+        private void OnLanguageChanged(object? sender, AppLanguage e)
+        {
+            Task.Delay(100).ContinueWith((t) =>
+            {
+                OnPropertyChanged(nameof(Title));
+            });
         }
 
         private void OnRecentFilesChanged(object? sender, EventArgs e)

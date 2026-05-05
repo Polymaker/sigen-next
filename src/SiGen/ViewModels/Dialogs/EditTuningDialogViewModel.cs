@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualBasic;
 using netDxf.Objects;
 using SiGen.Data.Common;
@@ -24,7 +25,7 @@ namespace SiGen.ViewModels.Dialogs
         private const double TensionBalanceTolerance = 0.25;
 
         private readonly InstrumentLayoutConfiguration layoutConfiguration;
-        private readonly ILayoutDocumentContext? layoutContext;
+        private readonly ILayoutDocument? layoutContext;
         private readonly IStringMaterialEstimationService materialEstimationService;
 
         public override string Title => Lang.Resources.EditTuningDialog_Title;
@@ -50,11 +51,13 @@ namespace SiGen.ViewModels.Dialogs
             ApplyTuningCommand = new RelayCommand<InstrumentTuningPreset>(ApplyTuningPreset);
         }
 
-        public EditTuningDialogViewModel(ILayoutDocumentContext context)
+        [ActivatorUtilitiesConstructor]
+        public EditTuningDialogViewModel(ILayoutDocument context,
+            IStringMaterialEstimationService materialEstimationService)
         {
             this.layoutConfiguration = context.Configuration;
             this.valuesProvider = context.InstrumentValuesProvider;
-            materialEstimationService = context.MaterialEstimationService;
+            this.materialEstimationService = materialEstimationService;
             
             ShowTitleBar = true;
             ApplyTuningCommand = new RelayCommand<InstrumentTuningPreset>(ApplyTuningPreset);

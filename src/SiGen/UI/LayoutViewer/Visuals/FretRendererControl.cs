@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace SiGen.UI.LayoutViewer.Visuals
 {
-    public class FretRendererControl : Control
+    public class FretRendererControl : Control, ILayoutRenderable
     {
         private ILayoutViewerContext ViewerContext { get; }
         private StringedInstrumentLayout? Layout => ViewerContext.Layout;
@@ -26,10 +26,6 @@ namespace SiGen.UI.LayoutViewer.Visuals
         public FretRendererControl(ILayoutViewerContext context)
         {
             ViewerContext = context;
-            context.ColorSchemeChanged += (s, e) =>
-            {
-                InvalidateVisual();
-            };
         }
 
         public override void Render(DrawingContext context)
@@ -60,7 +56,7 @@ namespace SiGen.UI.LayoutViewer.Visuals
                 {
                     foreach (var segment in group)
                     {
-                        var adjustedShape = segment.FretShape?.Extend(0.25);
+                        var adjustedShape = segment.FretShape?.TrimExtend(TrimExtendSide.Start | TrimExtendSide.End, 0.25);
                         if (adjustedShape == null) continue;
 
                         if (adjustedShape is LinearPath linear)
@@ -81,6 +77,16 @@ namespace SiGen.UI.LayoutViewer.Visuals
 
                             }
                         }
+                        else if (adjustedShape is BezierSplinePath bezierSpline)
+                        {
+                            var segments = bezierSpline.GetSegments();
+                            if (segments.Count == 0) continue;
+
+                            sContext.BeginFigure(segments[0].P0.ToAvalonia(), isFilled: false);
+                            foreach (var seg in segments)
+                                sContext.CubicBezierTo(seg.P1.ToAvalonia(), seg.P2.ToAvalonia(), seg.P3.ToAvalonia());
+                            sContext.EndFigure(isClosed: false);
+                        }
                     }
                 }
 
@@ -90,53 +96,8 @@ namespace SiGen.UI.LayoutViewer.Visuals
                 context.DrawGeometry(null, fretPen, streamGeom);
                 clipState?.Dispose();
             }
-
-            //foreach (var segment in fretSegments)
-            //{
-            //    if (segment.FretShape == null) continue;
-            //    var adjustedShape = segment.FretShape.Extend(0.25); //extend slightly to extend past the fingerboard edges to prevent gaps, the excess will be clipped
-
-            //    if (adjustedShape == null) continue;
-            //    var clipGeom = GetFretClipGeom(segment);
-            //    var fretColorBrush = segment.IsNut ? new SolidColorBrush(RenderSettings.NutColor) :
-            //        (segment.IsBridge ? new SolidColorBrush(RenderSettings.BridgeColor) :
-            //        new SolidColorBrush(RenderSettings.FretColor));
-
-            //    //var fretColor = segment.IsNut ? RenderSettings.NutColor :
-            //    //    (segment.IsBridge ? RenderSettings.BridgeColor : RenderSettings.FretColor);
-
-            //    var fretThickness = segment.IsNut || segment.IsBridge ? 2 : SiGen.Measuring.Measure.Mm(2).ToPixels();
-            //    var fretPen = new Pen(fretColorBrush, fretThickness);
-            //    Geometry? fretGeometry = null;
-
-            //    if (adjustedShape is LinearPath linearPath)
-            //    {
-            //        fretGeometry = new LineGeometry
-            //        {
-            //            StartPoint = linearPath.Start.ToAvalonia(),
-            //            EndPoint = linearPath.End.ToAvalonia()
-            //        };
-            //    }
-            //    else if (adjustedShape is PolyLinePath polyLine)
-            //    {
-            //        fretGeometry = new PolylineGeometry()
-            //        {
-            //            Points = polyLine.Points.Select(p => p.ToAvalonia()).ToList()
-            //        };
-            //    }
-
-            //    if (fretGeometry != null)
-            //    {
-            //        DrawingContext.PushedState? clipState = null;
-            //        if (clipGeom != null)
-            //            clipState = context.PushGeometryClip(clipGeom);
-            //        context.DrawGeometry(null, fretPen, fretGeometry);
-            //        clipState?.Dispose();
-            //    }
-            //}
         }
 
-        //todo: cache clip geometries by covered string range
         private Geometry? GetFretClipGeom(FretSegmentElement element)
         {
             var key = (element.BassStringIndex, element.TrebleStringIndex);
@@ -164,6 +125,11 @@ namespace SiGen.UI.LayoutViewer.Visuals
             pathGeometry.Transform = new TranslateTransform(0.001, 0.001); //required otherwise the clip does not work properly
             _clipGeometryCache[key] = pathGeometry;
             return pathGeometry;
+        }
+
+        public void UpdateColorScheme(LayoutViewerColorScheme theme)
+        {
+            InvalidateVisual();
         }
     }
 }

@@ -74,7 +74,7 @@ public partial class ScaleLengthEditorPanel : UserControl
     {
         if (ViewModel != null && IsLoaded)
         {
-            var instrumentType = ViewModel.LayoutDocumentContext.Configuration.InstrumentType;
+            var instrumentType = ViewModel.LayoutDocument.Configuration.InstrumentType;
             if (instrumentType == Data.Common.InstrumentType.ElectricGuitar || 
                 instrumentType == Data.Common.InstrumentType.ElectricBass)
             {
@@ -102,7 +102,7 @@ public partial class ScaleLengthEditorPanel : UserControl
     {
         SingleScaleLengthField.Info = null;
 
-        var provider = ViewModel?.LayoutDocumentContext?.InstrumentValuesProvider;
+        var provider = ViewModel?.LayoutDocument?.InstrumentValuesProvider;
         if (provider == null) return;
 
         var scaleLengthPresets = provider.GetScaleLengthPresets();
@@ -140,7 +140,7 @@ public partial class ScaleLengthEditorPanel : UserControl
 
         if (ViewModel == null) return;
 
-        var instrumentType = ViewModel.LayoutDocumentContext.Configuration.InstrumentType;
+        var instrumentType = ViewModel.LayoutDocument.Configuration.InstrumentType;
 
 
         if (instrumentType == Data.Common.InstrumentType.ElectricGuitar || instrumentType == Data.Common.InstrumentType.ElectricBass)

@@ -11,7 +11,7 @@ namespace SiGen.Utilities
 {
     public static class MeasureUtils
     {
-        public static double CmToPixels = 37.7952755906; // 1 cm = 37.7952755906 pixels (96 DPI)
+        public const double CmToPixels = 37.7952755906; // 1 cm = 37.7952755906 pixels (96 DPI)
 
         public static Rect ToAvalonia(this RectangleM rectangle, double scale)
         {

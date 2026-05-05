@@ -59,6 +59,11 @@ namespace SiGen.ViewModels.Dialogs
             CompleteDialog(MessageBoxResult.No);
         }
 
+
+        public override void CancelDialog()
+        {
+            CompleteDialog(MessageBoxResult.Cancel);
+        }
         //[RelayCommand]
         //private void Cancel()
         //{

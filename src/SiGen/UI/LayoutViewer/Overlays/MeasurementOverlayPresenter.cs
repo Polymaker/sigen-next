@@ -20,8 +20,6 @@ namespace SiGen.UI.LayoutViewer.Overlays
         private const string TextBoxClassDark = "measure-overlay-dark";
         private const string TextBoxClassLight = "measure-overlay-light";
 
-        private readonly Func<VectorD, Point> _vectorToScreen;
-
         private readonly Color _mainColor = Color.FromArgb(230, 20, 20, 20);
         private readonly Color _xAxisColor = Color.FromArgb(240, 220, 65, 55);
         private readonly Color _yAxisColor = Color.FromArgb(240, 64, 126, 210);
@@ -48,10 +46,11 @@ namespace SiGen.UI.LayoutViewer.Overlays
         public bool HasStartPoint => _startPoint.HasValue;
         public bool HasCompletedMeasurement => _startPoint.HasValue && _endPoint.HasValue;
         public VectorD? StartPoint => _startPoint;
+        private ILayoutViewerContext _layoutViewer = default!;
 
-        public MeasurementOverlayPresenter(Func<VectorD, Point> vectorToScreen, Measuring.UnitSystem unitMode, LayoutViewerColorScheme theme)
+        public MeasurementOverlayPresenter(ILayoutViewerContext layoutViewer, Measuring.UnitSystem unitMode, LayoutViewerColorScheme theme)
         {
-            _vectorToScreen = vectorToScreen;
+            _layoutViewer = layoutViewer;
             _unitMode = unitMode;
 
             _mainLine = CreateLine(3);
@@ -150,7 +149,7 @@ namespace SiGen.UI.LayoutViewer.Overlays
                 return;
             }
 
-            var startScreen = _vectorToScreen(_startPoint.Value);
+            var startScreen = _layoutViewer.VectorToScreen(_startPoint.Value);
             PositionIndicator(_startMarker, startScreen, true);
 
             if (!_endPoint.HasValue)
@@ -170,7 +169,7 @@ namespace SiGen.UI.LayoutViewer.Overlays
 
             var end = _endPoint.Value;
             var start = _startPoint.Value;
-            var endScreen = _vectorToScreen(end);
+            var endScreen = _layoutViewer.VectorToScreen(end);
             var delta = end - start;
 
             _mainLine.StartPoint = startScreen;
@@ -185,7 +184,7 @@ namespace SiGen.UI.LayoutViewer.Overlays
             var showComponents = hasX && hasY; // only show axis breakdown when truly diagonal
 
             var elbow = new VectorD(end.X, start.Y);
-            var elbowScreen = _vectorToScreen(elbow);
+            var elbowScreen = _layoutViewer.VectorToScreen(elbow);
             var triangleCenter = new Point(
                 (startScreen.X + elbowScreen.X + endScreen.X) / 3d,
                 (startScreen.Y + elbowScreen.Y + endScreen.Y) / 3d);
@@ -288,7 +287,7 @@ namespace SiGen.UI.LayoutViewer.Overlays
                 return;
             }
 
-            PositionIndicator(_snapPreviewMarker, _vectorToScreen(_snapPreviewPoint.Value), true);
+            PositionIndicator(_snapPreviewMarker, _layoutViewer.VectorToScreen(_snapPreviewPoint.Value), true);
         }
 
         private void PositionIndicator(Ellipse indicator, Point point, bool visible)
@@ -306,7 +305,7 @@ namespace SiGen.UI.LayoutViewer.Overlays
                 return;
             }
 
-            var previewScreen = _vectorToScreen(_snapPreviewPoint.Value);
+            var previewScreen = _layoutViewer.VectorToScreen(_snapPreviewPoint.Value);
             _livePreviewLine.StartPoint = startScreen;
             _livePreviewLine.EndPoint = previewScreen;
             _livePreviewLine.IsVisible = true;

@@ -136,6 +136,13 @@ namespace SiGen.Layouts.Elements
                 else
                     return (polyline.Points[^1] - polyline.Points[^2]).Normalized;
             }
+            else if (FretShape is BezierSplinePath bezierSpline)
+            {
+                if (side == FingerboardSide.Bass)
+                    return bezierSpline.GetTangent(0) * -1d;
+                else
+                    return bezierSpline.GetTangent(1);
+            }
             return default;
         }
     }
@@ -244,6 +251,12 @@ namespace SiGen.Layouts.Elements
         public bool ContainsString(int index)
         {
             return FretPoints.Where(x => !x.IsReference).Any(x => x.StringIndex == index);
+        }
+
+        public int GetFretIndexForString(int stringIndex)
+        {
+            var point = FretPoints.FirstOrDefault(x => !x.IsReference && x.StringIndex == stringIndex);
+            return point?.FretIndex ?? -1;
         }
     }
 }

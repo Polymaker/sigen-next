@@ -7,6 +7,7 @@ using SiGen.Layouts.Data;
 using SiGen.Layouts.Elements;
 using SiGen.Maths;
 using SiGen.Settings;
+using SiGen.UI.LayoutViewer.Visuals;
 using SiGen.Utilities;
 using System;
 using System.Collections.Generic;
@@ -17,19 +18,25 @@ using System.Threading.Tasks;
 
 namespace SiGen.UI.LayoutViewer.Overlays
 {
-    public class FretNumberOverlayControl : Control
+    public class FretNumbersRenderer : Control, ILayoutRenderable
     {
         private ILayoutViewerContext ViewerContext { get; }
         private StringedInstrumentLayout? Layout => ViewerContext.Layout;
         public LayoutViewerColorScheme RenderSettings => ViewerContext.ColorScheme;
 
-        public FretNumberOverlayControl(ILayoutViewerContext context)
+        public FretNumbersRenderer(ILayoutViewerContext context)
         {
             ViewerContext = context;
-            context.ColorSchemeChanged += (s, e) =>
-            {
-                InvalidateVisual();
-            };
+        //    context.ColorSchemeChanged += (s, e) =>
+        //    {
+        //        InvalidateVisual();
+        //    };
+        }
+
+        public void UpdateColorScheme(LayoutViewerColorScheme theme)
+        {
+            InvalidateVisual();
+            //throw new NotImplementedException();
         }
 
         public override void Render(DrawingContext context)
@@ -90,7 +97,6 @@ namespace SiGen.UI.LayoutViewer.Overlays
                     DrawFretNumber(fretIndex, screenPos, FingerboardSide.Treble);
                 }
             }
-
         }
 
         private VectorD CorrectVectorForView(VectorD vector)
@@ -149,6 +155,8 @@ namespace SiGen.UI.LayoutViewer.Overlays
             //    return new Point(isLeftHanded ? margin.X : (text.Width + margin.X) * -1d, text.Height * -0.5d);
             //}
         }
+
+        
         //private Point GetTextOffset(FormattedText text, Point margin, FingerboardSide side)
         //{
         //    bool isLeftHanded = Layout?.Configuration?.LeftHanded ?? false;

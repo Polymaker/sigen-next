@@ -35,7 +35,7 @@ namespace SiGen.Layouts.Configuration
         /// Individual fret configuration for the string or group of strings.
         /// </summary>
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public FretConfiguration? Frets { get; set; } /*= null!;*/
+        public StringFretConfiguration? Frets { get; set; } /*= null!;*/
 
         [JsonIgnore]
         public abstract bool IsStringCourse { get; }
@@ -95,6 +95,22 @@ namespace SiGen.Layouts.Configuration
             }
             return null;
         }
+
+        #region Helpers
+
+        public void SetStartingFret(int fretNumber)
+        {
+            Frets ??= new StringFretConfiguration();
+            Frets.StartingFret = fretNumber;
+        }
+
+        public void SetNumberOfFrets(int fretCount)
+        {
+            Frets ??= new StringFretConfiguration();
+            Frets.NumberOfFrets = fretCount;
+        }
+
+        #endregion
 
         [JsonIgnore]
         public bool IsGaugeDefined => EnumerateStrings().All(x => x.Data.Gauge.HasValue);

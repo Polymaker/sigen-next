@@ -153,10 +153,12 @@
 											 Watermark="Length"
 											 Width="60" MinHeight="0" FontSize="12"
 											 VerticalContentAlignment="Center" />
-						<ctrl:NumericTextBox Value="{Binding Ratio}"
+						<ctrl:NumericTextBox Value="{Binding Ratio, Mode=TwoWay}"
 											 MinimumValue="0" MaximumValue="1"
 											 MinHeight="0" FontSize="12"
-											 VerticalContentAlignment="Center" Watermark="{Binding DefaultRatio}"  />
+											 AllowEmpty="True"
+											 VerticalContentAlignment="Center" 
+											 Watermark="{Binding DefaultRatio}"  />
 						<!--<TextBox Text="{Binding Ratio}" TextAlignment="Right" />-->
 					</StackPanel>
 				</DataTemplate>

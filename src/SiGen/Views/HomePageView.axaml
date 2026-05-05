@@ -54,6 +54,7 @@
 		
 
 		<StackPanel Grid.Column="0" Margin="10" Spacing="4" >
+
 			<TextBlock FontSize="24" TextWrapping="Wrap" FontWeight="DemiBold">
 				<Run Text="{x:Static lang:Resources.HomePageView_HeaderPart1}" />
 				<Run Text="{x:Static lang:Resources.HomePageView_HeaderPart2}" Foreground="{DynamicResource SystemAccentColor}" />
@@ -136,7 +137,9 @@
 					<ItemsControl.ItemTemplate>
 						<DataTemplate x:DataType="vm:InstrumentTemplateGroupModel">
 							<Border 
-									CornerRadius="4">
+									CornerRadius="4" 
+									
+									>
 								<DockPanel>
 									<ctrl:SvgIcon SvgImage="{Binding InstrumentType, Converter={StaticResource InstrumentTypeToSvgPathConverter}}"
 									 Height="40" Margin="8,0,4,0"

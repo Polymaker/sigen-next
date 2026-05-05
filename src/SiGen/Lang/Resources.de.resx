@@ -379,6 +379,9 @@
   <data name="Common.Cancel" xml:space="preserve">
     <value>Abbrechen</value>
   </data>
+  <data name="Common.Apply" xml:space="preserve">
+    <value>Anwenden</value>
+  </data>
   <data name="EditFretsDialog.Title" xml:space="preserve">
     <value>Bundkonfiguration</value>
   </data>
@@ -435,6 +438,12 @@
   </data>
   <data name="TensionBalanceState.OverTensioned" xml:space="preserve">
     <value>Überspannt</value>
+  </data>
+  <data name="EditStringsDialog.Title" xml:space="preserve">
+    <value>Saitenkonfiguration</value>
+  </data>
+  <data name="EditStringsDialog.StringSetsLabel" xml:space="preserve">
+    <value>Verfügbare Saitensätze:</value>
   </data>
   <data name="EditStringsDialog.StringHeader" xml:space="preserve">
     <value>Saite</value>
@@ -646,5 +655,14 @@ Fehler: {0}</value>
   </data>
   <data name="OpenDocument_FileMigrated_Message" xml:space="preserve">
     <value>Diese Datei wurde mit einer älteren Version von SiGen erstellt und automatisch migriert. Bitte überprüfen Sie das Layout und speichern Sie die Datei, um sie auf das aktuelle Format zu aktualisieren.</value>
+  </data>
+  <data name="Menu_File_CloseDocument" xml:space="preserve">
+    <value>Schließen</value>
+  </data>
+  <data name="Menu_Document_Close" xml:space="preserve">
+    <value>Schließen</value>
+  </data>
+  <data name="Menu_Document_OpenInExplorer" xml:space="preserve">
+    <value>Im Ordner anzeigen</value>
   </data>
 </root>

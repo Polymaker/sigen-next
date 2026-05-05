@@ -133,6 +133,15 @@ namespace SiGen.Lang {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Apply.
+        /// </summary>
+        public static string Common_Apply {
+            get {
+                return ResourceManager.GetString("Common.Apply", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cancel.
         /// </summary>
         public static string Common_Cancel {
@@ -579,6 +588,24 @@ namespace SiGen.Lang {
         public static string EditStringsDialog_StringHeader {
             get {
                 return ResourceManager.GetString("EditStringsDialog.StringHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Available string sets:.
+        /// </summary>
+        public static string EditStringsDialog_StringSetsLabel {
+            get {
+                return ResourceManager.GetString("EditStringsDialog.StringSetsLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Strings Configuration.
+        /// </summary>
+        public static string EditStringsDialog_Title {
+            get {
+                return ResourceManager.GetString("EditStringsDialog.Title", resourceCulture);
             }
         }
         
@@ -1043,11 +1070,38 @@ namespace SiGen.Lang {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Close.
+        /// </summary>
+        public static string Menu_Document_Close {
+            get {
+                return ResourceManager.GetString("Menu_Document_Close", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show In Folder.
+        /// </summary>
+        public static string Menu_Document_OpenInExplorer {
+            get {
+                return ResourceManager.GetString("Menu_Document_OpenInExplorer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to _File.
         /// </summary>
         public static string Menu_File {
             get {
                 return ResourceManager.GetString("Menu_File", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Close.
+        /// </summary>
+        public static string Menu_File_CloseDocument {
+            get {
+                return ResourceManager.GetString("Menu_File_CloseDocument", resourceCulture);
             }
         }
         

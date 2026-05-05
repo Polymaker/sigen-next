@@ -235,5 +235,27 @@ namespace SiGen.Paths
             var end = End + dirVec * amount;
             return new LinearPath(start, end);
         }
+
+        public override PathBase? TrimExtend(TrimExtendSide side, double amount)
+        {
+            if (side == TrimExtendSide.None || Math.Abs(amount) <= double.Epsilon)
+                return new LinearPath(Start, End);
+
+            var dir = Direction;
+            var newStart = Start;
+            var newEnd = End;
+
+            if (side.HasFlag(TrimExtendSide.Start))
+                newStart = Start - dir * amount;
+
+            if (side.HasFlag(TrimExtendSide.End))
+                newEnd = End + dir * amount;
+
+            // Ensure the two endpoints haven't crossed each other after trimming
+            if (VectorD.Dot(newEnd - newStart, dir) <= 0)
+                return null;
+
+            return new LinearPath(newStart, newEnd);
+        }
     }
 }

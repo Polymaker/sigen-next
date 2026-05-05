@@ -14,6 +14,8 @@ namespace SiGen.Layouts.Configuration
     {
         public int Version { get; set; } = 2;
 
+        public string? Name { get; set; }
+
         /// <summary>
         /// The number of strings on the instrument.
         /// </summary>
@@ -63,7 +65,7 @@ namespace SiGen.Layouts.Configuration
         /// <summary>
         /// Global fret configuration.
         /// </summary>
-        public FretConfiguration Frets { get; set; }
+        public GlobalFretConfiguration Frets { get; set; }
 
         /// <summary>
         /// Gets or sets the number of frets on the instrument.
@@ -104,7 +106,7 @@ namespace SiGen.Layouts.Configuration
             NutSpacing = new StringSpacingConfiguration();
             BridgeSpacing = new StringSpacingConfiguration();
             ScaleLength = new ScaleLengthConfiguration();
-            Frets = new FretConfiguration()
+            Frets = new GlobalFretConfiguration()
             {
                 NumberOfFrets = 24,
                 Temperament = Temperament.Equal

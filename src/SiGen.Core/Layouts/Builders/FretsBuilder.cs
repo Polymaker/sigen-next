@@ -13,39 +13,31 @@ namespace SiGen.Layouts.Builders
 {
     public class FretsBuilder : LayoutBuilderBase
     {
+        public double FretBreakAngleThreshold { get; set; } = 5; //todo: put this setting in the configuration
+        public double FretSlantDistanceThreshold { get; set; } = 0.07; //todo: put this setting in the configuration
+
         public FretsBuilder(StringedInstrumentLayout layout, InstrumentLayoutConfiguration configuration) : base(layout, configuration)
         {
         }
 
         protected override void ExecuteFirstPass()
         {
-
-            //var points = GenerateFretPoints();
-
             BuildFretSegments();
-
-            //if (!HasManualFretPositions())
-            //{
-            //    GenerateFrets();
-            //}
-            //else
-            //{
-            //    //todo
-            //}
 
             AdjustFingerboardEdges();
 
             if (Configuration.StringConfigurations.Any(x => (x.Frets?.StartingFret ?? 0) != 0))
             {
                 foreach (var @string in Layout.Strings)
-                    @string.GeneratePath();
+                    @string.GeneratePath(); //regenerate string paths with updated nut points for strings with starting fret != 0
             }
         }
 
         private void BuildFretSegments()
         {
-            //bool isMultiscale = Configuration.ScaleLength.Mode != ScaleLengthMode.Single;
-            bool useLinearMatching = Configuration.ScaleLength.Mode == ScaleLengthMode.Single && Measure.IsNullOrEmpty(Configuration.ScaleLength.BassTrebleSkew);
+            bool useLinearMatching = Configuration.ScaleLength.Mode == ScaleLengthMode.Single && 
+                Measure.IsNullOrEmpty(Configuration.ScaleLength.BassTrebleSkew);
+
             var points = GenerateFretPoints();
             var pointsByString = points
                 .GroupBy(p => p.StringIndex)
@@ -56,12 +48,10 @@ namespace SiGen.Layouts.Builders
 
             var segments = new List<FretSegment>();
 
-            double fretBreakAngleThreshold = 10; //todo: put this setting in the configuration
-
             while (queue.Count > 0)
             {
                 var seed = queue.Dequeue();
-                if (processed.Contains(seed) || seed.IsReference) continue;
+                if (processed.Contains(seed)/* || seed.IsReference*/) continue;
 
                 var segmentPoints = new List<FretPoint> { seed };
                 var currentPoint = seed;
@@ -87,8 +77,8 @@ namespace SiGen.Layouts.Builders
                     {
                         var lastLine = currentSegment.GetLineFromLastTwoPoints();
                         var angleRelativeToLastSegment = Math.Abs(LinearPath.GetAngleBetweenLines(lastLine, candidateSegmentLine));
-                        //If the angle between consecutive segments exceeds fretBreakAngleThreshold, a new segment is started to avoid sharp bends.
-                        if (angleRelativeToLastSegment > fretBreakAngleThreshold)
+                        //If the angle between consecutive segments exceeds FretBreakAngleThreshold, a new segment is started to avoid sharp bends.
+                        if (angleRelativeToLastSegment > FretBreakAngleThreshold)
                             break;
                     }
 
@@ -104,7 +94,7 @@ namespace SiGen.Layouts.Builders
             //Split fret segments that have references points between two real points
             SplitSegments(segments);
 
-            //split segments that are partial nut segments (possible if a string has a starting fret > 0)
+            //Split segments that are partial nut segments (possible if a string has a starting fret > 0)
             SplitNutSegments(segments);
 
             int fretIndex = 0;
@@ -118,11 +108,10 @@ namespace SiGen.Layouts.Builders
         private FretPoint? FindLinearMatch(FretPoint current, List<FretPoint> candidatePoints, HashSet<FretPoint> processed)
         {
             var currentPos = current.Position.ToVector();
-            double toleranceCm = 0.1; //todo: put this setting in the configuration
 
             return candidatePoints
                 .Where(p => !processed.Contains(p))
-                .Where(p => Math.Abs(p.Position.ToVector().Y - currentPos.Y) <= toleranceCm)
+                .Where(p => Math.Abs(p.Position.ToVector().Y - currentPos.Y) <= FretSlantDistanceThreshold)
                 .MinBy(p => Math.Abs(p.Position.ToVector().Y - currentPos.Y));
         }
 
@@ -137,16 +126,12 @@ namespace SiGen.Layouts.Builders
 
             if (currentSegment.Count >= 2)
             {
-                if (currentPoint.FretIndex == 16)
-                {
-
-                }
                 var currentDirection = currentSegment.GetLineFromLastTwoPoints();
                 if (nextString.Path.Intersects(currentDirection, out var expectedPosition2, true))
                 {
                     var foundPoint =  candidatePoints
                        .Where(p => !processed.Contains(p))
-                       .Where(p => VectorD.Distance(p.Position.ToVector(), expectedPosition2) <= 0.2) //todo: put this setting in the configuration
+                       .Where(p => VectorD.Distance(p.Position.ToVector(), expectedPosition2) <= FretSlantDistanceThreshold)
                        .MinBy(p => VectorD.Distance(p.Position.ToVector(), expectedPosition2));
                     if (foundPoint != null) return foundPoint;
                 }
@@ -154,7 +139,7 @@ namespace SiGen.Layouts.Builders
 
             return candidatePoints
                     .Where(p => !processed.Contains(p))
-                    .Where(p => VectorD.Distance(p.Position.ToVector(), expectedPosition1) <= 0.2) //todo: put this setting in the configuration
+                    .Where(p => VectorD.Distance(p.Position.ToVector(), expectedPosition1) <= FretSlantDistanceThreshold) 
                     .MinBy(p => VectorD.Distance(p.Position.ToVector(), expectedPosition1));
         }
 
@@ -198,29 +183,6 @@ namespace SiGen.Layouts.Builders
             //}
         }
 
-        private bool HasManualFretPositions()
-        {
-            return Configuration.Temperament == Temperament.Custom || 
-                Configuration.StringConfigurations.Any(x => x.Frets != null && x.Frets.Temperament == Temperament.Custom);
-        }
-
-        private void GenerateFrets()
-        {
-            var stringElems = Layout.Strings.ToList();
-
-            var points = GenerateFretPoints();
-
-            foreach (var fretGroup in points.GroupBy(x => x.FretIndex))
-            {
-                var fretSegments = CreateFretSegments(fretGroup.ToList(), 25, 10);
-                foreach (var segment in fretSegments)
-                {
-                    var segmentPath = CreateSegmentPath(segment);
-                    Layout.AddElement(new FretSegmentElement(fretGroup.Key, segment, segmentPath));
-                }
-            }
-        }
-
         private List<FretPoint> GenerateFretPoints()
         {
             var points = new List<FretPoint>();
@@ -236,7 +198,7 @@ namespace SiGen.Layouts.Builders
 
                 bool hasStringFretConfig = stringConfig.Frets != null;
 
-                var stringFretConfig = stringConfig.Frets ?? Configuration.Frets;
+                FretConfigurationBase stringFretConfig = stringConfig.Frets ?? (FretConfigurationBase)Configuration.Frets;
                 int? numberOfFrets = stringFretConfig?.NumberOfFrets ?? Configuration.NumberOfFrets;
                 if (numberOfFrets == null)
                     continue;
@@ -288,9 +250,6 @@ namespace SiGen.Layouts.Builders
                         if (j < startingFret || j > numberOfFrets)
                             fretPoint.IsReference = true;
 
-                        //if (j == (stringConfig?.Frets?.NumberOfFrets ?? Configuration.NumberOfFrets))
-                        //    fretPoint.IsLastFret = true;
-
                         stringPoints.Add(fretPoint);
                         lastFretIndex = j;
                     }
@@ -323,14 +282,13 @@ namespace SiGen.Layouts.Builders
                     lastPoint.IsLastFret = true;
 
                 //add bridge point
-                var bridgePoint = new FretPoint(i, 999, stringElem.BridgePoint, PitchInterval.FromCents(99999));
-                bridgePoint.IsBridge = true;
+                var bridgePoint = new FretPoint(i, 999, stringElem.BridgePoint, PitchInterval.FromCents(99999)) { IsBridge = true };
                 stringPoints.Add(bridgePoint);
 
                 int curFretIndex = 0;
                 //int curFretNumber = 1;
-                int curFretNumber = (stringFretConfig?.StartingFret ?? 0) + 1;
-                stringPoints = stringPoints.OrderBy(x => x.Interval.Cents).ToList();
+                int curFretNumber = (stringConfig.Frets?.StartingFret ?? 0) + 1;
+                stringPoints = [.. stringPoints.OrderBy(x => x.Interval.Cents)];
                 foreach (var pt in stringPoints)
                 {
                     pt.FretIndex = curFretIndex++;
@@ -352,97 +310,6 @@ namespace SiGen.Layouts.Builders
                     PitchInterval.FromNote(rootNote.Transpose(fretIndex), temperament).Cents,
                 _ => throw new ArgumentOutOfRangeException()
             };
-        }
-
-        /// <summary>
-        /// Segments a list of fret points into fret segments based on geometric thresholds.
-        /// A new segment is started when the angle between the candidate fret segment and the string
-        /// becomes too acute (below <paramref name="minFretStringAngle"/>), indicating excessive slant.
-        /// Additionally, if the angle between consecutive segments exceeds <paramref name="fretBreakAngleThreshold"/>,
-        /// a new segment is started to avoid sharp direction changes.
-        /// </summary>
-        /// <param name="fretPoints">The list of fret points for a single fret index.</param>
-        /// <param name="minFretStringAngle">
-        /// Minimum allowed angle (in degrees) between a fret segment and the string.
-        /// If the angle is less than this value, the segment is considered too slanted and a new segment is started.
-        /// </param>
-        /// <param name="fretBreakAngleThreshold">
-        /// Maximum allowed angle (in degrees) between consecutive fret segments.
-        /// If exceeded, a new segment is started to avoid sharp bends.
-        /// </param>
-        /// <returns>A list of fret segments for rendering and layout.</returns>
-        private List<FretSegment> CreateFretSegments(List<FretPoint> fretPoints, double minFretStringAngle, double fretBreakAngleThreshold)
-        {
-            var segments = new List<FretSegment>();
-
-            FretPoint currentPoint = fretPoints.First();
-
-            var currentSegment = new FretSegment();
-            currentSegment.AddPoint(currentPoint);
-            segments.Add(currentSegment);
-
-            FretPoint? GetNextPoint()
-            {
-                return fretPoints.FirstOrDefault(x => x.StringIndex > currentPoint.StringIndex);
-            }
-
-            while (true)
-            {
-                var nextPoint = GetNextPoint();
-
-                if (nextPoint == null) break;
-
-                if (nextPoint.StringIndex - currentPoint.StringIndex > 1)
-                {
-                    currentSegment = new FretSegment();
-                    currentSegment.AddPoint(nextPoint);
-
-                    currentPoint = nextPoint;
-                    segments.Add(currentSegment);
-                    break;
-                }
-
-                //When evaluating a candidate segment, calculate the angle between the segment and the string.
-                var candidateSegmentLine = new LinearPath(currentPoint.Position.ToVector(), nextPoint.Position.ToVector());
-                var segmentString = Layout.GetStringElement(currentPoint.StringIndex); //the string that the segment is on
-                var angleRelativeToString = Math.Abs(LinearPath.GetAngleBetweenLines(segmentString.Path, candidateSegmentLine));
-
-                //If the angle is less than minFretStringAngle, the segment is too slanted and a new segment is started.
-                bool shouldBreak = angleRelativeToString < minFretStringAngle;
-
-                if (currentSegment.Count >= 2)
-                {
-                    var lastLine = currentSegment.GetLineFromLastTwoPoints();
-                    var angleRelativeToLastSegment = Math.Abs(LinearPath.GetAngleBetweenLines(lastLine, candidateSegmentLine));
-                    //If the angle between consecutive segments exceeds fretBreakAngleThreshold, a new segment is started to avoid sharp bends.
-                    if (angleRelativeToLastSegment > fretBreakAngleThreshold)
-                        shouldBreak = true;
-                }
-
-                if (!shouldBreak)
-                {
-                    currentSegment.AddPoint(nextPoint);
-                }
-                else
-                {
-                    currentSegment = new FretSegment();
-                    currentSegment.AddPoint(nextPoint);
-                    segments.Add(currentSegment);
-                }
-
-                currentPoint = nextPoint;
-            }
-
-
-            //remove segments that are only reference points (I don't know if it's even possilbe)
-            segments.RemoveAll(x => x.FretPoints.All(y => y.IsReference));
-
-            //Split fret segments that have references points between two real points
-            SplitSegments(segments);
-
-            //split segments that are partial nut segments (possible if a string has a starting fret > 0)
-            SplitNutSegments(segments);
-            return segments;
         }
 
         /// <summary>
@@ -553,113 +420,228 @@ namespace SiGen.Layouts.Builders
 
         }
 
-        private PathBase CreateSegmentPath(FretSegment segment)
+        /// <summary>
+        /// Returns the boundary edge (fingerboard edge or string median) on the given side
+        /// for the specified string index.
+        /// </summary>
+        private LinearPath GetFretBoundaryEdge(int stringIndex, FingerboardSide side)
         {
-            var vectorPoints = new List<VectorD>();
-
-            var firstPt = segment.FretPoints.First(x => !x.IsReference);
-            var lastPt = segment.FretPoints.Last(x => !x.IsReference);
-            LinearPath? bassSideEdge = null;
-            LinearPath? trebSideEdge = null;
-
-            if (firstPt.StringIndex == 0)
-                bassSideEdge = (LinearPath)Layout.GetFingerboardEdge(FingerboardSide.Bass).Path;
+            if (side == FingerboardSide.Bass)
+            {
+                return stringIndex == 0
+                    ? (LinearPath)Layout.GetFingerboardEdge(FingerboardSide.Bass).Path
+                    : Layout.GetStringMedian(stringIndex - 1).Path;
+            }
             else
             {
-                bassSideEdge = Layout.GetStringMedian(firstPt.StringIndex - 1).Path;
-                //todo: only if there is no other strings before
-                //bassSideEdge = GetFingerboardEdgeLineFromString(firstPt.StringIndex, FingerboardSide.Bass);
+                return stringIndex == Configuration.NumberOfStrings - 1
+                    ? (LinearPath)Layout.GetFingerboardEdge(FingerboardSide.Treble).Path
+                    : Layout.GetStringMedian(stringIndex).Path;
             }
+        }
 
-            if (lastPt.StringIndex == Configuration.NumberOfStrings - 1)
-                trebSideEdge = (LinearPath)Layout.GetFingerboardEdge(FingerboardSide.Treble).Path;
-            else
-                trebSideEdge = Layout.GetStringMedian(lastPt.StringIndex).Path;
+        /// <summary>
+        /// Builds a typed list of shape points for a fret segment.
+        /// Each entry carries its position and the originating <see cref="FretPoint"/> (null for boundary intersections).
+        /// </summary>
+        private List<(VectorD Position, FretPoint? Source)> BuildFretShapePoints(FretSegment segment)
+        {
+            var result = new List<(VectorD, FretPoint?)>();
 
-            foreach (var fretPt in segment.FretPoints.Where(x => !x.IsReference))
-                vectorPoints.Add(fretPt.Position.ToVector());
+            var firstStringPt = segment.FretPoints.First(x => !x.IsReference);
+            var lastStringPt  = segment.FretPoints.Last(x => !x.IsReference);
 
+            var bassEdge   = GetFretBoundaryEdge(segment.FirstStringIndex, FingerboardSide.Bass);
+            var trebleEdge = GetFretBoundaryEdge(segment.LastStringIndex,  FingerboardSide.Treble);
+
+            // Bass boundary
             if (segment.FretPoints.Count == 1)
             {
-                vectorPoints.Insert(0, bassSideEdge.SnapToLine(firstPt.Position.ToVector()));
-                vectorPoints.Add(trebSideEdge.SnapToLine(lastPt.Position.ToVector()));
+                result.Add((bassEdge.SnapToLine(firstStringPt.Position.ToVector(), LinearPath.LineSnapDirection.Horizontal), null));
             }
             else
             {
                 var fretLine = new LinearPath(segment.FretPoints[0].Position.ToVector(), segment.FretPoints[1].Position.ToVector());
-                if (fretLine.Intersects(bassSideEdge, out var inter, true))
-                    vectorPoints.Insert(0, inter);
-
-                fretLine = new LinearPath(segment.FretPoints[^2].Position.ToVector(), segment.FretPoints[^1].Position.ToVector());
-                if (fretLine.Intersects(trebSideEdge, out inter, true))
-                    vectorPoints.Add(inter);
+                if (fretLine.Intersects(bassEdge, out var inter, true))
+                    result.Add((inter, null));
             }
 
-            if (ShouldFretBeStraight(vectorPoints, 5))
+            foreach (var fp in segment.FretPoints.Where(x => !x.IsReference))
+                result.Add((fp.Position.ToVector(), fp));
+
+            // Treble boundary
+            if (segment.FretPoints.Count == 1)
             {
-                if (segment.FretPoints[0].FretIndex == 0)
-                {
-                    Trace.WriteLine($"Nut p0: {vectorPoints.First().X} p1: {vectorPoints.Last().X}");
-                }
-                return new LinearPath(vectorPoints.First(), vectorPoints.Last());
-            }
-
-            return new PolyLinePath(vectorPoints);
-        }
-
-        private LinearPath GetFingerboardEdgeLineFromString(int stringIndex, FingerboardSide side)
-        {
-            var stringElem = Layout.GetStringElement(stringIndex);
-            var stringPath = (LinearPath)stringElem.Path.Clone();
-
-            var nutMargin = Configuration.Fingerboard.GetMargin(Data.FingerboardEnd.Nut, side);
-            var bridgeMargin = Configuration.Fingerboard.GetMargin(Data.FingerboardEnd.Bridge, side);
-            nutMargin += Configuration.StringConfigurations[stringIndex].GetHalfWidth(side, Configuration.Fingerboard.CompensateMarginsForStrings);
-            bridgeMargin += Configuration.StringConfigurations[stringIndex].GetHalfWidth(side, Configuration.Fingerboard.CompensateMarginsForStrings);
-
-            var start = stringPath.Start;
-            var end = stringPath.End;
-            if (side == FingerboardSide.Bass)
-            {
-                start.X -= nutMargin.NormalizedValue;
-                end.X -= bridgeMargin.NormalizedValue;
+                result.Add((trebleEdge.SnapToLine(lastStringPt.Position.ToVector(), LinearPath.LineSnapDirection.Horizontal), null));
             }
             else
             {
-                start.X += nutMargin.NormalizedValue;
-                end.X += bridgeMargin.NormalizedValue;
+                var fretLine = new LinearPath(segment.FretPoints[^2].Position.ToVector(), segment.FretPoints[^1].Position.ToVector());
+                if (fretLine.Intersects(trebleEdge, out var inter, true))
+                    result.Add((inter, null));
             }
 
-            stringPath.Start = start;
-            stringPath.End = end;   
-
-            return stringPath;
+            return result;
         }
 
-        public static bool ShouldFretBeStraight(List<VectorD> fretPositions, double maxDeviation)
-        {
-            if (fretPositions.Count <= 2)
-                return true; // Any two points always form a line
+        private List<VectorD> GetFretShapePoints(FretSegment segment)
+            => BuildFretShapePoints(segment).Select(p => p.Position).ToList();
 
-            var start = fretPositions.First();
-            var end = fretPositions.Last();
+        private PathBase CreateSegmentPath(FretSegment segment)
+        {
+            var shapeStyle = FretShapeStyle.NotchedSpline;// Configuration.Frets.ShapeStyle;
+
+            if (segment.FretPoints.Count == 1 || ShouldFretBeStraight(segment, 0.07)) //0.7mm
+            {
+                var vectorPoints = GetFretShapePoints(segment);
+                return new LinearPath(vectorPoints.First(), vectorPoints.Last());
+            }
+
+            return shapeStyle switch
+            {
+                FretShapeStyle.NotchedSpline => CreateNotchedSplinePath(segment),
+                FretShapeStyle.Polyline => new PolyLinePath(GetFretShapePoints(segment)),
+                _ => CreateSmoothSplinePath(segment),
+            };
+        }
+
+        public static bool ShouldFretBeStraight(FretSegment segment, double maxDeviationCm)
+        {
+            var fretPoints = segment.FretPoints.Where(x => !x.IsReference).ToList();
+            if (fretPoints.Count <= 2)
+                return true;
+
+            var start = fretPoints.First().Position.ToVector();
+            var end   = fretPoints.Last().Position.ToVector();
             var dx = end.X - start.X;
             var dy = end.Y - start.Y;
-
             var lengthSquared = dx * dx + dy * dy;
 
             if (lengthSquared == 0)
-                return false; // All points collapsed to a single location
+                return false;
 
-            foreach (var point in fretPositions)
+            foreach (var pt in fretPoints)
             {
-                // Area-based perpendicular distance to the line (cross-product method)
-                var distance = Math.Abs((dy * (point.X - start.X) - dx * (point.Y - start.Y)) / Math.Sqrt(lengthSquared));
-                if (distance > maxDeviation)
+                var v = pt.Position.ToVector();
+                var distance = Math.Abs((dy * (v.X - start.X) - dx * (v.Y - start.Y)) / Math.Sqrt(lengthSquared));
+                if (distance > maxDeviationCm)
                     return false;
             }
 
             return true;
+        }
+
+        private BezierSplinePath CreateSmoothSplinePath(FretSegment segment)
+        {
+            const double handleRatio = 0.35;
+            var points = BuildFretShapePoints(segment);
+            var spline = new BezierSplinePath();
+
+            for (int i = 0; i < points.Count; i++)
+            {
+                var anchor = points[i].Position;
+
+                VectorD tangent;
+                if (i == 0)
+                    tangent = (points[1].Position - points[0].Position).Normalized;
+                else if (i == points.Count - 1)
+                    tangent = (points[^1].Position - points[^2].Position).Normalized;
+                else
+                    tangent = (points[i + 1].Position - points[i - 1].Position).Normalized;
+
+                double inLength  = i > 0               ? VectorD.Distance(anchor, points[i - 1].Position) * handleRatio : 0;
+                double outLength = i < points.Count - 1 ? VectorD.Distance(anchor, points[i + 1].Position) * handleRatio : 0;
+
+                spline.AddPoint(new SplineControlPoint(
+                    anchor,
+                    anchor - tangent * inLength,
+                    anchor + tangent * outLength));
+            }
+
+            return spline;
+        }
+
+        private BezierSplinePath CreateNotchedSplinePath(FretSegment segment)
+        {
+            const double handleRatio  = 0.35;
+            const double notchHalfWidth = 0.05; // cm
+
+
+            var spline = new BezierSplinePath();
+
+            // Expand fret points into notch pairs; boundary points pass through unchanged.
+            var anchors = new List<(VectorD Position, VectorD Perpendicular, bool IsNotch)>();
+
+            var bassEdge = GetFretBoundaryEdge(segment.FirstStringIndex, FingerboardSide.Bass);
+            var trebleEdge = GetFretBoundaryEdge(segment.LastStringIndex, FingerboardSide.Treble);
+
+            var realPoints = segment.FretPoints.Where(p => !p.IsReference).ToList();
+
+            VectorD GetStringPerp(int stringIndex)
+            {
+                var stringElem = Layout.GetStringElement(stringIndex);
+                var dir = stringElem!.Path.Direction;
+
+                return new VectorD(-dir.Y, dir.X).Normalized;
+            }
+
+            for (int i = 0; i < realPoints.Count; i++)
+            {
+                var perpNormal = GetStringPerp(realPoints[i].StringIndex);
+                var perpLine = new LinearPath(realPoints[i].Position.ToVector(), realPoints[i].Position.ToVector() + perpNormal);
+
+                if (i == 0)
+                {
+                    //add the bass boundary point
+                    if (bassEdge.Intersects(perpLine, out var bassInter, true))
+                        anchors.Add((bassInter, perpNormal, false));
+                }
+
+                var ptPos = realPoints[i].Position.ToVector();
+
+                // Real fret point → two notch anchors straddling the string position
+                anchors.Add((ptPos - perpNormal * notchHalfWidth, perpNormal, true));
+                anchors.Add((ptPos + perpNormal * notchHalfWidth, perpNormal, true));
+
+                if (i == realPoints.Count - 1)
+                {
+                    //add the treble boundary point 
+                    if (trebleEdge.Intersects(perpLine, out var trebInter, true))
+                        anchors.Add((trebInter, perpNormal, false));
+                }
+            }
+
+
+            for (int i = 0; i < anchors.Count; i++)
+            {
+                var (anchor, perpendicular, isNotch) = anchors[i];
+
+                double inLength  = i > 0                ? VectorD.Distance(anchor, anchors[i - 1].Position) * handleRatio : 0;
+                double outLength = i < anchors.Count - 1 ? VectorD.Distance(anchor, anchors[i + 1].Position) * handleRatio : 0;
+
+                if (isNotch)
+                {
+                    // Handles along the perpendicular enforce the flat notch section
+                    spline.AddPoint(new SplineControlPoint(
+                        anchor,
+                        anchor - perpendicular * inLength,
+                        anchor + perpendicular * outLength));
+                }
+                else
+                {
+                    // Boundary points: tangent-based handles (Catmull-Rom style)
+                    VectorD prev = i > 0                ? anchors[i - 1].Position : anchor;
+                    VectorD next = i < anchors.Count - 1 ? anchors[i + 1].Position : anchor;
+                    var tangent = (next - prev).Normalized;
+
+                    spline.AddPoint(new SplineControlPoint(
+                        anchor,
+                        anchor - tangent * inLength,
+                        anchor + tangent * outLength));
+                }
+            }
+
+            return spline;
         }
     }
 }

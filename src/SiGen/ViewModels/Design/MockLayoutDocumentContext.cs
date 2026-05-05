@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace SiGen.ViewModels.Design
 {
-    public class MockLayoutDocumentContext : ILayoutDocumentContext
+    public class MockLayoutDocumentContext : ILayoutDocument
     {
         public InstrumentLayoutConfiguration Configuration { get; }
 

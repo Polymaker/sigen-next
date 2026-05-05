@@ -9,7 +9,12 @@ using System.Threading.Tasks;
 
 namespace SiGen.UI.LayoutViewer.Visuals
 {
-    public abstract class VisualElementBase<T> : Panel where T : LayoutElement
+    public interface ILayoutRenderable
+    {
+        void UpdateColorScheme(LayoutViewerColorScheme theme);
+    }
+
+    public abstract class VisualElementBase<T> : Panel, ILayoutRenderable where T : LayoutElement
     {
         public T Element { get; private set; }
         protected StringedInstrumentLayout Layout => Element.Layout!;
@@ -24,7 +29,7 @@ namespace SiGen.UI.LayoutViewer.Visuals
 
         protected abstract void GenerateVisuals();
 
-        public virtual void UpdateTheme(LayoutViewerColorScheme theme)
+        public virtual void UpdateColorScheme(LayoutViewerColorScheme theme)
         {
             ThemeRenderSettings = theme;
             // Derived classes should update brushes/colors here

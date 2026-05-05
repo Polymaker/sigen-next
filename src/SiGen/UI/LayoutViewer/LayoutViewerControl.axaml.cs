@@ -2,19 +2,13 @@ using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
-using Avalonia.Markup.Xaml;
 using Avalonia.Media;
-using Avalonia.Reactive;
 using Avalonia.Styling;
 using Avalonia.Threading;
-using Material.Colors.ColorManipulation;
-using Microsoft.Extensions.DependencyInjection;
 using SiGen.Layouts;
 using SiGen.Layouts.Elements;
 using SiGen.Maths;
 using SiGen.Measuring;
-using SiGen.Services;
-using SiGen.Settings;
 using SiGen.UI.LayoutViewer.Overlays;
 using SiGen.UI.LayoutViewer.Visuals;
 using SiGen.Utilities;
@@ -22,7 +16,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Reactive.Linq;
 using SiGen.Layouts.Snapping;
 
 namespace SiGen.UI.LayoutViewer;
@@ -110,18 +103,10 @@ public partial class LayoutViewerControl : UserControl, ILayoutViewerContext
         set => SetValue(IsMeasureToolActiveProperty, value);
     }
 
-    private const double SnapMaxDistancePx = 10;
-
-    private LayoutSnapResult _currentSnapResult = LayoutSnapResult.None;
-
-    private MeasurementOverlayPresenter measurementOverlay;
-
     private TranslateTransform _centerTransform;
     private ScaleTransform _zoomTransform;
     private TranslateTransform _translateTransform;
     private RotateTransform _orientationTransform;
-
-    private ISettingsService? _settingsService;
 
     public bool IsAssigningLayout { get; set; }
 
@@ -140,17 +125,6 @@ public partial class LayoutViewerControl : UserControl, ILayoutViewerContext
             _ => 0
         });
 
-        _orientationTransform.Bind(
-            RotateTransform.AngleProperty,
-            this.GetObservable(OrientationProperty)
-                .Select(o => o switch
-                {
-                    LayoutOrientation.HorizontalNutRight => 90.0,
-                    LayoutOrientation.HorizontalNutLeft => 270.0,
-                    _ => 0.0
-                })
-        );
-
         var transformGroup = new TransformGroup
         {
             Children = { _centerTransform, _zoomTransform, _orientationTransform, _translateTransform }
@@ -165,8 +139,8 @@ public partial class LayoutViewerControl : UserControl, ILayoutViewerContext
         BorderContainer.AddHandler(Gestures.PinchEndedEvent, Canvas_PinchGestureEnded, handledEventsToo: true);
 
 
-        fretNumberOverlay = new FretNumberOverlayControl(this);
-        measurementOverlay = new MeasurementOverlayPresenter(v => ((ILayoutViewerContext)this).VectorToScreen(v), UnitMode, ColorScheme);
+        fretNumberOverlay = new FretNumbersRenderer(this);
+        measurementOverlay = new MeasurementOverlayPresenter(this, UnitMode, ColorScheme);
 
         OnColorSchemeChanged();
         LayoutGrid.SetBluePrintBounds(new RectangleM(Measuring.Measure.Cm(-5), Measuring.Measure.Cm(-5), Measuring.Measure.Cm(10), Measuring.Measure.Cm(10)));
@@ -215,7 +189,7 @@ public partial class LayoutViewerControl : UserControl, ILayoutViewerContext
         {
             StopFling();
 
-            if (!hasLoaded)
+            if (!IsLoaded)
                 return;
 
             CalculateTranslationBounds();
@@ -239,21 +213,21 @@ public partial class LayoutViewerControl : UserControl, ILayoutViewerContext
         }
         else if (change.Property == OrientationProperty)
         {
+            _orientationTransform.Angle = Orientation switch
+            {
+                LayoutOrientation.HorizontalNutRight => 90,
+                LayoutOrientation.HorizontalNutLeft => 270,
+                _ => 0
+            };
             CalculateZoomToFit();
             ResetZoomAndTranslation();
             RepositionOverlays();
         }
     }
 
-    private bool hasLoaded = false;
-
     protected override void OnLoaded(RoutedEventArgs e)
     {
         base.OnLoaded(e);
-        hasLoaded = true;
-
-        // Initialize color scheme from settings
-        InitializeFromSettings();
 
         if (Layout != null)
         {
@@ -269,49 +243,6 @@ public partial class LayoutViewerControl : UserControl, ILayoutViewerContext
                 Zoom = ClampZoom(Zoom); // Ensure zoom is within bounds
             }
         }
-    }
-
-    protected override void OnUnloaded(RoutedEventArgs e)
-    {
-        base.OnUnloaded(e);
-
-        // Unsubscribe from settings changes to avoid memory leaks
-        if (_settingsService != null)
-        {
-            _settingsService.LayoutViewerColorSchemeChanged -= OnSettingsColorSchemeChanged;
-            _settingsService.UnitSystemChanged -= OnUnitSystemChanged;
-        }
-    }
-
-    private void InitializeFromSettings()
-    {
-        if (Application.Current is App app)
-        {
-            _settingsService = app.Services.GetService<ISettingsService>();
-            if (_settingsService != null)
-            {
-                // Apply current settings
-                ColorScheme = _settingsService.Settings.LayoutViewerColorScheme.ToColorScheme();
-
-                // Subscribe to future changes
-                _settingsService.LayoutViewerColorSchemeChanged += OnSettingsColorSchemeChanged;
-                _settingsService.UnitSystemChanged += OnUnitSystemChanged;
-            }
-        }
-    }
-
-    private void OnUnitSystemChanged(object? sender, UnitSystem e)
-    {
-        UnitMode = e;
-    }
-
-    private void OnSettingsColorSchemeChanged(object? sender, LayoutViewerColorSchemeSettings e)
-    {
-        // Ensure we're on the UI thread
-        Dispatcher.UIThread.Post(() =>
-        {
-            ColorScheme = e.ToColorScheme();
-        });
     }
 
     protected override void OnSizeChanged(SizeChangedEventArgs e)
@@ -433,19 +364,19 @@ public partial class LayoutViewerControl : UserControl, ILayoutViewerContext
         if (Orientation == LayoutOrientation.Vertical)
         {
             fitToViewZoom = (double)MathD.Min(
-                availableSize.Height / (layoutBounds.Height.NormalizedValue * CmScaleFactor),
-                availableSize.Width / (layoutBounds.Width.NormalizedValue * CmScaleFactor)
+                availableSize.Height / (layoutBounds.Height.NormalizedValue * MeasureUtils.CmToPixels),
+                availableSize.Width / (layoutBounds.Width.NormalizedValue * MeasureUtils.CmToPixels)
             );
         }
         else
         {
             fitToViewZoom = (double)MathD.Min(
-                availableSize.Height / (layoutBounds.Width.NormalizedValue * CmScaleFactor),
-                availableSize.Width / (layoutBounds.Height.NormalizedValue * CmScaleFactor)
+                availableSize.Height / (layoutBounds.Width.NormalizedValue * MeasureUtils.CmToPixels),
+                availableSize.Width / (layoutBounds.Height.NormalizedValue * MeasureUtils.CmToPixels)
             );
         }
 
-        minimumZoom = Math.Max(fitToViewZoom * 0.95, 0.15);
+        minimumZoom = Math.Max(fitToViewZoom * 0.90, 0.15);
         maximumZoom = 10;
     }
 
@@ -776,7 +707,7 @@ public partial class LayoutViewerControl : UserControl, ILayoutViewerContext
         }
 
         var cursorInLayout = ScreenToLayout(pointerPosition);
-        var maxDistanceCm = SnapMaxDistancePx / (CmScaleFactor * Zoom);
+        var maxDistanceCm = SnapMaxDistancePx / (MeasureUtils.CmToPixels * Zoom);
 
         //if (keyModifiers.HasFlag(KeyModifiers.Control) && measurementOverlay.HasStartPoint)
         //{
@@ -816,7 +747,7 @@ public partial class LayoutViewerControl : UserControl, ILayoutViewerContext
     private VectorD ScreenToLayout(Point point)
     {
         var translated = point - new Point(_centerTransform.X + Translation.X, _centerTransform.Y + Translation.Y);
-        var scale = CmScaleFactor * Zoom;
+        var scale = MeasureUtils.CmToPixels * Zoom;
         if (scale <= 0)
             return VectorD.Empty;
 
@@ -958,12 +889,10 @@ public partial class LayoutViewerControl : UserControl, ILayoutViewerContext
 
     #region Visuals Elements
 
-    internal const double CmScaleFactor = 37.7952755906; // 1 cm in pixels at 96 DPI
-
     private void CreateLayoutVisualsAndOverlays()
     {
         RenderCanvas.Children.Clear();
-        OverlayCanvas.Children.Clear();
+        //OverlayCanvas.Children.Clear();
 
         if (Layout == null) return;
 
@@ -977,12 +906,10 @@ public partial class LayoutViewerControl : UserControl, ILayoutViewerContext
         foreach (var median in Layout.Elements.OfType<GuideLineElement>())
             RenderCanvas.Children.Add(new GuideLineVisualElement(median, ColorScheme));
 
-        RenderCanvas.Children.Add(new FretRendererControl(this));
-        //foreach (var fretSegment in Layout.Elements.OfType<FretSegmentElement>())
-        //    RenderCanvas.Children.Add(new FretSegmentVisual(fretSegment, RenderSettings)); 
-
         foreach (var edge in Layout.Elements.OfType<FingerboardEdgeElement>())
             RenderCanvas.Children.Add(new FingerboardEdgeVisualElement(edge, ColorScheme));
+
+        RenderCanvas.Children.Add(new FretRendererControl(this));
 
         foreach (var @string in Layout.Strings)
             RenderCanvas.Children.Add(new StringVisualElement(@string, ColorScheme));
@@ -992,61 +919,46 @@ public partial class LayoutViewerControl : UserControl, ILayoutViewerContext
 
     #region Overlays
 
-    private class OverlayPositionHelper : IOverlayPositionHelper
-    {
-        public double Zoom { get; }
-        public LayoutOrientation ViewerOrientation { get; }
+    private const double SnapMaxDistancePx = 10;
 
-        public StringedInstrumentLayout Layout { get; }
+    private LayoutSnapResult _currentSnapResult = LayoutSnapResult.None;
 
-        public OverlayPositionHelper(StringedInstrumentLayout layout, double zoom, LayoutOrientation viewerOrientation)
-        {
-            Layout = layout;
-            Zoom = zoom;
-            ViewerOrientation = viewerOrientation;
-        }
-
-        public Point VectorToScreen(VectorD point)
-        {
-            if (ViewerOrientation == LayoutOrientation.HorizontalNutRight)
-            {
-                return new Point((double)point.Y * CmScaleFactor * Zoom, (double)point.X * CmScaleFactor * Zoom);
-            }
-
-            if (ViewerOrientation == LayoutOrientation.HorizontalNutLeft)
-            {
-                return new Point(-(double)point.Y * CmScaleFactor * Zoom, -(double)point.X * CmScaleFactor * Zoom);
-            }
-
-            return new Point((double)point.X * CmScaleFactor * Zoom, -(double)point.Y * CmScaleFactor * Zoom);
-        }
-    }
+    private MeasurementOverlayPresenter measurementOverlay;
+    private FretNumbersRenderer fretNumberOverlay;
 
     Point ILayoutViewerContext.VectorToScreen(VectorD point)
     {
         if (Orientation == LayoutOrientation.HorizontalNutRight)
         {
-            return new Point((double)point.Y * CmScaleFactor * Zoom, (double)point.X * CmScaleFactor * Zoom);
+            return new Point(point.Y * MeasureUtils.CmToPixels * Zoom, point.X * MeasureUtils.CmToPixels * Zoom);
         }
 
         if (Orientation == LayoutOrientation.HorizontalNutLeft)
         {
-            return new Point(-(double)point.Y * CmScaleFactor * Zoom, -(double)point.X * CmScaleFactor * Zoom);
+            return new Point(-point.Y * MeasureUtils.CmToPixels * Zoom, -point.X * MeasureUtils.CmToPixels * Zoom);
         }
 
-        return new Point((double)point.X * CmScaleFactor * Zoom, -(double)point.Y * CmScaleFactor * Zoom);
+        return new Point(point.X * MeasureUtils.CmToPixels * Zoom, -point.Y * MeasureUtils.CmToPixels * Zoom);
     }
 
-    private FretNumberOverlayControl fretNumberOverlay;
+    
 
     private void GenerateOverlays()
     {
         if (Layout == null) return;
 
-        OverlayCanvas.Children.Add(fretNumberOverlay);
+        if (OverlayCanvas.Children.Count == 0)
+        {
+            OverlayCanvas.Children.Add(fretNumberOverlay);
 
-        measurementOverlay.Attach(OverlayCanvas);
-        measurementOverlay.Reposition();
+            measurementOverlay.Attach(OverlayCanvas);
+            measurementOverlay.Reposition();
+        }
+        else
+        {
+            fretNumberOverlay.InvalidateVisual();
+            measurementOverlay.Reposition();
+        }
     }
 
     private void RepositionOverlays()
@@ -1054,19 +966,8 @@ public partial class LayoutViewerControl : UserControl, ILayoutViewerContext
         if (Layout == null) return;
 
         fretNumberOverlay.InvalidateVisual();
-        foreach (var visual in RenderCanvas.Children.OfType<INotifyZoomChanged>())
-            visual.ZoomChanged(Zoom);
-
-        var helper = new OverlayPositionHelper(Layout, Zoom, Orientation);
-        foreach (var overlay in OverlayCanvas.Children.OfType<ILayoutOverlay>())
-        {
-            //((Control)overlay).IsVisible = true; // Ensure overlay is visible
-            overlay.Reposition(helper);
-        }
-
         measurementOverlay.Reposition();
     }
-
 
     #endregion
 
@@ -1113,19 +1014,20 @@ public partial class LayoutViewerControl : UserControl, ILayoutViewerContext
         LayoutGrid.UpdateTheme(ColorScheme);
 
         measurementOverlay.UpdateTheme(ColorScheme);
+        fretNumberOverlay.InvalidateVisual();
 
         // Efficiently update theme for visuals and overlays
-        foreach (var child in RenderCanvas.Children)
+        foreach (var child in RenderCanvas.Children.OfType<ILayoutRenderable>())
         {
-            if (child is VisualElementBase<Layouts.LayoutElement> visual)
-                visual.UpdateTheme(ColorScheme);
-        }
-        foreach (var overlay in OverlayCanvas.Children.OfType<LayoutOverlayBase>())
-        {
-            overlay.UpdateTheme(ColorScheme);
+            child.UpdateColorScheme(ColorScheme);
         }
 
-        double luminance = ColorScheme.BackgroundColor.RelativeLuminance();
+        //foreach (var overlay in OverlayCanvas.Children.OfType<ILayoutRenderable>())
+        //{
+        //    overlay.UpdateColorScheme(ColorScheme);
+        //}
+
+        double luminance = RelativeLuminance(ColorScheme.BackgroundColor);
         bool isLightBackground = luminance > 0.5;
         measurementOverlay.SetTextBoxContrastTheme(isLightBackground);
 
@@ -1137,5 +1039,21 @@ public partial class LayoutViewerControl : UserControl, ILayoutViewerContext
         {
             ZoomPanelThemeVariant.RequestedThemeVariant = ThemeVariant.Dark;
         }
+    }
+
+    private static double RelativeLuminance(Color c)
+    {
+        double Process(double s) =>
+            s < 0.03928 ? s / 12.92 : Math.Pow((s + 0.055) / 1.055, 2.4);
+
+        double dR = (double)c.R / 255,
+            dG = (double)c.G / 255,
+            dB = (double)c.B / 255;
+
+        var r = Process(dR);
+        var g = Process(dG);
+        var b = Process(dB);
+
+        return 0.2126 * r + 0.7152 * g + 0.0722 * b;
     }
 }

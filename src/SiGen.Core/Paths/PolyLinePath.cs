@@ -112,6 +112,82 @@ namespace SiGen.Paths
             return newPoints.Count >= 2 ? new PolyLinePath(newPoints) : null;
         }
 
+        public override PathBase? TrimExtend(TrimExtendSide side, double amount)
+        {
+            if (Points.Count < 2 || side == TrimExtendSide.None || Math.Abs(amount) <= double.Epsilon)
+                return new PolyLinePath([.. Points]);
+
+            var newPoints = new List<VectorD>(Points);
+
+            if (side.HasFlag(TrimExtendSide.Start))
+            {
+                if (amount > 0)
+                {
+                    var dir = (newPoints[0] - newPoints[1]).Normalized;
+                    newPoints.Insert(0, newPoints[0] + dir * amount);
+                }
+                else
+                {
+                    newPoints = TrimStart(newPoints, -amount);
+                    if (newPoints == null)
+                        return null;
+                }
+            }
+
+            if (side.HasFlag(TrimExtendSide.End))
+            {
+                if (amount > 0)
+                {
+                    var dir = (newPoints[^1] - newPoints[^2]).Normalized;
+                    newPoints.Add(newPoints[^1] + dir * amount);
+                }
+                else
+                {
+                    newPoints = TrimEnd(newPoints, -amount);
+                    if (newPoints == null)
+                        return null;
+                }
+            }
+
+            return newPoints.Count >= 2 ? new PolyLinePath(newPoints) : null;
+        }
+
+        private static List<VectorD>? TrimStart(List<VectorD> points, double amount)
+        {
+            int i = 0;
+            while (i < points.Count - 1)
+            {
+                double segLen = VectorD.Distance(points[i], points[i + 1]);
+                if (amount < segLen)
+                {
+                    var dir = (points[i + 1] - points[i]).Normalized;
+                    points[i] = points[i] + dir * amount;
+                    return points.Skip(i).ToList();
+                }
+                amount -= segLen;
+                i++;
+            }
+            return null;
+        }
+
+        private static List<VectorD>? TrimEnd(List<VectorD> points, double amount)
+        {
+            int i = points.Count - 1;
+            while (i > 0)
+            {
+                double segLen = VectorD.Distance(points[i], points[i - 1]);
+                if (amount < segLen)
+                {
+                    var dir = (points[i - 1] - points[i]).Normalized;
+                    points[i] = points[i] + dir * amount;
+                    return points.Take(i + 1).ToList();
+                }
+                amount -= segLen;
+                i--;
+            }
+            return null;
+        }
+
         public override bool Intersects(LinearPath line, out VectorD intersection)
         {
             for (int i = 0; i < Points.Count - 1; i++)

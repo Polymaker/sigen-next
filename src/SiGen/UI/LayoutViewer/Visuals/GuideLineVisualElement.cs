@@ -32,9 +32,9 @@ namespace SiGen.UI.LayoutViewer.Visuals
             Children.Add(_line);
         }
 
-        public override void UpdateTheme(LayoutViewerColorScheme theme)
+        public override void UpdateColorScheme(LayoutViewerColorScheme theme)
         {
-            base.UpdateTheme(theme);
+            base.UpdateColorScheme(theme);
             if (_line != null)
                 _line.Stroke = new SolidColorBrush(theme.GuideLineColor);
         }
