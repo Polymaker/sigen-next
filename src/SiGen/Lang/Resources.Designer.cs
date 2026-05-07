@@ -709,6 +709,15 @@ namespace SiGen.Lang {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Extension.
+        /// </summary>
+        public static string FingerboardEditorPanel_ExtensionLabel {
+            get {
+                return ResourceManager.GetString("FingerboardEditorPanel.ExtensionLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Fingerboard margins.
         /// </summary>
         public static string FingerboardEditorPanel_Header {

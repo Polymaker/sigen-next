@@ -14,7 +14,9 @@ namespace SiGen.Layouts.Builders
     public class FretsBuilder : LayoutBuilderBase
     {
         public double FretBreakAngleThreshold { get; set; } = 5; //todo: put this setting in the configuration
-        public double FretSlantDistanceThreshold { get; set; } = 0.07; //todo: put this setting in the configuration
+        public double FretSlantDistanceThreshold { get; set; } = 0.1; //todo: put this setting in the configuration
+
+        public double MinimumSlantAngle { get; set; } = 25; // angle at which a fret is too slanted relative to the string and should be broken into a new segment
 
         public FretsBuilder(StringedInstrumentLayout layout, InstrumentLayoutConfiguration configuration) : base(layout, configuration)
         {
@@ -73,16 +75,32 @@ namespace SiGen.Layouts.Builders
                     if (match == null) break;
 
                     var candidateSegmentLine = new LinearPath(currentPoint.Position.ToVector(), match.Position.ToVector());
-                    if (currentSegment.Count >= 2)
-                    {
-                        var lastLine = currentSegment.GetLineFromLastTwoPoints();
-                        var angleRelativeToLastSegment = Math.Abs(LinearPath.GetAngleBetweenLines(lastLine, candidateSegmentLine));
-                        //If the angle between consecutive segments exceeds FretBreakAngleThreshold, a new segment is started to avoid sharp bends.
-                        if (angleRelativeToLastSegment > FretBreakAngleThreshold)
-                            break;
-                    }
+                    var segmentString = Layout.GetStringElement(currentPoint.StringIndex); //the string that the segment is on
+                    var angleRelativeToString = Math.Abs(LinearPath.GetAngleBetweenLines(segmentString.Path, candidateSegmentLine));
+
+                    //If the angle is less than MinimumSlantAngle, the segment is too slanted and a new segment is started.
+                    if (angleRelativeToString < MinimumSlantAngle)
+                        break;
+
+                    //Layout.GetStringElement(currentPoint.StringIndex).Path.Intersects(candidateSegmentLine, out var inter1, true);
+
+                    //if (currentSegment.Count >= 2)
+                    //{
+                    //    var lastLine = currentSegment.GetLineFromLastTwoPoints();
+                    //    var angleRelativeToLastSegment = Math.Abs(LinearPath.GetAngleBetweenLines(lastLine, candidateSegmentLine));
+                    //    //If the angle between consecutive segments exceeds FretBreakAngleThreshold, a new segment is started to avoid sharp bends.
+                    //    if (angleRelativeToLastSegment > FretBreakAngleThreshold)
+                    //        break;
+                    //}
 
                     currentSegment.AddPoint(match);
+                    if (currentSegment.Count > 2 && !ShouldFretBeStraight(currentSegment, FretSlantDistanceThreshold))
+                    {
+                        // if adding the new point creates a non-linear segment, break the segment here and start a new one from the match point
+                        currentSegment.FretPoints.Remove(match);
+                        break;
+                    }
+
                     processed.Add(match);
                     currentPoint = match;
                 }
@@ -94,7 +112,7 @@ namespace SiGen.Layouts.Builders
             //Split fret segments that have references points between two real points
             SplitSegments(segments);
 
-            //Split segments that are partial nut segments (possible if a string has a starting fret > 0)
+            //Split segments that are partial nut segments (possible if a string has a starting fret <> 0)
             SplitNutSegments(segments);
 
             int fretIndex = 0;
@@ -122,7 +140,6 @@ namespace SiGen.Layouts.Builders
             if (nextString == null) return null;
 
             var expectedPosition1 = nextString.Path.Interpolate(1d - (1d / currentPoint.Interval.Ratio));
-
 
             if (currentSegment.Count >= 2)
             {

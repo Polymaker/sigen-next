@@ -40,37 +40,12 @@ namespace SiGen.Layouts.Snapping
         public SnapLineType Type { get; }
         public LayoutElement SourceElement { get; }
         public PathBase Path { get; }
-        public IReadOnlyList<LinearPath> Segments { get; }
 
         public LayoutSnapLine(SnapLineType type, LayoutElement sourceElement, PathBase path)
         {
             Type = type;
             SourceElement = sourceElement;
             Path = path;
-            Segments = CreateSegments(path);
-        }
-
-        private static IReadOnlyList<LinearPath> CreateSegments(PathBase path)
-        {
-            if (path is LinearPath linear)
-                return new[] { linear };
-
-            if (path is PolyLinePath polyline && polyline.Points.Count > 1)
-            {
-                var segments = new List<LinearPath>();
-                for (int i = 0; i < polyline.Points.Count - 1; i++)
-                {
-                    segments.Add(new LinearPath(polyline.Points[i], polyline.Points[i + 1]));
-                }
-                return segments;
-            }
-            else if (path is BezierSplinePath bezierSpline)
-            {
-                //var segments = new List<LinearPath>();
-
-            }
-
-            return Array.Empty<LinearPath>();
         }
     }
 
@@ -150,33 +125,19 @@ namespace SiGen.Layouts.Snapping
                 if ((line.Type & allowedLineTypes) == SnapLineType.None)
                     continue;
 
-                for (int j = 0; j < line.Segments.Count; j++)
-                {
-                    var projectedPoint = GetClosestPointOnSegment(cursorPosition, line.Segments[j]);
-                    var distance = VectorD.Distance(cursorPosition, projectedPoint);
-                    if (distance > maxDistance)
-                        continue;
+                if (!line.Path.TrySnapToNearestPoint(cursorPosition, out var projectedPoint, out var distance))
+                    continue;
 
-                    if (!best.IsSnapped || distance < best.Distance)
-                    {
-                        best = new LayoutSnapResult(true, projectedPoint, SnapTargetType.Line, line.Type, distance);
-                    }
+                if (distance > maxDistance)
+                    continue;
+
+                if (!best.IsSnapped || distance < best.Distance)
+                {
+                    best = new LayoutSnapResult(true, projectedPoint, SnapTargetType.Line, line.Type, distance);
                 }
             }
 
             return best;
-        }
-
-        private static VectorD GetClosestPointOnSegment(VectorD point, LinearPath segment)
-        {
-            var segmentVector = segment.End - segment.Start;
-            var segmentLengthSquared = segmentVector.LengthSquared();
-            if (segmentLengthSquared <= double.Epsilon)
-                return segment.Start;
-
-            var t = VectorD.Dot(point - segment.Start, segmentVector) / segmentLengthSquared;
-            t = Math.Clamp(t, 0d, 1d);
-            return segment.Start + segmentVector * t;
         }
     }
 
@@ -230,27 +191,15 @@ namespace SiGen.Layouts.Snapping
             for (int i = 0; i < lines.Count; i++)
             {
                 var lineA = lines[i];
-                if (lineA.Segments.Count == 0)
-                    continue;
 
                 for (int j = i + 1; j < lines.Count; j++)
                 {
                     var lineB = lines[j];
-                    if (lineB.Segments.Count == 0)
-                        continue;
-
                     var lineTypes = lineA.Type | lineB.Type;
+                    var points = PathOperations.GetIntersections(lineA.Path, lineB.Path, SegmentIntersectionThreshold);
 
-                    foreach (var segmentA in lineA.Segments)
-                    {
-                        foreach (var segmentB in lineB.Segments)
-                        {
-                            if (LinearPath.Intersects(segmentA, segmentB, out var intersection, SegmentIntersectionThreshold))
-                            {
-                                MergeIntersection(intersections, intersection, lineTypes);
-                            }
-                        }
-                    }
+                    for (int k = 0; k < points.Count; k++)
+                        MergeIntersection(intersections, points[k], lineTypes);
                 }
             }
 

@@ -49,6 +49,11 @@ namespace SiGen.Services
             throw new NotImplementedException();
         }
 
+        public Task<List<double>?> ShowFretIntervalsDialogAsync(string title, IReadOnlyList<double>? initialIntervals = null)
+        {
+            return Task.FromResult<List<double>?>(null);
+        }
+
         public Task<bool> ShowUserSettingsDialogAsync()
         {
             return Task.FromResult(false);

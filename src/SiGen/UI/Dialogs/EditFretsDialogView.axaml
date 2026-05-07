@@ -6,22 +6,20 @@
 			 xmlns:ctrl="using:SiGen.UI.Controls"
 			 xmlns:conv="clr-namespace:SiGen.Converters;assembly=SiGen"
 			 xmlns:lang="using:SiGen.Lang"
-			 
 			 xmlns:sys="clr-namespace:System;assembly=System.Runtime"
+			 xmlns:materialIcons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
 			 mc:Ignorable="d"
-			 d:DesignWidth="750"
+			 d:DesignWidth="650"
 			 d:DesignHeight="640"
-			 MinWidth="750"
+			 MinWidth="650"
 			 MaxHeight="700"
 			 x:Class="SiGen.UI.Dialogs.EditFretsDialogView"
-
 			 x:DataType="vm:EditFretsDialogViewModel">
 	<UserControl.DataContext>
 		<vm:EditFretsDialogViewModel/>
 	</UserControl.DataContext>
 
 	<UserControl.Resources>
-
 		<ResourceDictionary>
 			<conv:EnumValueConverter x:Key="EnumValueConverter" />
 			<ResourceDictionary.ThemeDictionaries>
@@ -37,8 +35,7 @@
 
 	<UserControl.Styles>
 		<Style Selector="TextBox">
-			<!-- Base padding has 10px left and 6px right so text is not centered correctly -->
-			<Setter Property="Padding" Value="6,6,6,5" /> 
+			<Setter Property="Padding" Value="6,6,6,5" />
 		</Style>
 	</UserControl.Styles>
 
@@ -54,15 +51,26 @@
 					  RowDefinitions="Auto,Auto"
 					  ColumnSpacing="12"
 					  RowSpacing="4">
-					<TextBlock Grid.Row="0" Grid.Column="0" Text="{x:Static lang:Resources.FretsLabel}" FontWeight="SemiBold" HorizontalAlignment="Center" />
-					<TextBlock Grid.Row="0" Grid.Column="1" Text="{x:Static lang:Resources.EditFretsDialog_TemperamentHeader}" FontWeight="SemiBold" HorizontalAlignment="Center" />
-					<TextBlock Grid.Row="0" Grid.Column="2"  
-							   FontWeight="SemiBold" HorizontalAlignment="Center" IsVisible="{Binding IsEqualTemperament}"
-							   ToolTip.Tip="{x:Static lang:Resources.EditFretsDialog_EqualTemperamentStepsTooltip}"
-							   >
+					<TextBlock Grid.Row="0" Grid.Column="0"
+							   Text="{x:Static lang:Resources.FretsLabel}"
+							   FontWeight="SemiBold"
+							   HorizontalAlignment="Center" />
+					<TextBlock Grid.Row="0" Grid.Column="1"
+							   Text="{x:Static lang:Resources.EditFretsDialog_TemperamentHeader}"
+							   FontWeight="SemiBold"
+							   HorizontalAlignment="Center" />
+					<TextBlock Grid.Row="0" Grid.Column="2"
+							   FontWeight="SemiBold"
+							   HorizontalAlignment="Center"
+							   IsVisible="{Binding IsEqualTemperament}"
+							   ToolTip.Tip="{x:Static lang:Resources.EditFretsDialog_EqualTemperamentStepsTooltip}">
 						<Run Text="{x:Static lang:Resources.EditFretsDialog_EqualTemperamentStepsHeader}" />
 						<Run Text="ⓘ" FontWeight="Normal"/>
 					</TextBlock>
+
+					<TextBlock Grid.Row="0" Grid.Column="3" 
+							   Text="Manual positions"
+							   FontWeight="SemiBold"/>
 
 					<ctrl:NumericTextBox Grid.Row="1" Grid.Column="0"
 									 Width="90"
@@ -78,7 +86,7 @@
 							  SelectedValue="{Binding Temperament, Mode=TwoWay}">
 						<ComboBox.ItemTemplate>
 							<DataTemplate>
-								<TextBlock Text="{Binding ., Converter={StaticResource EnumValueConverter}}"  VerticalAlignment="Center" />
+								<TextBlock Text="{Binding ., Converter={StaticResource EnumValueConverter}}" VerticalAlignment="Center" />
 							</DataTemplate>
 						</ComboBox.ItemTemplate>
 					</ComboBox>
@@ -91,11 +99,24 @@
 									 MaximumValue="96"
 									 TextAlignment="Center"
 									 IsVisible="{Binding IsEqualTemperament}" />
+
+
+
+
+					<StackPanel Grid.Row="1" Grid.Column="3"
+								Orientation="Horizontal" VerticalAlignment="Center"
+								Spacing="8">
+						<Button Content="Configure..."
+								Command="{Binding EditGlobalIntervalsCommand}" />
+						<TextBlock Text="{Binding GlobalIntervalsSummary}"
+								   Opacity="0.75"
+								   VerticalAlignment="Center" />
+					</StackPanel>
 				</Grid>
 
-		
 				<TextBlock Text="{x:Static lang:Resources.EditFretsDialog_OverrideInfo}"
-						   TextWrapping="Wrap" MaxWidth="700"
+						   TextWrapping="Wrap"
+						   MaxWidth="680"
 						   HorizontalAlignment="Left"
 						   Opacity="0.8" />
 			</StackPanel>
@@ -107,25 +128,23 @@
 				CornerRadius="6">
 			<Grid RowDefinitions="Auto,Auto,*">
 				<Grid Grid.Row="0"
-					  ColumnDefinitions="120,90,90,*,100"
-					  ColumnSpacing="6"
+					  ColumnDefinitions="100,90,90,*,80,30"
+					  ColumnSpacing="3"
 					  Margin="8,4,8,4">
+
 					<TextBlock Grid.Column="0" Text="{x:Static lang:Resources.EditFretsDialog_StringOrCourseHeader}" FontWeight="Bold"
+							   HorizontalAlignment="Left" VerticalAlignment="Center" />
+					<TextBlock Grid.Column="1" Text="{x:Static lang:Resources.FretsLabel}" FontWeight="Bold"
 							   HorizontalAlignment="Center" VerticalAlignment="Center" />
-
-					<TextBlock Grid.Column="1" Text="{x:Static lang:Resources.FretsLabel}" FontWeight="Bold" 
-							   HorizontalAlignment="Center" VerticalAlignment="Center" />
-
-
-					<TextBlock Grid.Column="2" 
+					<TextBlock Grid.Column="2"
 							   ToolTip.Tip="{x:Static lang:Resources.EditFretsDialog_StartingFretTooltip}"
 							   TextWrapping="Wrap" FontWeight="Bold" TextAlignment="Center"
 							   HorizontalAlignment="Center" VerticalAlignment="Center">
 						<Run Text="{x:Static lang:Resources.EditFretsDialog_StartingFretHeader}" />
 						<Run Text="ⓘ" FontWeight="Normal" />
 					</TextBlock>
-					<TextBlock Grid.Column="3" Text="{x:Static lang:Resources.EditFretsDialog_TemperamentHeader}" 
-							   FontWeight="Bold" 
+					<TextBlock Grid.Column="3" Text="{x:Static lang:Resources.EditFretsDialog_TemperamentHeader}"
+							   FontWeight="Bold"
 							   HorizontalAlignment="Center" VerticalAlignment="Center" />
 					<TextBlock Grid.Column="4" FontWeight="Bold" ToolTip.Tip="{x:Static lang:Resources.EditFretsDialog_EqualTemperamentStepsTooltip}"
 							   HorizontalAlignment="Center" VerticalAlignment="Center">
@@ -134,7 +153,7 @@
 					</TextBlock>
 				</Grid>
 
-				<Separator  Grid.Row="1" Margin="0" />
+				<Separator Grid.Row="1" Margin="0" />
 
 				<ScrollViewer Grid.Row="2">
 					<ItemsControl ItemsSource="{Binding StringCourses}">
@@ -150,12 +169,11 @@
 										</Style>
 									</Border.Styles>
 
-									<Grid ColumnDefinitions="120,90,90,*,100"
-										  ColumnSpacing="6"
+									<Grid ColumnDefinitions="100,90,90,*,80,30"
+										  ColumnSpacing="3"
 										  Margin="8,6">
 										<StackPanel Grid.Column="0" Spacing="2" VerticalAlignment="Center">
-											<TextBlock FontWeight="DemiBold"
-													   IsVisible="{Binding IsNotGrouped}">
+											<TextBlock FontWeight="DemiBold" IsVisible="{Binding IsNotGrouped}">
 												<TextBlock.Text>
 													<MultiBinding StringFormat="{}{0} {1}">
 														<Binding Source="{x:Static lang:Resources.StringLabel}" />
@@ -163,8 +181,7 @@
 													</MultiBinding>
 												</TextBlock.Text>
 											</TextBlock>
-											<TextBlock FontWeight="DemiBold"
-													   IsVisible="{Binding IsGrouped}">
+											<TextBlock FontWeight="DemiBold" IsVisible="{Binding IsGrouped}">
 												<TextBlock.Text>
 													<MultiBinding StringFormat="{}{0} {1}">
 														<Binding Source="{x:Static lang:Resources.CourseLabel}" />
@@ -172,9 +189,7 @@
 													</MultiBinding>
 												</TextBlock.Text>
 											</TextBlock>
-											<TextBlock FontSize="11"
-													   Opacity="0.75"
-													   IsVisible="{Binding IsGrouped}">
+											<TextBlock FontSize="11" Opacity="0.75" IsVisible="{Binding IsGrouped}">
 												<TextBlock.Text>
 													<MultiBinding StringFormat="{}{0} {1}">
 														<Binding Path="NumberOfStrings" />
@@ -184,7 +199,7 @@
 											</TextBlock>
 										</StackPanel>
 
-										<ctrl:NumericTextBox Grid.Column="1" Margin="6,0"
+										<ctrl:NumericTextBox Grid.Column="1" Margin="3,0"
 														 Value="{Binding NumberOfFrets, Mode=TwoWay}"
 														 AllowEmpty="True"
 														 AllowDecimals="False"
@@ -194,7 +209,7 @@
 														 VerticalAlignment="Center"
 														 Watermark="{Binding $parent[UserControl].DataContext.NumberOfFrets}" />
 
-										<ctrl:NumericTextBox Grid.Column="2" Margin="6,0"
+										<ctrl:NumericTextBox Grid.Column="2" Margin="3,0"
 														 Value="{Binding StartingFret, Mode=TwoWay}"
 														 AllowEmpty="True"
 														 AllowDecimals="False"
@@ -204,46 +219,41 @@
 														 VerticalAlignment="Center"
 														 Watermark="0" />
 
-										<StackPanel Grid.Column="3" Spacing="8"
-													Orientation="Horizontal">
-											<CheckBox Content="{x:Static lang:Resources.EditFretsDialog_UseGlobal}"
-													  IsChecked="{Binding UseGlobalTemperament, Mode=TwoWay}" 
-													  VerticalAlignment="Center"/>
-											<TextBlock Opacity="0.65"
-													   IsVisible="{Binding UseGlobalTemperament}"
-													   FontStyle="Italic" Padding="0,0,3,0"
-													   VerticalAlignment="Center">
-												<TextBlock.Text>
-													<MultiBinding StringFormat="{}{0}: {1}">
-														<Binding Source="{x:Static lang:Resources.EditFretsDialog_GlobalLabel}" />
-														<Binding Path="GlobalTemperamentLabel" />
-													</MultiBinding>
-												</TextBlock.Text>
-											</TextBlock>
-											<ComboBox MinWidth="180"
-													  ItemsSource="{Binding $parent[UserControl].DataContext.Temperaments}"
-													  SelectedValue="{Binding LocalTemperament, Mode=TwoWay}"
-													  IsVisible="{Binding HasLocalTemperament}"
-													  VerticalAlignment="Center">
-												<ComboBox.ItemTemplate>
-													<DataTemplate x:DataType="sys:Object">
-														<TextBlock Text="{Binding ., Converter={StaticResource EnumValueConverter}}"  VerticalAlignment="Center" />
-													</DataTemplate>
-												</ComboBox.ItemTemplate>
-											</ComboBox>
-										</StackPanel>
+										<ComboBox Grid.Column="3" VerticalAlignment="Center"
+													  HorizontalAlignment="Stretch" Margin="3,0"
+													  PlaceholderText="{Binding GlobalTemperamentLabel}"
+													  ItemsSource="{Binding $parent[UserControl].DataContext.TemperamentsWithGlobalOption}"
+													  SelectedItem="{Binding SelectedTemperamentOption, Mode=TwoWay}">
+											<ComboBox.ItemTemplate>
+												<DataTemplate x:DataType="vm:TemperamentOptionItem">
+													<TextBlock Text="{Binding DisplayName}"
+															   VerticalAlignment="Center"
+															   Classes.UseGlobalOption="{Binding IsGlobalOption}" />
+												</DataTemplate>
+											</ComboBox.ItemTemplate>
+											<ComboBox.Styles>
+												<Style Selector="TextBlock.UseGlobalOption">
+													<Setter Property="FontStyle" Value="Italic" />
+													<Setter	Property="Opacity" Value="0.75" />
+													<Setter Property="TextAlignment" Value="Center" />
+												</Style>
+											</ComboBox.Styles>
+										</ComboBox>
 
-										<StackPanel Grid.Column="4" Spacing="4"
-													IsVisible="{Binding UsesEqualTemperament}">
-											<ctrl:NumericTextBox Width="70"
+										<ctrl:NumericTextBox  Grid.Column="4"
+															  Width="70"
 														 Value="{Binding EqualTemperamentSteps, Mode=TwoWay}"
 														 AllowEmpty="True"
 														 AllowDecimals="False"
 														 MinimumValue="5"
 														 MaximumValue="96"
 														 TextAlignment="Center"
-														 Watermark="{Binding GlobalEqualTemperamentStepsLabel}" />
-										</StackPanel>
+														 IsVisible="{Binding UsesEqualTemperament}"
+														 Watermark="{Binding $parent[UserControl].DataContext.EqualTemperamentSteps}" />
+										<Button  Grid.Column="5" Command="{Binding EditIntervalsCommand}" >
+											<materialIcons:MaterialIcon		Kind="Tune" Width="16" Height="16" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+										</Button>
+										
 									</Grid>
 								</Border>
 							</DataTemplate>

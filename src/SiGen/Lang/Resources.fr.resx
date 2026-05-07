@@ -358,6 +358,9 @@ Ouvrez un fichier récent ou partez d'un modèle.</value>
   <data name="FingerboardEditorPanel.CompensateMarginsLabel" xml:space="preserve">
     <value>Compenser le calibre</value>
   </data>
+  <data name="FingerboardEditorPanel.ExtensionLabel" xml:space="preserve">
+    <value>Extension</value>
+  </data>
   <data name="DateLabel.Today" xml:space="preserve">
     <value>Aujourd’hui {0}</value>
   </data>

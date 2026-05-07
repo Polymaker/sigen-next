@@ -1,0 +1,67 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:SiGen.ViewModels.Dialogs"
+             xmlns:ctrl="using:SiGen.UI.Controls"
+             mc:Ignorable="d"
+             d:DesignWidth="520"
+             d:DesignHeight="420"
+             MinWidth="500"
+             MinHeight="360"
+             x:Class="SiGen.UI.Dialogs.EditFretIntervalsDialogView"
+             x:DataType="vm:EditFretIntervalsDialogViewModel">
+    <Grid RowDefinitions="Auto,*,Auto" Margin="8">
+        <TextBlock Grid.Row="0"
+                   Text="Enter cent values for manual fret positions. Values are sorted and duplicates are removed on save."
+                   TextWrapping="Wrap"
+                   Opacity="0.8"
+                   Margin="2,0,2,8" />
+
+        <Border Grid.Row="1"
+                Background="{DynamicResource PanelBackgroundBrush}"
+                CornerRadius="6">
+            <Grid RowDefinitions="Auto,*">
+                <StackPanel Orientation="Horizontal" Spacing="8" Margin="8">
+                    <Button Content="Add value"
+                            Command="{Binding AddIntervalCommand}" />
+                </StackPanel>
+
+                <ScrollViewer Grid.Row="1" Margin="8,0,8,8">
+                    <ItemsControl ItemsSource="{Binding Intervals}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate x:DataType="vm:FretIntervalValueModel">
+                                <Grid ColumnDefinitions="120,*" Margin="0,0,0,6" ColumnSpacing="8">
+                                    <ctrl:NumericTextBox Value="{Binding Cents, Mode=TwoWay}"
+                                                         AllowEmpty="True"
+                                                         MinimumValue="0"
+                                                         MaximumValue="12000"
+                                                         TextAlignment="Center" />
+                                    <Button Grid.Column="1"
+                                            HorizontalAlignment="Left"
+                                            Content="Remove"
+                                            Command="{Binding $parent[UserControl].DataContext.RemoveIntervalCommand}"
+                                            CommandParameter="{Binding .}" />
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+            </Grid>
+        </Border>
+
+        <WrapPanel Grid.Row="2" HorizontalAlignment="Center" Margin="0,8,0,0">
+            <Button Classes="Primary"
+                    Content="Save"
+                    Command="{Binding SaveCommand}"
+                    Margin="3,0"
+                    Width="100"
+                    HorizontalContentAlignment="Center" />
+            <Button Content="Cancel"
+                    Command="{Binding CancelCommand}"
+                    Margin="3,0"
+                    Width="100"
+                    HorizontalContentAlignment="Center" />
+        </WrapPanel>
+    </Grid>
+</UserControl>

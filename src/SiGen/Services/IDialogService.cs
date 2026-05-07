@@ -30,6 +30,8 @@ namespace SiGen.Services
 
         Task<EditFretsResult?> ShowFretsDialog(ILayoutDocument context);
 
+        Task<List<double>?> ShowFretIntervalsDialogAsync(string title, IReadOnlyList<double>? initialIntervals = null);
+
         /// <summary>
         /// Shows the user settings dialog.
         /// Returns true if settings were saved, false if cancelled.

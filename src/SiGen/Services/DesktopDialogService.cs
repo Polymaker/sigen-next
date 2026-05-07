@@ -92,8 +92,15 @@ namespace SiGen.Services
 
         public async Task<EditFretsResult?> ShowFretsDialog(ILayoutDocument context)
         {
-            var viewModel = new EditFretsDialogViewModel(context);
+            var viewModel = ActivatorUtilities.CreateInstance<EditFretsDialogViewModel>(_serviceProvider, context);
             var dialogControl = new EditFretsDialogView();
+            return await ShowDialogAsync(dialogControl, viewModel);
+        }
+
+        public async Task<List<double>?> ShowFretIntervalsDialogAsync(string title, IReadOnlyList<double>? initialIntervals = null)
+        {
+            var viewModel = new EditFretIntervalsDialogViewModel(title, initialIntervals);
+            var dialogControl = new EditFretIntervalsDialogView();
             return await ShowDialogAsync(dialogControl, viewModel);
         }
 

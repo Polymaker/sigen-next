@@ -338,6 +338,9 @@ Open a recent file or start from a template.</value>
   <data name="FingerboardEditorPanel.CompensateMarginsLabel" xml:space="preserve">
     <value>Compensate for gauge</value>
   </data>
+  <data name="FingerboardEditorPanel.ExtensionLabel" xml:space="preserve">
+    <value>Extension</value>
+  </data>
   <data name="DateLabel.Today" xml:space="preserve">
     <value>Today {0}</value>
   </data>

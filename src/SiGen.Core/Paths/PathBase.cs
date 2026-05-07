@@ -1,4 +1,5 @@
 ﻿using SiGen.Maths;
+using System.Collections.Generic;
 
 namespace SiGen.Paths
 {
@@ -19,6 +20,22 @@ namespace SiGen.Paths
 
         public virtual PathBase? TrimExtend(TrimExtendSide side, double amount) 
         { return null; }
+
+        public virtual IReadOnlyList<VectorD> GetIntersections(PathBase other, double threshold = 0d)
+        {
+            return PathOperations.GetIntersections(this, other, threshold);
+        }
+
+        public virtual bool Intersects(PathBase other, out IReadOnlyList<VectorD> intersections, double threshold = 0d)
+        {
+            intersections = GetIntersections(other, threshold);
+            return intersections.Count > 0;
+        }
+
+        public virtual bool TrySnapToNearestPoint(VectorD point, out VectorD snappedPoint, out double distance)
+        {
+            return PathOperations.TrySnapToNearestPoint(this, point, out snappedPoint, out distance);
+        }
 
         public abstract bool Intersects(LinearPath line, out VectorD intersection);
 

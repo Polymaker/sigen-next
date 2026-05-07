@@ -1,14 +1,14 @@
 <UserControl xmlns="https://github.com/avaloniaui"
-xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-mc:Ignorable="d"  d:DesignHeight="400" MinWidth="650" d:DesignWidth="650"
-x:Class="SiGen.UI.Dialogs.EditStringsDialogView"
-xmlns:vm="using:SiGen.ViewModels.Dialogs"
-xmlns:ctrl="using:SiGen.UI.Controls"
-xmlns:conv="using:SiGen.Converters"
-xmlns:lang="using:SiGen.Lang"
-xmlns:materialIcons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+			 mc:Ignorable="d"  d:DesignHeight="400" MinWidth="650" d:DesignWidth="650"
+			 x:Class="SiGen.UI.Dialogs.EditStringsDialogView"
+			 xmlns:vm="using:SiGen.ViewModels.Dialogs"
+			 xmlns:ctrl="using:SiGen.UI.Controls"
+			 xmlns:conv="using:SiGen.Converters"
+			 xmlns:lang="using:SiGen.Lang"
+			 xmlns:materialIcons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
 			 x:DataType="vm:EditStringsDialogViewModel"
 			 x:Name="StringsDialog">
 	<UserControl.DataContext>
@@ -32,12 +32,12 @@ xmlns:materialIcons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Ico
 
 		<Grid Grid.Row="0" Margin="3" ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto">
 			<Label Grid.Row="0" Grid.Column="0"
-				   Content="{x:Static lang:Resources.EditStringsDialog_StringSetsLabel}" 
+				   Content="{x:Static lang:Resources.EditStringsDialog_StringSetsLabel}"
 				   VerticalAlignment="Center" />
 
-			<ComboBox x:Name="StringSetSelector" 
+			<ComboBox x:Name="StringSetSelector"
 					  Grid.Row="1" Grid.Column="0"
-					  ItemsSource="{Binding AvailableSets}" 
+					  ItemsSource="{Binding AvailableSets}"
 					  HorizontalAlignment="Stretch">
 				<ComboBox.ItemTemplate>
 					<DataTemplate>
@@ -46,8 +46,8 @@ xmlns:materialIcons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Ico
 				</ComboBox.ItemTemplate>
 			</ComboBox>
 
-			<Button Grid.Row="1" Grid.Column="1" 
-					Content="{x:Static lang:Resources.Common_Apply}" 
+			<Button Grid.Row="1" Grid.Column="1"
+					Content="{x:Static lang:Resources.Common_Apply}"
 					Margin="3,0,0,0" Padding="10,6"
 					Command="{Binding ApplyStringSetCommand}"
 					CommandParameter="{Binding #StringSetSelector.SelectedItem}"/>
@@ -55,7 +55,7 @@ xmlns:materialIcons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Ico
 		<Border Grid.Row="1" Margin="3"
 				Background="{DynamicResource PanelBackgroundBrush}" CornerRadius="6">
 			<Grid RowDefinitions="Auto,*" HorizontalAlignment="Stretch" >
-				<Grid Grid.Row="0" 
+				<Grid Grid.Row="0"
 					  ColumnDefinitions="90,80,2*,120,*" RowDefinitions="Auto,*"
 					  HorizontalAlignment="Stretch" Margin="3,0">
 					<Label Grid.Column="0" Content="{x:Static lang:Resources.EditStringsDialog_StringHeader}"
@@ -163,33 +163,33 @@ xmlns:materialIcons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Ico
 																				   IsBassString="{Binding $parent[UserControl].DataContext.IsBassInstrument}"
 																				   />
 
-													<StackPanel Orientation="Horizontal" Grid.Column="4" Spacing="2"
-																HorizontalAlignment="Center">
-														<Button Padding="6" CornerRadius="12"
-																Command="{Binding  $parent[UserControl].DataContext.RemoveStringFromCourseCommand}"
+														<StackPanel Orientation="Horizontal" Grid.Column="4" Spacing="2"
+																	HorizontalAlignment="Center">
+															<Button Padding="6" CornerRadius="12"
+																	Command="{Binding  $parent[UserControl].DataContext.RemoveStringFromCourseCommand}"
 																	CommandParameter="{Binding .}"
 																	IsEnabled="{Binding CanRemove}"
-																	
+
 																	>
-															<ToolTip.Tip>
-																<StackPanel>
-																	<TextBlock IsVisible="{Binding $parent[ItemsControl].DataContext.IsSingle}"
-																	Text="{x:Static lang:Resources.EditStringsDialog_RemoveSingleStringTooltip}" />
-																	<TextBlock IsVisible="{Binding $parent[ItemsControl].DataContext.IsCourse}"
-																	Text="{x:Static lang:Resources.EditStringsDialog_RemoveStringFromCourseTooltip}" />
-																</StackPanel>
-															</ToolTip.Tip>
-															<materialIcons:MaterialIcon Kind="Remove" IconSize="12" />
-														</Button>
-														<Button Padding="6" CornerRadius="12" ToolTip.Tip="{x:Static lang:Resources.EditStringsDialog_AddStringTooltip}"
-																IsVisible="{Binding $parent[ItemsControl].DataContext.IsCourse}"
+																<ToolTip.Tip>
+																	<StackPanel>
+																		<TextBlock IsVisible="{Binding $parent[ItemsControl].DataContext.IsSingle}"
+																				   Text="{x:Static lang:Resources.EditStringsDialog_RemoveSingleStringTooltip}" />
+																		<TextBlock IsVisible="{Binding $parent[ItemsControl].DataContext.IsCourse}"
+																				   Text="{x:Static lang:Resources.EditStringsDialog_RemoveStringFromCourseTooltip}" />
+																	</StackPanel>
+																</ToolTip.Tip>
+																<materialIcons:MaterialIcon Kind="Remove" IconSize="12" />
+															</Button>
+															<Button Padding="6" CornerRadius="12" ToolTip.Tip="{x:Static lang:Resources.EditStringsDialog_AddStringTooltip}"
+																	IsVisible="{Binding $parent[ItemsControl].DataContext.IsCourse}"
 																	Command="{Binding  $parent[UserControl].DataContext.AddStringToCourseCommand}"
 																	CommandParameter="{Binding $parent[ItemsControl].DataContext}"
 																	>
-															<materialIcons:MaterialIcon Kind="Add" IconSize="12" />
-														</Button>
-														<Button Padding="4" CornerRadius="12" ToolTip.Tip="{x:Static lang:Resources.EditStringsDialog_ConvertToCourseTooltip}" 
-																IsVisible="{Binding $parent[ItemsControl].DataContext.IsSingle}"
+																<materialIcons:MaterialIcon Kind="Add" IconSize="12" />
+															</Button>
+															<Button Padding="4" CornerRadius="12" ToolTip.Tip="{x:Static lang:Resources.EditStringsDialog_ConvertToCourseTooltip}"
+																	IsVisible="{Binding $parent[ItemsControl].DataContext.IsSingle}"
 																	Command="{Binding  $parent[UserControl].DataContext.AddStringToCourseCommand}"
 																	CommandParameter="{Binding $parent[ItemsControl].DataContext}"
 																	>

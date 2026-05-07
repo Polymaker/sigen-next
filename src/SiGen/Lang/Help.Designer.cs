@@ -82,6 +82,15 @@ namespace SiGen.Lang {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Length to continue the fingerboard after the last fret. This extends the fingerboard body beyond the fretted area..
+        /// </summary>
+        public static string FingerboardExtension_Help {
+            get {
+                return ResourceManager.GetString("FingerboardExtension_Help", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Select whether the instrument layout is for a right-handed or left-handed player..
         /// </summary>
         public static string Handedness_Help {

@@ -169,4 +169,7 @@ Höhere Werte lassen Bünde mehr Richtung Steg "zeigen", niedrigere Werte Richtu
     <value>Berücksichtigt die Saitenstärke bei der Berechnung der Ränder. 
 Wenn aktiviert, wird der Abstand von der Außenkante der Saite bis zur Griffbrettkante gemessen, anstatt von der Saitenmitte aus.</value>
   </data>
+  <data name="FingerboardExtension_Help" xml:space="preserve">
+    <value>Länge zum Fortsetzen des Griffbretts nach dem letzten Bund. Dies verlängert den Griffbretkörper über den gegriffenen Bereich hinaus.</value>
+  </data>
 </root>
