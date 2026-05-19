@@ -34,10 +34,13 @@ namespace SiGen.Converters
             if (dateTime.Date == now.Date.AddDays(-1))
                 return string.Format(uiCulture, GetResourceString("DateLabel.Yesterday", uiCulture, "Yesterday {0}"), time);
 
-            if (dateTime <= now.AddYears(-1))
-                return dateTime.ToString("MMM yyyy HH:mm", uiCulture);
+            if (dateTime > now.AddMonths(-1))
+                return dateTime.ToString(GetResourceString("DateFormat.WithinMonth", uiCulture, "MMM d HH:mm"), uiCulture);
 
-            return dateTime.ToString("MMM HH:mm", uiCulture);
+            if (dateTime <= now.AddYears(-1))
+                return dateTime.ToString(GetResourceString("DateFormat.OlderThanYear", uiCulture, "MMM d yyyy"), uiCulture);
+
+            return dateTime.ToString(GetResourceString("DateFormat.WithinYear", uiCulture, "MMM d"), uiCulture);
         }
 
         private static string GetResourceString(string key, CultureInfo culture, string fallback)

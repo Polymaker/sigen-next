@@ -55,6 +55,28 @@ namespace SiGen.UI.LayoutViewer.Visuals
                 };
                 Children.Add(_edgeLine);
             }
+            else if (Element.Path is BezierSplinePath bezierSpline)
+            {
+                var segments = bezierSpline.GetSegments();
+                if (segments.Count > 0)
+                {
+                    var geom = new StreamGeometry();
+                    using (var ctx = geom.Open())
+                    {
+                        ctx.BeginFigure(segments[0].P0.ToAvalonia(), false);
+                        foreach (var seg in segments)
+                            ctx.CubicBezierTo(seg.P1.ToAvalonia(), seg.P2.ToAvalonia(), seg.P3.ToAvalonia());
+                        ctx.EndFigure(false);
+                    }
+                    _edgeLine = new Path
+                    {
+                        Stroke = new SolidColorBrush(ThemeRenderSettings.FingerBoardEdgeColor),
+                        StrokeThickness = 1.5,
+                        Data = geom
+                    };
+                    Children.Add(_edgeLine);
+                }
+            }
         }
 
         /// <summary>

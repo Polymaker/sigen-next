@@ -1,6 +1,8 @@
 ﻿using Avalonia;
+using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Media;
+using SvgElem = Avalonia.Svg.Skia.Svg;
 
 namespace SiGen.UI.Controls;
 
@@ -26,8 +28,18 @@ public class SvgIcon : TemplatedControl
         set => SetValue(SvgImageProperty, value);
     }
 
+    private SvgElem? svgElement;
+
+    protected override void OnApplyTemplate(TemplateAppliedEventArgs e)
+    {
+        base.OnApplyTemplate(e);
+        svgElement = e.NameScope.Find<SvgElem>("PART_SvgElement");
+        UpdateIconCss();
+    }
+
     protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
     {
+        
         base.OnPropertyChanged(change);
         if (change.Property == ForegroundProperty || change.Property == OpacityProperty)
             UpdateIconCss();
@@ -42,6 +54,11 @@ public class SvgIcon : TemplatedControl
         }
         else
             IconCss = null;
+
+        //if (svgElement != null)
+        //{
+        //    SvgElem.SetCss(svgElement, IconCss);
+        //}
         //else
         //{
         //    string hex = GetColorHex(Colors.Red);

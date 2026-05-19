@@ -15,7 +15,7 @@ namespace SiGen.Layouts.Elements
         public int BassStringIndex => MedianIndex;
         public int TrebleStringIndex => MedianIndex + 1;
 
-        public StringMedianElement(int medianIndex, LinearPath path) : base(path)
+        public StringMedianElement(int medianIndex, LinearPath path) : base(GuideLineType.StringMedian, path: path)
         {
             MedianIndex = medianIndex;
         }

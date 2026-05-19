@@ -13,6 +13,7 @@
 			 xmlns:materialIcons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
 			 xmlns:settings="using:SiGen.Settings"
 			 xmlns:lang="using:SiGen.Lang"
+			 xmlns:export="using:SiGen.Export"
 			 Name="MainView"
 			 >
 	<UserControl.Resources>
@@ -86,7 +87,7 @@
 
 					<Separator/>
 
-					<MenuItem Header="{x:Static lang:Resources.Menu_File_RecentFiles}" x:Name="RecentFilesMenu" ItemsSource="{Binding RecentFiles}">
+					<MenuItem Header="{x:Static lang:Resources.Menu_File_RecentFiles}" x:Name="RecentFilesMenu" >
 						<MenuItem.ItemTemplate>
 							<DataTemplate x:DataType="vm:RecentFileMenuModel">
 								<MenuItem Padding="0"
@@ -122,13 +123,12 @@
 					</MenuItem>
 				</MenuItem>
 				<MenuItem Header="_Export">
-					<MenuItem Header="Print" Command="{Binding PrintLayoutCommand}" />
-					<MenuItem Header="SVG"/>
-					<MenuItem Header="DXF"/>
+					<!--<MenuItem Header="Print" Command="{Binding PrintLayoutCommand}" />-->
+					<MenuItem Header="Export to SVG..." Command="{Binding ExportLayoutCommand}" CommandParameter="{x:Static export:ExportTargetFormat.Svg}"/>
+					<MenuItem Header="Export to DXF..." Command="{Binding ExportLayoutCommand}" CommandParameter="{x:Static export:ExportTargetFormat.Dxf}"/>
+					<MenuItem Header="Export to PDF / Print..." Command="{Binding ExportLayoutCommand}" CommandParameter="{x:Static export:ExportTargetFormat.Pdf}"/>
 				</MenuItem>
-				<!--<Menu.Effect>
-				<DropShadowEffect OffsetY="2" Opacity="0.5" OffsetX="-1" />
-				</Menu.Effect>-->
+			
 			</Menu>
 			<Grid>
 				<ctrl:TabControlEx x:Name="DocumentsTabControl" Margin="0,4,0,0"

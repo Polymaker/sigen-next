@@ -4,60 +4,128 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="using:SiGen.ViewModels.Dialogs"
              xmlns:ctrl="using:SiGen.UI.Controls"
+             xmlns:lang="using:SiGen.Lang"
+             xmlns:materialIcons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
              mc:Ignorable="d"
-             d:DesignWidth="520"
-             d:DesignHeight="420"
+             d:DesignWidth="500"
+             d:DesignHeight="360"
              MinWidth="500"
              MinHeight="360"
+             MaxHeight="600"
              x:Class="SiGen.UI.Dialogs.EditFretIntervalsDialogView"
              x:DataType="vm:EditFretIntervalsDialogViewModel">
+
+    <UserControl.DataContext>
+		<vm:EditFretIntervalsDialogViewModel/>
+	</UserControl.DataContext>
+
     <Grid RowDefinitions="Auto,*,Auto" Margin="8">
         <TextBlock Grid.Row="0"
-                   Text="Enter cent values for manual fret positions. Values are sorted and duplicates are removed on save."
+                   Text="{x:Static lang:Resources.FretIntervalsDialog_HelpText}"
                    TextWrapping="Wrap"
                    Opacity="0.8"
                    Margin="2,0,2,8" />
 
-        <Border Grid.Row="1"
-                Background="{DynamicResource PanelBackgroundBrush}"
-                CornerRadius="6">
-            <Grid RowDefinitions="Auto,*">
-                <StackPanel Orientation="Horizontal" Spacing="8" Margin="8">
-                    <Button Content="Add value"
-                            Command="{Binding AddIntervalCommand}" />
-                </StackPanel>
+        <Grid Grid.Row="1" ColumnDefinitions="*,1.2*" ColumnSpacing="8">
+            <Border Grid.Column="0"
+                    Background="{DynamicResource PanelBackgroundBrush}"
+                    CornerRadius="6">
+                <Grid RowDefinitions="Auto,Auto,*,Auto" Margin="4">
+                    <Grid Grid.Row="0" ColumnDefinitions="120,*" ColumnSpacing="8" Margin="4">
+                        <ctrl:NumericTextBox Grid.Column="0"
+                                             Value="{Binding NewIntervalCents, Mode=TwoWay}"
+                                             AllowEmpty="True"
+                                             MinimumValue="0"
+                                             MaximumValue="12000"
+                                             TextAlignment="Center" />
+                        <Button Grid.Column="1"
+                                HorizontalAlignment="Left"
+                                Command="{Binding AddIntervalCommand}">
+                            <materialIcons:MaterialIcon Kind="Plus" Margin="3" />
+                        </Button>
+                    </Grid>
 
-                <ScrollViewer Grid.Row="1" Margin="8,0,8,8">
-                    <ItemsControl ItemsSource="{Binding Intervals}">
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate x:DataType="vm:FretIntervalValueModel">
-                                <Grid ColumnDefinitions="120,*" Margin="0,0,0,6" ColumnSpacing="8">
-                                    <ctrl:NumericTextBox Value="{Binding Cents, Mode=TwoWay}"
-                                                         AllowEmpty="True"
-                                                         MinimumValue="0"
-                                                         MaximumValue="12000"
-                                                         TextAlignment="Center" />
-                                    <Button Grid.Column="1"
-                                            HorizontalAlignment="Left"
-                                            Content="Remove"
-                                            Command="{Binding $parent[UserControl].DataContext.RemoveIntervalCommand}"
-                                            CommandParameter="{Binding .}" />
-                                </Grid>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
-                </ScrollViewer>
-            </Grid>
-        </Border>
+                    <Separator Grid.Row="1" Margin="0,4,0,4" />
+
+                    <ScrollViewer Grid.Row="2" Margin="4">
+                        <ItemsControl ItemsSource="{Binding Intervals}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate x:DataType="vm:FretIntervalValueModel">
+                                    <Grid ColumnDefinitions="120,*" Margin="0,0,0,6" ColumnSpacing="8">
+                                        <ctrl:NumericTextBox Value="{Binding Cents, Mode=TwoWay}"
+                                                             AllowEmpty="True"
+                                                             MinimumValue="0"
+                                                             MaximumValue="12000"
+                                                             TextAlignment="Center" />
+                                        <Button Grid.Column="1"
+                                                HorizontalAlignment="Left"
+                                                Command="{Binding $parent[UserControl].DataContext.RemoveIntervalCommand}"
+                                                CommandParameter="{Binding .}">
+                                            <materialIcons:MaterialIcon Kind="Delete" Margin="3" />
+                                        </Button>
+                                    </Grid>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </ScrollViewer>
+
+                    <Button Grid.Row="3"
+                            Content="{x:Static lang:Resources.FretIntervalsDialog_ClearAll}"
+                            Command="{Binding ClearIntervalsCommand}"
+                            Margin="4,0,4,4"
+                            HorizontalAlignment="Center"
+                            HorizontalContentAlignment="Center"
+                            Width="120" />
+                </Grid>
+            </Border>
+
+            <Border Grid.Column="1"
+                    Background="{DynamicResource PanelBackgroundBrush}"
+                    CornerRadius="6"
+                    Padding="10">
+                <StackPanel Spacing="8">
+                    <TextBlock Text="{x:Static lang:Resources.FretIntervalsDialog_RangeGeneratorHeader}" FontWeight="Bold" FontSize="13" />
+
+                    <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto,Auto" ColumnSpacing="8" RowSpacing="6">
+                        <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" Text="{x:Static lang:Resources.FretIntervalsDialog_StartCent}" />
+                        <ctrl:NumericTextBox Grid.Row="0" Grid.Column="1"
+                                             Value="{Binding GenerateStartCents, Mode=TwoWay}"
+                                             AllowEmpty="True"
+                                             MinimumValue="0"
+                                             MaximumValue="12000" />
+
+                        <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" Text="{x:Static lang:Resources.FretIntervalsDialog_CentInterval}" />
+                        <ctrl:NumericTextBox Grid.Row="1" Grid.Column="1"
+                                             Value="{Binding GenerateIntervalCents, Mode=TwoWay}"
+                                             AllowEmpty="True"
+                                             MinimumValue="0"
+                                             MaximumValue="12000" />
+
+                        <TextBlock Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" Text="{x:Static lang:Resources.FretIntervalsDialog_PositionCount}" />
+                        <ctrl:NumericTextBox Grid.Row="2" Grid.Column="1"
+                                             Value="{Binding GenerateCount, Mode=TwoWay}"
+                                             AllowEmpty="True"
+                                             AllowDecimals="False"
+                                             MinimumValue="1"
+                                             MaximumValue="50" />
+                    </Grid>
+
+                    <Button Content="{x:Static lang:Resources.FretIntervalsDialog_Generate}"
+                            Width="120"
+                            HorizontalAlignment="Center" HorizontalContentAlignment="Center"
+                            Command="{Binding GenerateIntervalsCommand}" />
+                </StackPanel>
+            </Border>
+        </Grid>
 
         <WrapPanel Grid.Row="2" HorizontalAlignment="Center" Margin="0,8,0,0">
             <Button Classes="Primary"
-                    Content="Save"
+                    Content="{x:Static lang:Resources.Common_Save}"
                     Command="{Binding SaveCommand}"
                     Margin="3,0"
                     Width="100"
                     HorizontalContentAlignment="Center" />
-            <Button Content="Cancel"
+            <Button Content="{x:Static lang:Resources.Common_Cancel}"
                     Command="{Binding CancelCommand}"
                     Margin="3,0"
                     Width="100"

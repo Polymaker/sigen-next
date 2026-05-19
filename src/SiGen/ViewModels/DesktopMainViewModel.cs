@@ -53,6 +53,8 @@ namespace SiGen.ViewModels
         public IAsyncRelayCommand CloseSelectedDocumentCommand {  get; }
         public IRelayCommand OpenInFileExplorerCommand { get; }
         public IRelayCommand PrintLayoutCommand { get; }
+        public IAsyncRelayCommand<ExportTargetFormat> ExportLayoutCommand { get; }
+
         #endregion
 
         #region State
@@ -86,6 +88,7 @@ namespace SiGen.ViewModels
             ShowSettingsCommand = new AsyncRelayCommand(ShowSettingsAsync);
             CloseSelectedDocumentCommand = new AsyncRelayCommand(CloseSelectedDocument, () => SelectedDocument != null);
             OpenInFileExplorerCommand = new RelayCommand(() => OpenInFileExplorer(SelectedDocument as ILayoutDocument), () => SelectedDocument is ILayoutDocument doc && !string.IsNullOrEmpty(doc.FilePath));
+            ExportLayoutCommand = new AsyncRelayCommand<ExportTargetFormat>(format => ExportLayout(SelectedDocument as ILayoutDocument, format), _ => SelectedDocument is ILayoutDocument);
             // Subscribe to recent files changes
             settingsService.RecentFilesChanged += OnRecentFilesChanged;
             OpenDocuments.CollectionChanged += OpenDocuments_CollectionChanged;
@@ -96,7 +99,7 @@ namespace SiGen.ViewModels
                     {
                         ExportFingerboard = true,
                         ExportStrings = true,
-                        UseStringThickness = true
+                        UseStringGauge = true
                     };
                     var exporter = new PdfLayoutExporter(options, layoutDoc.Layout!);
                     exporter.ExportLayout(ExportTarget.ToFile("layout.pdf"));
@@ -407,7 +410,15 @@ namespace SiGen.ViewModels
 
         #endregion
 
-        
+        #region Export
+
+        public async Task ExportLayout(ILayoutDocument? document, ExportTargetFormat format)
+        {
+            if (document == null) return;
+            await dialogService.ShowExportDialog(document, format);
+        }
+
+        #endregion
 
         public void OpenInFileExplorer(ILayoutDocument? document)
         {

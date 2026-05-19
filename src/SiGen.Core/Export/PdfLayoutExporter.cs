@@ -50,15 +50,15 @@ namespace SiGen.Export
 
             if (Options.EnableTiling)
             {
-                if (Options.HorizontalPageOverlap >= contentWidth)
-                    throw new InvalidOperationException("Horizontal page overlap must be smaller than the printable width.");
+                if (Options.PageOverlap >= contentWidth)
+                    throw new InvalidOperationException("Page overlap must be smaller than the printable width.");
 
-                if (Options.VerticalPageOverlap >= contentHeight)
-                    throw new InvalidOperationException("Vertical page overlap must be smaller than the printable height.");
+                if (Options.PageOverlap >= contentHeight)
+                    throw new InvalidOperationException("Page overlap must be smaller than the printable height.");
             }
 
-            var stepX = Options.EnableTiling ? contentWidth - Options.HorizontalPageOverlap : contentWidth;
-            var stepY = Options.EnableTiling ? contentHeight - Options.VerticalPageOverlap : contentHeight;
+            var stepX = Options.EnableTiling ? contentWidth - Options.PageOverlap : contentWidth;
+            var stepY = Options.EnableTiling ? contentHeight - Options.PageOverlap : contentHeight;
 
             if (stepX <= Measure.Zero || stepY <= Measure.Zero)
                 throw new InvalidOperationException("The effective printable step must be greater than zero.");
@@ -85,6 +85,7 @@ namespace SiGen.Export
 
                     pages.Add(new PdfLayoutPage(
                         pageNumber,
+                        column, row,
                         layoutArea,
                         printableArea,
                         CreateMetadata(pageNumber, rowCount * columnCount, layoutArea, bounds)));
@@ -95,7 +96,13 @@ namespace SiGen.Export
 
             var markers = BuildMarkers(pages, rowCount, columnCount, stepX, stepY);
 
-            return new PdfLayoutPlan(bounds, pageSize, printableArea, pages, markers, Options);
+            return new PdfLayoutPlan(bounds, pageSize, printableArea, new SizeM(tiledWidth, tiledHeight), pages, markers, Options);
+        }
+
+        public static PdfLayoutPlan BuildPlan(PdfExportOptions options, StringedInstrumentLayout layout)
+        {
+            var exporter = new PdfLayoutExporter(options, layout);
+            return exporter.BuildPlan();
         }
 
         #region Drawing
@@ -303,7 +310,7 @@ namespace SiGen.Export
                 throw new InvalidOperationException("Margins cannot be negative.");
             }
 
-            if (Options.HorizontalPageOverlap < Measure.Zero || Options.VerticalPageOverlap < Measure.Zero)
+            if (Options.PageOverlap < Measure.Zero)
                 throw new InvalidOperationException("Page overlap cannot be negative.");
         }
 
@@ -341,9 +348,9 @@ namespace SiGen.Export
                     int index = row * columnCount + column;
                     var page = pages[index];
 
-                    if (column < columnCount - 1 && Options.HorizontalPageOverlap > Measure.Zero)
+                    if (column < columnCount - 1 && Options.PageOverlap > Measure.Zero)
                     {
-                        var markerX = page.LayoutArea.Left + stepX + (Options.HorizontalPageOverlap / 2d);
+                        var markerX = page.LayoutArea.Left + stepX + (Options.PageOverlap / 2d);
                         markers.Add(new PdfLayoutMarker(
                             new PointM(markerX, page.LayoutArea.Top - verticalInset),
                             PdfLayoutMarkerType.Registration,
@@ -354,9 +361,9 @@ namespace SiGen.Export
                             MarkerRadius));
                     }
 
-                    if (row < rowCount - 1 && Options.VerticalPageOverlap > Measure.Zero)
+                    if (row < rowCount - 1 && Options.PageOverlap > Measure.Zero)
                     {
-                        var markerY = page.LayoutArea.Top - stepY - (Options.VerticalPageOverlap / 2d);
+                        var markerY = page.LayoutArea.Top - stepY - (Options.PageOverlap / 2d);
                         markers.Add(new PdfLayoutMarker(
                             new PointM(page.LayoutArea.Left + horizontalInset, markerY),
                             PdfLayoutMarkerType.Registration,

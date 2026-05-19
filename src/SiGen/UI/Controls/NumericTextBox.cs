@@ -81,13 +81,13 @@ namespace SiGen.UI.Controls
 
         private string? _lastValidText;
         private bool _isEditing;
+        private bool _isInternalTextUpdate;
         private Timer? _commitTimer;
         private const int CommitDelayMs = 800;
 
         public NumericTextBox()
         {
             this.LostFocus += OnLostFocus;
-            //this.KeyDown += OnKeyDown;
         }
 
         protected override void OnTextInput(TextInputEventArgs e)
@@ -97,23 +97,9 @@ namespace SiGen.UI.Controls
             StartCommitTimer();
         }
 
-
-        //private void OnKeyDown(object? sender, KeyEventArgs e)
-        //{
-        //    if (e.Key == Key.Back) 
-        //    {
-        //        _isEditing = true;
-        //        StartCommitTimer();
-        //    }
-        //    if (e.Key == Key.Enter)
-        //    {
-        //        CommitText();
-        //        e.Handled = true;
-        //    }
-        //}
         protected override void OnKeyDown(KeyEventArgs e)
         {
-            if (e.Key == Key.Back)
+            if (e.Key == Key.Back || e.Key == Key.Delete)
             {
                 _isEditing = true;
                 StartCommitTimer();
@@ -140,7 +126,7 @@ namespace SiGen.UI.Controls
                 _commitTimer.Elapsed += (s, e) =>
                 {
                     _commitTimer?.Stop();
-                    
+
                     Avalonia.Threading.Dispatcher.UIThread.Post(() =>
                     {
                         if (Text != null && (Text.EndsWith(".") || Text.EndsWith(",")))
@@ -167,33 +153,54 @@ namespace SiGen.UI.Controls
                 }
                 else
                 {
+                    _isInternalTextUpdate = true;
                     Text = _lastValidText ?? "";
+                    _isInternalTextUpdate = false;
                 }
                 return;
             }
-            if (double.TryParse(Text, out var val)) //todo: consider culture
+            if (double.TryParse(Text, out var val))
             {
                 var coerced = CoerceValue(this, val);
                 Value = coerced;
                 var coercedText = coerced?.ToString() ?? "";
-                if (Text != coercedText) Text = coercedText;
+                if (Text != coercedText)
+                {
+                    _isInternalTextUpdate = true;
+                    Text = coercedText;
+                    _isInternalTextUpdate = false;
+                }
                 _lastValidText = Text;
             }
             else
             {
-                // Restore last valid text if parse fails
+                _isInternalTextUpdate = true;
                 Text = _lastValidText ?? "";
+                _isInternalTextUpdate = false;
             }
         }
 
         protected override void OnPropertyChanged(AvaloniaPropertyChangedEventArgs change)
         {
             base.OnPropertyChanged(change);
+
+            if (change.Property == TextProperty)
+            {
+                if (!_isInternalTextUpdate && IsFocused)
+                {
+                    _isEditing = true;
+                    StartCommitTimer();
+                }
+                return;
+            }
+
             if (change.Property == ValueProperty)
             {
                 if (!_isEditing)
                 {
+                    _isInternalTextUpdate = true;
                     Text = Value?.ToString() ?? "";
+                    _isInternalTextUpdate = false;
                     _lastValidText = Text;
                 }
             }

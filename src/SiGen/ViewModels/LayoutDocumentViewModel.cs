@@ -33,6 +33,7 @@ namespace SiGen.ViewModels
         private bool hasUnsavedChanges;
 
         [ObservableProperty]
+        //private StringedInstrumentLayout? layout;
         public partial StringedInstrumentLayout? Layout { get; private set; }
 
         public event EventHandler? LayoutChanged;

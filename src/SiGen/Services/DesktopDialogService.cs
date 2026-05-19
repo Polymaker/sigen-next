@@ -1,6 +1,7 @@
 using Avalonia.Controls;
 using Avalonia.Platform.Storage;
 using Microsoft.Extensions.DependencyInjection;
+using SiGen.Export;
 using SiGen.Layouts.Configuration;
 using SiGen.Layouts.Data;
 using SiGen.Measuring;
@@ -18,14 +19,13 @@ namespace SiGen.Services
     {
         private readonly Window _parentWindow;
         private readonly IServiceProvider _serviceProvider;
+        private readonly Stack<Window> _dialogWindowStack = new();
 
         public DesktopDialogService(Window parentWindow, IServiceProvider serviceProvider)
         {
             _parentWindow = parentWindow;
             _serviceProvider = serviceProvider;
         }
-
-        
 
         private async Task<TResult?> ShowDialogAsync<TResult>(UserControl dialogControl, DialogViewModelBase<TResult> viewModel)
         {
@@ -41,23 +41,37 @@ namespace SiGen.Services
             var completionSource = new TaskCompletionSource<TResult?>();
             viewModel.SetCompletionSource(completionSource);
 
-            var dialogTask = dialogWindow.ShowDialog<bool?>(_parentWindow);
-            var resultTask = completionSource.Task;
+            // Use the top of the stack as owner if available, otherwise use the parent window
+            var ownerWindow = _dialogWindowStack.Count > 0 ? _dialogWindowStack.Peek() : _parentWindow;
 
-            var completedTask = await Task.WhenAny(dialogTask, resultTask);
+            // Push the new dialog window onto the stack
+            _dialogWindowStack.Push(dialogWindow);
 
-            if (completedTask == resultTask)
+            try
             {
-                // ViewModel completed first, close the dialog
-                dialogWindow.Close();
-                return await resultTask;
+                var dialogTask = dialogWindow.ShowDialog<bool?>(ownerWindow);
+                var resultTask = completionSource.Task;
+
+                var completedTask = await Task.WhenAny(dialogTask, resultTask);
+
+                if (completedTask == resultTask)
+                {
+                    // ViewModel completed first, close the dialog
+                    dialogWindow.Close();
+                    return await resultTask;
+                }
+                else
+                {
+                    // Dialog was closed by user (X button, etc.)
+                    // Handle as needed (maybe return default value or throw)
+                    completionSource.TrySetCanceled();
+                    throw new OperationCanceledException("Dialog was closed by user");
+                }
             }
-            else
+            finally
             {
-                // Dialog was closed by user (X button, etc.)
-                // Handle as needed (maybe return default value or throw)
-                completionSource.TrySetCanceled();
-                throw new OperationCanceledException("Dialog was closed by user");
+                // Pop the dialog window from the stack
+                _dialogWindowStack.Pop();
             }
 
             //return result;
@@ -164,6 +178,15 @@ namespace SiGen.Services
         }
 
         #endregion
+
+        public async Task ShowExportDialog(ILayoutDocument context, ExportTargetFormat? format)
+        {
+            var model = ActivatorUtilities.CreateInstance<ExportLayoutDialogViewModel>(_serviceProvider, context);
+            if (format.HasValue)
+                model.Format = format.Value;
+            var control = new ExportLayoutDialogView();
+            await ShowDialogAsync(control, model);
+        }
 
         #region Simple Message Dialogs
 

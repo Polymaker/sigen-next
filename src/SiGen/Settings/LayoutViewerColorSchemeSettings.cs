@@ -40,7 +40,7 @@ public class LayoutViewerColorSchemeSettings
     /// the custom color values are used.
     /// </summary>
     [JsonConverter(typeof(JsonStringEnumConverter))]
-    public LayoutViewerPreset Preset { get; set; } = LayoutViewerPreset.Light;
+    public LayoutViewerPreset Preset { get; set; } = LayoutViewerPreset.Blueprint;
 
     /// <summary>
     /// Gets or sets the custom background color (hex format, e.g., "#FFFFFF").

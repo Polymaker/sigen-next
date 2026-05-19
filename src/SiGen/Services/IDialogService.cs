@@ -1,3 +1,4 @@
+using SiGen.Export;
 using SiGen.Layouts.Configuration;
 using SiGen.Layouts.Data;
 using SiGen.Measuring;
@@ -39,6 +40,10 @@ namespace SiGen.Services
         Task<bool> ShowUserSettingsDialogAsync();
 
         #endregion
+
+        Task ShowExportDialog(ILayoutDocument context, ExportTargetFormat? format);
+
+
 
         #region Simple Message Dialogs
 

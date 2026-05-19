@@ -169,6 +169,7 @@ Valores altos hacen que los trastes "apunten" hacia el puente, valores bajos hac
 Cuando está activado, la distancia se mide desde el borde de la cuerda hasta el borde del diapasón, en lugar de hacerlo desde el centro de la cuerda.</value>
   </data>
   <data name="FingerboardExtension_Help" xml:space="preserve">
-    <value>Longitud para continuar el diapasón después del último traste. Esto extiende el cuerpo del diapasón más allá del área de trastes.</value>
+    <value>Longitud para continuar el diapasón después del último traste.
+Esto extiende el cuerpo del diapasón más allá del área de trastes.</value>
   </data>
 </root>

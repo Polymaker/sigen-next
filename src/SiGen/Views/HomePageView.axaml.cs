@@ -37,4 +37,5 @@ public partial class HomePageView : UserControl
             ViewModel?.OpenTemplate(template);
         }
     }
+
 }

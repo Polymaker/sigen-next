@@ -236,6 +236,12 @@ namespace SiGen.Layouts.Elements
             return realpoints.Any(x => x.IsNut) && !realpoints.All(x => x.IsNut);
         }
 
+        public bool IsPartialBridge()
+        {
+            var realpoints = FretPoints.Where(x => !x.IsReference);
+            return realpoints.Any(x => x.IsBridge) && !realpoints.All(x => x.IsBridge);
+        }
+
         public bool IsNut()
         {
             var realpoints = FretPoints.Where(x => !x.IsReference);

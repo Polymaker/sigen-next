@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
 		Microsoft ResX Schema
@@ -269,7 +269,7 @@
     <value>START FROM A TEMPLATE</value>
   </data>
   <data name="HomePageView.WelcomeText" xml:space="preserve">
-    <value>Design and export precision stringed instrument layouts – from a standard Strat to a fanned-fret 8-string.
+    <value>Design and export precision stringed instrument layouts, from a standard Strat to a fanned-fret 8-string.
 Open a recent file or start from a template.</value>
   </data>
   <data name="InstrumentInfoEditorPanel.LayoutName" xml:space="preserve">
@@ -347,6 +347,15 @@ Open a recent file or start from a template.</value>
   <data name="DateLabel.Yesterday" xml:space="preserve">
     <value>Yesterday {0}</value>
   </data>
+  <data name="DateFormat.WithinMonth" xml:space="preserve">
+    <value>MMM d HH:mm</value>
+  </data>
+  <data name="DateFormat.WithinYear" xml:space="preserve">
+    <value>MMM d</value>
+  </data>
+  <data name="DateFormat.OlderThanYear" xml:space="preserve">
+    <value>MMM d yyyy</value>
+  </data>
   <data name="ScaleLengthEditorPanel.SingleScalePresetHeader" xml:space="preserve">
     <value>Common scale lengths</value>
   </data>
@@ -395,11 +404,23 @@ Open a recent file or start from a template.</value>
   <data name="Common.Apply" xml:space="preserve">
     <value>Apply</value>
   </data>
+  <data name="Common.None" xml:space="preserve">
+    <value>None</value>
+  </data>
   <data name="EditFretsDialog.EqualTemperamentStepsTooltip" xml:space="preserve">
     <value>Number of equal divisions of the octave used for fret placement when the temperament is equal. 12 is the standard western system. Higher values can be used for microtonal layouts.</value>
   </data>
   <data name="EditFretsDialog.StartingFretTooltip" xml:space="preserve">
     <value>Starting fret index for this string or course. 0 means the nut is the starting position. Positive values start after the nut. Negative values add one or more frets before the nut.</value>
+  </data>
+  <data name="EditFretsDialog.ManualPositionsHeader" xml:space="preserve">
+    <value>Manual positions</value>
+  </data>
+  <data name="EditFretsDialog.ConfigureButton" xml:space="preserve">
+    <value>Configure...</value>
+  </data>
+  <data name="EditFretsDialog.ConfigureManualPositionTooltip" xml:space="preserve">
+    <value>Configure manual fret positions for this string or course</value>
   </data>
   <data name="EditTuningDialog.TensionToolTip" xml:space="preserve">
     <value>String tension values are estimated based on tuning, scale length, and string gauge. These are approximate values to help you balance tension across strings.</value>
@@ -647,5 +668,39 @@ Error: {0}</value>
   </data>
   <data name="Menu_Document_OpenInExplorer" xml:space="preserve">
     <value>Show In Folder</value>
+  </data>
+  <data name="FretIntervalsDialog.HelpText" xml:space="preserve">
+    <value>Enter cent values for manual fret positions.
+Values are sorted and duplicates are removed on save.</value>
+  </data>
+  <data name="FretIntervalsDialog.ClearAll" xml:space="preserve">
+    <value>Clear all</value>
+  </data>
+  <data name="FretIntervalsDialog.RangeGeneratorHeader" xml:space="preserve">
+    <value>Range generator</value>
+  </data>
+  <data name="FretIntervalsDialog.StartCent" xml:space="preserve">
+    <value>Start cent</value>
+  </data>
+  <data name="FretIntervalsDialog.CentInterval" xml:space="preserve">
+    <value>Cent interval</value>
+  </data>
+  <data name="FretIntervalsDialog.PositionCount" xml:space="preserve">
+    <value>Positions</value>
+  </data>
+  <data name="FretIntervalsDialog.Generate" xml:space="preserve">
+    <value>Generate</value>
+  </data>
+  <data name="FretIntervalsDialog.StringTitleFormat" xml:space="preserve">
+    <value>Manual fret positions ({0} {1})</value>
+  </data>
+  <data name="FretIntervalsDialog.GlobalTitle" xml:space="preserve">
+    <value>Manual fret positions</value>
+  </data>
+  <data name="FretIntervalsDialog.ValuesCountFormat" xml:space="preserve">
+    <value>{0} values</value>
+  </data>
+  <data name="HomePageView.SearchPlaceHolder" xml:space="preserve">
+    <value>Search...</value>
   </data>
 </root>

@@ -21,8 +21,4 @@
     <PackageReference Include="Avalonia.Android" />
     <PackageReference Include="Xamarin.AndroidX.Core.SplashScreen" />
   </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\SiGen\SiGen.csproj" />
-  </ItemGroup>
 </Project>

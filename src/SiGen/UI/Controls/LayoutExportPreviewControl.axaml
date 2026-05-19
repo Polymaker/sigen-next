@@ -1,0 +1,29 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="300" d:DesignHeight="600"
+             xmlns:materialIcons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             x:Class="SiGen.UI.Controls.LayoutExportPreviewControl">
+    <Border x:Name="ContainerBorder" Background="Gray" CornerRadius="4">
+        <Grid ColumnDefinitions="*,Auto">
+            <Canvas x:Name="PreviewCanvas" Grid.ColumnSpan="2" />
+            <Border  Grid.Column="1" VerticalAlignment="Bottom" Background="#AAFFFFFF" CornerRadius="4">
+                <ThemeVariantScope RequestedThemeVariant="Light">
+                    <StackPanel Margin="3" Spacing="3">
+                        <Button Padding="4" Click="ZoomInButton_Click" >
+                            <materialIcons:MaterialIcon Kind="ZoomInOutline" IconSize="16" />
+                        </Button>
+                        <Button Padding="4" Click="ResetViewButton_Click">
+                            <materialIcons:MaterialIcon Kind="ImageFilterCenterFocusStrong" IconSize="16" />
+                        </Button>
+                        <Button Padding="4" Click="ZoomOutButton_Click">
+                            <materialIcons:MaterialIcon Kind="ZoomOutOutline" IconSize="16" />
+                        </Button>
+                    </StackPanel>
+                </ThemeVariantScope>
+            </Border>
+
+        </Grid>
+    </Border>
+</UserControl>

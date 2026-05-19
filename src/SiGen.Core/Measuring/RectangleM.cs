@@ -18,10 +18,10 @@ namespace SiGen.Measuring
             get => new(X, Y);
             set { X = value.X; Y = value.Y; }
         }
-        public PointM Size
+        public SizeM Size
         {
             get => new(Width, Height);
-            set { Width = value.X; Height = value.Y; }
+            set { Width = value.Width; Height = value.Height; }
         }
 
         public Measure Left
@@ -110,5 +110,10 @@ namespace SiGen.Measuring
         }
 
         #endregion
+    
+        public RectangleM Inflate(Measure amount)
+        {
+            return new RectangleM(X - amount, Y + amount, Width + amount * 2, Height + amount * 2);
+        }
     }
 }

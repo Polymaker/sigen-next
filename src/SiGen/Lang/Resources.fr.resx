@@ -367,6 +367,15 @@ Ouvrez un fichier récent ou partez d'un modèle.</value>
   <data name="DateLabel.Yesterday" xml:space="preserve">
     <value>Hier {0}</value>
   </data>
+  <data name="DateFormat.WithinMonth" xml:space="preserve">
+    <value>d MMM HH:mm</value>
+  </data>
+  <data name="DateFormat.WithinYear" xml:space="preserve">
+    <value>d MMM</value>
+  </data>
+  <data name="DateFormat.OlderThanYear" xml:space="preserve">
+    <value>d MMM yyyy</value>
+  </data>
   <data name="ScaleLengthEditorPanel.SingleScalePresetHeader" xml:space="preserve">
     <value>Diapasons courants</value>
   </data>
@@ -384,6 +393,9 @@ Ouvrez un fichier récent ou partez d'un modèle.</value>
   </data>
   <data name="Common.Apply" xml:space="preserve">
     <value>Appliquer</value>
+  </data>
+  <data name="Common.None" xml:space="preserve">
+    <value>Aucune</value>
   </data>
   <data name="EditFretsDialog.Title" xml:space="preserve">
     <value>Configuration des frettes</value>
@@ -420,6 +432,15 @@ Ouvrez un fichier récent ou partez d'un modèle.</value>
   </data>
   <data name="EditFretsDialog.StartingFretTooltip" xml:space="preserve">
     <value>Index de départ des frettes pour cette corde ou ce chœur. 0 signifie que le sillet est la position de départ. Les valeurs positives commencent après le sillet. Les valeurs négatives ajoutent une ou plusieurs frettes avant le sillet.</value>
+  </data>
+  <data name="EditFretsDialog.ManualPositionsHeader" xml:space="preserve">
+    <value>Positions manuelles</value>
+  </data>
+  <data name="EditFretsDialog.ConfigureButton" xml:space="preserve">
+    <value>Configurer...</value>
+  </data>
+  <data name="EditFretsDialog.ConfigureManualPositionTooltip" xml:space="preserve">
+    <value>Configurer les positions manuelles des frettes pour cette corde ou ce chœur</value>
   </data>
   <data name="EditTuningDialog.TensionToolTip" xml:space="preserve">
     <value>Les valeurs de tension des cordes sont estimées en fonction de l'accordage, de la longueur vibrante et du calibre des cordes. Ce sont des valeurs approximatives pour vous aider à équilibrer la tension entre les cordes.</value>
@@ -667,5 +688,39 @@ Erreur : {0}</value>
   </data>
   <data name="Menu_Document_OpenInExplorer" xml:space="preserve">
     <value>Afficher dans le dossier</value>
+  </data>
+  <data name="FretIntervalsDialog.HelpText" xml:space="preserve">
+    <value>Saisissez les valeurs en cents pour les positions de frettes manuelles.
+Les valeurs sont triées et les doublons supprimés lors de l’enregistrement.</value>
+  </data>
+  <data name="FretIntervalsDialog.ClearAll" xml:space="preserve">
+    <value>Tout effacer</value>
+  </data>
+  <data name="FretIntervalsDialog.RangeGeneratorHeader" xml:space="preserve">
+    <value>Générateur de plage</value>
+  </data>
+  <data name="FretIntervalsDialog.StartCent" xml:space="preserve">
+    <value>Cent de départ</value>
+  </data>
+  <data name="FretIntervalsDialog.CentInterval" xml:space="preserve">
+    <value>Intervalle en cents</value>
+  </data>
+  <data name="FretIntervalsDialog.PositionCount" xml:space="preserve">
+    <value>Positions</value>
+  </data>
+  <data name="FretIntervalsDialog.Generate" xml:space="preserve">
+    <value>Générer</value>
+  </data>
+  <data name="FretIntervalsDialog.StringTitleFormat" xml:space="preserve">
+    <value>Positions de frettes manuelles ({0} {1})</value>
+  </data>
+  <data name="FretIntervalsDialog.GlobalTitle" xml:space="preserve">
+    <value>Positions de frettes manuelles</value>
+  </data>
+  <data name="FretIntervalsDialog.ValuesCountFormat" xml:space="preserve">
+    <value>{0} valeurs</value>
+  </data>
+  <data name="HomePageView.SearchPlaceHolder" xml:space="preserve">
+    <value>Rechercher...</value>
   </data>
 </root>

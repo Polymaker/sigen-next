@@ -93,19 +93,26 @@ namespace SiGen.Layouts.Builders
                 ApplySymmetry(stringPaths);
             }
 
-            for (int i = 0; i < NumberOfStrings; i++)
+            if (Configuration.ScaleLength.Mode != ScaleLengthMode.PerString && NumberOfStrings > 2)
             {
-                //if (Configuration.StringConfigurations[i] is StringGroupConfiguration group)
-                //{
-                //    var offsetX = group.GetTotalSpacing() * -0.5d;
+                // Different nut/bridge spacing or centering can give each string a slightly different taper,
+                // so their 50% points (12th-fret line) may not naturally align. We build a line between the
+                // bass/treble midpoints, then extend/trim each inner string so its midpoint lands on that line.
+                var bassMidPoint = stringPaths[0].Interpolate(0.5);
+                var trebMidPoint = stringPaths[^1].Interpolate(0.5);
+                var midLine = new LinearPath(bassMidPoint, trebMidPoint);
 
-                //}
-                //else
-                //{
-                //    Layout.AddElement(new StringElement(i, stringPaths[i]));
-                //}
-                Layout.AddElement(new StringElement(i, stringPaths[i]));
+                for (int i = 1; i < stringPaths.Length - 1; i++)
+                {
+                    if (!stringPaths[i].Intersects(midLine, out VectorD strMidPoint)) continue;
+
+                    var halfLength = VectorD.Distance(stringPaths[i].Start, strMidPoint);
+                    stringPaths[i].End = stringPaths[i].Start + stringPaths[i].Direction * halfLength * 2d;
+                }
             }
+
+            for (int i = 0; i < NumberOfStrings; i++)
+                Layout.AddElement(new StringElement(i, stringPaths[i]));
 
             for (int i = 0; i < NumberOfStrings - 1; i++)
             {
@@ -145,7 +152,7 @@ namespace SiGen.Layouts.Builders
                             BridgePoint = stringElem.BridgePoint + new PointM(offsetX, Measure.Zero),
                             StartPoint = stringElem.StartPoint + new PointM(offsetX, Measure.Zero)
                         };
-                        Trace.WriteLine($"Course {i} string {j} nut pox X: {newString.NutPoint.X}");
+                        
                         Layout.AddElement(newString);
 
                         offsetX += group.Spacing ?? Measure.Mm(1.5);

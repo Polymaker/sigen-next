@@ -367,6 +367,15 @@ Abre un archivo reciente o empieza con una de nuestras plantillas.</value>
   <data name="DateLabel.Yesterday" xml:space="preserve">
     <value>Ayer {0}</value>
   </data>
+  <data name="DateFormat.WithinMonth" xml:space="preserve">
+    <value>d MMM HH:mm</value>
+  </data>
+  <data name="DateFormat.WithinYear" xml:space="preserve">
+    <value>d MMM</value>
+  </data>
+  <data name="DateFormat.OlderThanYear" xml:space="preserve">
+    <value>d MMM yyyy</value>
+  </data>
   <data name="ScaleLengthEditorPanel.SingleScalePresetHeader" xml:space="preserve">
     <value>Escalas habituales</value>
   </data>
@@ -384,6 +393,9 @@ Abre un archivo reciente o empieza con una de nuestras plantillas.</value>
   </data>
   <data name="Common.Apply" xml:space="preserve">
     <value>Aplicar</value>
+  </data>
+  <data name="Common.None" xml:space="preserve">
+    <value>Ninguna</value>
   </data>
   <data name="EditFretsDialog.Title" xml:space="preserve">
     <value>Configuración de trastes</value>
@@ -420,6 +432,15 @@ Abre un archivo reciente o empieza con una de nuestras plantillas.</value>
   </data>
   <data name="EditFretsDialog.StartingFretTooltip" xml:space="preserve">
     <value>Índice del traste inicial para esta cuerda u orden. 0 significa que la cejuela es la posición inicial. Los valores positivos empiezan después de la cejuela. Los valores negativos añaden uno o más trastes antes de la cejuela.</value>
+  </data>
+  <data name="EditFretsDialog.ManualPositionsHeader" xml:space="preserve">
+    <value>Posiciones manuales</value>
+  </data>
+  <data name="EditFretsDialog.ConfigureButton" xml:space="preserve">
+    <value>Configurar...</value>
+  </data>
+  <data name="EditFretsDialog.ConfigureManualPositionTooltip" xml:space="preserve">
+    <value>Configurar posiciones manuales de trastes para esta cuerda u orden</value>
   </data>
   <data name="EditTuningDialog.TensionToolTip" xml:space="preserve">
     <value>Los valores de tensión de las cuerdas se estiman según la afinación, longitud de escala y calibre de las cuerdas. Son valores aproximados para ayudarte a equilibrar la tensión entre las cuerdas.</value>
@@ -667,5 +688,38 @@ Error: {0}</value>
   </data>
   <data name="Menu_Document_OpenInExplorer" xml:space="preserve">
     <value>Mostrar en la carpeta</value>
+  </data>
+  <data name="FretIntervalsDialog.HelpText" xml:space="preserve">
+    <value>Introduce valores en cents para posiciones de trastes manuales. Los valores se ordenan y se eliminan duplicados al guardar.</value>
+  </data>
+  <data name="FretIntervalsDialog.ClearAll" xml:space="preserve">
+    <value>Borrar todo</value>
+  </data>
+  <data name="FretIntervalsDialog.RangeGeneratorHeader" xml:space="preserve">
+    <value>Generador de rango</value>
+  </data>
+  <data name="FretIntervalsDialog.StartCent" xml:space="preserve">
+    <value>Cent inicial</value>
+  </data>
+  <data name="FretIntervalsDialog.CentInterval" xml:space="preserve">
+    <value>Intervalo en cents</value>
+  </data>
+  <data name="FretIntervalsDialog.PositionCount" xml:space="preserve">
+    <value>Posiciones</value>
+  </data>
+  <data name="FretIntervalsDialog.Generate" xml:space="preserve">
+    <value>Generar</value>
+  </data>
+  <data name="FretIntervalsDialog.StringTitleFormat" xml:space="preserve">
+    <value>Posiciones de trastes manuales ({0} {1})</value>
+  </data>
+  <data name="FretIntervalsDialog.GlobalTitle" xml:space="preserve">
+    <value>Posiciones de trastes manuales</value>
+  </data>
+  <data name="FretIntervalsDialog.ValuesCountFormat" xml:space="preserve">
+    <value>{0} valores</value>
+  </data>
+  <data name="HomePageView.SearchPlaceHolder" xml:space="preserve">
+    <value>Buscar...</value>
   </data>
 </root>

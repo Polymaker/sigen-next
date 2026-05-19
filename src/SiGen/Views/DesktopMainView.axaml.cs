@@ -26,13 +26,26 @@ public partial class DesktopMainView : UserControl
         if (ViewModel != null)
         {
             ViewModel.PropertyChanged += ViewModel_PropertyChanged;
+            RebuildRecentFilesMenu();
         }
     }
 
     private void ViewModel_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
     {
-        if (e.PropertyName == nameof(ViewModel.RecentFiles))
-            RecentFilesMenu.ItemsSource = ViewModel?.RecentFiles;
+        if (e.PropertyName == nameof(ViewModel.RecentFiles)) {
+            RebuildRecentFilesMenu();
+        }
+    }
+
+    private void RebuildRecentFilesMenu()
+    {
+        RecentFilesMenu.Items.Clear();
+        if (ViewModel != null)
+        {
+            foreach (var recent in ViewModel.RecentFiles)
+                RecentFilesMenu.Items.Add(recent);
+        }
+        RecentFilesMenu.IsEnabled = RecentFilesMenu.Items.Count > 0;
     }
 
     private void DocumentsTabControl_TabReordered(object? sender, UI.Controls.TabReorderedEventArgs e)

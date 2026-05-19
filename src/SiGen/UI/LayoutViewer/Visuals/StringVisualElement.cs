@@ -232,6 +232,7 @@ namespace SiGen.UI.LayoutViewer.Visuals
 
             var nutBridgeFrets = Element.Layout.Elements.OfType<FretSegmentElement>()
                 .Where(x => x.ContainsString(Element.CourseIndex) && (x.IsNut || x.IsBridge)).ToList();
+            if (nutBridgeFrets.Count < 2) return null;
 
             var pathGeometry = new PathGeometry();
             var ctx = pathGeometry.Open();

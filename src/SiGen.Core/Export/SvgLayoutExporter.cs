@@ -9,8 +9,10 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
 
 namespace SiGen.Export
 {
@@ -19,6 +21,8 @@ namespace SiGen.Export
         private SvgDocument Document;
         private PointM OriginOffset;
         private float ScaleFactor = 1f;
+        private Dictionary<ElementType, SvgGroup> LayerGroups;
+
 
         public SvgLayoutExporter(SvgExportOptions options, StringedInstrumentLayout layout) : base(options, layout)
         {
@@ -30,11 +34,39 @@ namespace SiGen.Export
                 Height = GetDocumentUnit(layout.Bounds!.Height)
             };
             Document.ViewBox = new SvgViewBox(0, 0, Document.Width, Document.Height);
+
+            if (options.InkscapeCompatible)
+            {
+                Document.Namespaces.Add("inkscape", "http://www.inkscape.org/namespaces/inkscape");
+            }
             //Document.ViewBox = new SvgViewBox(0, 0, (float)layout.Bounds!.Width[Options.Unit], (float)layout.Bounds!.Height[Options.Unit]);
             ScaleFactor = Document.ViewBox.Height / (float)layout.Bounds.Height[Options.Unit];
 
             OriginOffset = new PointM(layout.Bounds.Location.X * -1, layout.Bounds.Location.Y * -1);
+
+            LayerGroups = new Dictionary<ElementType, SvgGroup>();
         }
+
+        private SvgGroup GetOrCreateLayer(ElementType elementType)
+        {
+            if (!LayerGroups.TryGetValue(elementType, out var layerGroup))
+            {
+                layerGroup = new SvgGroup
+                {
+                    ID = $"layer-{elementType.ToString().ToLowerInvariant()}"
+                };
+                if (Options.InkscapeCompatible)
+                {
+                    layerGroup.CustomAttributes.Add("http://www.inkscape.org/namespaces/inkscape:groupmode", "layer");
+                    layerGroup.CustomAttributes.Add("http://www.inkscape.org/namespaces/inkscape:label", elementType.ToString());
+                }
+                LayerGroups[elementType] = layerGroup;
+                Document.Children.Add(layerGroup);
+            }
+            return layerGroup;
+        }
+
+
 
         protected override void ExportElement(ElementType elementType, PathBase path, LineExportOptions lineOptions)
         {
@@ -44,7 +76,9 @@ namespace SiGen.Export
 
                 //svgElement.CustomAttributes.Add("elementType", elementType.ToString());
                 ApplyStyle(svgElement, lineOptions);
-                Document.Children.Add(svgElement);
+
+                var layerGroup = GetOrCreateLayer(elementType);
+                layerGroup.Children.Add(svgElement);
                 return;
             }
         }
@@ -68,13 +102,28 @@ namespace SiGen.Export
             {
                 var svgPoly = new SvgPath();
                 svgPoly.PathData = new SvgPathSegmentList();
-                svgPoly.PathData.Add(new SvgMoveToSegment(true, ToPointF(poly.Points[0])));
+                svgPoly.PathData.Add(new SvgMoveToSegment(true, ToPointF(poly.Points[0]))); 
 
                 for (int i = 0; i < poly.Points.Count - 1; i++)
                 {
                     svgPoly.PathData.Add(new SvgLineSegment(false, ToPointF(poly.Points[i + 1])));
                 }
                 return svgPoly;
+            }
+            else if (path is BezierSplinePath bezierSpline)
+            {
+                var svgBezier = new SvgPath();
+                svgBezier.PathData = new SvgPathSegmentList();
+                svgBezier.PathData.Add(new SvgMoveToSegment(true, ToPointF(bezierSpline.GetFirstPoint())));
+                foreach (var segment in bezierSpline.GetSegments())
+                {
+                    svgBezier.PathData.Add(new SvgCubicCurveSegment(
+                        true,
+                        ToPointF(segment.P1),
+                        ToPointF(segment.P2),
+                        ToPointF(segment.P3)));
+                }
+                return svgBezier;
             }
             //else if (path is BezierPath bezier)
             //{
@@ -117,14 +166,15 @@ namespace SiGen.Export
             {
                 svgElement.StrokeDashArray = new SvgUnitCollection()
                 {
-                    new SvgUnit(SvgUnitType.Pixel, 4),
-                    new SvgUnit(SvgUnitType.Pixel, 2)
+                    new SvgUnit(SvgUnitType.Pixel, 8),
+                    new SvgUnit(SvgUnitType.Pixel, 4)
                 };
             }
         }
 
         protected override void SaveToFile(string filePath)
         {
+            
             Document.Write(filePath);
         }
 

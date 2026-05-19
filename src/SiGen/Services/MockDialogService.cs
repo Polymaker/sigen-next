@@ -1,4 +1,5 @@
-﻿using SiGen.Layouts.Configuration;
+﻿using SiGen.Export;
+using SiGen.Layouts.Configuration;
 using SiGen.Layouts.Data;
 using SiGen.Measuring;
 using SiGen.ViewModels;
@@ -82,6 +83,11 @@ namespace SiGen.Services
         public Task<MessageBoxResult> ShowMessageBoxAsync(string message, string title, MessageBoxButtons buttons = MessageBoxButtons.Ok, MessageBoxIcon icon = MessageBoxIcon.None)
         {
             return Task.FromResult(MessageBoxResult.None);
+        }
+
+        public Task ShowExportDialog(ILayoutDocument context, ExportTargetFormat? format)
+        {
+            return Task.FromResult(false);
         }
     }
 }

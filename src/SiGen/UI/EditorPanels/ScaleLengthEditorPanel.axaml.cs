@@ -117,7 +117,7 @@ public partial class ScaleLengthEditorPanel : UserControl
             var length = preset.ScaleLength;
             menuBuilder.AddOption(CreateScaleLengthPresetHeader(preset), () =>
             {
-                ViewModel?.SingleScale = length;
+				if (ViewModel != null) ViewModel.SingleScale = length;
             });
         }
 
@@ -174,8 +174,11 @@ public partial class ScaleLengthEditorPanel : UserControl
             {
                 menuBuilder.AddOption($"{preset.Item1.ToStringFormatted()} → {preset.Item2.ToStringFormatted()}", () =>
                 {
-                    ViewModel?.BassScale = preset.Item1;
-                    ViewModel?.TrebleScale = preset.Item2;
+					if (ViewModel != null) 
+					{
+						ViewModel.BassScale = preset.Item1;
+						ViewModel.TrebleScale = preset.Item2;
+					}
                 });
             }
 

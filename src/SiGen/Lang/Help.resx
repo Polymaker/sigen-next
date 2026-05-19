@@ -170,6 +170,7 @@ Higher values make frets "point" more toward the bridge, lower values toward the
 When enabled, the distance is measured from the edge of the string to the edge of the fingerboard, rather than from the string center.</value>
   </data>
   <data name="FingerboardExtension_Help" xml:space="preserve">
-    <value>Length to continue the fingerboard after the last fret. This extends the fingerboard body beyond the fretted area.</value>
+    <value>Length to continue the fingerboard after the last fret.
+This extends the fingerboard body beyond the fretted area.</value>
   </data>
 </root>

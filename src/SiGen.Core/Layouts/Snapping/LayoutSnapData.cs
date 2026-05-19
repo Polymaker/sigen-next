@@ -144,7 +144,7 @@ namespace SiGen.Layouts.Snapping
     internal static class LayoutSnapDataBuilder
     {
         private const double IntersectionMergeTolerance = 0.0001;
-        private const double SegmentIntersectionThreshold = 0.01;
+        private const double SegmentIntersectionThreshold = 0.02;
 
         public static LayoutSnapData Build(StringedInstrumentLayout layout)
         {
@@ -180,7 +180,7 @@ namespace SiGen.Layouts.Snapping
                     new VectorD(0, top + centerLineMarginCm),
                     new VectorD(0, bottom - centerLineMarginCm));
 
-                yield return new LayoutSnapLine(SnapLineType.CenterLine, new GuideLineElement(centerLinePath), centerLinePath);
+                yield return new LayoutSnapLine(SnapLineType.CenterLine, new GuideLineElement(GuideLineType.CenterLine, centerLinePath), centerLinePath);
             }
         }
 

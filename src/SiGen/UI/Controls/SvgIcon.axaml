@@ -1,6 +1,8 @@
 <ResourceDictionary xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:controls="using:SiGen.UI.Controls">
+        xmlns:controls="using:SiGen.UI.Controls"
+        xmlns:svg="using:Avalonia.Svg.Skia"
+        >
 
   <!--
     Additional resources 
@@ -21,7 +23,7 @@
   <ControlTheme x:Key="{x:Type controls:SvgIcon}" TargetType="controls:SvgIcon">
     <Setter Property="Template">
       <ControlTemplate>
-		  <Svg Path="{TemplateBinding SvgImage}" Css="{TemplateBinding IconCss}" 
+		  <svg:Svg x:Name="PART_SvgElement" Path="{TemplateBinding SvgImage}" Css="{TemplateBinding IconCss}" 
 			   Width="{TemplateBinding Width}" Height="{TemplateBinding Height}" />
       </ControlTemplate>
     </Setter>

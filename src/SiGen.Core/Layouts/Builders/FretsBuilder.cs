@@ -14,9 +14,9 @@ namespace SiGen.Layouts.Builders
     public class FretsBuilder : LayoutBuilderBase
     {
         public double FretBreakAngleThreshold { get; set; } = 5; //todo: put this setting in the configuration
-        public double FretSlantDistanceThreshold { get; set; } = 0.1; //todo: put this setting in the configuration
+        public double FretSlantDistanceThreshold { get; set; } = 0.07; //todo: put this setting in the configuration
 
-        public double MinimumSlantAngle { get; set; } = 25; // angle at which a fret is too slanted relative to the string and should be broken into a new segment
+        public double MinimumSlantAngle { get; set; } = 20; // angle at which a fret is too slanted relative to the string and should be broken into a new segment
 
         public FretsBuilder(StringedInstrumentLayout layout, InstrumentLayoutConfiguration configuration) : base(layout, configuration)
         {
@@ -113,7 +113,7 @@ namespace SiGen.Layouts.Builders
             SplitSegments(segments);
 
             //Split segments that are partial nut segments (possible if a string has a starting fret <> 0)
-            SplitNutSegments(segments);
+            SplitNutBridgeSegments(segments);
 
             int fretIndex = 0;
             foreach (var segment in segments)
@@ -364,77 +364,65 @@ namespace SiGen.Layouts.Builders
             }
         }
 
-        private void SplitNutSegments(List<FretSegment> segments)
+        private void SplitNutBridgeSegments(List<FretSegment> segments)
         {
-            var partialNutSegments = segments.Where(x => x.IsPartialNut()).ToList();
-            if (partialNutSegments.Count == 0) return;
+            var mixedSegments = segments.Where(x => x.IsPartialNut() || x.IsPartialBridge()).ToList();
+            if (mixedSegments.Count == 0) return;
 
-            for (int i = 0;  i < partialNutSegments.Count; i++)
+            foreach (var segment in mixedSegments)
             {
-                var currentSegment = partialNutSegments[i];
+                var splitSegments = SplitMixedSegment(segment);
+                int index = segments.IndexOf(segment);
+                segments.RemoveAt(index);
+                segments.InsertRange(index, splitSegments);
+            }
+        }
 
-                
-                int firstNutIndex = 0;
+        /// <summary>
+        /// Splits a segment that contains a mix of nut, bridge and/or normal fret points into
+        /// "pure" segments (each containing only one type). Cloned reference delimiter points
+        /// are inserted at each split boundary.
+        /// </summary>
+        private static List<FretSegment> SplitMixedSegment(FretSegment segment)
+        {
+            static int PointType(FretPoint p) => p.IsNut ? 0 : p.IsBridge ? 2 : 1;
 
-                bool isNut = false; // segment.FretPoints[0].IsNut;
+            var realPoints = segment.FretPoints.Where(x => !x.IsReference).ToList();
 
-                void createNutSegment(int firstIndex, int lastIndex)
+            // Group consecutive real points by type
+            var groups = new List<List<FretPoint>>();
+            var currentGroup = new List<FretPoint> { realPoints[0] };
+            for (int i = 1; i < realPoints.Count; i++)
+            {
+                if (PointType(realPoints[i]) == PointType(currentGroup[0]))
+                    currentGroup.Add(realPoints[i]);
+                else
                 {
-                    var nutSegment = new FretSegment();
-                    if (firstIndex > 0)
-                        nutSegment.FretPoints.Add(currentSegment.FretPoints[firstIndex - 1].Clone());
-                    nutSegment.FretPoints.AddRange(currentSegment.FretPoints.Skip(firstIndex).Take(lastIndex - firstNutIndex + 1));
-                    if (lastIndex + 1 < currentSegment.Count)
-                        nutSegment.FretPoints.Add(currentSegment.FretPoints[lastIndex + 1].Clone());
-                    segments.Add(nutSegment);
-                }
-
-                for (int j = 0; j < currentSegment.Count; j++)
-                {
-                    if (currentSegment.FretPoints[j].IsReference) continue;
-
-                    if (!isNut && currentSegment.FretPoints[j].IsNut)
-                    {
-                        isNut = true;
-                        firstNutIndex = j;
-                        continue;
-                    }
-
-                    if (isNut && !currentSegment.FretPoints[j].IsNut)
-                    {
-                        isNut = false;
-                        int lastNutIndex = j - 1;
-                        createNutSegment(firstNutIndex, lastNutIndex);
-
-                        if (j + 1 < currentSegment.Count)
-                        {
-                            var remainingSegment = new FretSegment();
-                            remainingSegment.FretPoints.Add(currentSegment.FretPoints[j - 1].Clone());
-                            remainingSegment.FretPoints.AddRange(currentSegment.FretPoints.Skip(j));
-                            segments.Add(remainingSegment);
-                            if (remainingSegment.IsPartialNut())
-                                partialNutSegments.Insert(j + 1, remainingSegment);
-                        }
-                        currentSegment.FretPoints[firstNutIndex] = currentSegment.FretPoints[firstNutIndex].Clone();
-                        currentSegment.FretPoints.RemoveRange(firstNutIndex + 1, currentSegment.Count - firstNutIndex - 1);
-
-                        if (currentSegment.FretPoints.All(y => y.IsReference))
-                            segments.Remove(currentSegment);
-
-                        break;
-                    }
-                }
-
-                if (isNut)
-                {
-                    createNutSegment(firstNutIndex, currentSegment.Count - 1);
-                    currentSegment.FretPoints[firstNutIndex] = currentSegment.FretPoints[firstNutIndex].Clone();
-                    currentSegment.FretPoints.RemoveRange(firstNutIndex + 1, currentSegment.Count - firstNutIndex - 1);
-                    if (currentSegment.FretPoints.All(y => y.IsReference))
-                        segments.Remove(currentSegment);
+                    groups.Add(currentGroup);
+                    currentGroup = [realPoints[i]];
                 }
             }
+            groups.Add(currentGroup);
 
+            var result = new List<FretSegment>(groups.Count);
+            for (int g = 0; g < groups.Count; g++)
+            {
+                var newSegment = new FretSegment();
+
+                // leading delimiter: clone the last point of the previous group
+                if (g > 0)
+                    newSegment.FretPoints.Add(groups[g - 1].Last().Clone());
+
+                newSegment.FretPoints.AddRange(groups[g]);
+
+                // trailing delimiter: clone the first point of the next group
+                if (g < groups.Count - 1)
+                    newSegment.FretPoints.Add(groups[g + 1].First().Clone());
+
+                result.Add(newSegment);
+            }
+
+            return result;
         }
 
         /// <summary>
@@ -506,9 +494,9 @@ namespace SiGen.Layouts.Builders
 
         private PathBase CreateSegmentPath(FretSegment segment)
         {
-            var shapeStyle = FretShapeStyle.NotchedSpline;// Configuration.Frets.ShapeStyle;
-
-            if (segment.FretPoints.Count == 1 || ShouldFretBeStraight(segment, 0.07)) //0.7mm
+            var shapeStyle = FretShapeStyle.Polyline;// Configuration.Frets.ShapeStyle;
+            var tolerence = segment.IsBridge() ? 0.1 : 0.07; // allow more deviation for bridge segments since they often allow adjustment of the saddle
+            if (segment.FretPoints.Count == 1 || ShouldFretBeStraight(segment, tolerence)) 
             {
                 var vectorPoints = GetFretShapePoints(segment);
                 return new LinearPath(vectorPoints.First(), vectorPoints.Last());

@@ -1,0 +1,22 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="300" 
+             x:Class="SiGen.UI.Controls.LineThicknessEditor">
+  <Grid ColumnDefinitions="*,2*" ColumnSpacing="3">
+
+      <NumericUpDown x:Name="PART_Value" Value="1" 
+                     Minimum="0" FormatString="0.##" 
+                     MinWidth="40"
+                     HorizontalAlignment="Stretch" 
+                     ShowButtonSpinner="False"
+                     ValueChanged="OnValueChanged" />
+
+      <ComboBox x:Name="PART_Unit" Grid.Column="1" 
+                HorizontalAlignment="Stretch" 
+                SelectionChanged="OnUnitChanged">
+          
+      </ComboBox>
+  </Grid>
+</UserControl>

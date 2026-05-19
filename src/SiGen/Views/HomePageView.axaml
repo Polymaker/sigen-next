@@ -67,7 +67,7 @@
 			<TextBlock Text="{x:Static lang:Resources.HomePageView_RecentFilesLabel}"  Margin="0,4"
 					   FontSize="15" Foreground="{DynamicResource SystemAccentColor}" FontWeight="DemiBold" />
 
-			<TextBox Watermark="Search..." Text="{Binding SearchText, Mode=TwoWay}" Margin="0,4" />
+			<TextBox Watermark="{x:Static lang:Resources.HomePageView_SearchPlaceHolder}" Text="{Binding SearchText, Mode=TwoWay}" Margin="0,4" />
 			
 			<ListBox ItemsSource="{Binding FilteredRecentFiles}" 
 					 Margin="0,4" Background="Transparent"
@@ -109,8 +109,6 @@
 					</Style>-->
 				</ListBox.Styles>
 			</ListBox>
-
-			
 		</StackPanel>
 
 		<!--<GridSplitter Grid.Column="1"  Width="2" Background="{DynamicResource SystemAccentColor}" HorizontalAlignment="Center" />-->

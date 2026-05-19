@@ -130,8 +130,11 @@ namespace SiGen.ViewModels.Dialogs
         private async System.Threading.Tasks.Task OpenStringIntervalsDialogAsync(FretCourseEditModel course)
         {
             var titleFormat = Lang.Resources.ResourceManager.GetString("FretIntervalsDialog.StringTitleFormat", Lang.Resources.Culture)
-                ?? "Manual fret positions (string/course {0})";
-            var title = string.Format(titleFormat, course.CourseNumber);
+                ?? "Manual fret positions ({0} {1})";
+
+            var label = course.IsGrouped ? Lang.Resources.CourseLabel : Lang.Resources.StringLabel;
+            var title = string.Format(titleFormat, label, course.CourseNumber);
+
             var intervals = await dialogService.ShowFretIntervalsDialogAsync(title, course.Intervals);
             if (intervals == null)
                 return;
@@ -177,15 +180,15 @@ namespace SiGen.ViewModels.Dialogs
         private readonly Func<FretCourseEditModel, System.Threading.Tasks.Task>? editIntervalsAction;
 
         private Temperament globalTemperament;
-        private int globalEqualTemperamentSteps;
-        private IReadOnlyList<double>? globalIntervals;
+        //private int globalEqualTemperamentSteps;
+        //private IReadOnlyList<double>? globalIntervals;
 
         [ObservableProperty]
         private int courseIndex;
 
         [ObservableProperty]
         private double? numberOfFrets;
-
+         
         [ObservableProperty]
         private double? startingFret;
 
@@ -236,7 +239,7 @@ namespace SiGen.ViewModels.Dialogs
         public void UpdateGlobalSettings(Temperament temperament, int equalTemperamentSteps)
         {
             globalTemperament = temperament;
-            globalEqualTemperamentSteps = equalTemperamentSteps;
+            //globalEqualTemperamentSteps = equalTemperamentSteps;
             OnPropertyChanged(nameof(SelectedTemperament));
             OnPropertyChanged(nameof(SelectedTemperamentOption));
             OnPropertyChanged(nameof(UsesEqualTemperament));

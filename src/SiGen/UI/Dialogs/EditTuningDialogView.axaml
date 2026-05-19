@@ -1,175 +1,181 @@
 ﻿<UserControl xmlns="https://github.com/avaloniaui"
-			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-			 mc:Ignorable="d"  d:DesignHeight="450" MinWidth="350" MaxHeight="700"
-			 xmlns:vm="using:SiGen.ViewModels.Dialogs"
-			 xmlns:ctrl="using:SiGen.UI.Controls"
-			 x:DataType="vm:EditTuningDialogViewModel"
-			 xmlns:conv="using:SiGen.Converters"
-			 xmlns:lang="using:SiGen.Lang"
-			 x:Class="SiGen.UI.Dialogs.EditTuningDialogView">
-	<UserControl.DataContext>
-		<vm:EditTuningDialogViewModel/>
-	</UserControl.DataContext>
-	
-	<UserControl.Resources>
-		<ResourceDictionary>
-			<conv:EnumValueConverter x:Key="EnumValueConverter" />
-		</ResourceDictionary>
-	</UserControl.Resources>
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"  d:DesignHeight="450" MinWidth="350" MaxHeight="700"
+             xmlns:vm="using:SiGen.ViewModels.Dialogs"
+             xmlns:ctrl="using:SiGen.UI.Controls"
+             x:DataType="vm:EditTuningDialogViewModel"
+             xmlns:conv="using:SiGen.Converters"
+             xmlns:lang="using:SiGen.Lang"
+             x:Class="SiGen.UI.Dialogs.EditTuningDialogView">
+    <UserControl.DataContext>
+        <vm:EditTuningDialogViewModel/>
+    </UserControl.DataContext>
 
-	<Grid RowDefinitions="Auto,*,Auto" Margin="3" >
-		<Grid ColumnDefinitions="*,Auto" Margin="2"
-			  RowDefinitions="Auto,Auto,Auto">
-			<Label Grid.Row="0"
-				   Content="{x:Static lang:Resources.EditTuningDialog_TuningPresetsLabel}" VerticalAlignment="Center" />
-			
-			<ComboBox Name="TuningSelector"
-					  SelectedValueBinding="{Binding Preset}"
-					  ItemsSource="{Binding TuningPresets}"
-					  Grid.Row="1" Grid.Column="0"
-					  HorizontalAlignment="Stretch" >
-				<ComboBox.ItemTemplate>
-					<DataTemplate>
-						<StackPanel>
-							<TextBlock Grid.Column="0" Text="{Binding Name}" FontWeight="Bold" />
-							<TextBlock Grid.Column="1" FontSize="12"
-									   Text="{Binding Description, StringFormat='({0})'}"
-									   Opacity="0.75" VerticalAlignment="Bottom"
-									   Margin="5,0,0,0" Height="15"/>
-						</StackPanel>
-					</DataTemplate>
-				</ComboBox.ItemTemplate>
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <conv:EnumValueConverter x:Key="EnumValueConverter" />
+        </ResourceDictionary>
+    </UserControl.Resources>
 
-			</ComboBox>
+    <Grid RowDefinitions="Auto,*,Auto" Margin="6" RowSpacing="6" >
 
-			<Button Grid.Row="1" Grid.Column="1" Content="Apply"
-					Command="{Binding ApplyTuningCommand}"
-					CommandParameter="{Binding #TuningSelector.SelectedValue}"
-					VerticalAlignment="Top" Margin="4,0,0,0">
-				<Button.Styles>
-					<Style Selector="Button">
-						<Setter Property="IsEnabled" Value="{Binding #TuningSelector.SelectedItem, Converter={x:Static ObjectConverters.IsNotNull}}"/>
-					</Style>
-				</Button.Styles>
-			</Button>
+        <Border CornerRadius="6"
+                Background="{DynamicResource PanelBackgroundBrush}" Padding="8" >
+            <Grid ColumnDefinitions="*,Auto" 
+                  RowDefinitions="Auto,Auto,Auto">
+                <Label Grid.Row="0" Margin="0,-4,0,0" FontWeight="SemiBold"
+                       Content="{x:Static lang:Resources.EditTuningDialog_TuningPresetsLabel}" 
+                       VerticalAlignment="Center" />
 
-			<TextBlock Grid.Row="2" Grid.ColumnSpan="2"
-					   Text="{x:Static lang:Resources.EditTuningDialog_OptionalTuningMessage}"
-					   TextWrapping="Wrap" MaxWidth="450"
-					   Margin="2,6,2,3"
-					   Opacity="0.85" />
-		</Grid>
-		<Border Grid.Row="1"  CornerRadius="6" Margin="0,3,0,0"
-				Background="{DynamicResource PanelBackgroundBrush}">
-			<Grid RowDefinitions="Auto,Auto,*" ColumnDefinitions="*,*,*">
+                <ComboBox Name="TuningSelector"
+                          SelectedValueBinding="{Binding Preset}"
+                          ItemsSource="{Binding TuningPresets}"
+                          Grid.Row="1" Grid.Column="0"
+                          HorizontalAlignment="Stretch" >
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel>
+                                <TextBlock Grid.Column="0" Text="{Binding Name}" FontWeight="Bold" />
+                                <TextBlock Grid.Column="1" FontSize="12"
+                                           Text="{Binding Description, StringFormat='({0})'}"
+                                           Opacity="0.75" VerticalAlignment="Bottom"
+                                           Margin="5,0,0,0" Height="15"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
 
-			<Label Content="{x:Static lang:Resources.StringLabel}" HorizontalAlignment="Center" FontWeight="Bold" />
-			<Label Content="{x:Static lang:Resources.EditTuningDialog_TuningHeader}" Grid.Column="1" HorizontalAlignment="Center" FontWeight="Bold" />
-	
+                </ComboBox>
 
-				<TextBlock  Grid.Column="2" ToolTip.Tip="{x:Static lang:Resources.EditTuningDialog_TensionToolTip}"
-							HorizontalAlignment="Center" VerticalAlignment="Center"
-							FontWeight="Bold">
-					<Run Text="{x:Static lang:Resources.EditTuningDialog_TensionHeader}" />
-					<Run Text="ⓘ" FontWeight="Normal"/>
-				</TextBlock>
+                <Button Grid.Row="1" Grid.Column="1" Content="{x:Static lang:Resources.Common_Apply}"
+                        Command="{Binding ApplyTuningCommand}"
+                        CommandParameter="{Binding #TuningSelector.SelectedValue}"
+                        VerticalAlignment="Top" Margin="4,0,0,0">
+                    <Button.Styles>
+                        <Style Selector="Button">
+                            <Setter Property="IsEnabled" Value="{Binding #TuningSelector.SelectedItem, Converter={x:Static ObjectConverters.IsNotNull}}"/>
+                        </Style>
+                    </Button.Styles>
+                </Button>
 
-				<Separator Grid.Row="1" Grid.ColumnSpan="5" Margin="0,3,0,0" />
-				<ScrollViewer Grid.Row="2" Grid.ColumnSpan="3">
-					<ItemsControl
-					ItemsSource="{Binding StringCourses}"
-					>
-						<ItemsControl.ItemTemplate>
-							<DataTemplate>
-								<Border Classes.IsEven="{Binding IsEven}">
-									<Border.Styles>
-										<Style Selector="Border">
-											<Setter Property="Background" Value="Transparent"/>
-										</Style>
-										<Style Selector="Border.IsEven">
-											<Setter Property="Background" Value="{DynamicResource EvenRowBrush}"/>
-										</Style>
-									</Border.Styles>
+                <TextBlock Grid.Row="2" Grid.ColumnSpan="2"
+                           Text="{x:Static lang:Resources.EditTuningDialog_OptionalTuningMessage}"
+                           TextWrapping="Wrap" MaxWidth="450"
+                           Margin="2,6,2,0"
+                           Opacity="0.85" />
+            </Grid>
+        </Border>
 
-									<Grid ColumnDefinitions="*, *, *" >
+        <Border Grid.Row="1"  CornerRadius="6" 
+                Background="{DynamicResource PanelBackgroundBrush}">
+            <Grid RowDefinitions="Auto,Auto,*" ColumnDefinitions="*,*,*">
 
-										<StackPanel Orientation="Horizontal" Grid.Column="0">
-											<ctrl:SvgIcon Margin="6,9,3,0"
-													  SvgImage="/Assets/Icons/StringIcon.svg" Height="24" Opacity="0.5" VerticalAlignment="Top" />
+                <Label Content="{x:Static lang:Resources.StringLabel}" HorizontalAlignment="Center" FontWeight="Bold" />
+                <Label Content="{x:Static lang:Resources.EditTuningDialog_TuningHeader}" Grid.Column="1" HorizontalAlignment="Center" FontWeight="Bold" />
 
-											<TextBlock VerticalAlignment="Center" FontWeight="DemiBold"
-													   Width="65" Margin="3,0"
-													   IsVisible="{Binding IsNotGrouped}" >
-												<TextBlock.Text>
-													<MultiBinding StringFormat="{}{0} {1}">
-														<Binding Source="{x:Static lang:Resources.StringLabel}" />
-														<Binding Path="CourseNumber" />
-													</MultiBinding>
-												</TextBlock.Text>
-											</TextBlock>
-											<TextBlock VerticalAlignment="Top" FontWeight="DemiBold"
-													   Width="80" Margin="3,10,0,0" IsVisible="{Binding IsGrouped}">
-												<TextBlock.Text>
-													<MultiBinding StringFormat="{}{0} {1}">
-														<Binding Source="{x:Static lang:Resources.CourseLabel}" />
-														<Binding Path="CourseNumber" />
-													</MultiBinding>
-												</TextBlock.Text>
-											</TextBlock>
-										</StackPanel>
 
-										<ItemsControl ItemsSource="{Binding Strings}" Grid.Column="0" Grid.ColumnSpan="3">
-											<ItemsControl.ItemTemplate>
-												<DataTemplate >
-													<Grid ColumnDefinitions="*,*,*">
-							
-														<ctrl:NoteUpDown Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center"
-																		 Value="{Binding Tuning, Mode=TwoWay}" Margin="0,3" Width="100" />
-														
-														<TextBlock Grid.Column="2" Text="N/A"  FontSize="12"
-																   HorizontalAlignment="Center" VerticalAlignment="Center"
-																   IsVisible="{Binding StringTension, Converter={x:Static ObjectConverters.IsNull}}" />
-														
-														<StackPanel Grid.Column="2" VerticalAlignment="Center"
-																	IsVisible="{Binding StringTension, Converter={x:Static ObjectConverters.IsNotNull}}" >
-															<Label
-																Content="{Binding StringTension, StringFormat='{}{0:0.##} lbs'}"
-																VerticalAlignment="Center" Padding="0" FontSize="13"
-																HorizontalAlignment="Center"/>
-															<!--<Label
-																Content="{Binding StiffnessIndex, StringFormat='{}{0:0.##}'}"
-																VerticalAlignment="Center" Padding="0" FontSize="13"
-																HorizontalAlignment="Center"/>-->
-															<Label
-																Content="{Binding TensionBalanceState, Converter={StaticResource EnumValueConverter}}"
-																VerticalAlignment="Center" Padding="0" FontSize="13"
-																HorizontalAlignment="Center"/>
-														</StackPanel>
+                <TextBlock  Grid.Column="2" ToolTip.Tip="{x:Static lang:Resources.EditTuningDialog_TensionToolTip}"
+                            HorizontalAlignment="Center" VerticalAlignment="Center"
+                            FontWeight="Bold">
+                    <Run Text="{x:Static lang:Resources.EditTuningDialog_TensionHeader}" />
+                    <Run Text="ⓘ" FontWeight="Normal"/>
+                </TextBlock>
 
-													</Grid>
-												</DataTemplate>
-											</ItemsControl.ItemTemplate>
-										</ItemsControl>
-									</Grid>
-								</Border>
-							</DataTemplate>
-						</ItemsControl.ItemTemplate>
-					</ItemsControl>
-				</ScrollViewer>
+                <Separator Grid.Row="1" Grid.ColumnSpan="5" Margin="0,3,0,0" />
+                <ScrollViewer Grid.Row="2" Grid.ColumnSpan="3">
+                    <ItemsControl
+                    ItemsSource="{Binding StringCourses}"
+                    >
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Border Classes.IsEven="{Binding IsEven}">
+                                    <Border.Styles>
+                                        <Style Selector="Border">
+                                            <Setter Property="Background" Value="Transparent"/>
+                                        </Style>
+                                        <Style Selector="Border.IsEven">
+                                            <Setter Property="Background" Value="{DynamicResource EvenRowBrush}"/>
+                                        </Style>
+                                    </Border.Styles>
 
-			</Grid>
+                                    <Grid ColumnDefinitions="*, *, *" >
 
-		</Border>
+                                        <StackPanel Orientation="Horizontal" Grid.Column="0">
+                                            <ctrl:SvgIcon Margin="6,9,3,0"
+                                                          SvgImage="/Assets/Icons/StringIcon.svg" Height="24" Width="24"  Opacity="0.5" VerticalAlignment="Top" />
 
-		<Border Grid.Row="2">
-			<WrapPanel HorizontalAlignment="Center" Margin="0,3,0,0" >
-				<Button Classes="Primary" Content="{x:Static lang:Resources.Common_Save}" Command="{Binding SaveCommand}"
-						Margin="3,0" Width="100" HorizontalContentAlignment="Center" />
-				<Button Content="{x:Static lang:Resources.Common_Cancel}" Command="{Binding CancelCommand}"
-						Margin="3,0" Width="100" HorizontalContentAlignment="Center" />
-			</WrapPanel>
-		</Border>
-	</Grid>
+                                            <TextBlock VerticalAlignment="Center" FontWeight="DemiBold"
+                                                       Width="65" Margin="3,0"
+                                                       IsVisible="{Binding IsNotGrouped}" >
+                                                <TextBlock.Text>
+                                                    <MultiBinding StringFormat="{}{0} {1}">
+                                                        <Binding Source="{x:Static lang:Resources.StringLabel}" />
+                                                        <Binding Path="CourseNumber" />
+                                                    </MultiBinding>
+                                                </TextBlock.Text>
+                                            </TextBlock>
+                                            <TextBlock VerticalAlignment="Top" FontWeight="DemiBold"
+                                                       Width="80" Margin="3,10,0,0" IsVisible="{Binding IsGrouped}">
+                                                <TextBlock.Text>
+                                                    <MultiBinding StringFormat="{}{0} {1}">
+                                                        <Binding Source="{x:Static lang:Resources.CourseLabel}" />
+                                                        <Binding Path="CourseNumber" />
+                                                    </MultiBinding>
+                                                </TextBlock.Text>
+                                            </TextBlock>
+                                        </StackPanel>
+
+                                        <ItemsControl ItemsSource="{Binding Strings}" Grid.Column="0" Grid.ColumnSpan="3">
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate >
+                                                    <Grid ColumnDefinitions="*,*,*">
+
+                                                        <ctrl:NoteUpDown Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center"
+                                                                         Value="{Binding Tuning, Mode=TwoWay}" Margin="0,3" Width="100" />
+
+                                                        <TextBlock Grid.Column="2" Text="N/A"  FontSize="12"
+                                                                   HorizontalAlignment="Center" VerticalAlignment="Center"
+                                                                   IsVisible="{Binding StringTension, Converter={x:Static ObjectConverters.IsNull}}" />
+
+                                                        <StackPanel Grid.Column="2" VerticalAlignment="Center"
+                                                                    IsVisible="{Binding StringTension, Converter={x:Static ObjectConverters.IsNotNull}}" >
+                                                            <Label
+                                                            Content="{Binding StringTension, StringFormat='{}{0:0.##} lbs'}"
+                                                            VerticalAlignment="Center" Padding="0" FontSize="13"
+                                                            HorizontalAlignment="Center"/>
+                                                            <!--<Label
+                                                            Content="{Binding StiffnessIndex, StringFormat='{}{0:0.##}'}"
+                                                            VerticalAlignment="Center" Padding="0" FontSize="13"
+                                                            HorizontalAlignment="Center"/>-->
+                                                            <Label
+                                                            Content="{Binding TensionBalanceState, Converter={StaticResource EnumValueConverter}}"
+                                                            VerticalAlignment="Center" Padding="0" FontSize="13"
+                                                            HorizontalAlignment="Center"/>
+                                                        </StackPanel>
+
+                                                    </Grid>
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+
+            </Grid>
+
+        </Border>
+
+        <Border Grid.Row="2">
+            <WrapPanel HorizontalAlignment="Center" >
+                <Button Classes="Primary" Content="{x:Static lang:Resources.Common_Save}" Command="{Binding SaveCommand}"
+                        Margin="3,0" Width="100" HorizontalContentAlignment="Center" />
+                <Button Content="{x:Static lang:Resources.Common_Cancel}" Command="{Binding CancelCommand}"
+                        Margin="3,0" Width="100" HorizontalContentAlignment="Center" />
+            </WrapPanel>
+        </Border>
+    </Grid>
 </UserControl>

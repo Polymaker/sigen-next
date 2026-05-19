@@ -1,4 +1,5 @@
 ﻿using SiGen.Layouts;
+using SiGen.Layouts.Elements;
 using SiGen.Measuring;
 using SiGen.Paths;
 using System;
@@ -32,7 +33,12 @@ namespace SiGen.Export
         public static ExportTarget ToStream(Stream stream) => new ExportTarget(ExportTargetType.Stream, stream: stream);
     }
 
-    public abstract class BaseLayoutExporter<TOptions>
+    public interface ILayoutExporter
+    {
+        void ExportLayout(ExportTarget target);
+    }
+
+    public abstract class BaseLayoutExporter<TOptions> : ILayoutExporter
         where TOptions : BaseExportOptions
     {
         public TOptions Options { get; }
@@ -76,20 +82,7 @@ namespace SiGen.Export
         protected void ExportElements()
         {
             if (Options.ExportCenterLine)
-            {
-                var bounds = Layout.Bounds!;
-                var centerLine = new LinearPath(
-                    new PointM(bounds.Left + bounds.Width / 2, bounds.Top).ToVector(),
-                    new PointM(bounds.Left + bounds.Width / 2, bounds.Bottom).ToVector()
-                );
-                var centerLineOptions = new LineExportOptions()
-                {
-                    Color = Color.Blue,
-                    LineThickness = new LineThickness(1, ThicknessUnit.Point),
-                    Dashed = true
-                };
-                ExportElement(ElementType.GuideLine, centerLine, centerLineOptions);
-            }
+                ExportCenterLine();
 
             if (Options.ExportFingerboard)
                 ExportFingerboard();
@@ -99,6 +92,20 @@ namespace SiGen.Export
 
             if (Options.ExportStrings)
                 ExportStrings();
+
+            if (Options.ExportMedians)
+                ExportMedians();
+        }
+
+        private void ExportCenterLine()
+        {
+            var bounds = Layout.Bounds!;
+            var centerLine = new LinearPath(
+                new PointM(bounds.Left + bounds.Width / 2, bounds.Top).ToVector(),
+                new PointM(bounds.Left + bounds.Width / 2, bounds.Bottom).ToVector()
+            );
+
+            ExportElement(ElementType.GuideLine, centerLine, Options.CenterLine);
         }
 
         private void ExportFrets()
@@ -110,16 +117,16 @@ namespace SiGen.Export
                     continue;
 
                 var shape = fretElement.FretShape;
-                if (!(fretElement.IsBridge || fretElement.IsNut) && Options.ExtendFrets && !Measure.IsNullOrEmpty(Options.FretExtensionAmount))
+                if (!(fretElement.IsBridge || fretElement.IsNut) && Options.Frets.Extend && !Measure.IsNullOrEmpty(Options.Frets.ExtensionAmount))
                 {
                     TrimExtendSide sides = TrimExtendSide.None;
                     if (fretElement.ContainsString(0)) sides |= TrimExtendSide.Start;
                     if (fretElement.ContainsString(lastStringIndex)) sides |= TrimExtendSide.End;
-                    shape = shape.TrimExtend(sides, Options.FretExtensionAmount.Value.NormalizedValue) ?? fretElement.FretShape;
+                    shape = shape.TrimExtend(sides, Options.Frets.ExtensionAmount.Value.NormalizedValue) ?? fretElement.FretShape;
                 }
 
                 if (shape != null)
-                    ExportElement(ElementType.Fret, shape, Options.FretLineOptions);
+                    ExportElement(ElementType.Fret, shape, Options.Frets);
             }
         }
 
@@ -127,7 +134,15 @@ namespace SiGen.Export
         {
             foreach (var edge in Layout.Elements.OfType<FingerboardEdgeElement>())
             {
-                ExportElement(ElementType.Fingerboard, edge.Path, Options.FretLineOptions);
+                ExportElement(ElementType.Fingerboard, edge.Path, Options.Fingerboard);
+            }
+
+            if (Options.Fingerboard.ProjectionLines.Enabled)
+            {
+                foreach (var contLine in Layout.Elements.OfType<GuideLineElement>().Where(x => x.Type == GuideLineType.FretboardProjection))
+                {
+                    ExportElement(ElementType.Fingerboard, contLine.Path, Options.Fingerboard.ProjectionLines);
+                }
             }
         }
 
@@ -135,24 +150,38 @@ namespace SiGen.Export
         {
             var stringLineOptions = new LineExportOptions()
             {
-                Color = Options.StringLineOptions.Color,
-                LineThickness = Options.StringLineOptions.LineThickness,
-                Dashed = Options.StringLineOptions.Dashed
+                Color = Options.Strings.Color,
+                LineThickness = Options.Strings.LineThickness,
+                Dashed = Options.Strings.Dashed
             };
 
             foreach (var stringElem in Layout.GetStrings())
             {
-                if (Options.UseStringThickness)
+                if (Options.Strings.UseGauge)
                 {
                     var stringGauge = stringElem.GetGauge();
                     stringLineOptions.LineThickness = stringGauge.HasValue
                         ? new LineThickness((double)stringGauge.Value[LengthUnit.Mm], ThicknessUnit.Millimeter)
-                        : Options.StringLineOptions.LineThickness;
+                        : Options.Strings.LineThickness;
                 }
                 ExportElement(ElementType.String, stringElem.Path, stringLineOptions);
             }
         }
 
+        private void ExportMedians()
+        {
+            foreach (var contLine in Layout.Elements.OfType<GuideLineElement>().Where(x => x.Type == GuideLineType.StringMedian))
+            {
+                ExportElement(ElementType.GuideLine, contLine.Path, Options.Medians);
+            }
+        }
+
+        /// <summary>
+        /// Exports a single element to the output format.
+        /// </summary>
+        /// <param name="elementType">The type of element being exported (for layer organization)</param>
+        /// <param name="path">The geometric path to export</param>
+        /// <param name="lineOptions">Styling options (color, thickness, dashes). Note: Enabled flag is already checked by the base exporter.</param>
         protected abstract void ExportElement(ElementType elementType, PathBase path, LineExportOptions lineOptions);
 
         protected abstract void SaveToFile(string filePath);
@@ -162,6 +191,22 @@ namespace SiGen.Export
             throw new NotSupportedException($"{GetType().Name} does not support exporting to a stream.");
         }
     }
+
+    //public static class LayoutExporterFactory
+    //{
+    //    public static BaseLayoutExporter<TOptions> CreateExporter<TOptions>(ExportTargetFormat targetFormat, TOptions options, StringedInstrumentLayout layout)
+    //        where TOptions : BaseExportOptions
+    //    {
+    //        if (targetFormat == ExportTargetFormat.Svg)
+    //        {
+    //            if (options is not SvgExportOptions svgOptions)
+    //                throw new ArgumentException($"Expected options of type {typeof(SvgExportOptions).Name} for SVG export, but got {options.GetType().Name}.");
+    //            return new SvgLayoutExporter(svgOptions, layout);
+    //        }
+    //        // For now we only have one exporter implementation, but this factory allows us to easily add more in the future.
+            
+    //    }
+    //}
 
     public enum ElementType
     {
@@ -179,24 +224,6 @@ namespace SiGen.Export
         Millimeter,
     }
 
-    public struct LineThickness
-    {
-        public double Value { get; set; }
-        public ThicknessUnit Unit { get; set; }
+    
 
-        public LineThickness(double value, ThicknessUnit unit)
-        {
-            Value = value;
-            Unit = unit;
-        }
-
-        public override string ToString() => $"{Value} {Unit}";
-    }
-
-    public class LineExportOptions
-    {
-        public LineThickness? LineThickness { get; set; }// = new LineThickness(0.1, ThicknessUnit.Millimeter);
-        public Color? Color { get; set; } = System.Drawing.Color.Black;
-        public bool Dashed { get; set; } = false;
-    }
 }

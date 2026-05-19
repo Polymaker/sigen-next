@@ -15,9 +15,25 @@ namespace SiGen.ViewModels.Dialogs
 
         public ObservableCollection<FretIntervalValueModel> Intervals { get; } = new();
 
+        [ObservableProperty]
+        private double? newIntervalCents;
+
+        [ObservableProperty]
+        private double? generateStartCents;
+
+        [ObservableProperty]
+        private double? generateIntervalCents;
+
+        [ObservableProperty]
+        private double? generateCount;
+
         public IRelayCommand AddIntervalCommand { get; }
         public IRelayCommand<FretIntervalValueModel> RemoveIntervalCommand { get; }
+        public IRelayCommand ClearIntervalsCommand { get; }
+        public IRelayCommand GenerateIntervalsCommand { get; }
         public IRelayCommand SaveCommand { get; }
+
+        public EditFretIntervalsDialogViewModel() : this("Edit Fret Intervals", new double[] { 100, 150, 200 }) { }
 
         public EditFretIntervalsDialogViewModel(string title, IReadOnlyList<double>? initialIntervals = null)
         {
@@ -30,20 +46,75 @@ namespace SiGen.ViewModels.Dialogs
                     Intervals.Add(new FretIntervalValueModel(value));
             }
 
-            AddIntervalCommand = new RelayCommand(AddInterval);
+            GenerateStartCents = 0;
+            GenerateIntervalCents = 100;
+            GenerateCount = 12;
+
+            AddIntervalCommand = new RelayCommand(AddInterval, CanAddInterval);
             RemoveIntervalCommand = new RelayCommand<FretIntervalValueModel>(RemoveInterval);
+            ClearIntervalsCommand = new RelayCommand(ClearIntervals);
+            GenerateIntervalsCommand = new RelayCommand(GenerateIntervals);
             SaveCommand = new RelayCommand(Save);
+        }
+
+        partial void OnNewIntervalCentsChanged(double? value)
+        {
+            AddIntervalCommand.NotifyCanExecuteChanged();
+        }
+
+        private bool CanAddInterval()
+        {
+            return NewIntervalCents.HasValue && NewIntervalCents.Value >= 0;
         }
 
         private void AddInterval()
         {
-            Intervals.Add(new FretIntervalValueModel(null));
+            if (!NewIntervalCents.HasValue)
+                return;
+
+            var value = Math.Round(NewIntervalCents.Value, 4);
+            if (value < 0)
+                return;
+
+            Intervals.Add(new FretIntervalValueModel(value));
+            NewIntervalCents = null;
         }
 
         private void RemoveInterval(FretIntervalValueModel? value)
         {
             if (value != null)
                 Intervals.Remove(value);
+        }
+
+        private void ClearIntervals()
+        {
+            Intervals.Clear();
+        }
+
+        private void GenerateIntervals()
+        {
+            int count = EditFretsDialogViewModel.NormalizeWholeNumber(GenerateCount) ?? 0;
+            if (count <= 0)
+                return;
+
+            double start = GenerateStartCents ?? 0;
+            double step = GenerateIntervalCents ?? 0;
+
+            var existing = Intervals
+                .Select(x => x.Cents)
+                .Where(x => x.HasValue)
+                .Select(x => Math.Round(x!.Value, 4))
+                .ToHashSet();
+
+            for (int i = 0; i < count; i++)
+            {
+                var value = Math.Round(start + (i * step), 4);
+                if (value < 0 || existing.Contains(value))
+                    continue;
+
+                Intervals.Add(new FretIntervalValueModel(value));
+                existing.Add(value);
+            }
         }
 
         private void Save()

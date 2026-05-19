@@ -150,7 +150,7 @@ Les valeurs positives inclinent les frettes d'un côté, les valeurs négatives 
 • **Manuel** : Définit l'alignement manuellement (0 = côté grave aligné, 1 = côté aigu aligné, 0,5 = centré).</value>
   </data>
   <data name="InstrumentType_Help" xml:space="preserve">
-    <value>Cette valeur détermine le type d'instrument que vous concez
+    <value>Cette valeur détermine le type d'instrument que vous concevez.
 La sélection d'un type d'instrument active des boutons d'information à côté de certains champs, affichant des valeurs communes et des suggestions spécifiques à cet instrument.</value>
   </data>
   <data name="ScaleLength_MultiScaleRatio" xml:space="preserve">
@@ -170,6 +170,7 @@ Les valeurs élevées font "pointer" les frettes vers le chevalet, les valeurs f
 Une fois activée, la distance est mesurée du bord de la corde jusqu'au bord de la touche, plutôt que depuis le centre de la corde.</value>
   </data>
   <data name="FingerboardExtension_Help" xml:space="preserve">
-    <value>Longueur pour continuer la touche après la dernière frette. Cela prolonge le corps de la touche au-delà de la zone frettée.</value>
+    <value>Longueur pour continuer la touche après la dernière frette.
+Cela prolonge le corps de la touche au-delà de la zone frettée.</value>
   </data>
 </root>

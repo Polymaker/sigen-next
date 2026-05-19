@@ -245,26 +245,22 @@ internal class MockSettingsService : ISettingsService
             FilePath = @"C:\Layouts\BassGuitar.sil",
             LastOpened = DateTime.Now.AddDays(-5),
         });
-    }
-
-    public void AddRecentFile(string filePath)
-    {
-        throw new NotImplementedException();
+        RecentFilesChanged?.Invoke(this, EventArgs.Empty);
     }
 
     public void AddRecentFile(ILayoutDocument document)
     {
-        throw new NotImplementedException();
+        RecentFilesChanged?.Invoke(this, EventArgs.Empty);
     }
 
     public void Load()
     {
-        throw new NotImplementedException();
+        
     }
 
     public void Save()
     {
-        throw new NotImplementedException();
+        
     }
 
     public void SetTheme(AppTheme theme)

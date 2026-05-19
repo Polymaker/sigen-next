@@ -51,6 +51,18 @@ namespace SiGen.Utilities
                 (double)point.Y * scale);
         }
 
+        public static Size ToAvalonia(this SizeM size, double scale)
+        {
+            return new Size(
+                (double)size.Width.NormalizedValue * scale,
+                (double)size.Height.NormalizedValue * scale);
+        }
+
+        public static Size ToAvalonia(this SizeM size)
+        {
+            return ToAvalonia(size, CmToPixels);
+        }
+
         public static double ToPixels(this Measure measure)
         {
             return (double)measure.NormalizedValue * CmToPixels;

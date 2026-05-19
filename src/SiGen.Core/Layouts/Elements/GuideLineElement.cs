@@ -6,9 +6,12 @@ namespace SiGen.Layouts.Elements
     {
         public LinearPath Path { get; }
 
-        public GuideLineElement(LinearPath path)
+        public GuideLineType Type { get; set; }
+
+        public GuideLineElement(GuideLineType type, LinearPath path)
         {
             Path = path;
+            Type = type;
         }
 
         protected override void FlipHorizontalCore()
@@ -17,4 +20,10 @@ namespace SiGen.Layouts.Elements
         }
     }
 
+    public enum GuideLineType
+    {
+        CenterLine,
+        StringMedian,
+        FretboardProjection
+    }
 }
