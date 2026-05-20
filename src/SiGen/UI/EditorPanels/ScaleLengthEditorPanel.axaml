@@ -150,7 +150,7 @@
 						<TextBlock Text="{Binding Label}"  HorizontalAlignment="Center" FontSize="12" />
 						<ctrl:MeasureTextBox Value="{Binding Scale, Mode=TwoWay}"
 											 MinimumValue="10in" MaximumValue="40in"
-											 Watermark="Length"
+											 Watermark="{x:Static lang:Resources.Common_Length}"
 											 Width="60" MinHeight="0" FontSize="12"
 											 VerticalContentAlignment="Center" />
 						<ctrl:NumericTextBox Value="{Binding Ratio, Mode=TwoWay}"
@@ -181,7 +181,7 @@
 		<TextBlock Text="{Binding Label}"  HorizontalAlignment="Center" FontSize="12" />
 		<ctrl:MeasureTextBox Value="{Binding Scale, Mode=TwoWay}"
 		MinimumValue="10in" MaximumValue="40in"
-		Watermark="Length"
+		Watermark="{x:Static lang:Resources.Common_Length}"
 		Width="60" MinHeight="0" FontSize="12"
 		VerticalContentAlignment="Center" />
 		<ctrl:NumericTextBox Value="{Binding Ratio}"

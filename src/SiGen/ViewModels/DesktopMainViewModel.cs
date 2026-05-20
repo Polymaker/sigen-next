@@ -52,7 +52,6 @@ namespace SiGen.ViewModels
         public IAsyncRelayCommand ShowSettingsCommand { get; }
         public IAsyncRelayCommand CloseSelectedDocumentCommand {  get; }
         public IRelayCommand OpenInFileExplorerCommand { get; }
-        public IRelayCommand PrintLayoutCommand { get; }
         public IAsyncRelayCommand<ExportTargetFormat> ExportLayoutCommand { get; }
 
         #endregion
@@ -92,21 +91,7 @@ namespace SiGen.ViewModels
             // Subscribe to recent files changes
             settingsService.RecentFilesChanged += OnRecentFilesChanged;
             OpenDocuments.CollectionChanged += OpenDocuments_CollectionChanged;
-            PrintLayoutCommand = new RelayCommand(() => {
-                if (SelectedDocument is ILayoutDocument layoutDoc)
-                {
-                    var options = new PdfExportOptions()
-                    {
-                        ExportFingerboard = true,
-                        ExportStrings = true,
-                        UseStringGauge = true
-                    };
-                    var exporter = new PdfLayoutExporter(options, layoutDoc.Layout!);
-                    exporter.ExportLayout(ExportTarget.ToFile("layout.pdf"));
-                    //var printService = serviceProvider.GetService<IPrintService>();
-                    //printService?.PrintLayout(layoutDoc.Configuration);
-                }
-            }, () => SelectedDocument is ILayoutDocument);
+
             // Initial menu build
             RebuildRecentFilesMenu();
         }

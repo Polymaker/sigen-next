@@ -100,7 +100,7 @@
 
 		<ctrl:CustomFormField Label="{x:Static lang:Resources.FingerboardEditorPanel_CompensateMarginsLabel}">
 			<ctrl:CustomFormField.Input>
-				<ToggleSwitch IsChecked="{Binding CompensateForStringThickness, Mode=TwoWay}" OnContent="Yes" OffContent="No" />
+				<ToggleSwitch IsChecked="{Binding CompensateForStringThickness, Mode=TwoWay}" OnContent="{x:Static lang:Resources.Common_Yes}" OffContent="{x:Static lang:Resources.Common_No}" />
 			</ctrl:CustomFormField.Input>
 			<ctrl:CustomFormField.Help>
 				<TextBlock TextWrapping="Wrap" MaxWidth="600"

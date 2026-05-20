@@ -17,7 +17,7 @@ It provides advanced tools for luthiers and builders to create custom fretboards
 - Advanced fret calculation and compensation
 - Multi-language support
 - Intuitive user interface for instrument design
-- Export layouts to SVG and DXF formats
+- Export layouts to SVG, DXF and PDF formats
 
 ## Preview
 Here is a multiscale layout with 2 bass strings and 5 guitar strings:

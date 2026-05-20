@@ -22,6 +22,7 @@ namespace SiGen.Layouts.Snapping
         None = 0,
         Intersection = 1,
         Line = 2,
+        EndPoint = 3,
     }
 
     public readonly record struct LayoutSnapResult(
@@ -53,6 +54,7 @@ namespace SiGen.Layouts.Snapping
     {
         public VectorD Position { get; }
         public SnapLineType LineTypes { get; private set; }
+        public bool IsEndPoint { get; private set; }
 
         public LayoutIntersectionPoint(VectorD position, SnapLineType lineTypes)
         {
@@ -64,19 +66,42 @@ namespace SiGen.Layouts.Snapping
         {
             LineTypes |= lineTypes;
         }
+
+        internal void MarkAsEndPoint()
+        {
+            IsEndPoint = true;
+        }
+    }
+
+    public sealed class LayoutEndPoint
+    {
+        public VectorD Position { get; }
+        public SnapLineType LineType { get; }
+        public LayoutElement SourceElement { get; }
+        public bool IsStart { get; }
+
+        public LayoutEndPoint(VectorD position, SnapLineType lineType, LayoutElement sourceElement, bool isStart)
+        {
+            Position = position;
+            LineType = lineType;
+            SourceElement = sourceElement;
+            IsStart = isStart;
+        }
     }
 
     public sealed class LayoutSnapData
     {
-        public static LayoutSnapData Empty { get; } = new LayoutSnapData(Array.Empty<LayoutSnapLine>(), Array.Empty<LayoutIntersectionPoint>());
+        public static LayoutSnapData Empty { get; } = new LayoutSnapData(Array.Empty<LayoutSnapLine>(), Array.Empty<LayoutIntersectionPoint>(), Array.Empty<LayoutEndPoint>());
 
         public IReadOnlyList<LayoutSnapLine> Lines { get; }
         public IReadOnlyList<LayoutIntersectionPoint> IntersectionPoints { get; }
+        public IReadOnlyList<LayoutEndPoint> EndPoints { get; }
 
-        public LayoutSnapData(IReadOnlyList<LayoutSnapLine> lines, IReadOnlyList<LayoutIntersectionPoint> intersectionPoints)
+        public LayoutSnapData(IReadOnlyList<LayoutSnapLine> lines, IReadOnlyList<LayoutIntersectionPoint> intersectionPoints, IReadOnlyList<LayoutEndPoint> endPoints)
         {
             Lines = lines;
             IntersectionPoints = intersectionPoints;
+            EndPoints = endPoints;
         }
 
         public LayoutSnapResult TrySnap(VectorD cursorPosition, SnapLineType allowedLineTypes, double maxDistance)
@@ -88,6 +113,10 @@ namespace SiGen.Layouts.Snapping
             if (bestIntersection.IsSnapped)
                 return bestIntersection;
 
+            var bestEndPoint = TrySnapToEndPoint(cursorPosition, allowedLineTypes, maxDistance);
+            if (bestEndPoint.IsSnapped)
+                return bestEndPoint;
+
             return TrySnapToLine(cursorPosition, allowedLineTypes, maxDistance);
         }
 
@@ -98,8 +127,14 @@ namespace SiGen.Layouts.Snapping
             for (int i = 0; i < IntersectionPoints.Count; i++)
             {
                 var intersection = IntersectionPoints[i];
-                // Only snap to intersection if ALL line types that form it are allowed
-                if ((intersection.LineTypes & allowedLineTypes) != intersection.LineTypes)
+
+                // For endpoints: snap if ANY of the line types is allowed
+                // For regular intersections: snap only if ALL line types are allowed
+                bool isAllowed = intersection.IsEndPoint
+                    ? (intersection.LineTypes & allowedLineTypes) != SnapLineType.None
+                    : (intersection.LineTypes & allowedLineTypes) == intersection.LineTypes;
+
+                if (!isAllowed)
                     continue;
 
                 var distance = VectorD.Distance(cursorPosition, intersection.Position);
@@ -109,6 +144,29 @@ namespace SiGen.Layouts.Snapping
                 if (!best.IsSnapped || distance < best.Distance)
                 {
                     best = new LayoutSnapResult(true, intersection.Position, SnapTargetType.Intersection, intersection.LineTypes, distance);
+                }
+            }
+
+            return best;
+        }
+
+        private LayoutSnapResult TrySnapToEndPoint(VectorD cursorPosition, SnapLineType allowedLineTypes, double maxDistance)
+        {
+            var best = LayoutSnapResult.None;
+
+            for (int i = 0; i < EndPoints.Count; i++)
+            {
+                var endPoint = EndPoints[i];
+                if ((endPoint.LineType & allowedLineTypes) == SnapLineType.None)
+                    continue;
+
+                var distance = VectorD.Distance(cursorPosition, endPoint.Position);
+                if (distance > maxDistance)
+                    continue;
+
+                if (!best.IsSnapped || distance < best.Distance)
+                {
+                    best = new LayoutSnapResult(true, endPoint.Position, SnapTargetType.EndPoint, endPoint.LineType, distance);
                 }
             }
 
@@ -145,12 +203,14 @@ namespace SiGen.Layouts.Snapping
     {
         private const double IntersectionMergeTolerance = 0.0001;
         private const double SegmentIntersectionThreshold = 0.02;
+        private const double EndPointMergeTolerance = 0.0001;
 
         public static LayoutSnapData Build(StringedInstrumentLayout layout)
         {
             var lines = CreateLines(layout).ToList();
             var intersections = CreateIntersections(lines);
-            return new LayoutSnapData(lines, intersections);
+            var endPoints = CreateEndPoints(lines, intersections);
+            return new LayoutSnapData(lines, intersections, endPoints);
         }
 
         private static IEnumerable<LayoutSnapLine> CreateLines(StringedInstrumentLayout layout)
@@ -218,6 +278,42 @@ namespace SiGen.Layouts.Snapping
             }
 
             intersections.Add(new LayoutIntersectionPoint(intersection, lineTypes));
+        }
+
+        private static List<LayoutEndPoint> CreateEndPoints(List<LayoutSnapLine> lines, List<LayoutIntersectionPoint> intersections)
+        {
+            var endPoints = new List<LayoutEndPoint>();
+
+            for (int i = 0; i < lines.Count; i++)
+            {
+                var line = lines[i];
+                var path = line.Path;
+
+                var startPoint = path.GetFirstPoint();
+                var endPoint = path.GetLastPoint();
+
+                // Mark intersections that are also endpoints, or add as standalone endpoint
+                if (!MarkIntersectionAsEndPoint(startPoint, intersections))
+                    endPoints.Add(new LayoutEndPoint(startPoint, line.Type, line.SourceElement, true));
+
+                if (!MarkIntersectionAsEndPoint(endPoint, intersections))
+                    endPoints.Add(new LayoutEndPoint(endPoint, line.Type, line.SourceElement, false));
+            }
+
+            return endPoints;
+        }
+
+        private static bool MarkIntersectionAsEndPoint(VectorD point, List<LayoutIntersectionPoint> intersections)
+        {
+            for (int i = 0; i < intersections.Count; i++)
+            {
+                if (VectorD.Distance(point, intersections[i].Position) <= EndPointMergeTolerance)
+                {
+                    intersections[i].MarkAsEndPoint();
+                    return true;
+                }
+            }
+            return false;
         }
     }
 }

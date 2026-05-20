@@ -20,6 +20,7 @@ namespace SiGen.DependencyInjection
             services.AddSingleton<IInstrumentValuesProviderFactory, InstrumentValuesProviderFactory>();
             services.AddSingleton<ISettingsService, SettingsService>();
             services.AddSingleton<IDatabaseInitializationService, DatabaseInitializationService>();
+            services.AddSingleton<IPdfPrinterService, PdfPrinterService>();
 
             services.AddDbContextFactory<SiGenDbContext>(options =>
                 options.UseSqlite(SiGenDatabasePath.GetConnectionString()));

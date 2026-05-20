@@ -38,14 +38,14 @@
 							     Grid.Column="1" Grid.Row="1" Margin="4,0,4,0" MinHeight="0" Padding="4,6"
 					FontSize="13" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
 					IsVisible="{Binding NutSpacingMode, Converter={StaticResource NotEqualsConverter}, ConverterParameter=Manual}"/>
-			
-			<Button Content="Configure..." FontSize="12" 
+
+			<Button Content="{x:Static lang:Resources.Common_Configure}" FontSize="12" 
 					HorizontalContentAlignment="Center"
 					Command="{Binding EditCustomSpacingCommand}"
 					CommandParameter="{x:Static layoutData:FingerboardEnd.Nut}"
 					IsVisible="{Binding NutSpacingMode, Converter={StaticResource EqualsConverter}, ConverterParameter=Manual}"
 					HorizontalAlignment="Stretch" Grid.Column="1" Grid.Row="1" Margin="4,0,4,0"/>
-			
+
 			<ctrl:MeasureTextBox Value="{Binding NutStringSpread, Mode=TwoWay}" x:Name="NutStringSpreadBox"
 								 Grid.Column="2" Grid.Row="1" Margin="4,0,4,0" MinHeight="0" Padding="4,6"
 								 FontSize="13" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
@@ -136,7 +136,7 @@
 								 VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
 								 IsVisible="{Binding BridgeSpacingMode, Converter={StaticResource NotEqualsConverter}, ConverterParameter=Manual}"/>
 
-			<Button Content="Configure..." FontSize="12"
+			<Button Content="{x:Static lang:Resources.Common_Configure}" FontSize="12"
 					HorizontalContentAlignment="Center"
 					Command="{Binding EditCustomSpacingCommand}"
 					CommandParameter="{x:Static layoutData:FingerboardEnd.Bridge}"

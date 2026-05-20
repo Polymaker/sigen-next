@@ -17,6 +17,8 @@ namespace SiGen.ViewModels
         ///// </summary>
         //InstrumentLayoutConfiguration WorkingConfiguration { get; }
 
+        string Title { get; }
+
         string? FilePath { get; }
 
         /// <summary>

@@ -21,6 +21,8 @@ namespace SiGen.ViewModels.Design
 
         public IInstrumentValuesProvider? InstrumentValuesProvider { get; }
 
+        public string Title => "Mock Layout Document";
+
         public string? FilePath => string.Empty;
 
         public IDialogService? DialogService { get; }

@@ -14,9 +14,9 @@
     </UserControl.DataContext>
 
     <UserControl.Resources>
-        <ResourceDictionary>
-            <conv:EnumValueConverter x:Key="EnumValueConverter" />
-        </ResourceDictionary>
+        <conv:EnumValueConverter x:Key="EnumValueConverter" />
+        
+
     </UserControl.Resources>
 
     <Grid RowDefinitions="Auto,*,Auto" Margin="6" RowSpacing="6" >
@@ -104,7 +104,7 @@
                                         <StackPanel Orientation="Horizontal" Grid.Column="0">
                                             <ctrl:SvgIcon Margin="6,9,3,0"
                                                           SvgImage="/Assets/Icons/StringIcon.svg" Height="24" Width="24"  Opacity="0.5" VerticalAlignment="Top" />
-
+                                            <PathIcon Data="{StaticResource StringIcon}"/>
                                             <TextBlock VerticalAlignment="Center" FontWeight="DemiBold"
                                                        Width="65" Margin="3,0"
                                                        IsVisible="{Binding IsNotGrouped}" >
@@ -134,7 +134,7 @@
                                                         <ctrl:NoteUpDown Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center"
                                                                          Value="{Binding Tuning, Mode=TwoWay}" Margin="0,3" Width="100" />
 
-                                                        <TextBlock Grid.Column="2" Text="N/A"  FontSize="12"
+                                                        <TextBlock Grid.Column="2" Text="{x:Static lang:Resources.Common_NotAvailable}"  FontSize="12"
                                                                    HorizontalAlignment="Center" VerticalAlignment="Center"
                                                                    IsVisible="{Binding StringTension, Converter={x:Static ObjectConverters.IsNull}}" />
 

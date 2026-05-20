@@ -723,4 +723,133 @@ Les valeurs sont triées et les doublons supprimés lors de l’enregistrement.<
   <data name="HomePageView.SearchPlaceHolder" xml:space="preserve">
     <value>Rechercher...</value>
   </data>
+  <data name="Common.Print" xml:space="preserve">
+    <value>Imprimer</value>
+  </data>
+  <data name="Common.Export" xml:space="preserve">
+    <value>Exporter</value>
+  </data>
+  <data name="ExportLayoutDialog.PdfConfigurationTab" xml:space="preserve">
+    <value>Configuration PDF</value>
+  </data>
+  <data name="ExportLayoutDialog.ExportOptionsTab" xml:space="preserve">
+    <value>Options d'export</value>
+  </data>
+  <data name="ExportLayoutDialog.PaperSize" xml:space="preserve">
+    <value>Taille de papier</value>
+  </data>
+  <data name="ExportLayoutDialog.Orientation" xml:space="preserve">
+    <value>Orientation</value>
+  </data>
+  <data name="ExportLayoutDialog.Margins" xml:space="preserve">
+    <value>Marges</value>
+  </data>
+  <data name="ExportLayoutDialog.Overlap" xml:space="preserve">
+    <value>Chevauchement</value>
+  </data>
+  <data name="ExportLayoutDialog.MarginLeft" xml:space="preserve">
+    <value>Gauche</value>
+  </data>
+  <data name="ExportLayoutDialog.MarginTop" xml:space="preserve">
+    <value>Haut</value>
+  </data>
+  <data name="ExportLayoutDialog.MarginRight" xml:space="preserve">
+    <value>Droite</value>
+  </data>
+  <data name="ExportLayoutDialog.MarginBottom" xml:space="preserve">
+    <value>Bas</value>
+  </data>
+  <data name="ExportLayoutDialog.ExportFrets" xml:space="preserve">
+    <value>Exporter les frettes</value>
+  </data>
+  <data name="ExportLayoutDialog.ExportStrings" xml:space="preserve">
+    <value>Exporter les cordes</value>
+  </data>
+  <data name="ExportLayoutDialog.ExportFingerboard" xml:space="preserve">
+    <value>Exporter la touche</value>
+  </data>
+  <data name="ExportLayoutDialog.ExportCenterLine" xml:space="preserve">
+    <value>Exporter la ligne centrale</value>
+  </data>
+  <data name="ExportLayoutDialog.ExportMedians" xml:space="preserve">
+    <value>Exporter les médianes</value>
+  </data>
+  <data name="ExportLayoutDialog.LineStyling" xml:space="preserve">
+    <value>Style de ligne</value>
+  </data>
+  <data name="ExportLayoutDialog.Options" xml:space="preserve">
+    <value>Options</value>
+  </data>
+  <data name="ExportLayoutDialog.Color" xml:space="preserve">
+    <value>Couleur</value>
+  </data>
+  <data name="ExportLayoutDialog.Dashed" xml:space="preserve">
+    <value>Pointillé</value>
+  </data>
+  <data name="ExportLayoutDialog.ExtendTrimFrets" xml:space="preserve">
+    <value>Étendre / Rogner les fentes de frettes</value>
+  </data>
+  <data name="ExportLayoutDialog.ExtendTrimHint" xml:space="preserve">
+    <value>Entrez une valeur négative pour rogner ou une valeur positive pour étendre</value>
+  </data>
+  <data name="ExportLayoutDialog.UseStringGauge" xml:space="preserve">
+    <value>Utiliser le calibre de corde pour l'épaisseur de ligne</value>
+  </data>
+  <data name="ExportLayoutDialog.ProjectionLines" xml:space="preserve">
+    <value>Lignes de projection</value>
+  </data>
+  <data name="ExportLayoutDialog.ExportProjectionLines" xml:space="preserve">
+    <value>Exporter les lignes de projection</value>
+  </data>
+  <data name="Menu_Export" xml:space="preserve">
+    <value>Exporter</value>
+  </data>
+  <data name="Menu_Export_ToSvg" xml:space="preserve">
+    <value>Exporter en SVG...</value>
+  </data>
+  <data name="Menu_Export_ToDxf" xml:space="preserve">
+    <value>Exporter en DXF...</value>
+  </data>
+  <data name="Menu_Export_ToPdfOrPrint" xml:space="preserve">
+    <value>Exporter en PDF / Imprimer...</value>
+  </data>
+  <data name="MainView.NoDocumentOpen" xml:space="preserve">
+    <value>Aucun document ouvert.</value>
+  </data>
+  <data name="MainView.NoDocumentOpen_Hint1" xml:space="preserve">
+    <value>Ouvrir un plan existant (CTRL+O)</value>
+  </data>
+  <data name="MainView.NoDocumentOpen_Hint2" xml:space="preserve">
+    <value>Sélectionner un modèle dans la page d'accueil (CTRL+H)</value>
+  </data>
+  <data name="Common.Yes" xml:space="preserve">
+    <value>Oui</value>
+  </data>
+  <data name="Common.No" xml:space="preserve">
+    <value>Non</value>
+  </data>
+  <data name="Common.Configure" xml:space="preserve">
+    <value>Configurer...</value>
+  </data>
+  <data name="Common.Spacing" xml:space="preserve">
+    <value>Espacement</value>
+  </data>
+  <data name="Common.NotAvailable" xml:space="preserve">
+    <value>N/D</value>
+  </data>
+  <data name="Common.Length" xml:space="preserve">
+    <value>Longueur</value>
+  </data>
+  <data name="ContextMenu.Cut" xml:space="preserve">
+    <value>Couper</value>
+  </data>
+  <data name="ContextMenu.Copy" xml:space="preserve">
+    <value>Copier</value>
+  </data>
+  <data name="ContextMenu.Paste" xml:space="preserve">
+    <value>Coller</value>
+  </data>
+  <data name="ContextMenu.Convert" xml:space="preserve">
+    <value>Convertir</value>
+  </data>
 </root>

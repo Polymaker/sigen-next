@@ -103,9 +103,42 @@ namespace SiGen.Layouts.Builders
 
             if (points.Count >= 2 && extension > 0)
             {
-                var line = new PolyLinePath(points);
+                PathBase line;
+                if (ArePointsCollinear(points, 0.01))
+                {
+                    // Use a simple linear path when all points are in a straight line
+                    line = new LinearPath(points.First(), points.Last());
+                }
+                else
+                {
+                    line = new PolyLinePath(points);
+                }
                 Layout.AddElement(new FingerboardEdgeElement(line, null));
             }
+        }
+
+        private static bool ArePointsCollinear(List<VectorD> points, double maxDeviationCm)
+        {
+            if (points.Count <= 2)
+                return true;
+
+            var start = points.First();
+            var end = points.Last();
+            var dx = end.X - start.X;
+            var dy = end.Y - start.Y;
+            var lengthSquared = dx * dx + dy * dy;
+
+            if (lengthSquared == 0)
+                return false;
+
+            foreach (var pt in points)
+            {
+                var distance = Math.Abs((dy * (pt.X - start.X) - dx * (pt.Y - start.Y)) / Math.Sqrt(lengthSquared));
+                if (distance > maxDeviationCm)
+                    return false;
+            }
+
+            return true;
         }
 
         private FingerboardEdgeElement CreateSideElement(FingerboardSide side)

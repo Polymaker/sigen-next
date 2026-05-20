@@ -292,9 +292,12 @@ namespace SiGen.Layouts.Builders
                         //fretPoint.IsLastFret = j == intervals.Count - 1;
                         stringPoints.Add(fretPoint);
                     }
+
+                    // remove duplicate points that can occur when using custom intervals that overlap with regular frets
+                    stringPoints = stringPoints.GroupBy(x => Math.Round(x.Interval.Cents)).Select(g => g.First()).ToList(); 
                 }
 
-                var lastPoint = stringPoints.OrderBy(x=>x.Interval.Cents).LastOrDefault(x => !x.IsReference);
+                var lastPoint = stringPoints.OrderBy(x => x.Interval.Cents).LastOrDefault(x => !x.IsReference);
                 if (lastPoint != null)
                     lastPoint.IsLastFret = true;
 

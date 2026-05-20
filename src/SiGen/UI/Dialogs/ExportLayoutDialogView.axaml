@@ -5,9 +5,10 @@
              xmlns:controls="clr-namespace:SiGen.UI.Controls"
              xmlns:vm="using:SiGen.ViewModels.Dialogs"
              xmlns:conv="clr-namespace:SiGen.Converters;assembly=SiGen"
+             xmlns:lang="using:SiGen.Lang"
              xmlns:materialIcons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
-             mc:Ignorable="d" d:DesignWidth="900" d:DesignHeight="800"
-             MinWidth="750" MinHeight="800"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="800"
+             MinWidth="800" MinHeight="800"
              x:Class="SiGen.UI.Dialogs.ExportLayoutDialogView"
              x:DataType="vm:ExportLayoutDialogViewModel">
     <UserControl.DataContext>
@@ -33,15 +34,19 @@
     </UserControl.Styles>
     <UserControl.Resources>
         <conv:NotEqualsConverter x:Key="NotEqualsConverter" />
+        <conv:EnumValueConverter x:Key="EnumValueConverter" />
+
         <x:Double x:Key="TabItemMinHeight">30</x:Double>
         <Thickness x:Key="TabControlTopPlacementItemMargin">6</Thickness>
         <x:Double x:Key="ExpanderMinHeight">32</x:Double>
         <Thickness x:Key="ExpanderChevronMargin">20,0,0,0</Thickness>
+        <Thickness x:Key="ExpanderContentPadding">12</Thickness>
+
     </UserControl.Resources>
 
     <Grid RowDefinitions="*,Auto">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" MinWidth="420" />
+            <ColumnDefinition Width="1.4*" MinWidth="450" />
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="*" MinWidth="300" />
         </Grid.ColumnDefinitions>
@@ -53,7 +58,7 @@
                         <Setter Property="FontSize" Value="16" />
                     </Style>
                 </TabControl.Styles>
-                <TabItem Header="PDF Configuration" IsVisible="{Binding IsExportingToPdf}">
+                <TabItem Header="{x:Static lang:Resources.ExportLayoutDialog_PdfConfigurationTab}" IsVisible="{Binding IsExportingToPdf}">
                     <ScrollViewer MinWidth="400">
                         <StackPanel>
                             <Border Background="{DynamicResource ExpanderContentBackground}"
@@ -61,7 +66,7 @@
                                     BorderThickness="1"
                                     CornerRadius="4" Padding="8,4">
                                 <StackPanel>
-                                    <controls:CustomFormField Label="Paper Size" LabelWidth="120">
+                                    <controls:CustomFormField Label="{x:Static lang:Resources.ExportLayoutDialog_PaperSize}" LabelWidth="120">
                                         <controls:CustomFormField.Input>
                                             <ComboBox Width="200"
                                                       SelectedValue="{Binding SelectedPaperSize}"
@@ -74,31 +79,37 @@
                                             </ComboBox>
                                         </controls:CustomFormField.Input>
                                     </controls:CustomFormField>
-                                    <controls:CustomFormField Label="Orientation" LabelWidth="120">
+                                    <controls:CustomFormField Label="{x:Static lang:Resources.ExportLayoutDialog_Orientation}" LabelWidth="120">
                                         <controls:CustomFormField.Input>
                                             <ComboBox Width="150" SelectedValue="{Binding SelectedPageOrientation}"
                                                       ItemsSource="{Binding PageOrientations}"/>
                                         </controls:CustomFormField.Input>
                                     </controls:CustomFormField>
-                                    <controls:CustomFormField Label="Margins" LabelWidth="120">
+                                    <controls:CustomFormField Label="{x:Static lang:Resources.ExportLayoutDialog_Margins}" LabelWidth="120">
                                         <controls:CustomFormField.Input>
-                                            <Grid ColumnDefinitions="*,*,*,*" RowDefinitions="*,Auto" MaxWidth="300"
+                                            <Grid ColumnDefinitions="*,*,*,*" RowDefinitions="*,Auto"
+                                                  MaxWidth="350" HorizontalAlignment="Left"
                                                   RowSpacing="3" ColumnSpacing="4">
-                                                <controls:MeasureTextBox  Grid.Column="0" Grid.Row="0" FontSize="12" MinHeight="0" VerticalAlignment="Center" />
-                                                <TextBlock Text="Left" Grid.Column="0" Grid.Row="1" HorizontalAlignment="Center" FontSize="12" />
+                                                <controls:MeasureTextBox Grid.Column="0" Grid.Row="0"
+                                                                          FontSize="12" MinHeight="0" VerticalAlignment="Center" MinimumValue="0mm" 
+                                                                          Value="{Binding PdfMarginLeft, Mode=TwoWay}" />
+                                                <TextBlock Text="{x:Static lang:Resources.ExportLayoutDialog_MarginLeft}" Grid.Column="0" Grid.Row="1" HorizontalAlignment="Center" FontSize="12" />
 
-                                                <controls:MeasureTextBox  Grid.Column="1" Grid.Row="0" FontSize="12" MinHeight="0" VerticalAlignment="Center" />
-                                                <TextBlock Text="Top" Grid.Column="1" Grid.Row="1" HorizontalAlignment="Center" FontSize="12" />
+                                                <controls:MeasureTextBox Grid.Column="1" Grid.Row="0" FontSize="12" MinHeight="0" VerticalAlignment="Center" MinimumValue="0mm" 
+                                                                          Value="{Binding PdfMarginTop, Mode=TwoWay}" />
+                                                <TextBlock Text="{x:Static lang:Resources.ExportLayoutDialog_MarginTop}" Grid.Column="1" Grid.Row="1" HorizontalAlignment="Center" FontSize="12" />
 
-                                                <controls:MeasureTextBox  Grid.Column="2" Grid.Row="0" FontSize="12" MinHeight="0" VerticalAlignment="Center" />
-                                                <TextBlock Text="Right" Grid.Column="2" Grid.Row="1" HorizontalAlignment="Center" FontSize="12" />
+                                                <controls:MeasureTextBox Grid.Column="2" Grid.Row="0" FontSize="12" MinHeight="0" VerticalAlignment="Center" MinimumValue="0mm" 
+                                                                          Value="{Binding PdfMarginRight, Mode=TwoWay}" />
+                                                <TextBlock Text="{x:Static lang:Resources.ExportLayoutDialog_MarginRight}" Grid.Column="2" Grid.Row="1" HorizontalAlignment="Center" FontSize="12" />
 
-                                                <controls:MeasureTextBox  Grid.Column="3" Grid.Row="0" FontSize="12" MinHeight="0" VerticalAlignment="Center" />
-                                                <TextBlock Text="Bottom" Grid.Column="3" Grid.Row="1" HorizontalAlignment="Center" FontSize="12" />
+                                                <controls:MeasureTextBox Grid.Column="3" Grid.Row="0" FontSize="12" MinHeight="0" VerticalAlignment="Center" MinimumValue="0mm" 
+                                                                          Value="{Binding PdfMarginBottom, Mode=TwoWay}" />
+                                                <TextBlock Text="{x:Static lang:Resources.ExportLayoutDialog_MarginBottom}" Grid.Column="3" Grid.Row="1" HorizontalAlignment="Center" FontSize="12" />
                                             </Grid>
                                         </controls:CustomFormField.Input>
                                     </controls:CustomFormField>
-                                    <controls:CustomFormField Label="Overlap" LabelWidth="120">
+                                    <controls:CustomFormField Label="{x:Static lang:Resources.ExportLayoutDialog_Overlap}" LabelWidth="120">
                                         <controls:CustomFormField.Input>
                                             <controls:MeasureTextBox Width="100" HorizontalAlignment="Left"
                                                                      Value="{Binding PdfOverlap}"
@@ -108,34 +119,33 @@
                                 </StackPanel>
                             </Border>
                         </StackPanel>
-
                     </ScrollViewer>
                 </TabItem>
 
-                <TabItem Header="Export options"  >
+                <TabItem Header="{x:Static lang:Resources.ExportLayoutDialog_ExportOptionsTab}"  >
                     <ScrollViewer MinWidth="400">
                         <StackPanel Spacing="3">
                             <Expander x:Name="FretsExpander" HorizontalAlignment="Stretch" IsExpanded="True">
                                 <Expander.Header>
-                                    <CheckBox Content="Export Frets" IsChecked="{Binding ExportFrets}" />
+                                    <CheckBox Content="{x:Static lang:Resources.ExportLayoutDialog_ExportFrets}" IsChecked="{Binding ExportFrets}" />
                                 </Expander.Header>
                                 <StackPanel Spacing="3" IsEnabled="{Binding ExportFrets}">
 
-                                    <ContentControl Content="Line Styling" Classes="SectionHeader" />
+                                    <ContentControl Content="{x:Static lang:Resources.ExportLayoutDialog_LineStyling}" Classes="SectionHeader" />
 
                                     <Grid ColumnDefinitions="80,Auto,1.5*,Auto"  ColumnSpacing="8" >
-                                        <TextBlock Text="Color" VerticalAlignment="Center" />
+                                        <TextBlock Text="{x:Static lang:Resources.ExportLayoutDialog_Color}" VerticalAlignment="Center" />
                                         <ColorPicker Grid.Column="1" HorizontalAlignment="Left"
                                                      Color="{Binding FretColor}" />
                                         <controls:LineThicknessEditor Grid.Column="2" VerticalAlignment="Center"
                                                                       Thickness="{Binding FretLineThickness, Mode=TwoWay}" />
-                                        <CheckBox Content="Dashed" Grid.Column="3" IsChecked="{Binding FretDashed}" />
+                                        <CheckBox Content="{x:Static lang:Resources.ExportLayoutDialog_Dashed}" Grid.Column="3" IsChecked="{Binding FretDashed}" />
                                     </Grid>
 
-                                    <ContentControl Content="Options" Classes="SectionHeader" Margin="0,3,0,0"/>
+                                    <ContentControl Content="{x:Static lang:Resources.ExportLayoutDialog_Options}" Classes="SectionHeader" Margin="0,3,0,0"/>
 
                                     <Grid ColumnDefinitions="Auto,*" ColumnSpacing="8">
-                                        <CheckBox Content="Extend / Trim fret slots" IsChecked="{Binding ExtendFrets}" />
+                                        <CheckBox Content="{x:Static lang:Resources.ExportLayoutDialog_ExtendTrimFrets}" IsChecked="{Binding ExtendFrets}" />
                                         <controls:MeasureTextBox  Grid.Column="1" Width="140" HorizontalAlignment="Left"
                                                                   Value="{Binding FretExtensionAmount, Mode=TwoWay}"
                                                                   IsEnabled="{Binding ExtendFrets}"
@@ -143,7 +153,7 @@
                                                                   MinimumValue="-2cm" MaximumValue="2cm" />
                                     </Grid>
 
-                                    <TextBlock Text="Enter a negative value for trimming or a positive value for extending"
+                                    <TextBlock Text="{x:Static lang:Resources.ExportLayoutDialog_ExtendTrimHint}"
                                                TextWrapping="Wrap"
                                                FontStyle="Italic" Opacity="0.75" />
                                 </StackPanel>
@@ -151,89 +161,89 @@
 
                             <Expander x:Name="StringsExpander" HorizontalAlignment="Stretch" >
                                 <Expander.Header>
-                                    <CheckBox Content="Export Strings" IsChecked="{Binding ExportStrings}" />
+                                    <CheckBox Content="{x:Static lang:Resources.ExportLayoutDialog_ExportStrings}" IsChecked="{Binding ExportStrings}" />
                                 </Expander.Header>
                                 <StackPanel Spacing="3" IsEnabled="{Binding ExportStrings}">
-                                    <ContentControl Content="Line Styling" Classes="SectionHeader" />
+                                    <ContentControl Content="{x:Static lang:Resources.ExportLayoutDialog_LineStyling}" Classes="SectionHeader" />
 
                                     <Grid ColumnDefinitions="80,Auto,1.5*,Auto"  ColumnSpacing="8" >
-                                        <TextBlock Text="Color" VerticalAlignment="Center" />
+                                        <TextBlock Text="{x:Static lang:Resources.ExportLayoutDialog_Color}" VerticalAlignment="Center" />
                                         <ColorPicker Grid.Column="1" HorizontalAlignment="Left"
                                                      Color="{Binding StringColor}"/>
                                         <controls:LineThicknessEditor Grid.Column="2" VerticalAlignment="Center"
                                                                       Thickness="{Binding StringLineThickness, Mode=TwoWay}"
                                                                       IsEnabled="{Binding UseStringGauge, Converter={StaticResource NotEqualsConverter}, ConverterParameter=True}"
                                                                       />
-                                        <CheckBox Content="Dashed" Grid.Column="3" IsChecked="{Binding StringDashed}" />
+                                        <CheckBox Content="{x:Static lang:Resources.ExportLayoutDialog_Dashed}" Grid.Column="3" IsChecked="{Binding StringDashed}" />
                                     </Grid>
 
-                                    <ContentControl Content="Options" Classes="SectionHeader" Margin="0,3,0,0"/>
+                                    <ContentControl Content="{x:Static lang:Resources.ExportLayoutDialog_Options}" Classes="SectionHeader" Margin="0,3,0,0"/>
 
-                                    <CheckBox Content="Use string gauge for thickness" IsChecked="{Binding UseStringGauge}"  />
+                                    <CheckBox Content="{x:Static lang:Resources.ExportLayoutDialog_UseStringGauge}" IsChecked="{Binding UseStringGauge}"  />
                                 </StackPanel>
                             </Expander>
 
                             <Expander x:Name="FingerboardExpander" HorizontalAlignment="Stretch">
                                 <Expander.Header>
-                                    <CheckBox Content="Export Fingerboard" IsChecked="{Binding ExportFingerboard}" />
+                                    <CheckBox Content="{x:Static lang:Resources.ExportLayoutDialog_ExportFingerboard}" IsChecked="{Binding ExportFingerboard}" />
                                 </Expander.Header>
                                 <StackPanel Spacing="3" IsEnabled="{Binding ExportFingerboard}">
-                                    <ContentControl Content="Line Styling" Classes="SectionHeader" />
+                                    <ContentControl Content="{x:Static lang:Resources.ExportLayoutDialog_LineStyling}" Classes="SectionHeader" />
 
                                     <Grid ColumnDefinitions="80,Auto,1.5*,Auto"  ColumnSpacing="8" >
-                                        <TextBlock Text="Color" VerticalAlignment="Center" />
+                                        <TextBlock Text="{x:Static lang:Resources.ExportLayoutDialog_Color}" VerticalAlignment="Center" />
                                         <ColorPicker Grid.Column="1" HorizontalAlignment="Left"
                                                      Color="{Binding FingerboardColor}" />
                                         <controls:LineThicknessEditor Grid.Column="2" VerticalAlignment="Center"
                                                                       Thickness="{Binding FingerboardLineThickness, Mode=TwoWay}" />
-                                        <CheckBox Content="Dashed" Grid.Column="3" IsChecked="{Binding FingerboardDashed}" />
+                                        <CheckBox Content="{x:Static lang:Resources.ExportLayoutDialog_Dashed}" Grid.Column="3" IsChecked="{Binding FingerboardDashed}" />
                                     </Grid>
-                                    <ContentControl Content="Projection lines" Classes="SectionHeader" Margin="0,3,0,0"/>
-                                    <CheckBox Content="Export projection lines" IsChecked="{Binding ExportFingerboardProjectionLines}" />
+                                    <ContentControl Content="{x:Static lang:Resources.ExportLayoutDialog_ProjectionLines}" Classes="SectionHeader" Margin="0,3,0,0"/>
+                                    <CheckBox Content="{x:Static lang:Resources.ExportLayoutDialog_ExportProjectionLines}" IsChecked="{Binding ExportFingerboardProjectionLines}" />
                                     <Grid ColumnDefinitions="80,Auto,1.5*,Auto"  ColumnSpacing="8"
                                           IsEnabled="{Binding ExportFingerboardProjectionLines}">
-                                        <TextBlock Text="Color" VerticalAlignment="Center" />
+                                        <TextBlock Text="{x:Static lang:Resources.ExportLayoutDialog_Color}" VerticalAlignment="Center" />
                                         <ColorPicker Grid.Column="1" HorizontalAlignment="Left"
                                                      Color="{Binding FingerboardProjectionColor}" />
                                         <controls:LineThicknessEditor Grid.Column="2" VerticalAlignment="Center"
                                                                       Thickness="{Binding FingerboardProjectionLineThickness, Mode=TwoWay}" />
-                                        <CheckBox Content="Dashed" Grid.Column="3" IsChecked="{Binding FingerboardProjectionDashed}" />
+                                        <CheckBox Content="{x:Static lang:Resources.ExportLayoutDialog_Dashed}" Grid.Column="3" IsChecked="{Binding FingerboardProjectionDashed}" />
                                     </Grid>
                                 </StackPanel>
                             </Expander>
 
                             <Expander x:Name="CenterLineExpander" HorizontalAlignment="Stretch" >
                                 <Expander.Header>
-                                    <CheckBox Content="Export Center Line" IsChecked="{Binding ExportCenterLine}" />
+                                    <CheckBox Content="{x:Static lang:Resources.ExportLayoutDialog_ExportCenterLine}" IsChecked="{Binding ExportCenterLine}" />
                                 </Expander.Header>
                                 <StackPanel Spacing="3" IsEnabled="{Binding ExportCenterLine}">
-                                    <ContentControl Content="Line Styling" Classes="SectionHeader" />
+                                    <ContentControl Content="{x:Static lang:Resources.ExportLayoutDialog_LineStyling}" Classes="SectionHeader" />
 
                                     <Grid ColumnDefinitions="80,Auto,1.5*,Auto"  ColumnSpacing="8" >
-                                        <TextBlock Text="Color" VerticalAlignment="Center" />
+                                        <TextBlock Text="{x:Static lang:Resources.ExportLayoutDialog_Color}" VerticalAlignment="Center" />
                                         <ColorPicker Grid.Column="1" HorizontalAlignment="Left"
                                                      Color="{Binding CenterLineColor}" />
                                         <controls:LineThicknessEditor Grid.Column="2" VerticalAlignment="Center"
                                                                       Thickness="{Binding CenterLineThickness, Mode=TwoWay}" />
-                                        <CheckBox Content="Dashed" Grid.Column="3" IsChecked="{Binding CenterLineDashed}" />
+                                        <CheckBox Content="{x:Static lang:Resources.ExportLayoutDialog_Dashed}" Grid.Column="3" IsChecked="{Binding CenterLineDashed}" />
                                     </Grid>
                                 </StackPanel>
                             </Expander>
 
                             <Expander x:Name="MediansExpander" HorizontalAlignment="Stretch" >
                                 <Expander.Header>
-                                    <CheckBox Content="Export Medians" IsChecked="{Binding ExportMedians}" />
+                                    <CheckBox Content="{x:Static lang:Resources.ExportLayoutDialog_ExportMedians}" IsChecked="{Binding ExportMedians}" />
                                 </Expander.Header>
                                 <StackPanel Spacing="3" IsEnabled="{Binding ExportMedians}">
-                                    <ContentControl Content="Line Styling" Classes="SectionHeader" />
+                                    <ContentControl Content="{x:Static lang:Resources.ExportLayoutDialog_LineStyling}" Classes="SectionHeader" />
 
                                     <Grid ColumnDefinitions="80,Auto,1.5*,Auto"  ColumnSpacing="8" >
-                                        <TextBlock Text="Color" VerticalAlignment="Center" />
+                                        <TextBlock Text="{x:Static lang:Resources.ExportLayoutDialog_Color}" VerticalAlignment="Center" />
                                         <ColorPicker Grid.Column="1" HorizontalAlignment="Left"
                                                      Color="{Binding MediansColor}" />
                                         <controls:LineThicknessEditor Grid.Column="2" VerticalAlignment="Center"
                                                                       Thickness="{Binding MediansLineThickness, Mode=TwoWay}" />
-                                        <CheckBox Content="Dashed" Grid.Column="3" IsChecked="{Binding MediansDashed}" />
+                                        <CheckBox Content="{x:Static lang:Resources.ExportLayoutDialog_Dashed}" Grid.Column="3" IsChecked="{Binding MediansDashed}" />
                                     </Grid>
                                 </StackPanel>
                             </Expander>
@@ -252,20 +262,21 @@
         <Border Grid.Row="1" Grid.ColumnSpan="3" Background="{DynamicResource PanelBackgroundBrush}" Margin="0,3,0,0">
             <StackPanel  Orientation="Horizontal"
                          HorizontalAlignment="Center" Margin="3" Spacing="3">
-                <Button Width="90" IsVisible="{Binding IsExportingToPdf}">
+                <Button Width="100" IsVisible="{Binding IsExportingToPdf}" Command="{Binding PrintCommand}">
                     <StackPanel Orientation="Horizontal" Spacing="6" HorizontalAlignment="Center">
                         <materialIcons:MaterialIcon Kind="Printer"  />
-                        <TextBlock Text="Print" />
+                        <TextBlock Text="{x:Static lang:Resources.Common_Print}" />
                     </StackPanel>
                 </Button>
-                <Button Width="90" Command="{Binding ExportCommand}">
+                <Button Width="100" Command="{Binding ExportCommand}">
                     <StackPanel Orientation="Horizontal" Spacing="6" HorizontalAlignment="Center">
                         <materialIcons:MaterialIcon Kind="Export"  />
-                        <TextBlock Text="Export" />
+                        <TextBlock Text="{x:Static lang:Resources.Common_Export}" />
                     </StackPanel>
                 </Button>
-                <Button Content="Cancel" Width="90" Command="{Binding CancelCommand}" HorizontalContentAlignment="Center" />
+                <Button Content="{x:Static lang:Resources.Common_Cancel}" Width="100" Command="{Binding CancelCommand}" HorizontalContentAlignment="Center" />
             </StackPanel>
+
         </Border>
     </Grid>
 </UserControl>

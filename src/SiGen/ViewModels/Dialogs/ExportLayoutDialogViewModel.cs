@@ -12,7 +12,6 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using DrawingColor = System.Drawing.Color;
 
@@ -27,11 +26,13 @@ namespace SiGen.ViewModels.Dialogs
         [ObservableProperty]
         private StringedInstrumentLayout? _layout;
 
-        
+
 
         private readonly IDialogService dialogService;
+        private readonly IPdfPrinterService? pdfPrinterService;
 
         public IAsyncRelayCommand ExportCommand { get; }
+        public IAsyncRelayCommand PrintCommand { get; }
 
         #region General Settings
 
@@ -161,7 +162,26 @@ namespace SiGen.ViewModels.Dialogs
         private PdfPageOrientation selectedPageOrientation;
 
         [ObservableProperty]
-        private PdfPageMargin? _pdfContentMargin;
+        private Measure? _pdfMarginLeft;
+
+        [ObservableProperty]
+        private Measure? _pdfMarginTop;
+
+        [ObservableProperty]
+        private Measure? _pdfMarginRight;
+
+        [ObservableProperty]
+        private Measure? _pdfMarginBottom;
+
+        public PdfPageMargin PdfContentMargin
+        {
+            get => new(
+                PdfMarginLeft ?? Measure.Mm(10),
+                PdfMarginTop ?? Measure.Mm(10),
+                PdfMarginRight ?? Measure.Mm(10),
+                PdfMarginBottom ?? Measure.Mm(10)
+            );
+        }
 
         [ObservableProperty]
         private Measuring.Measure? _pdfOverlap;
@@ -182,24 +202,33 @@ namespace SiGen.ViewModels.Dialogs
             var layoutConfig = provider.GetDefaultConfiguration();
             var result = LayoutBuilder.Build(layoutConfig);
             ExportCommand = new AsyncRelayCommand(ExportLayout);
+            PrintCommand = new AsyncRelayCommand(PrintLayout);
             _layout = result.Layout;
             SelectedPageOrientation = PdfPageOrientation.Portrait;
             SelectedPaperSize = PdfPaperSize.Letter;
-            PdfContentMargin = PdfPageMargin.Uniform(Measure.Mm(10));
+            PdfMarginLeft = Measure.Mm(10);
+            PdfMarginTop = Measure.Mm(10);
+            PdfMarginRight = Measure.Mm(10);
+            PdfMarginBottom = Measure.Mm(10);
             PdfOverlap = Measure.Mm(10);
         }
 
         [ActivatorUtilitiesConstructor]
-        public ExportLayoutDialogViewModel(ILayoutDocument? document, IDialogService dialogService)
+        public ExportLayoutDialogViewModel(ILayoutDocument? document, IDialogService dialogService, IPdfPrinterService pdfPrinterService)
         {
             _context = document;
             _layout = document?.Layout;
             this.dialogService = dialogService;
+            this.pdfPrinterService = pdfPrinterService;
 
             ExportCommand = new AsyncRelayCommand(ExportLayout);
+            PrintCommand = new AsyncRelayCommand(PrintLayout, () => pdfPrinterService.CanPrintPdf);
             SelectedPageOrientation = PdfPageOrientation.Portrait;
             SelectedPaperSize = PdfPaperSize.Letter;
-            PdfContentMargin = PdfPageMargin.Uniform(Measure.Mm(10));
+            PdfMarginLeft = Measure.Mm(10);
+            PdfMarginTop = Measure.Mm(10);
+            PdfMarginRight = Measure.Mm(10);
+            PdfMarginBottom = Measure.Mm(10);
             PdfOverlap = Measure.Mm(10);
             Resizable = true;
         }
@@ -208,6 +237,16 @@ namespace SiGen.ViewModels.Dialogs
         protected override void OnPropertyChanged(PropertyChangedEventArgs e)
         {
             base.OnPropertyChanged(e);
+
+            // Notify that PdfContentMargin has changed when any individual margin property changes
+            if (e.PropertyName == nameof(PdfMarginLeft) || 
+                e.PropertyName == nameof(PdfMarginTop) || 
+                e.PropertyName == nameof(PdfMarginRight) || 
+                e.PropertyName == nameof(PdfMarginBottom))
+            {
+                OnPropertyChanged(nameof(PdfContentMargin));
+            }
+
             // Notify that ExportOptions has changed whenever any option property changes
             if (e.PropertyName != nameof(ExportOptions) && e.PropertyName != nameof(Layout) && e.PropertyName != nameof(Format))
             {
@@ -249,7 +288,10 @@ namespace SiGen.ViewModels.Dialogs
             {
                 
                 string layoutName = "layout";
-                if (!string.IsNullOrEmpty(_context?.FilePath))
+
+                if (!string.IsNullOrEmpty(_context?.Title))
+                    layoutName = _context.Title;
+                else if (!string.IsNullOrEmpty(_context?.FilePath))
                     layoutName = System.IO.Path.GetFileNameWithoutExtension(_context.FilePath);
 
                 return Format switch
@@ -292,16 +334,38 @@ namespace SiGen.ViewModels.Dialogs
         
         public async Task PrintLayout()
         {
+            if (pdfPrinterService == null || !pdfPrinterService.CanPrintPdf)
+                return;
+
             Format = ExportTargetFormat.Pdf;
             var options = CreateExportOptions();
-            
+
             var exporter = new PdfLayoutExporter((PdfExportOptions)options, Layout!);
+            string tempFilePath = System.IO.Path.Combine(System.IO.Path.GetTempPath(), $"SiGen_Print_{Guid.NewGuid()}.pdf");
 
-            //todo: generate temp file and send to printer, then delete temp file after printing
-            exporter.ExportLayout(ExportTarget.ToFile("temp file"));
+            try
+            {
+                exporter.ExportLayout(ExportTarget.ToFile(tempFilePath));
+                await pdfPrinterService.PrintPdfAsync(tempFilePath);
 
+                // Give the print system time to spool the file before deleting
+                await Task.Delay(2000);
+            }
+            catch
+            {
+                // Handle errors silently for now
+            }
+            finally
+            {
+                // Clean up temp file
+                try
+                {
+                    if (System.IO.File.Exists(tempFilePath))
+                        System.IO.File.Delete(tempFilePath);
+                }
+                catch { }
+            }
         }
-
 
         /// <summary>
         /// Creates export options from the current ViewModel state
@@ -316,6 +380,7 @@ namespace SiGen.ViewModels.Dialogs
                 {
                     Paper = SelectedPaperSize ?? PdfPaperSize.Letter,
                     Orientation = SelectedPageOrientation,
+                    ContentMargin = PdfContentMargin,
                     PageOverlap = PdfOverlap ?? Measure.Cm(1),
                 },
                 _ => throw new InvalidOperationException("Unsupported export format")
@@ -385,6 +450,11 @@ namespace SiGen.ViewModels.Dialogs
                 Format = ExportTargetFormat.Pdf;
                 SelectedPaperSize = pdfOptions.Paper;
                 SelectedPageOrientation = pdfOptions.Orientation;
+                PdfMarginLeft = pdfOptions.ContentMargin.Left;
+                PdfMarginTop = pdfOptions.ContentMargin.Top;
+                PdfMarginRight = pdfOptions.ContentMargin.Right;
+                PdfMarginBottom = pdfOptions.ContentMargin.Bottom;
+                PdfOverlap = pdfOptions.PageOverlap;
             }
 
             // Frets

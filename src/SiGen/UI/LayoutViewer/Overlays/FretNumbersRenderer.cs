@@ -45,6 +45,7 @@ namespace SiGen.UI.LayoutViewer.Overlays
 
             int numberOfFrets = Layout.Configuration!.GetMaxFrets();
             var textBrush = new SolidColorBrush(RenderSettings.OverlayTextColor);
+            var outlineBrush = new SolidColorBrush(GetContrastColor(RenderSettings.OverlayTextColor),0.6);
 
             //var textMargin = new Point(
             //    (double)MathD.Map(0.4, 3, 2, 10, ViewerContext.Zoom),
@@ -53,6 +54,7 @@ namespace SiGen.UI.LayoutViewer.Overlays
             double margin = (double)MathD.Map(0.4, 3, 2, 15, ViewerContext.Zoom);
 
             double fontSize = (double)MathD.Map(0.5, 3, 0.6, 1.6, ViewerContext.Zoom) * 14;
+            double outlineThickness = Math.Max(1.0, fontSize * 0.08); // Scale outline with font size
 
             void DrawFretNumber(int fretIndex, Point position, FingerboardSide side)
             {
@@ -66,7 +68,7 @@ namespace SiGen.UI.LayoutViewer.Overlays
                 );
                 //position -= new Point(formattedText.Width * 0.5, formattedText.Height * 0.5);
                 position += GetTextOffset(formattedText, side);
-                context.DrawText(formattedText, position);
+                DrawTextWithOutline(context, fretIndex.ToString(), textBrush, outlineBrush, position, fontSize, outlineThickness);
             }
 
             var fretSegments = Layout.Elements.OfType<FretSegmentElement>().Where(f => !(f.IsNut || f.IsBridge)).ToList();
@@ -154,6 +156,55 @@ namespace SiGen.UI.LayoutViewer.Overlays
             //    //                     !isLeftHanded && side == FingerboardSide.Treble;
             //    return new Point(isLeftHanded ? margin.X : (text.Width + margin.X) * -1d, text.Height * -0.5d);
             //}
+        }
+
+        private static Color GetContrastColor(Color color)
+        {
+            // Calculate perceived brightness using the standard formula
+            double brightness = (0.299 * color.R + 0.587 * color.G + 0.114 * color.B) / 255.0;
+            return brightness > 0.5 ? Colors.Black : Colors.White;
+        }
+
+        private static void DrawTextWithOutline(DrawingContext context, string text, IBrush textBrush, IBrush outlineBrush, Point position, double fontSize, double thickness)
+        {
+            // Draw outline in 8 directions for smooth appearance
+            var offsets = new[]
+            {
+                new Point(-thickness, -thickness),
+                new Point(0, -thickness),
+                new Point(thickness, -thickness),
+                new Point(-thickness, 0),
+                new Point(thickness, 0),
+                new Point(-thickness, thickness),
+                new Point(0, thickness),
+                new Point(thickness, thickness)
+            };
+
+            // Draw outline
+            var outlineText = new FormattedText(
+                text,
+                CultureInfo.CurrentCulture,
+                FlowDirection.LeftToRight,
+                Typeface.Default,
+                fontSize,
+                outlineBrush
+            );
+
+            foreach (var offset in offsets)
+            {
+                context.DrawText(outlineText, position + offset);
+            }
+
+            // Draw main text on top
+            var mainText = new FormattedText(
+                text,
+                CultureInfo.CurrentCulture,
+                FlowDirection.LeftToRight,
+                Typeface.Default,
+                fontSize,
+                textBrush
+            );
+            context.DrawText(mainText, position);
         }
 
         

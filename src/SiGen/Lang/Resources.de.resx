@@ -722,4 +722,133 @@ Fehler: {0}</value>
   <data name="HomePageView.SearchPlaceHolder" xml:space="preserve">
     <value>Suchen...</value>
   </data>
+  <data name="Common.Print" xml:space="preserve">
+    <value>Drucken</value>
+  </data>
+  <data name="Common.Export" xml:space="preserve">
+    <value>Exportieren</value>
+  </data>
+  <data name="ExportLayoutDialog.PdfConfigurationTab" xml:space="preserve">
+    <value>PDF-Konfiguration</value>
+  </data>
+  <data name="ExportLayoutDialog.ExportOptionsTab" xml:space="preserve">
+    <value>Exportoptionen</value>
+  </data>
+  <data name="ExportLayoutDialog.PaperSize" xml:space="preserve">
+    <value>Papiergröße</value>
+  </data>
+  <data name="ExportLayoutDialog.Orientation" xml:space="preserve">
+    <value>Ausrichtung</value>
+  </data>
+  <data name="ExportLayoutDialog.Margins" xml:space="preserve">
+    <value>Ränder</value>
+  </data>
+  <data name="ExportLayoutDialog.Overlap" xml:space="preserve">
+    <value>Überlappung</value>
+  </data>
+  <data name="ExportLayoutDialog.MarginLeft" xml:space="preserve">
+    <value>Links</value>
+  </data>
+  <data name="ExportLayoutDialog.MarginTop" xml:space="preserve">
+    <value>Oben</value>
+  </data>
+  <data name="ExportLayoutDialog.MarginRight" xml:space="preserve">
+    <value>Rechts</value>
+  </data>
+  <data name="ExportLayoutDialog.MarginBottom" xml:space="preserve">
+    <value>Unten</value>
+  </data>
+  <data name="ExportLayoutDialog.ExportFrets" xml:space="preserve">
+    <value>Bünde exportieren</value>
+  </data>
+  <data name="ExportLayoutDialog.ExportStrings" xml:space="preserve">
+    <value>Saiten exportieren</value>
+  </data>
+  <data name="ExportLayoutDialog.ExportFingerboard" xml:space="preserve">
+    <value>Griffbrett exportieren</value>
+  </data>
+  <data name="ExportLayoutDialog.ExportCenterLine" xml:space="preserve">
+    <value>Mittellinie exportieren</value>
+  </data>
+  <data name="ExportLayoutDialog.ExportMedians" xml:space="preserve">
+    <value>Mediane exportieren</value>
+  </data>
+  <data name="ExportLayoutDialog.LineStyling" xml:space="preserve">
+    <value>Linienstil</value>
+  </data>
+  <data name="ExportLayoutDialog.Options" xml:space="preserve">
+    <value>Optionen</value>
+  </data>
+  <data name="ExportLayoutDialog.Color" xml:space="preserve">
+    <value>Farbe</value>
+  </data>
+  <data name="ExportLayoutDialog.Dashed" xml:space="preserve">
+    <value>Gestrichelt</value>
+  </data>
+  <data name="ExportLayoutDialog.ExtendTrimFrets" xml:space="preserve">
+    <value>Bundschlitze erweitern / kürzen</value>
+  </data>
+  <data name="ExportLayoutDialog.ExtendTrimHint" xml:space="preserve">
+    <value>Geben Sie einen negativen Wert zum Kürzen oder einen positiven Wert zum Erweitern ein</value>
+  </data>
+  <data name="ExportLayoutDialog.UseStringGauge" xml:space="preserve">
+    <value>Saitenstärke für Liniendicke verwenden</value>
+  </data>
+  <data name="ExportLayoutDialog.ProjectionLines" xml:space="preserve">
+    <value>Projektionslinien</value>
+  </data>
+  <data name="ExportLayoutDialog.ExportProjectionLines" xml:space="preserve">
+    <value>Projektionslinien exportieren</value>
+  </data>
+  <data name="Menu_Export" xml:space="preserve">
+    <value>Exportieren</value>
+  </data>
+  <data name="Menu_Export_ToSvg" xml:space="preserve">
+    <value>Nach SVG exportieren...</value>
+  </data>
+  <data name="Menu_Export_ToDxf" xml:space="preserve">
+    <value>Nach DXF exportieren...</value>
+  </data>
+  <data name="Menu_Export_ToPdfOrPrint" xml:space="preserve">
+    <value>Nach PDF exportieren / Drucken...</value>
+  </data>
+  <data name="MainView.NoDocumentOpen" xml:space="preserve">
+    <value>Kein Dokument geöffnet.</value>
+  </data>
+  <data name="MainView.NoDocumentOpen_Hint1" xml:space="preserve">
+    <value>Vorhandenen Bauplan öffnen (STRG+O)</value>
+  </data>
+  <data name="MainView.NoDocumentOpen_Hint2" xml:space="preserve">
+    <value>Aus einer Vorlage auf der Startseite auswählen (STRG+H)</value>
+  </data>
+  <data name="Common.Yes" xml:space="preserve">
+    <value>Ja</value>
+  </data>
+  <data name="Common.No" xml:space="preserve">
+    <value>Nein</value>
+  </data>
+  <data name="Common.Configure" xml:space="preserve">
+    <value>Konfigurieren...</value>
+  </data>
+  <data name="Common.Spacing" xml:space="preserve">
+    <value>Abstand</value>
+  </data>
+  <data name="Common.NotAvailable" xml:space="preserve">
+    <value>N/V</value>
+  </data>
+  <data name="Common.Length" xml:space="preserve">
+    <value>Länge</value>
+  </data>
+  <data name="ContextMenu.Cut" xml:space="preserve">
+    <value>Ausschneiden</value>
+  </data>
+  <data name="ContextMenu.Copy" xml:space="preserve">
+    <value>Kopieren</value>
+  </data>
+  <data name="ContextMenu.Paste" xml:space="preserve">
+    <value>Einfügen</value>
+  </data>
+  <data name="ContextMenu.Convert" xml:space="preserve">
+    <value>Umwandeln</value>
+  </data>
 </root>

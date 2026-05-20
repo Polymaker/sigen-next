@@ -85,7 +85,7 @@ namespace SiGen.UI.Controls
             }
 
             baseContextMenu.Items.Add(new Separator());
-            var convertMenuItem = new MenuItem { Header = "Convert", Tag = "CONVERT" }; //todo: localize
+            var convertMenuItem = new MenuItem { Header = Lang.Resources.ContextMenu_Convert, Tag = "CONVERT" };
 
             var mmMenuItem = new MenuItem { Header = "mm", Tag = LengthUnit.Mm };
             mmMenuItem.Click += (s, e) => ConvertToUnit(LengthUnit.Mm);
@@ -130,15 +130,15 @@ namespace SiGen.UI.Controls
 
         private void PopulateDefaultContextMenuItems(ContextMenu contextMenu)
         {
-            var cutMenuItem = new MenuItem { Header = "Cut" }; //todo: localize
+            var cutMenuItem = new MenuItem { Header = Lang.Resources.ContextMenu_Cut };
             cutMenuItem.Command = new RelayCommand(Cut, () => CanCut);
             cutMenuItem.InputGesture = CutGesture;
-            
-            var copyMenuItem = new MenuItem { Header = "Copy" }; //todo: localize
+
+            var copyMenuItem = new MenuItem { Header = Lang.Resources.ContextMenu_Copy };
             copyMenuItem.Command = new RelayCommand(Copy, () => CanCopy);
             copyMenuItem.InputGesture = CopyGesture;
 
-            var pasteMenuItem = new MenuItem { Header = "Paste" }; //todo: localize
+            var pasteMenuItem = new MenuItem { Header = Lang.Resources.ContextMenu_Paste };
             pasteMenuItem.Command = new RelayCommand(Paste, () => CanPaste);
             pasteMenuItem.InputGesture = PasteGesture;
 

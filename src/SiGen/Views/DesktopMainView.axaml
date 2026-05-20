@@ -1,227 +1,242 @@
 <UserControl xmlns="https://github.com/avaloniaui"
-			 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-			 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-			 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-			 mc:Ignorable="d" d:DesignWidth="1000" d:DesignHeight="800"
-			 x:Class="SiGen.Views.DesktopMainView"
-			 xmlns:vm="clr-namespace:SiGen.ViewModels"
-			 x:DataType="vm:DesktopMainViewModel"
-			 xmlns:conv="clr-namespace:SiGen.Converters;assembly=SiGen"
-			 xmlns:views="clr-namespace:SiGen.Views"
-			 xmlns:ctrl="using:SiGen.UI.Controls"
-			 Design.DataContext="{x:Static vm:DesignData.DesktopMainViewModel}"
-			 xmlns:materialIcons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
-			 xmlns:settings="using:SiGen.Settings"
-			 xmlns:lang="using:SiGen.Lang"
-			 xmlns:export="using:SiGen.Export"
-			 Name="MainView"
-			 >
-	<UserControl.Resources>
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="1000" d:DesignHeight="800"
+             x:Class="SiGen.Views.DesktopMainView"
+             xmlns:vm="clr-namespace:SiGen.ViewModels"
+             x:DataType="vm:DesktopMainViewModel"
+             xmlns:conv="clr-namespace:SiGen.Converters;assembly=SiGen"
+             xmlns:views="clr-namespace:SiGen.Views"
+             xmlns:ctrl="using:SiGen.UI.Controls"
+             Design.DataContext="{x:Static vm:DesignData.DesktopMainViewModel}"
+             xmlns:materialIcons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             xmlns:settings="using:SiGen.Settings"
+             xmlns:lang="using:SiGen.Lang"
+             xmlns:export="using:SiGen.Export"
+             Name="MainView"
+             >
+    <UserControl.Resources>
 
 
-		<ResourceDictionary>
-			<conv:EqualsConverter x:Key="EqualsConverter" />
-			<!--<Thickness x:Key="TabItemHeaderMargin">0,0,0,0</Thickness>-->
-			<x:Double x:Key="TabItemMinHeight">30</x:Double>
-			<x:Double x:Key="TabItemHeaderFontSize">15</x:Double>
-			<Thickness x:Key="TabItemMargin">0</Thickness>
-			<Thickness x:Key="TabItemHeaderMargin">8,4,8,0</Thickness>
-			<Thickness x:Key="TabControlTopPlacementItemMargin">0</Thickness>
+        <ResourceDictionary>
+            <conv:EqualsConverter x:Key="EqualsConverter" />
+            <!--<Thickness x:Key="TabItemHeaderMargin">0,0,0,0</Thickness>-->
+            <x:Double x:Key="TabItemMinHeight">30</x:Double>
+            <x:Double x:Key="TabItemHeaderFontSize">15</x:Double>
+            <Thickness x:Key="TabItemMargin">0</Thickness>
+            <Thickness x:Key="TabItemHeaderMargin">8,4,8,0</Thickness>
+            <Thickness x:Key="TabControlTopPlacementItemMargin">0</Thickness>
 
-			<ResourceDictionary.ThemeDictionaries>
-				<ResourceDictionary x:Key="Light">
-					<SolidColorBrush x:Key="MenuBackground">#F9F9F9</SolidColorBrush>
-					<SolidColorBrush x:Key="WindowBackground">#EFEFEF</SolidColorBrush>
-					<SolidColorBrush x:Key="TabItemHeaderBackgroundSelected">#FFFFFF</SolidColorBrush>
-					<SolidColorBrush x:Key="TabItemHeaderBackgroundSelectedPointerOver">#FFFFFF</SolidColorBrush>
-					<SolidColorBrush x:Key="TabItemHeaderBackgroundUnselected">#F5F5F5</SolidColorBrush>
-					<SolidColorBrush x:Key="TabItemHeaderBackgroundUnselectedPointerOver">#FAFAFA</SolidColorBrush>
-				</ResourceDictionary >
-				<ResourceDictionary x:Key="Dark">
-					<SolidColorBrush x:Key="MenuBackground">#191919</SolidColorBrush>
-					<SolidColorBrush x:Key="WindowBackground">#0C0C0C</SolidColorBrush>
-					<SolidColorBrush x:Key="TabItemHeaderBackgroundSelected">#3D3D3D</SolidColorBrush>
-					<SolidColorBrush x:Key="TabItemHeaderBackgroundSelectedPointerOver">#3D3D3D</SolidColorBrush>
-					<SolidColorBrush x:Key="TabItemHeaderBackgroundUnselected">#1E1E1E</SolidColorBrush>
-					<SolidColorBrush x:Key="TabItemHeaderBackgroundUnselectedPointerOver">#2D2D2D</SolidColorBrush>
-				</ResourceDictionary>
-			</ResourceDictionary.ThemeDictionaries>
-		</ResourceDictionary>
-	</UserControl.Resources>
+            <ResourceDictionary.ThemeDictionaries>
+                <ResourceDictionary x:Key="Light">
+                    <SolidColorBrush x:Key="MenuBackground">#F9F9F9</SolidColorBrush>
+                    <SolidColorBrush x:Key="WindowBackground">#EFEFEF</SolidColorBrush>
+                    <SolidColorBrush x:Key="TabItemHeaderBackgroundSelected">#FFFFFF</SolidColorBrush>
+                    <SolidColorBrush x:Key="TabItemHeaderBackgroundSelectedPointerOver">#FFFFFF</SolidColorBrush>
+                    <SolidColorBrush x:Key="TabItemHeaderBackgroundUnselected">#F5F5F5</SolidColorBrush>
+                    <SolidColorBrush x:Key="TabItemHeaderBackgroundUnselectedPointerOver">#FAFAFA</SolidColorBrush>
+                </ResourceDictionary >
+                <ResourceDictionary x:Key="Dark">
+                    <SolidColorBrush x:Key="MenuBackground">#191919</SolidColorBrush>
+                    <SolidColorBrush x:Key="WindowBackground">#0C0C0C</SolidColorBrush>
+                    <SolidColorBrush x:Key="TabItemHeaderBackgroundSelected">#3D3D3D</SolidColorBrush>
+                    <SolidColorBrush x:Key="TabItemHeaderBackgroundSelectedPointerOver">#3D3D3D</SolidColorBrush>
+                    <SolidColorBrush x:Key="TabItemHeaderBackgroundUnselected">#1E1E1E</SolidColorBrush>
+                    <SolidColorBrush x:Key="TabItemHeaderBackgroundUnselectedPointerOver">#2D2D2D</SolidColorBrush>
+                </ResourceDictionary>
+            </ResourceDictionary.ThemeDictionaries>
+        </ResourceDictionary>
+    </UserControl.Resources>
 
-	<Border Background="{DynamicResource WindowBackground}">
+    <Border Background="{DynamicResource WindowBackground}">
 
-		<DockPanel>
-			<Menu DockPanel.Dock="Top" Background="{DynamicResource MenuBackground}">
-				<MenuItem Header="{x:Static lang:Resources.Menu_File}">
-					<MenuItem Header="{x:Static lang:Resources.Menu_File_Open}"
-							  Command="{Binding OpenCommand}" InputGesture="Ctrl+O" >
-						<MenuItem.Icon>
-							<materialIcons:MaterialIcon Kind="FolderOpen" />
-						</MenuItem.Icon>
-					</MenuItem>
-					<MenuItem Header="{x:Static lang:Resources.Menu_File_HomePage}"
-							  Command="{Binding OpenHomeCommand}" InputGesture="Ctrl+H">
-						<MenuItem.Icon>
-							<materialIcons:MaterialIcon Kind="Home" />
-						</MenuItem.Icon>
-					</MenuItem>
+        <DockPanel>
+            <Menu DockPanel.Dock="Top" Background="{DynamicResource MenuBackground}">
+                <MenuItem Header="{x:Static lang:Resources.Menu_File}">
+                    <MenuItem Header="{x:Static lang:Resources.Menu_File_Open}"
+                              Command="{Binding OpenCommand}" InputGesture="Ctrl+O" >
+                        <MenuItem.Icon>
+                            <materialIcons:MaterialIcon Kind="FolderOpen" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Header="{x:Static lang:Resources.Menu_File_HomePage}"
+                              Command="{Binding OpenHomeCommand}" InputGesture="Ctrl+H">
+                        <MenuItem.Icon>
+                            <materialIcons:MaterialIcon Kind="Home" />
+                        </MenuItem.Icon>
+                    </MenuItem>
 
-	<!--				<Separator/>
-					<MenuItem Header="{x:Static lang:Resources.Menu_File_CloseDocument}"
-							  Command="{Binding CloseDocumentCommand}"
-							  CommandParameter="{Binding SelectedDocument}" />
-					-->
-					<Separator/>
-					<MenuItem Header="{x:Static lang:Resources.Menu_File_Save}" Command="{Binding SaveCommand}" InputGesture="Ctrl+S">
-						<MenuItem.Icon>
-							<materialIcons:MaterialIcon Kind="ContentSave" />
-						</MenuItem.Icon>
-					</MenuItem>
-					<MenuItem Header="{x:Static lang:Resources.Menu_File_SaveAs}"
-							  Command="{Binding SaveAsCommand}" InputGesture="Ctrl+Shift+S">
-						<MenuItem.Icon>
-							<materialIcons:MaterialIcon Kind="ContentSaveMove" />
-						</MenuItem.Icon>
-					</MenuItem>
+                    <!--				<Separator/>
+                    <MenuItem Header="{x:Static lang:Resources.Menu_File_CloseDocument}"
+                    Command="{Binding CloseDocumentCommand}"
+                    CommandParameter="{Binding SelectedDocument}" />
+                    -->
+                    <Separator/>
+                    <MenuItem Header="{x:Static lang:Resources.Menu_File_Save}" Command="{Binding SaveCommand}" InputGesture="Ctrl+S">
+                        <MenuItem.Icon>
+                            <materialIcons:MaterialIcon Kind="ContentSave" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Header="{x:Static lang:Resources.Menu_File_SaveAs}"
+                              Command="{Binding SaveAsCommand}" InputGesture="Ctrl+Shift+S">
+                        <MenuItem.Icon>
+                            <materialIcons:MaterialIcon Kind="ContentSaveMove" />
+                        </MenuItem.Icon>
+                    </MenuItem>
 
-					<Separator/>
+                    <Separator/>
 
-					<MenuItem Header="{x:Static lang:Resources.Menu_File_RecentFiles}" x:Name="RecentFilesMenu" >
-						<MenuItem.ItemTemplate>
-							<DataTemplate x:DataType="vm:RecentFileMenuModel">
-								<MenuItem Padding="0"
-										  ToolTip.Tip="{Binding FilePath}"
-										  Click="RecentFileMenuItem_Click">
-									<MenuItem.Header>
-										<AccessText >
-											<Run Text="{Binding Index}" />
-											<Run Text=": " />
-											<Run Text="{Binding DisplayName}" />
-										</AccessText>
-									</MenuItem.Header>
-								</MenuItem>
-							</DataTemplate>
-						</MenuItem.ItemTemplate>
-						<MenuItem.Icon>
-							<!--<materialIcons:MaterialIcon Kind="History" />-->
-							<materialIcons:MaterialIcon Kind="FileClock" />
-						</MenuItem.Icon>
-					</MenuItem>
+                    <MenuItem Header="{x:Static lang:Resources.Menu_File_RecentFiles}" x:Name="RecentFilesMenu" >
+                        <MenuItem.ItemTemplate>
+                            <DataTemplate x:DataType="vm:RecentFileMenuModel">
+                                <MenuItem Padding="0"
+                                          ToolTip.Tip="{Binding FilePath}"
+                                          Click="RecentFileMenuItem_Click">
+                                    <MenuItem.Header>
+                                        <AccessText >
+                                            <Run Text="{Binding Index}" />
+                                            <Run Text=": " />
+                                            <Run Text="{Binding DisplayName}" />
+                                        </AccessText>
+                                    </MenuItem.Header>
+                                </MenuItem>
+                            </DataTemplate>
+                        </MenuItem.ItemTemplate>
+                        <MenuItem.Icon>
+                            <!--<materialIcons:MaterialIcon Kind="History" />-->
+                            <materialIcons:MaterialIcon Kind="FileClock" />
+                        </MenuItem.Icon>
+                    </MenuItem>
 
-					<Separator/>
-					<MenuItem Header="{x:Static lang:Resources.Menu_File_Settings}" Command="{Binding ShowSettingsCommand}" InputGesture="Ctrl+,">
-						<MenuItem.Icon>
-							<materialIcons:MaterialIcon Kind="Cog" />
-						</MenuItem.Icon>
-					</MenuItem>
-					<Separator/>
-					<MenuItem Header="{x:Static lang:Resources.Menu_File_Exit}">
-						<MenuItem.Icon>
-							<materialIcons:MaterialIcon Kind="ExitRun" />
-						</MenuItem.Icon>
-					</MenuItem>
-				</MenuItem>
-				<MenuItem Header="_Export">
-					<!--<MenuItem Header="Print" Command="{Binding PrintLayoutCommand}" />-->
-					<MenuItem Header="Export to SVG..." Command="{Binding ExportLayoutCommand}" CommandParameter="{x:Static export:ExportTargetFormat.Svg}"/>
-					<MenuItem Header="Export to DXF..." Command="{Binding ExportLayoutCommand}" CommandParameter="{x:Static export:ExportTargetFormat.Dxf}"/>
-					<MenuItem Header="Export to PDF / Print..." Command="{Binding ExportLayoutCommand}" CommandParameter="{x:Static export:ExportTargetFormat.Pdf}"/>
-				</MenuItem>
-			
-			</Menu>
-			<Grid>
-				<ctrl:TabControlEx x:Name="DocumentsTabControl" Margin="0,4,0,0"
-								   ItemsSource="{Binding OpenDocuments}"
-								   SelectedItem="{Binding SelectedDocument, Mode=TwoWay}">
-					<TabControl.ItemTemplate>
-						<DataTemplate x:DataType="vm:IDocumentTabViewModel">
+                    <Separator/>
+                    <MenuItem Header="{x:Static lang:Resources.Menu_File_Settings}" Command="{Binding ShowSettingsCommand}" InputGesture="Ctrl+,">
+                        <MenuItem.Icon>
+                            <materialIcons:MaterialIcon Kind="Cog" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <Separator/>
+                    <MenuItem Header="{x:Static lang:Resources.Menu_File_Exit}">
+                        <MenuItem.Icon>
+                            <materialIcons:MaterialIcon Kind="ExitRun" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                </MenuItem>
+                <MenuItem Header="{x:Static lang:Resources.Menu_Export}">
+                    <MenuItem Header="{x:Static lang:Resources.Menu_Export_ToSvg}" Command="{Binding ExportLayoutCommand}" CommandParameter="{x:Static export:ExportTargetFormat.Svg}">
+                        <MenuItem.Icon>
+                            <TextBlock FontSize="14" FontWeight="Bold" Text="SVG" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Header="{x:Static lang:Resources.Menu_Export_ToDxf}" Command="{Binding ExportLayoutCommand}" CommandParameter="{x:Static export:ExportTargetFormat.Dxf}">
+                        <MenuItem.Icon>
+                            <TextBlock FontSize="14" FontWeight="Bold" Text="DXF" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Header="{x:Static lang:Resources.Menu_Export_ToPdfOrPrint}" Command="{Binding ExportLayoutCommand}" CommandParameter="{x:Static export:ExportTargetFormat.Pdf}">
+                        <MenuItem.Icon>
+                            <materialIcons:MaterialIcon Kind="Printer" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                </MenuItem>
+                <!--TODO: Create About Window-->
+         <!--       <MenuItem Header="_Help">
+                    <MenuItem Header="_About..." />
+                </MenuItem>-->
+            </Menu>
 
-							<StackPanel Orientation="Horizontal" ToolTip.Tip="{Binding TabToolTip}" >
-								<TextBlock Text="{Binding Title}" >
-									<TextBlock.ContextMenu>
-										<ContextMenu>
-											<MenuItem Header="{x:Static lang:Resources.Menu_Document_Close}"
-													  Command="{Binding $parent[views:DesktopMainView].DataContext.CloseDocumentCommand}"
-													  CommandParameter="{Binding}" >
-												<MenuItem.Icon>
-													<materialIcons:MaterialIcon Kind="WindowClose" IconSize="10" />
-												</MenuItem.Icon>
-											</MenuItem>
-											<MenuItem Header="{x:Static lang:Resources.Menu_Document_OpenInExplorer}"
-													  Command="{Binding $parent[views:DesktopMainView].DataContext.OpenInFileExplorerCommand}"
-													  CommandParameter="{Binding}"
-													  IsVisible="{Binding IsDocument}" >
-												<MenuItem.Icon>
-													<materialIcons:MaterialIcon Kind="FolderOpen" />
-												</MenuItem.Icon>
-											</MenuItem>
-										</ContextMenu>
-									</TextBlock.ContextMenu>
-								</TextBlock>
-								<TextBlock Text="*" Foreground="{DynamicResource SystemAccentColor}"
-										   IsVisible="{Binding HasUnsavedChanges, Converter={StaticResource EqualsConverter}, ConverterParameter=True}" />
-								<Button Classes="CloseButton"
-										Command="{Binding $parent[views:DesktopMainView].DataContext.CloseDocumentCommand}"
-										CommandParameter="{Binding}"
-										Padding="0" Margin="8,0,0,4"
+            <Grid>
+                <ctrl:TabControlEx x:Name="DocumentsTabControl" Margin="0,4,0,0"
+                                   ItemsSource="{Binding OpenDocuments}"
+                                   SelectedItem="{Binding SelectedDocument, Mode=TwoWay}">
+                    <TabControl.ItemTemplate>
+                        <DataTemplate x:DataType="vm:IDocumentTabViewModel">
 
-										Width="20" Height="20">
+                            <StackPanel Orientation="Horizontal" ToolTip.Tip="{Binding TabToolTip}" >
+                                <TextBlock Text="{Binding Title}" >
+                                    <TextBlock.ContextMenu>
+                                        <ContextMenu>
+                                            <MenuItem Header="{x:Static lang:Resources.Menu_Document_Close}"
+                                                      Command="{Binding $parent[views:DesktopMainView].DataContext.CloseDocumentCommand}"
+                                                      CommandParameter="{Binding}" >
+                                                <MenuItem.Icon>
+                                                    <materialIcons:MaterialIcon Kind="WindowClose" IconSize="10" />
+                                                </MenuItem.Icon>
+                                            </MenuItem>
+                                            <MenuItem Header="{x:Static lang:Resources.Menu_Document_OpenInExplorer}"
+                                                      Command="{Binding $parent[views:DesktopMainView].DataContext.OpenInFileExplorerCommand}"
+                                                      CommandParameter="{Binding}"
+                                                      IsVisible="{Binding IsDocument}" >
+                                                <MenuItem.Icon>
+                                                    <materialIcons:MaterialIcon Kind="FolderOpen" />
+                                                </MenuItem.Icon>
+                                            </MenuItem>
+                                        </ContextMenu>
+                                    </TextBlock.ContextMenu>
+                                </TextBlock>
+                                <TextBlock Text="*" Foreground="{DynamicResource SystemAccentColor}"
+                                           IsVisible="{Binding HasUnsavedChanges, Converter={StaticResource EqualsConverter}, ConverterParameter=True}" />
+                                <Button Classes="CloseButton"
+                                        Command="{Binding $parent[views:DesktopMainView].DataContext.CloseDocumentCommand}"
+                                        CommandParameter="{Binding}"
+                                        Padding="0" Margin="8,0,0,4"
 
-									<materialIcons:MaterialIcon Kind="Close"
-																IconSize="8"
-																HorizontalAlignment="Center"
-																VerticalAlignment="Center"/>
+                                        Width="20" Height="20">
 
-								</Button>
+                                    <materialIcons:MaterialIcon Kind="Close"
+                                                                IconSize="8"
+                                                                HorizontalAlignment="Center"
+                                                                VerticalAlignment="Center"/>
 
-							</StackPanel>
-						</DataTemplate>
-					</TabControl.ItemTemplate>
-					<TabControl.DataTemplates>
-						<DataTemplate x:DataType="vm:LayoutDocumentViewModel">
-							<views:LayoutDocumentView DataContext="{Binding}" />
-						</DataTemplate>
-						<DataTemplate x:DataType="vm:HomePageViewModel">
-							<views:HomePageView DataContext="{Binding}" VerticalAlignment="Stretch" />
-						</DataTemplate>
-					</TabControl.DataTemplates>
+                                </Button>
 
-					<TabControl.Styles>
+                            </StackPanel>
+                        </DataTemplate>
+                    </TabControl.ItemTemplate>
+                    <TabControl.DataTemplates>
+                        <DataTemplate x:DataType="vm:LayoutDocumentViewModel">
+                            <views:LayoutDocumentView DataContext="{Binding}" />
+                        </DataTemplate>
+                        <DataTemplate x:DataType="vm:HomePageViewModel">
+                            <views:HomePageView DataContext="{Binding}" VerticalAlignment="Stretch" />
+                        </DataTemplate>
+                    </TabControl.DataTemplates>
 
-						<Style Selector="TabItem:pointerover">
-							<!--<Setter Property="Background" Value="Red" />-->
-						</Style>
-						<Style Selector="TabItem">
-							<Setter Property="Margin" Value="0,0,3,0" />
-							<Setter Property="CornerRadius" Value="1,1,0,0" />
-						</Style>
-						<Style Selector="TabItem:not(:selected) Button.CloseButton">
-							<Setter Property="Opacity" Value="0"/>
-							<Setter Property="IsHitTestVisible" Value="False"/>
-						</Style>
-						<Style Selector="TabItem:not(:selected):pointerover Button.CloseButton">
-							<Setter Property="Opacity" Value="1"/>
-							<Setter Property="IsHitTestVisible" Value="True"/>
-						</Style>
-						<Style Selector="TabItem:selected Button.CloseButton">
-							<Setter Property="Opacity" Value="1"/>
-							<Setter Property="IsHitTestVisible" Value="True"/>
-						</Style>
-					</TabControl.Styles>
-				</ctrl:TabControlEx>
+                    <TabControl.Styles>
 
-				<TextBlock FontSize="16" Opacity="0.6" TextAlignment="Center"
-						   VerticalAlignment="Center" HorizontalAlignment="Center"
-						   IsVisible="{Binding NoOpenDocuments}">
-					<Run Text="No document open." />
-					<LineBreak />
-					<Run Text="Open an existing layout (CTRL+O)" />
-					<LineBreak />
-					<Run Text="Select from a template in the home page (CTRL+H)" />
-				</TextBlock>
-			</Grid>
-		</DockPanel>
-	</Border>
+                        <Style Selector="TabItem:pointerover">
+                            <!--<Setter Property="Background" Value="Red" />-->
+                        </Style>
+                        <Style Selector="TabItem">
+                            <Setter Property="Margin" Value="0,0,3,0" />
+                            <Setter Property="CornerRadius" Value="1,1,0,0" />
+                        </Style>
+                        <Style Selector="TabItem:not(:selected) Button.CloseButton">
+                            <Setter Property="Opacity" Value="0"/>
+                            <Setter Property="IsHitTestVisible" Value="False"/>
+                        </Style>
+                        <Style Selector="TabItem:not(:selected):pointerover Button.CloseButton">
+                            <Setter Property="Opacity" Value="1"/>
+                            <Setter Property="IsHitTestVisible" Value="True"/>
+                        </Style>
+                        <Style Selector="TabItem:selected Button.CloseButton">
+                            <Setter Property="Opacity" Value="1"/>
+                            <Setter Property="IsHitTestVisible" Value="True"/>
+                        </Style>
+                    </TabControl.Styles>
+                </ctrl:TabControlEx>
+
+                <TextBlock FontSize="16" Opacity="0.6" TextAlignment="Center"
+                           VerticalAlignment="Center" HorizontalAlignment="Center"
+                           IsVisible="{Binding NoOpenDocuments}">
+                    <Run Text="{x:Static lang:Resources.MainView_NoDocumentOpen}" />
+                    <LineBreak />
+                    <Run Text="{x:Static lang:Resources.MainView_NoDocumentOpen_Hint1}" />
+                    <LineBreak />
+                    <Run Text="{x:Static lang:Resources.MainView_NoDocumentOpen_Hint2}" />
+                </TextBlock>
+            </Grid>
+        </DockPanel>
+    </Border>
 
 </UserControl>

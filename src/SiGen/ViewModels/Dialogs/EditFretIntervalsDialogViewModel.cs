@@ -109,7 +109,7 @@ namespace SiGen.ViewModels.Dialogs
             for (int i = 0; i < count; i++)
             {
                 var value = Math.Round(start + (i * step), 4);
-                if (value < 0 || existing.Contains(value))
+                if (value <= 0 || existing.Contains(value))
                     continue;
 
                 Intervals.Add(new FretIntervalValueModel(value));
@@ -123,7 +123,7 @@ namespace SiGen.ViewModels.Dialogs
                 .Select(x => x.Cents)
                 .Where(x => x.HasValue)
                 .Select(x => Math.Round(x!.Value, 4))
-                .Where(x => x >= 0)
+                .Where(x => x > 0)
                 .Distinct()
                 .OrderBy(x => x)
                 .ToList();

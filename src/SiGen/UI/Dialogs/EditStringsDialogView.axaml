@@ -123,7 +123,7 @@
                                                 <Button.Flyout>
                                                     <Flyout>
                                                         <StackPanel Orientation="Horizontal">
-                                                            <Label Content="Spacing" VerticalAlignment="Center" FontWeight="Bold" Margin="0,0,6,0" />
+                                                            <Label Content="{x:Static lang:Resources.Common_Spacing}" VerticalAlignment="Center" FontWeight="Bold" Margin="0,0,6,0" />
                                                             <ctrl:MeasureTextBox Width="90" Value="{Binding CourseSpacing}" />
                                                         </StackPanel>
                                                     </Flyout>
