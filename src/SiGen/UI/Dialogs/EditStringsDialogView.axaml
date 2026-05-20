@@ -169,7 +169,7 @@
 
                                                         <StackPanel Orientation="Horizontal" Grid.Column="4" Spacing="2"
                                                                     HorizontalAlignment="Center">
-                                                            <Button Padding="6" CornerRadius="12"
+                                                            <Button Padding="3" CornerRadius="12"
                                                                     Command="{Binding  $parent[UserControl].DataContext.RemoveStringFromCourseCommand}"
                                                                     CommandParameter="{Binding .}"
                                                                     IsEnabled="{Binding CanRemove}"
@@ -183,21 +183,21 @@
                                                                                    Text="{x:Static lang:Resources.EditStringsDialog_RemoveStringFromCourseTooltip}" />
                                                                     </StackPanel>
                                                                 </ToolTip.Tip>
-                                                                <materialIcons:MaterialIcon Kind="Remove" IconSize="12" />
+                                                                <materialIcons:MaterialIcon Kind="Remove" IconSize="18" />
                                                             </Button>
-                                                            <Button Padding="6" CornerRadius="12" ToolTip.Tip="{x:Static lang:Resources.EditStringsDialog_AddStringTooltip}"
+                                                            <Button Padding="3" CornerRadius="12" ToolTip.Tip="{x:Static lang:Resources.EditStringsDialog_AddStringTooltip}"
                                                                     IsVisible="{Binding $parent[ItemsControl].DataContext.IsCourse}"
                                                                     Command="{Binding  $parent[UserControl].DataContext.AddStringToCourseCommand}"
                                                                     CommandParameter="{Binding $parent[ItemsControl].DataContext}"
                                                                     >
-                                                                <materialIcons:MaterialIcon Kind="Add" IconSize="12" />
+                                                                <materialIcons:MaterialIcon Kind="Add" IconSize="18" />
                                                             </Button>
-                                                            <Button Padding="4" CornerRadius="12" ToolTip.Tip="{x:Static lang:Resources.EditStringsDialog_ConvertToCourseTooltip}"
+                                                            <Button Padding="3" CornerRadius="12" ToolTip.Tip="{x:Static lang:Resources.EditStringsDialog_ConvertToCourseTooltip}"
                                                                     IsVisible="{Binding $parent[ItemsControl].DataContext.IsSingle}"
                                                                     Command="{Binding  $parent[UserControl].DataContext.AddStringToCourseCommand}"
                                                                     CommandParameter="{Binding $parent[ItemsControl].DataContext}"
                                                                     >
-                                                                <materialIcons:MaterialIcon Kind="SetSplit" IconSize="16" />
+                                                                <materialIcons:MaterialIcon Kind="SetSplit" IconSize="18" />
                                                             </Button>
                                                         </StackPanel>
                                                     </Grid>

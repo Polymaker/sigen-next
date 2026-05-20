@@ -63,7 +63,7 @@ namespace SiGen.UI.Controls
         {
             AddHandler(GotFocusEvent, OnGotFocus, RoutingStrategies.Tunnel);
             AddHandler(LostFocusEvent, OnLostFocus, RoutingStrategies.Bubble);
-            //Watermark = "Enter measurement"; // Optional: set a watermark 
+            //PlaceholderText = "Enter measurement"; // Optional: set a watermark 
             
         }
 

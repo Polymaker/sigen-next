@@ -9,11 +9,11 @@ using System.Diagnostics;
 
 namespace SiGen.Views;
 
-public partial class DesktopMainView : UserControl
+public partial class MainView : UserControl
 {
-    public ViewModels.DesktopMainViewModel? ViewModel => DataContext as ViewModels.DesktopMainViewModel;
+    public ViewModels.MainViewModel? ViewModel => DataContext as ViewModels.MainViewModel;
 
-    public DesktopMainView()
+    public MainView()
     {
         InitializeComponent();
         DocumentsTabControl.TabReordered += DocumentsTabControl_TabReordered;

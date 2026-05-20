@@ -67,7 +67,7 @@
 			<TextBlock Text="{x:Static lang:Resources.HomePageView_RecentFilesLabel}"  Margin="0,4"
 					   FontSize="15" Foreground="{DynamicResource SystemAccentColor}" FontWeight="DemiBold" />
 
-			<TextBox Watermark="{x:Static lang:Resources.HomePageView_SearchPlaceHolder}" Text="{Binding SearchText, Mode=TwoWay}" Margin="0,4" />
+			<TextBox PlaceholderText="{x:Static lang:Resources.HomePageView_SearchPlaceHolder}" Text="{Binding SearchText, Mode=TwoWay}" Margin="0,4" />
 			
 			<ListBox ItemsSource="{Binding FilteredRecentFiles}" 
 					 Margin="0,4" Background="Transparent"

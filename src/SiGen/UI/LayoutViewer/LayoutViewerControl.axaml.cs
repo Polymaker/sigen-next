@@ -135,8 +135,8 @@ public partial class LayoutViewerControl : UserControl, ILayoutViewerContext
             Children = { _centerTransform, _translateTransform }
         };
 
-        BorderContainer.AddHandler(Gestures.PinchEvent, Canvas_PinchGesture, handledEventsToo: true);
-        BorderContainer.AddHandler(Gestures.PinchEndedEvent, Canvas_PinchGestureEnded, handledEventsToo: true);
+        //BorderContainer.AddHandler(Gestures.PinchEvent, Canvas_PinchGesture, handledEventsToo: true);
+        //BorderContainer.AddHandler(Gestures.PinchEndedEvent, Canvas_PinchGestureEnded, handledEventsToo: true);
 
 
         fretNumberOverlay = new FretNumbersRenderer(this);

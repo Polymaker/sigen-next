@@ -8,106 +8,13 @@
         x:Class="SiGen.UI.Dialogs.DialogHostWindow"
         xmlns:vm="using:SiGen.ViewModels.Dialogs"
         x:DataType="vm:IDialogViewModel"
-        
-        CanResize="False"
-        SystemDecorations="None"
+        CanMinimize="False"
+        CanMaximize="False"
         
         Title="{Binding Title}">
     <Window.DataContext>
         <vm:MockDialogViewModel />
     </Window.DataContext>
 
-    <Grid >
-        <Grid  RowDefinitions="Auto,*">
-            
-
-            <Grid x:Name="CustomTitleBar"
-                  Grid.Row="0" 
-                  Background="{DynamicResource SystemAccentColor}"
-                  IsVisible="{Binding ShowTitleBar}"
-                  ColumnDefinitions="*, Auto"
-                  PointerPressed="CustomTitleBar_OnPointerPressed">
-                <TextBlock Text="{Binding Title}"
-                           Foreground="{DynamicResource AccentButtonForeground}"
-                           VerticalAlignment="Center"
-                           Margin="10,5"/>
-
-                <Button Grid.Column="1"
-                        Content="✕"
-                        Command="{Binding CancelCommand}"
-                        Foreground="{DynamicResource AccentButtonForeground}"
-                        Background="Transparent"
-                        BorderThickness="0"/>
-            </Grid>
-
-            <ContentPresenter Grid.Row="1" Name="DialogContent" />
-
-            <Border Grid.RowSpan="2"
-                    BorderBrush="{DynamicResource SystemAccentColor}"
-                    BorderThickness="1"
-                     />
-        </Grid>
-
-        <Border Background="Transparent" IsVisible="{Binding Resizable}"
-                Height="6"
-                HorizontalAlignment="Stretch"
-                VerticalAlignment="Top"
-                Tag="North"
-                Cursor="SizeNorthSouth"
-                PointerPressed="ResizeGrip_OnPointerPressed"/>
-        <Border Background="Transparent" IsVisible="{Binding Resizable}"
-                Height="6"
-                HorizontalAlignment="Stretch"
-                VerticalAlignment="Bottom"
-                Tag="South" 
-                Cursor="SizeNorthSouth"
-                PointerPressed="ResizeGrip_OnPointerPressed"/>
-        <Border Background="Transparent" IsVisible="{Binding Resizable}"
-                Width="6"
-                HorizontalAlignment="Left"
-                VerticalAlignment="Stretch"
-                Tag="West"
-                Cursor="SizeWestEast"
-                PointerPressed="ResizeGrip_OnPointerPressed"/>
-        <Border Background="Transparent" IsVisible="{Binding Resizable}"
-                Width="6"
-                HorizontalAlignment="Right"
-                VerticalAlignment="Stretch"
-                Tag="East"
-                Cursor="SizeWestEast"
-                PointerPressed="ResizeGrip_OnPointerPressed"/>
-
-        <Border Background="Transparent" IsVisible="{Binding Resizable}"
-                Width="10"
-                Height="10"
-                HorizontalAlignment="Left"
-                VerticalAlignment="Top"
-                Tag="NorthWest"
-                Cursor="TopLeftCorner"
-                PointerPressed="ResizeGrip_OnPointerPressed"/>
-        <Border Background="Transparent" IsVisible="{Binding Resizable}"
-                Width="4"
-                Height="4"
-                HorizontalAlignment="Right"
-                VerticalAlignment="Top"
-                Tag="NorthEast"
-                Cursor="TopRightCorner"
-                PointerPressed="ResizeGrip_OnPointerPressed"/>
-        <Border Background="Transparent" IsVisible="{Binding Resizable}"
-                Width="10"
-                Height="10"
-                HorizontalAlignment="Left"
-                VerticalAlignment="Bottom"
-                Tag="SouthWest"
-                Cursor="BottomLeftCorner"
-                PointerPressed="ResizeGrip_OnPointerPressed"/>
-        <Border Background="Transparent" IsVisible="{Binding Resizable}"
-                Width="10"
-                Height="10"
-                HorizontalAlignment="Right"
-                VerticalAlignment="Bottom"
-                Tag="SouthEast"
-                Cursor="BottomRightCorner"
-                PointerPressed="ResizeGrip_OnPointerPressed"/>
-    </Grid>
+    <ContentPresenter Name="DialogContent" />
 </Window>

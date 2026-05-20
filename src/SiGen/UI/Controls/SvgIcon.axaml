@@ -24,7 +24,7 @@
     <Setter Property="Template">
       <ControlTemplate>
 		  <svg:Svg x:Name="PART_SvgElement" Path="{TemplateBinding SvgImage}" Css="{TemplateBinding IconCss}" 
-			   Width="{TemplateBinding Width}" Height="{TemplateBinding Height}" />
+			   Width="{TemplateBinding Width}" Height="{TemplateBinding Height}" IsHitTestVisible="False" />
       </ControlTemplate>
     </Setter>
   </ControlTheme>

@@ -3,9 +3,9 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d" d:DesignWidth="1000" d:DesignHeight="800"
-             x:Class="SiGen.Views.DesktopMainView"
+             x:Class="SiGen.Views.MainView"
              xmlns:vm="clr-namespace:SiGen.ViewModels"
-             x:DataType="vm:DesktopMainViewModel"
+             x:DataType="vm:MainViewModel"
              xmlns:conv="clr-namespace:SiGen.Converters;assembly=SiGen"
              xmlns:views="clr-namespace:SiGen.Views"
              xmlns:ctrl="using:SiGen.UI.Controls"
@@ -14,7 +14,6 @@
              xmlns:settings="using:SiGen.Settings"
              xmlns:lang="using:SiGen.Lang"
              xmlns:export="using:SiGen.Export"
-             Name="MainView"
              >
     <UserControl.Resources>
 
@@ -57,13 +56,13 @@
                     <MenuItem Header="{x:Static lang:Resources.Menu_File_Open}"
                               Command="{Binding OpenCommand}" InputGesture="Ctrl+O" >
                         <MenuItem.Icon>
-                            <materialIcons:MaterialIcon Kind="FolderOpen" />
+                            <materialIcons:MaterialIcon Kind="FolderOpen" IconSize="16" />
                         </MenuItem.Icon>
                     </MenuItem>
                     <MenuItem Header="{x:Static lang:Resources.Menu_File_HomePage}"
                               Command="{Binding OpenHomeCommand}" InputGesture="Ctrl+H">
                         <MenuItem.Icon>
-                            <materialIcons:MaterialIcon Kind="Home" />
+                            <materialIcons:MaterialIcon Kind="Home" IconSize="16" />
                         </MenuItem.Icon>
                     </MenuItem>
 
@@ -75,13 +74,13 @@
                     <Separator/>
                     <MenuItem Header="{x:Static lang:Resources.Menu_File_Save}" Command="{Binding SaveCommand}" InputGesture="Ctrl+S">
                         <MenuItem.Icon>
-                            <materialIcons:MaterialIcon Kind="ContentSave" />
+                            <materialIcons:MaterialIcon Kind="ContentSave" IconSize="16"  />
                         </MenuItem.Icon>
                     </MenuItem>
                     <MenuItem Header="{x:Static lang:Resources.Menu_File_SaveAs}"
                               Command="{Binding SaveAsCommand}" InputGesture="Ctrl+Shift+S">
                         <MenuItem.Icon>
-                            <materialIcons:MaterialIcon Kind="ContentSaveMove" />
+                            <materialIcons:MaterialIcon Kind="ContentSaveMove" IconSize="16" />
                         </MenuItem.Icon>
                     </MenuItem>
 
@@ -105,20 +104,20 @@
                         </MenuItem.ItemTemplate>
                         <MenuItem.Icon>
                             <!--<materialIcons:MaterialIcon Kind="History" />-->
-                            <materialIcons:MaterialIcon Kind="FileClock" />
+                            <materialIcons:MaterialIcon Kind="FileClock" IconSize="16" />
                         </MenuItem.Icon>
                     </MenuItem>
 
                     <Separator/>
                     <MenuItem Header="{x:Static lang:Resources.Menu_File_Settings}" Command="{Binding ShowSettingsCommand}" InputGesture="Ctrl+,">
                         <MenuItem.Icon>
-                            <materialIcons:MaterialIcon Kind="Cog" />
+                            <materialIcons:MaterialIcon Kind="Cog" IconSize="16" />
                         </MenuItem.Icon>
                     </MenuItem>
                     <Separator/>
                     <MenuItem Header="{x:Static lang:Resources.Menu_File_Exit}">
                         <MenuItem.Icon>
-                            <materialIcons:MaterialIcon Kind="ExitRun" />
+                            <materialIcons:MaterialIcon Kind="ExitRun" IconSize="16" />
                         </MenuItem.Icon>
                     </MenuItem>
                 </MenuItem>
@@ -135,7 +134,7 @@
                     </MenuItem>
                     <MenuItem Header="{x:Static lang:Resources.Menu_Export_ToPdfOrPrint}" Command="{Binding ExportLayoutCommand}" CommandParameter="{x:Static export:ExportTargetFormat.Pdf}">
                         <MenuItem.Icon>
-                            <materialIcons:MaterialIcon Kind="Printer" />
+                            <materialIcons:MaterialIcon Kind="Printer" IconSize="16" />
                         </MenuItem.Icon>
                     </MenuItem>
                 </MenuItem>
@@ -157,14 +156,14 @@
                                     <TextBlock.ContextMenu>
                                         <ContextMenu>
                                             <MenuItem Header="{x:Static lang:Resources.Menu_Document_Close}"
-                                                      Command="{Binding $parent[views:DesktopMainView].DataContext.CloseDocumentCommand}"
+                                                      Command="{Binding $parent[views:MainView].DataContext.CloseDocumentCommand}"
                                                       CommandParameter="{Binding}" >
                                                 <MenuItem.Icon>
-                                                    <materialIcons:MaterialIcon Kind="WindowClose" IconSize="10" />
+                                                    <materialIcons:MaterialIcon Kind="WindowClose"  />
                                                 </MenuItem.Icon>
                                             </MenuItem>
                                             <MenuItem Header="{x:Static lang:Resources.Menu_Document_OpenInExplorer}"
-                                                      Command="{Binding $parent[views:DesktopMainView].DataContext.OpenInFileExplorerCommand}"
+                                                      Command="{Binding $parent[views:MainView].DataContext.OpenInFileExplorerCommand}"
                                                       CommandParameter="{Binding}"
                                                       IsVisible="{Binding IsDocument}" >
                                                 <MenuItem.Icon>
@@ -177,14 +176,14 @@
                                 <TextBlock Text="*" Foreground="{DynamicResource SystemAccentColor}"
                                            IsVisible="{Binding HasUnsavedChanges, Converter={StaticResource EqualsConverter}, ConverterParameter=True}" />
                                 <Button Classes="CloseButton"
-                                        Command="{Binding $parent[views:DesktopMainView].DataContext.CloseDocumentCommand}"
+                                        Command="{Binding $parent[views:MainView].DataContext.CloseDocumentCommand}"
                                         CommandParameter="{Binding}"
                                         Padding="0" Margin="8,0,0,4"
 
                                         Width="20" Height="20">
 
                                     <materialIcons:MaterialIcon Kind="Close"
-                                                                IconSize="8"
+                                                                IconSize="16"
                                                                 HorizontalAlignment="Center"
                                                                 VerticalAlignment="Center"/>
 

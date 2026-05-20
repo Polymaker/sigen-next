@@ -17,7 +17,7 @@ public partial class MainWindow : Window
         if (isConfirmedClosing)
             return;
 
-        DesktopMainViewModel? model = (Content as DesktopMainView)?.DataContext as DesktopMainViewModel;
+        MainViewModel? model = (Content as MainView)?.DataContext as MainViewModel;
         if (model == null)
             return;
 

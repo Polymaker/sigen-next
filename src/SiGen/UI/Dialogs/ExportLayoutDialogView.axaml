@@ -149,7 +149,7 @@
                                         <controls:MeasureTextBox  Grid.Column="1" Width="140" HorizontalAlignment="Left"
                                                                   Value="{Binding FretExtensionAmount, Mode=TwoWay}"
                                                                   IsEnabled="{Binding ExtendFrets}"
-                                                                  Watermark="-2mm, 2mm"
+                                                                  PlaceholderText="-2mm, 2mm"
                                                                   MinimumValue="-2cm" MaximumValue="2cm" />
                                     </Grid>
 
@@ -264,13 +264,13 @@
                          HorizontalAlignment="Center" Margin="3" Spacing="3">
                 <Button Width="100" IsVisible="{Binding IsExportingToPdf}" Command="{Binding PrintCommand}">
                     <StackPanel Orientation="Horizontal" Spacing="6" HorizontalAlignment="Center">
-                        <materialIcons:MaterialIcon Kind="Printer"  />
+                        <materialIcons:MaterialIcon Kind="Printer" IconSize="16"  />
                         <TextBlock Text="{x:Static lang:Resources.Common_Print}" />
                     </StackPanel>
                 </Button>
                 <Button Width="100" Command="{Binding ExportCommand}">
                     <StackPanel Orientation="Horizontal" Spacing="6" HorizontalAlignment="Center">
-                        <materialIcons:MaterialIcon Kind="Export"  />
+                        <materialIcons:MaterialIcon Kind="Export" IconSize="16"  />
                         <TextBlock Text="{x:Static lang:Resources.Common_Export}" />
                     </StackPanel>
                 </Button>
