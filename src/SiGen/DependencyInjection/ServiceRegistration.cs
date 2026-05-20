@@ -30,8 +30,8 @@ namespace SiGen.DependencyInjection
             services.AddTransient<IStringMaterialEstimationService, StringMaterialEstimationService>();
 
             services.AddSingleton<HomePageViewModel>();
-            services.AddSingleton<DesktopMainViewModel>();
-            services.AddSingleton<IDocumentManager>(sp => sp.GetRequiredService<DesktopMainViewModel>());
+            services.AddSingleton<MainViewModel>();
+            services.AddSingleton<IDocumentManager>(sp => sp.GetRequiredService<MainViewModel>());
 
             return services;
         }

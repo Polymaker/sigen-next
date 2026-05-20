@@ -47,13 +47,9 @@ public partial class App : Application
     {
         var collection = new ServiceCollection();
         collection.AddSiGenServices();
-        
 
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {
-            DisableAvaloniaDataAnnotationValidation();
-
-
             var mainWindow = new MainWindow();
             collection.AddSingleton<IDialogService, DesktopDialogService>(sp => new DesktopDialogService(mainWindow, sp));
             Services = collection.BuildServiceProvider();
@@ -61,24 +57,9 @@ public partial class App : Application
             // Load and apply user settings
             ApplyUserSettings();
 
-            mainWindow.Content = new DesktopMainView();
-            mainWindow.DataContext = Services.GetService<DesktopMainViewModel>();
+            mainWindow.Content = new MainView();
+            mainWindow.DataContext = Services.GetService<MainViewModel>();
             desktop.MainWindow = mainWindow;
-        }
-        else if (ApplicationLifetime is ISingleViewApplicationLifetime singleViewPlatform)
-        {
-            collection.AddSingleton<IDialogService, MockDialogService>();
-            Services = collection.BuildServiceProvider();
-
-            InitializeDatabase();
-            // Load and apply user settings
-            ApplyUserSettings();
-
-
-            singleViewPlatform.MainView = new MobileMainView
-            {
-                //DataContext = Services.GetService<MainViewModel>() ?? new MainViewModel()
-            };
         }
 
         base.OnFrameworkInitializationCompleted();
@@ -164,18 +145,4 @@ public partial class App : Application
         throw new InvalidOperationException("Current application is not of type App.");
     }
 
-    // Avoid duplicate validations from both Avalonia and the CommunityToolkit. 
-    // More info: https://docs.avaloniaui.net/docs/guides/development-guides/data-validation#manage-validationplugins
-    private void DisableAvaloniaDataAnnotationValidation()
-    {
-        // Get an array of plugins to remove
-        var dataValidationPluginsToRemove =
-            BindingPlugins.DataValidators.OfType<DataAnnotationsValidationPlugin>().ToArray();
-
-        // remove each entry found
-        foreach (var plugin in dataValidationPluginsToRemove)
-        {
-            BindingPlugins.DataValidators.Remove(plugin);
-        }
-    }
 }

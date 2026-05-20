@@ -1,11 +1,11 @@
-﻿using System;
+using System;
 using Avalonia;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using SiGen.DependencyInjection;
 using SiGen.Services;
 
-namespace SiGen.Desktop;
+namespace SiGen;
 
 sealed class Program
 {
@@ -15,18 +15,18 @@ sealed class Program
     [STAThread]
     public static void Main(string[] args)
     {
-        //var host = Host.CreateDefaultBuilder(args)
-        //    .ConfigureServices((context, services) =>
-        //    {
-        //        // Call the shared registration method
-        //        services.AddSiGenServices();
-                
-        //        // Register platform-specific services if needed
-        //        services.AddSingleton<IFileDialogService, AvaloniaFileDialogService>();
-        //    })
-        //    .Build();
+        var host = Host.CreateDefaultBuilder(args)
+            .ConfigureServices((context, services) =>
+            {
+                // Call the shared registration method
+                services.AddSiGenServices();
 
-        BuildAvaloniaApp(/*host*/)
+                // Register platform-specific services if needed
+                // services.AddSingleton<IFileDialogService, AvaloniaFileDialogService>();
+            })
+            .Build();
+
+        BuildAvaloniaApp(host)
             .StartWithClassicDesktopLifetime(args);
     }
 
@@ -36,7 +36,6 @@ sealed class Program
             .UsePlatformDetect()
             .WithInterFont()
             .LogToTrace();
-
 
     public static AppBuilder BuildAvaloniaApp(IHost host)
         => AppBuilder.Configure(() => new App(host.Services))

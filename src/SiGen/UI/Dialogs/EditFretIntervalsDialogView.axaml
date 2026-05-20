@@ -39,9 +39,9 @@
                                              MaximumValue="12000"
                                              TextAlignment="Center" />
                         <Button Grid.Column="1"
-                                HorizontalAlignment="Left"
+                                HorizontalAlignment="Left" Padding="3"
                                 Command="{Binding AddIntervalCommand}">
-                            <materialIcons:MaterialIcon Kind="Plus" Margin="3" />
+                            <materialIcons:MaterialIcon Kind="Plus"  IconSize="24" />
                         </Button>
                     </Grid>
 
@@ -57,11 +57,11 @@
                                                              MinimumValue="0"
                                                              MaximumValue="12000"
                                                              TextAlignment="Center" />
-                                        <Button Grid.Column="1"
+                                        <Button Grid.Column="1" Padding="3"
                                                 HorizontalAlignment="Left"
                                                 Command="{Binding $parent[UserControl].DataContext.RemoveIntervalCommand}"
                                                 CommandParameter="{Binding .}">
-                                            <materialIcons:MaterialIcon Kind="Delete" Margin="3" />
+                                            <materialIcons:MaterialIcon Kind="Delete" IconSize="24" />
                                         </Button>
                                     </Grid>
                                 </DataTemplate>
