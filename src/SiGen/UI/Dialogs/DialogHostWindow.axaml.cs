@@ -66,13 +66,13 @@ public partial class DialogHostWindow : Window
         double chromeWidth = 12;
         double chromeHeight = 4; // Account for window borders
 
-        if (viewModel.ShowTitleBar)
-        {
-            var titleBar = this.FindControl<Grid>("CustomTitleBar");
-            titleBar?.Measure(new Size(contentSize.Width, double.PositiveInfinity));
-            if (titleBar != null)
-                chromeHeight += titleBar.DesiredSize.Height;
-        }
+        //if (viewModel.ShowTitleBar)
+        //{
+        //    var titleBar = this.FindControl<Grid>("CustomTitleBar");
+        //    titleBar?.Measure(new Size(contentSize.Width, double.PositiveInfinity));
+        //    if (titleBar != null)
+        //        chromeHeight += titleBar.DesiredSize.Height;
+        //}
 
         ApplyContentConstraints(dialogControl, chromeWidth, chromeHeight);
         contentSize = new Size(contentSize.Width + chromeWidth, contentSize.Height + chromeHeight);
