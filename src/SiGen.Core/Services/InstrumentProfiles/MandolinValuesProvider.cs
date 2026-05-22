@@ -91,27 +91,28 @@ namespace SiGen.Services.InstrumentProfiles
                    .WithScaleLength(Measure.In(14))
                    .WithNutSpacing(Measure.Mm(7.5), centerAlignment: Layouts.Data.LayoutCenterAlignment.Fingerboard)
                    .WithBridgeSpacing(Measure.Mm(10.5))
+                   .WithExtension(Measure.Mm(8))
                    .AddStringCourse(c =>
                         c.WithSpacing(Measure.Mm(2))
-                        .AddString(new NoteAndOctave(NoteName.G, 3), Measure.In(0.040))
-                        .AddString(new NoteAndOctave(NoteName.G, 3), Measure.In(0.040))
+                        .AddString(s => s.WithGauge(Measure.In(0.036)).WithTuning(new NoteAndOctave(NoteName.G, 3)).WithMaterialType(StringMaterialType.BronzeWound))
+                        .AddString(s => s.WithGauge(Measure.In(0.036)).WithTuning(new NoteAndOctave(NoteName.G, 3)).WithMaterialType(StringMaterialType.BronzeWound))
                    )
                    .AddStringCourse(c =>
                         c.WithSpacing(Measure.Mm(1.75))
-                        .AddString(new NoteAndOctave(NoteName.D, 4), Measure.In(0.026))
-                        .AddString(new NoteAndOctave(NoteName.D, 4), Measure.In(0.026))
+                        .AddString(s => s.WithGauge(Measure.In(0.026)).WithTuning(new NoteAndOctave(NoteName.D, 4)).WithMaterialType(StringMaterialType.BronzeWound))
+                        .AddString(s => s.WithGauge(Measure.In(0.026)).WithTuning(new NoteAndOctave(NoteName.D, 4)).WithMaterialType(StringMaterialType.BronzeWound))
                         .WithNumberOfFrets(20)
                    )
                    .AddStringCourse(c =>
                         c.WithSpacing(Measure.Mm(1.6))
-                        .AddString(new NoteAndOctave(NoteName.A, 4), Measure.In(0.015))
-                        .AddString(new NoteAndOctave(NoteName.A, 4), Measure.In(0.015))
+                        .AddString(s => s.WithGauge(Measure.In(0.015)).WithTuning(new NoteAndOctave(NoteName.A, 4)).WithMaterialType(StringMaterialType.SteelPlain))
+                        .AddString(s => s.WithGauge(Measure.In(0.015)).WithTuning(new NoteAndOctave(NoteName.A, 4)).WithMaterialType(StringMaterialType.SteelPlain))
                         .WithNumberOfFrets(22)
                    )
                    .AddStringCourse(c =>
                         c.WithSpacing(Measure.Mm(1.5))
-                        .AddString(new NoteAndOctave(NoteName.E, 5), Measure.In(0.011))
-                        .AddString(new NoteAndOctave(NoteName.E, 5), Measure.In(0.011))
+                        .AddString(s => s.WithGauge(Measure.In(0.011)).WithTuning(new NoteAndOctave(NoteName.E, 4)).WithMaterialType(StringMaterialType.SteelPlain))
+                        .AddString(s => s.WithGauge(Measure.In(0.011)).WithTuning(new NoteAndOctave(NoteName.E, 4)).WithMaterialType(StringMaterialType.SteelPlain))
                         .WithNumberOfFrets(22)
                    )
                    ;
@@ -128,25 +129,31 @@ namespace SiGen.Services.InstrumentProfiles
                    .WithScaleLength(Measure.In(14))
                    .WithNutSpacing(Measure.Mm(7.5), centerAlignment: Layouts.Data.LayoutCenterAlignment.Fingerboard)
                    .WithBridgeSpacing(Measure.Mm(10.5))
+                   .WithExtension(Measure.Mm(8))
                    .AddSingleString(c => 
-                        c.WithGauge(Measure.In(0.050))
+                        c.WithGauge(Measure.In(0.049))
                         .WithTuning(new NoteAndOctave(NoteName.C, 3))
+                        .WithMaterialType(StringMaterialType.BronzeWound)
                    )
                    .AddSingleString(c =>
-                        c.WithGauge(Measure.In(0.040))
+                        c.WithGauge(Measure.In(0.036))
                         .WithTuning(new NoteAndOctave(NoteName.G, 3))
+                        .WithMaterialType(StringMaterialType.BronzeWound)
                    )
                    .AddSingleString(c =>
                         c.WithGauge(Measure.In(0.026))
                         .WithTuning(new NoteAndOctave(NoteName.D, 4))
+                        .WithMaterialType(StringMaterialType.BronzeWound)
                    )
                    .AddSingleString(c =>
                         c.WithGauge(Measure.In(0.015))
                         .WithTuning(new NoteAndOctave(NoteName.A, 4))
+                        .WithMaterialType(StringMaterialType.SteelPlain)
                    )
                    .AddSingleString(c =>
                         c.WithGauge(Measure.In(0.011))
                         .WithTuning(new NoteAndOctave(NoteName.E, 5))
+                        .WithMaterialType(StringMaterialType.SteelPlain)
                    )
                    ;
             return builder.Build();

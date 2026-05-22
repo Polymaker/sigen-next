@@ -39,6 +39,11 @@ namespace SiGen.Services
         /// </summary>
         Task<bool> ShowUserSettingsDialogAsync();
 
+        /// <summary>
+        /// Shows the About SiGen dialog.
+        /// </summary>
+        Task ShowAboutDialogAsync();
+
         #endregion
 
         Task ShowExportDialog(ILayoutDocument context, ExportTargetFormat? format);

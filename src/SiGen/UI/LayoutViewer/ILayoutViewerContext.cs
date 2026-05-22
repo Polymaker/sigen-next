@@ -18,6 +18,7 @@ namespace SiGen.UI.LayoutViewer
         Point Translation { get; }
         LayoutOrientation Orientation { get; }
         LayoutViewerColorScheme ColorScheme { get; }
+        LayoutViewerVisibleItems ActiveVisibilityFilters { get; }
 
         event EventHandler? ColorSchemeChanged;
 

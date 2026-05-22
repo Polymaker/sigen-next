@@ -1,5 +1,6 @@
 ﻿using Avalonia.Data.Converters;
 using SiGen.Data.Common;
+using SiGen.Export;
 using SiGen.Layouts.Configuration;
 using SiGen.Layouts.Data;
 using SiGen.Localization;
@@ -90,6 +91,17 @@ namespace SiGen.Converters
             {
                 string key = $"LayoutViewerPreset.{viewerPreset}";
                 return Lang.Resources.ResourceManager.GetString(key, Lang.Resources.Culture) ?? key;
+            }
+            else if (value is PdfPageOrientation pageOrientation)
+            {
+                string key = $"PdfPageOrientation.{pageOrientation}";
+                return Lang.Resources.ResourceManager.GetString(key, Lang.Resources.Culture) ?? key;
+            }
+            else if (value is PdfPaperSize paperSize)
+            {
+                string key = $"PdfPaperSize.{paperSize.Name}";
+                string label = Lang.Resources.ResourceManager.GetString(key, Lang.Resources.Culture) ?? paperSize.Name;
+                return $"{label} ({paperSize.Width.ToStringFormatted(useAbbreviation: true)} x {paperSize.Height.ToStringFormatted(useAbbreviation: true)})";
             }
             return value?.ToString();
         }

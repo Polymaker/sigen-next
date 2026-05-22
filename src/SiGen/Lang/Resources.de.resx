@@ -419,10 +419,7 @@
     <value>Startbund</value>
   </data>
   <data name="EditFretsDialog.UseGlobal" xml:space="preserve">
-    <value>Global verwenden</value>
-  </data>
-  <data name="EditFretsDialog.GlobalLabel" xml:space="preserve">
-    <value>Global</value>
+    <value>Globales Temperament</value>
   </data>
   <data name="EditFretsDialog.StringCountSuffix" xml:space="preserve">
     <value>Saiten</value>
@@ -518,7 +515,7 @@
     <value>Einrasten an:</value>
   </data>
   <data name="MeasureTool.Tooltip" xml:space="preserve">
-    <value>Abstände auf dem Plan messen</value>
+    <value>Klicken, um Abstände auf dem Plan zu messen</value>
   </data>
   <data name="MeasureTool.SnapFilter.Frets" xml:space="preserve">
     <value>Bünde</value>
@@ -850,5 +847,125 @@ Fehler: {0}</value>
   </data>
   <data name="ContextMenu.Convert" xml:space="preserve">
     <value>Umwandeln</value>
+  </data>
+  <data name="ExportLayoutDialog.Title" xml:space="preserve">
+    <value>Instrumentenbauplan exportieren</value>
+  </data>
+  <data name="Common.Close" xml:space="preserve">
+    <value>Schließen</value>
+  </data>
+  <data name="Menu_Help" xml:space="preserve">
+    <value>Hilfe</value>
+  </data>
+  <data name="Menu_Help_About" xml:space="preserve">
+    <value>Über SiGen</value>
+  </data>
+  <data name="AboutDialog.Title" xml:space="preserve">
+    <value>Über SiGen</value>
+  </data>
+  <data name="AboutDialog.AppName" xml:space="preserve">
+    <value>SiGen</value>
+  </data>
+  <data name="AboutDialog.Tagline" xml:space="preserve">
+    <value>Planer für Saiteninstrument-Layouts</value>
+  </data>
+  <data name="AboutDialog.Description" xml:space="preserve">
+    <value>SiGen hilft Gitarrenbauern, Herstellern und interessierten Bastlern beim Entwerfen von Griffbrettern und Instrumentenplänen mit konfigurierbaren Saiten, Bünden, Abständen und exportierbaren Vorlagen.</value>
+  </data>
+  <data name="AboutDialog.VersionLabel" xml:space="preserve">
+    <value>Version</value>
+  </data>
+  <data name="AboutDialog.RepositoryLabel" xml:space="preserve">
+    <value>Projektseite</value>
+  </data>
+  <data name="AboutDialog.LicenseLabel" xml:space="preserve">
+    <value>Lizenz</value>
+  </data>
+  <data name="AboutDialog.LicenseName" xml:space="preserve">
+    <value>MIT-Lizenz</value>
+  </data>
+  <data name="AboutDialog.HighlightsTitle" xml:space="preserve">
+    <value>Was Sie mit SiGen tun können</value>
+  </data>
+  <data name="AboutDialog.Highlight1" xml:space="preserve">
+    <value>Layouts für Gitarren, Bässe, Mandolinen, Banjos, Ukulelen und benutzerdefinierte Saiteninstrumente erstellen.</value>
+  </data>
+  <data name="AboutDialog.Highlight2" xml:space="preserve">
+    <value>Mensur, Saitenabstand, Bundanzahl, Multiscale-Geometrie und Griffbrettabmessungen anpassen.</value>
+  </data>
+  <data name="AboutDialog.Highlight3" xml:space="preserve">
+    <value>Ihre Arbeit als SVG, DXF oder PDF für Werkstattreferenzen und produktionsreife Vorlagen exportieren.</value>
+  </data>
+  <data name="AboutDialog.OpenLinkButton" xml:space="preserve">
+    <value>Öffnen</value>
+  </data>
+  <data name="VisibilityMenu.Header" xml:space="preserve">
+    <value>Anzeigen</value>
+  </data>
+  <data name="VisibilityMenu.Tooltip" xml:space="preserve">
+    <value>Sichtbarkeit</value>
+  </data>
+  <data name="VisibilityMenu.Frets" xml:space="preserve">
+    <value>Bünde</value>
+  </data>
+  <data name="VisibilityMenu.FretNumbers" xml:space="preserve">
+    <value>Bundnummern</value>
+  </data>
+  <data name="VisibilityMenu.Strings" xml:space="preserve">
+    <value>Saiten</value>
+  </data>
+  <data name="VisibilityMenu.Medians" xml:space="preserve">
+    <value>Mittellinien</value>
+  </data>
+  <data name="VisibilityMenu.Fingerboard" xml:space="preserve">
+    <value>Griffbrett</value>
+  </data>
+  <data name="VisibilityMenu.Grid" xml:space="preserve">
+    <value>Raster</value>
+  </data>
+  <data name="LayoutViewer.ResetView" xml:space="preserve">
+    <value>Einpassen</value>
+  </data>
+  <data name="AboutDialog.Copyright" xml:space="preserve">
+    <value>Copyright © 2025 James William Turner. Als Open Source unter der MIT-Lizenz veröffentlicht.</value>
+  </data>
+  <data name="PdfPageOrientation.Portrait" xml:space="preserve">
+    <value>Hochformat</value>
+  </data>
+  <data name="PdfPageOrientation.Landscape" xml:space="preserve">
+    <value>Querformat</value>
+  </data>
+  <data name="PdfPaperSize.A0" xml:space="preserve">
+    <value>A0</value>
+  </data>
+  <data name="PdfPaperSize.A1" xml:space="preserve">
+    <value>A1</value>
+  </data>
+  <data name="PdfPaperSize.A2" xml:space="preserve">
+    <value>A2</value>
+  </data>
+  <data name="PdfPaperSize.A3" xml:space="preserve">
+    <value>A3</value>
+  </data>
+  <data name="PdfPaperSize.A4" xml:space="preserve">
+    <value>A4</value>
+  </data>
+  <data name="PdfPaperSize.A5" xml:space="preserve">
+    <value>A5</value>
+  </data>
+  <data name="PdfPaperSize.B4" xml:space="preserve">
+    <value>B4</value>
+  </data>
+  <data name="PdfPaperSize.B5" xml:space="preserve">
+    <value>B5</value>
+  </data>
+  <data name="PdfPaperSize.Letter" xml:space="preserve">
+    <value>Letter</value>
+  </data>
+  <data name="PdfPaperSize.Legal" xml:space="preserve">
+    <value>Legal</value>
+  </data>
+  <data name="PdfPaperSize.Tabloid" xml:space="preserve">
+    <value>Tabloid</value>
   </data>
 </root>

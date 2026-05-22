@@ -5,6 +5,7 @@ using Avalonia.Interactivity;
 using Avalonia.Markup.Xaml;
 using SiGen.Utilities;
 using SiGen.ViewModels;
+using System;
 using System.Diagnostics;
 
 namespace SiGen.Views;
@@ -19,10 +20,19 @@ public partial class MainView : UserControl
         DocumentsTabControl.TabReordered += DocumentsTabControl_TabReordered;
     }
 
+    protected override void OnDataContextChanged(EventArgs e)
+    {
+        base.OnDataContextChanged(e);
+        if (ViewModel != null)
+        {
+            ViewModel.OpenHomePage();
+        }
+    }
+
     protected override void OnLoaded(RoutedEventArgs e)
     {
         base.OnLoaded(e);
-        ViewModel?.OpenHomePage();
+        //ViewModel?.OpenHomePage();
         if (ViewModel != null)
         {
             ViewModel.PropertyChanged += ViewModel_PropertyChanged;

@@ -217,10 +217,24 @@ namespace SiGen.ViewModels.Dialogs
 
         public async Task LoadAvailableStringSets()
         {
-            var stringSets = await dataService.GetAvailableStringSetsAsync(LayoutConfiguration.TotalNumberOfStrings, LayoutConfiguration.InstrumentType);
+            // Fetch sets that match either the number of courses OR the total number of strings
+            // This handles both mandolin (4 courses, 4 specs) and 12-string guitar (12 courses, 12 specs)
+            var setsForCourses = await dataService.GetAvailableStringSetsAsync(LayoutConfiguration.NumberOfStrings, LayoutConfiguration.InstrumentType);
+            var setsForTotal = LayoutConfiguration.NumberOfStrings != LayoutConfiguration.TotalNumberOfStrings
+                ? await dataService.GetAvailableStringSetsAsync(LayoutConfiguration.TotalNumberOfStrings, LayoutConfiguration.InstrumentType)
+                : new List<StringSet>();
+
             AvailableSets.Clear();
-            foreach (var item in stringSets)
+
+            bool allSameNumberOfStrings = setsForCourses.All(s => s.NumberOfStrings == LayoutConfiguration.TotalNumberOfStrings);
+
+            foreach (var item in setsForCourses.Concat(setsForTotal).DistinctBy(s => s.Id))
+            {
+                if (!allSameNumberOfStrings)
+                    item.Name += $" ({item.NumberOfStrings} {Lang.Resources.StringsLabel})"; // Append number of strings to name if there are sets with different string counts
                 AvailableSets.Add(item);
+            }
+                
         }
 
         public async void ApplyStringSet(StringSet? set)
@@ -228,20 +242,45 @@ namespace SiGen.ViewModels.Dialogs
             if (set == null) return;
             var orderedStrings = set.Strings.OrderBy(x => x.SortOrder).Select(x => x.String).ToList();
 
-            int globalIndex = 0;
-            for (int i = 0; i < Courses.Count; i++)
+            // Determine if this is a course-based set (mandolin) or individual string set (12-string)
+            bool isCourseBasedSet = set.NumberOfStrings == LayoutConfiguration.NumberOfStrings;
+
+            if (isCourseBasedSet)
             {
-                var course = Courses[i];
-                for (int s = 0; s < course.Strings.Count; s++)
+                // Apply one spec per course (all strings in course get same gauge) - for mandolin, etc.
+                for (int i = 0; i < Courses.Count && i < orderedStrings.Count; i++)
                 {
-                    var str = course.Strings[s];
-                    if (globalIndex < orderedStrings.Count)
+                    var course = Courses[i];
+                    var stringProp = orderedStrings[i];
+
+                    // Apply the same gauge/material to all strings in this course
+                    foreach (var str in course.Strings)
                     {
-                        var stringProp = orderedStrings[globalIndex++];
                         str.Gauge = Measuring.Measure.In(stringProp.Gauge);
                         str.MaterialType = stringProp.MaterialType;
                         str.UnitWeight = stringProp.UnitWeight;
                         str.CoreDiameter = stringProp.CoreDiameter;
+                    }
+                }
+            }
+            else
+            {
+                // Apply one spec per individual string - for 12-string guitar, etc.
+                int globalIndex = 0;
+                for (int i = 0; i < Courses.Count; i++)
+                {
+                    var course = Courses[i];
+                    for (int s = 0; s < course.Strings.Count; s++)
+                    {
+                        var str = course.Strings[s];
+                        if (globalIndex < orderedStrings.Count)
+                        {
+                            var stringProp = orderedStrings[globalIndex++];
+                            str.Gauge = Measuring.Measure.In(stringProp.Gauge);
+                            str.MaterialType = stringProp.MaterialType;
+                            str.UnitWeight = stringProp.UnitWeight;
+                            str.CoreDiameter = stringProp.CoreDiameter;
+                        }
                     }
                 }
             }

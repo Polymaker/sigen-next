@@ -1,0 +1,96 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:SiGen.ViewModels.Dialogs"
+             xmlns:materialIcons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+             xmlns:lang="using:SiGen.Lang"
+             mc:Ignorable="d"
+             d:DesignWidth="650"
+             d:DesignHeight="520"
+             MinWidth="480" MaxWidth="650"
+             MinHeight="420"
+             x:Class="SiGen.UI.Dialogs.AboutDialogView"
+             x:DataType="vm:AboutDialogViewModel">
+    <UserControl.DataContext>
+        <vm:AboutDialogViewModel />
+    </UserControl.DataContext>
+
+    <Grid RowDefinitions="*,Auto" Margin="16">
+        <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Auto">
+            <StackPanel Spacing="16">
+                <Border CornerRadius="10" Padding="16" Background="{DynamicResource PanelBackgroundBrush}">
+                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="16">
+                        <Image Width="72"
+                               Height="72"
+                               Stretch="Uniform"
+                               Source="avares://SiGen/Assets/SiGen.ico"
+                               VerticalAlignment="Top" />
+
+                        <StackPanel Grid.Column="1" Spacing="2">
+                            <TextBlock Text="{Binding ApplicationName}" FontSize="26" FontWeight="Bold" />
+                            <TextBlock Text="{Binding Tagline}" FontSize="14" Opacity="0.85" TextWrapping="Wrap" />
+                            <TextBlock Text="{Binding Description}" Margin="0,8,0,0" TextWrapping="Wrap" />
+                        </StackPanel>
+                    </Grid>
+                </Border>
+
+                <Border CornerRadius="10" Padding="16" Background="{DynamicResource PanelBackgroundBrush}">
+                    <Grid RowDefinitions="Auto,Auto,Auto" ColumnDefinitions="Auto,*" RowSpacing="8" ColumnSpacing="12">
+                        <TextBlock Text="{Binding VersionLabel}" FontWeight="SemiBold" />
+                        <TextBlock Grid.Column="1" Text="{Binding Version}" />
+
+                        <TextBlock Grid.Row="1" Text="{Binding RepositoryLabel}" FontWeight="SemiBold" VerticalAlignment="Center" />
+                      <!--  <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" Spacing="8">
+                            <TextBlock Text="{Binding RepositoryUrl}" VerticalAlignment="Center" TextWrapping="Wrap" />
+                            <Button Command="{Binding OpenRepositoryCommand}" Padding="10,4" Margin="0,-6">
+                                <StackPanel Orientation="Horizontal" Spacing="6">
+                                    <materialIcons:MaterialIcon Kind="OpenInNew" IconSize="16" />
+                                    <TextBlock Text="{x:Static lang:Resources.AboutDialog_OpenLinkButton}" />
+                                </StackPanel>
+                            </Button>
+                        </StackPanel>-->
+
+                        <HyperlinkButton  Grid.Row="1" Grid.Column="1" NavigateUri="{Binding RepositoryUrl}">
+                             <StackPanel Orientation="Horizontal" Spacing="6">
+                                    
+                                    <TextBlock Text="{Binding RepositoryUrl}" />
+                                 <materialIcons:MaterialIcon Kind="Github" IconSize="16" />
+                                 <!--<Path Fill="Red" Data="M12,2A10,10 0 0,0 2,12C2,16.42 4.87,20.17 8.84,21.5C9.34,21.58 9.5,21.27 9.5,21C9.5,20.77 9.5,20.14 9.5,19.31C6.73,19.91 6.14,17.97 6.14,17.97C5.68,16.81 5.03,16.5 5.03,16.5C4.12,15.88 5.1,15.9 5.1,15.9C6.1,15.97 6.63,16.93 6.63,16.93C7.5,18.45 8.97,18 9.54,17.76C9.63,17.11 9.89,16.67 10.17,16.42C7.95,16.17 5.62,15.31 5.62,11.5C5.62,10.39 6,9.5 6.65,8.79C6.55,8.54 6.2,7.5 6.75,6.15C6.75,6.15 7.59,5.88 9.5,7.17C10.29,6.95 11.15,6.84 12,6.84C12.85,6.84 13.71,6.95 14.5,7.17C16.41,5.88 17.25,6.15 17.25,6.15C17.8,7.5 17.45,8.54 17.35,8.79C18,9.5 18.38,10.39 18.38,11.5C18.38,15.32 16.04,16.16 13.81,16.41C14.17,16.72 14.5,17.33 14.5,18.26C14.5,19.6 14.5,20.68 14.5,21C14.5,21.27 14.66,21.59 15.17,21.5C19.14,20.16 22,16.42 22,12A10,10 0 0,0 12,2Z"/>-->
+                                </StackPanel>
+                        </HyperlinkButton>
+
+                        <TextBlock Grid.Row="2" Text="{Binding LicenseLabel}" FontWeight="SemiBold" />
+                        <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding LicenseName}" />
+                    </Grid>
+                </Border>
+
+                <Border CornerRadius="10" Padding="16" Background="{DynamicResource PanelBackgroundBrush}">
+                    <StackPanel Spacing="10">
+                        <TextBlock Text="{Binding HighlightsTitle}" FontSize="15" FontWeight="SemiBold" />
+                        <StackPanel Spacing="8">
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <TextBlock Text="•" FontSize="16" />
+                                <TextBlock Text="{Binding Highlight1}" TextWrapping="Wrap" MaxWidth="500" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <TextBlock Text="•" FontSize="16" />
+                                <TextBlock Text="{Binding Highlight2}" TextWrapping="Wrap" MaxWidth="500" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <TextBlock Text="•" FontSize="16" />
+                                <TextBlock Text="{Binding Highlight3}" TextWrapping="Wrap" MaxWidth="500" />
+                            </StackPanel>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+
+                <TextBlock Text="{Binding Copyright}" Opacity="0.75" TextWrapping="Wrap" />
+            </StackPanel>
+        </ScrollViewer>
+
+        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,16,0,0">
+            <Button Content="{Binding CloseButtonText}" Command="{Binding CloseCommand}" MinWidth="96" HorizontalContentAlignment="Center" />
+        </StackPanel>
+    </Grid>
+</UserControl>

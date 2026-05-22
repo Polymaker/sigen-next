@@ -19,7 +19,7 @@ public partial class EditFretsDialogView : UserControl
         base.OnLoaded(e);
         Task.Run(async () =>
         {
-            await Task.Delay(100);
+            await Task.Delay(10);
             await Avalonia.Threading.Dispatcher.UIThread.InvokeAsync(() =>
             {
                 OverrideInfoText.IsVisible = true;

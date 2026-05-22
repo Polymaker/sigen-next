@@ -93,7 +93,7 @@ namespace SiGen.UI.Controls
             var cmMenuItem = new MenuItem { Header = "cm", Tag = LengthUnit.Cm };
             cmMenuItem.Click += (s, e) => ConvertToUnit(LengthUnit.Cm);
             
-            var inMenuItem = new MenuItem { Header = "in", Tag = LengthUnit.In };
+            var inMenuItem = new MenuItem { Header = SiGen.Localization.Texts.InchAbbreviation, Tag = LengthUnit.In };
             inMenuItem.Click += (s, e) => ConvertToUnit(LengthUnit.In);
             
             convertMenuItem.Items.Add(mmMenuItem);
@@ -195,7 +195,7 @@ namespace SiGen.UI.Controls
             }
         }
 
-        private void ApplyValueToText()
+        public void ApplyValueToText()
         {
             if (Value is not null)
                 Text = Value.Value.ToStringFormatted();

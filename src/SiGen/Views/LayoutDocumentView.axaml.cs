@@ -24,8 +24,9 @@ public partial class LayoutDocumentView : UserControl
         var settingsService = App.GetService<SiGen.Services.ISettingsService>();
         currentColorScheme = settingsService.Settings.LayoutViewerColorScheme.ToColorScheme();
         settingsService.ViewerThemeChanged += SettingsService_ViewerThemeChanged;
-
+        settingsService.UnitSystemChanged += SettingsService_UnitSystemChanged;
         Viewer?.ColorScheme = currentColorScheme;
+        Viewer?.UnitMode = settingsService.Settings.PreferredUnits;
     }
 
     protected override void OnDataContextChanged(EventArgs e)
@@ -49,6 +50,16 @@ public partial class LayoutDocumentView : UserControl
         Dispatcher.UIThread.Post(() =>
         {
             Viewer.ColorScheme = currentColorScheme;
+        });
+    }
+
+    private void SettingsService_UnitSystemChanged(object? sender, Measuring.UnitSystem unitSystem)
+    {
+        if (Viewer == null) return;
+
+        Dispatcher.UIThread.Post(() =>
+        {
+            Viewer.UnitMode = unitSystem;
         });
     }
 
@@ -79,6 +90,7 @@ public partial class LayoutDocumentView : UserControl
             previousModel.LayoutTrans = Viewer.Translation;
             previousModel.LayoutOrientation = Viewer.Orientation;
             previousModel.ActiveSnapFilters = Viewer.ActiveSnapFilters;
+            previousModel.ActiveVisibilityFilters = Viewer.ActiveVisibilityFilters;
             previousModel.IsMeasureToolEnabled = Viewer.IsMeasureToolActive;
             previousModel.LayoutChanged -= DocumentViewModel_LayoutChanged;
             previousModel = null;
@@ -91,6 +103,7 @@ public partial class LayoutDocumentView : UserControl
             Viewer.Orientation = documentViewModel.LayoutOrientation;
             Viewer.Zoom = documentViewModel.LayoutZoom;
             Viewer.ActiveSnapFilters = documentViewModel.ActiveSnapFilters;
+            Viewer.ActiveVisibilityFilters = documentViewModel.ActiveVisibilityFilters;
             Viewer.IsMeasureToolActive = documentViewModel.IsMeasureToolEnabled;
             Viewer.Layout = documentViewModel.Layout;
             

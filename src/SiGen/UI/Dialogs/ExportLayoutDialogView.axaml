@@ -58,7 +58,14 @@
                         <Setter Property="FontSize" Value="16" />
                     </Style>
                 </TabControl.Styles>
-                <TabItem Header="{x:Static lang:Resources.ExportLayoutDialog_PdfConfigurationTab}" IsVisible="{Binding IsExportingToPdf}">
+                <TabItem IsVisible="{Binding IsExportingToPdf}">
+                    <TabItem.Header>
+                        <StackPanel Orientation="Horizontal" Spacing="4">
+                            <materialIcons:MaterialIcon Kind="PrinterPosCog" IconSize="18" />
+                            <TextBlock Text="{x:Static lang:Resources.ExportLayoutDialog_PdfConfigurationTab}"/>
+                        </StackPanel>
+                    </TabItem.Header>
+                    
                     <ScrollViewer MinWidth="400">
                         <StackPanel>
                             <Border Background="{DynamicResource ExpanderContentBackground}"
@@ -73,7 +80,7 @@
                                                       ItemsSource="{Binding AvailablePaperSizes}">
                                                 <ComboBox.ItemTemplate>
                                                     <DataTemplate>
-                                                        <TextBlock Text="{Binding DisplayDescription}" />
+                                                        <TextBlock Text="{Binding Converter={StaticResource EnumValueConverter}}" />
                                                     </DataTemplate>
                                                 </ComboBox.ItemTemplate>
                                             </ComboBox>
@@ -82,29 +89,35 @@
                                     <controls:CustomFormField Label="{x:Static lang:Resources.ExportLayoutDialog_Orientation}" LabelWidth="120">
                                         <controls:CustomFormField.Input>
                                             <ComboBox Width="150" SelectedValue="{Binding SelectedPageOrientation}"
-                                                      ItemsSource="{Binding PageOrientations}"/>
+                                                      ItemsSource="{Binding PageOrientations}">
+                                                <ComboBox.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <TextBlock Text="{Binding Converter={StaticResource EnumValueConverter}}" />
+                                                    </DataTemplate>
+                                                </ComboBox.ItemTemplate>
+                                            </ComboBox>
                                         </controls:CustomFormField.Input>
                                     </controls:CustomFormField>
                                     <controls:CustomFormField Label="{x:Static lang:Resources.ExportLayoutDialog_Margins}" LabelWidth="120">
                                         <controls:CustomFormField.Input>
-                                            <Grid ColumnDefinitions="*,*,*,*" RowDefinitions="*,Auto"
-                                                  MaxWidth="350" HorizontalAlignment="Left"
+                                            <Grid ColumnDefinitions="*,*,*,*" RowDefinitions="*,Auto" 
+                                                  MaxWidth="400" HorizontalAlignment="Left"
                                                   RowSpacing="3" ColumnSpacing="4">
                                                 <controls:MeasureTextBox Grid.Column="0" Grid.Row="0"
-                                                                          FontSize="12" MinHeight="0" VerticalAlignment="Center" MinimumValue="0mm" 
-                                                                          Value="{Binding PdfMarginLeft, Mode=TwoWay}" />
+                                                                          FontSize="14" MinHeight="0" VerticalAlignment="Center" MinimumValue="0mm" 
+                                                                          Value="{Binding PdfMarginLeft, Mode=TwoWay}" Padding="6,4" />
                                                 <TextBlock Text="{x:Static lang:Resources.ExportLayoutDialog_MarginLeft}" Grid.Column="0" Grid.Row="1" HorizontalAlignment="Center" FontSize="12" />
 
-                                                <controls:MeasureTextBox Grid.Column="1" Grid.Row="0" FontSize="12" MinHeight="0" VerticalAlignment="Center" MinimumValue="0mm" 
-                                                                          Value="{Binding PdfMarginTop, Mode=TwoWay}" />
+                                                <controls:MeasureTextBox Grid.Column="1" Grid.Row="0" FontSize="14" MinHeight="0" VerticalAlignment="Center" MinimumValue="0mm" 
+                                                                          Value="{Binding PdfMarginTop, Mode=TwoWay}" Padding="6,4" />
                                                 <TextBlock Text="{x:Static lang:Resources.ExportLayoutDialog_MarginTop}" Grid.Column="1" Grid.Row="1" HorizontalAlignment="Center" FontSize="12" />
 
-                                                <controls:MeasureTextBox Grid.Column="2" Grid.Row="0" FontSize="12" MinHeight="0" VerticalAlignment="Center" MinimumValue="0mm" 
-                                                                          Value="{Binding PdfMarginRight, Mode=TwoWay}" />
+                                                <controls:MeasureTextBox Grid.Column="2" Grid.Row="0" FontSize="14" MinHeight="0" VerticalAlignment="Center" MinimumValue="0mm" 
+                                                                          Value="{Binding PdfMarginRight, Mode=TwoWay}" Padding="6,4" />
                                                 <TextBlock Text="{x:Static lang:Resources.ExportLayoutDialog_MarginRight}" Grid.Column="2" Grid.Row="1" HorizontalAlignment="Center" FontSize="12" />
 
-                                                <controls:MeasureTextBox Grid.Column="3" Grid.Row="0" FontSize="12" MinHeight="0" VerticalAlignment="Center" MinimumValue="0mm" 
-                                                                          Value="{Binding PdfMarginBottom, Mode=TwoWay}" />
+                                                <controls:MeasureTextBox Grid.Column="3" Grid.Row="0" FontSize="14" MinHeight="0" VerticalAlignment="Center" MinimumValue="0mm" 
+                                                                          Value="{Binding PdfMarginBottom, Mode=TwoWay}" Padding="6,4" />
                                                 <TextBlock Text="{x:Static lang:Resources.ExportLayoutDialog_MarginBottom}" Grid.Column="3" Grid.Row="1" HorizontalAlignment="Center" FontSize="12" />
                                             </Grid>
                                         </controls:CustomFormField.Input>
@@ -122,7 +135,14 @@
                     </ScrollViewer>
                 </TabItem>
 
-                <TabItem Header="{x:Static lang:Resources.ExportLayoutDialog_ExportOptionsTab}"  >
+                <TabItem>
+                    <TabItem.Header>
+                        <StackPanel Orientation="Horizontal" Spacing="4">
+                            <materialIcons:MaterialIcon Kind="Tune" IconSize="18" />
+                            <TextBlock Text="{x:Static lang:Resources.ExportLayoutDialog_ExportOptionsTab}"/>
+                        </StackPanel>
+                    </TabItem.Header>
+                    
                     <ScrollViewer MinWidth="400">
                         <StackPanel Spacing="3">
                             <Expander x:Name="FretsExpander" HorizontalAlignment="Stretch" IsExpanded="True">

@@ -64,6 +64,9 @@ namespace SiGen.ViewModels
         [ObservableProperty]
         private bool isMeasureToolEnabled;
 
+        [ObservableProperty]
+        private LayoutViewerVisibleItems activeVisibilityFilters = LayoutViewerVisibleItems.All;
+
         public bool IsZoomToFit { get; set; } = true;
 
         #endregion
@@ -131,17 +134,11 @@ namespace SiGen.ViewModels
             return PanelViewModels.OfType<T>().FirstOrDefault();
         }
 
-
         partial void OnConfigurationChanged(InstrumentLayoutConfiguration value)
         {
             if (IsBindingPanels) return;
             RebuildLayout();
         }
-
-        //partial void OnLayoutZoomChanging(double oldValue, double newValue)
-        //{
-        //    Trace.WriteLine($"{Title} zoom changing from {oldValue} to {newValue}");
-        //}
 
         private void RebuildLayout()
         {

@@ -26,9 +26,20 @@ namespace SiGen.Export
 
     public record PdfPaperSize(string Name, Measure Width, Measure Height)
     {
+        // ISO A-series
+        public static PdfPaperSize A0 => new("A0", Measure.Mm(841), Measure.Mm(1189));
+        public static PdfPaperSize A1 => new("A1", Measure.Mm(594), Measure.Mm(841));
+        public static PdfPaperSize A2 => new("A2", Measure.Mm(420), Measure.Mm(594));
+        public static PdfPaperSize A3 => new("A3", Measure.Mm(297), Measure.Mm(420));
         public static PdfPaperSize A4 => new("A4", Measure.Mm(210), Measure.Mm(297));
+        public static PdfPaperSize A5 => new("A5", Measure.Mm(148), Measure.Mm(210));
+        // ISO B-series
+        public static PdfPaperSize B4 => new("B4", Measure.Mm(250), Measure.Mm(353));
+        public static PdfPaperSize B5 => new("B5", Measure.Mm(176), Measure.Mm(250));
+        // North American
         public static PdfPaperSize Letter => new("Letter", Measure.In(8.5), Measure.In(11));
         public static PdfPaperSize Legal => new("Legal", Measure.In(8.5), Measure.In(14));
+        public static PdfPaperSize Tabloid => new("Tabloid", Measure.In(11), Measure.In(17));
 
         public string DisplayDescription => $"{Name} ({Width} x {Height})";
     }

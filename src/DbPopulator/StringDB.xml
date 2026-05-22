@@ -260,7 +260,7 @@
       <String Name="PL013" Order="7" />
       <String Name="PL010" Order="8" />
     </StringSet>
-    <StringSet Name="Regular Light" Brand="D'Addario" InstrumentType="ElectricGuitar" NumberOfStrings="12">
+    <StringSet Name="Regular Light" Brand="D'Addario" InstrumentType="AcousticGuitar" NumberOfStrings="12">
       <String Name="NW046" Order="1" />
       <String Name="NW026" Order="2" />
       <String Name="NW036" Order="3" />
@@ -321,12 +321,6 @@
       <String Name="XLB070" Order="4" />
       <String Name="XLB050" Order="5" />
     </StringSet>
-    <StringSet Name="Regular Light" Brand="D'Addario" InstrumentType="AcousticBass" NumberOfStrings="4">
-      <String Name="PBB100" Order="1" />
-      <String Name="PBB080" Order="2" />
-      <String Name="PBB065" Order="3" />
-      <String Name="PBB045" Order="4" />
-    </StringSet>
     <StringSet Name="Regular" Brand="D'Addario" InstrumentType="AcousticBass" NumberOfStrings="4">
       <String Name="PBB100" Order="1" />
       <String Name="PBB080" Order="2" />
@@ -339,6 +333,64 @@
       <String Name="PBB080" Order="3" />
       <String Name="PBB065" Order="4" />
       <String Name="PBB045" Order="5" />
+    </StringSet>
+    <StringSet Name="Medium" Brand="D'Addario" InstrumentType="Mandolin" NumberOfStrings="4">
+      <String Name="PB036" Order="1" />
+      <String Name="PB026" Order="2" />
+      <String Name="PL015" Order="3" />
+      <String Name="PL011" Order="4" />
+    </StringSet>
+    <StringSet Name="Light" Brand="D'Addario" InstrumentType="Mandolin" NumberOfStrings="4">
+      <String Name="PB032" Order="1" />
+      <String Name="PB024" Order="2" />
+      <String Name="PL013" Order="3" />
+      <String Name="PL010" Order="4" />
+    </StringSet>
+    <StringSet Name="Medium" Brand="D'Addario" InstrumentType="Mandolin" NumberOfStrings="5">
+      <String Name="PB049" Order="1" />
+      <String Name="PB036" Order="2" />
+      <String Name="PB026" Order="3" />
+      <String Name="PL015" Order="4" />
+      <String Name="PL011" Order="5" />
+    </StringSet>
+    <StringSet Name="Light" Brand="D'Addario" InstrumentType="Mandolin" NumberOfStrings="5">
+      <String Name="PB045" Order="1" />
+      <String Name="PB032" Order="2" />
+      <String Name="PB024" Order="3" />
+      <String Name="PL013" Order="4" />
+      <String Name="PL010" Order="5" />
+    </StringSet>
+    <StringSet Name="Medium" Brand="D'Addario" InstrumentType="Banjo" NumberOfStrings="5">
+      <String Name="PL010" Order="1" />
+      <String Name="PB024" Order="2" />
+      <String Name="PL016" Order="3" />
+      <String Name="PL012" Order="4" />
+      <String Name="PL010" Order="5" />
+    </StringSet>
+    <StringSet Name="Light" Brand="D'Addario" InstrumentType="Banjo" NumberOfStrings="5">
+      <String Name="PL009" Order="1" />
+      <String Name="PB022" Order="2" />
+      <String Name="PL015" Order="3" />
+      <String Name="PL011" Order="4" />
+      <String Name="PL009" Order="5" />
+    </StringSet>
+    <StringSet Name="Medium" Brand="D'Addario" InstrumentType="Banjo" NumberOfStrings="4">
+      <String Name="PB036" Order="1" />
+      <String Name="PB026" Order="2" />
+      <String Name="PL016" Order="3" />
+      <String Name="PL010" Order="4" />
+    </StringSet>
+    <StringSet Name="Light" Brand="D'Addario" InstrumentType="Banjo" NumberOfStrings="4">
+      <String Name="PB032" Order="1" />
+      <String Name="PB024" Order="2" />
+      <String Name="PL015" Order="3" />
+      <String Name="PL009" Order="4" />
+    </StringSet>
+    <StringSet Name="Standard" Brand="D'Addario" InstrumentType="Ukulele" NumberOfStrings="4">
+      <String Name="J4501" Order="1" />
+      <String Name="J4502" Order="2" />
+      <String Name="J4503" Order="3" />
+      <String Name="J4501" Order="4" />
     </StringSet>
   </StringSets>
 </StringsDB>

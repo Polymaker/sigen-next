@@ -33,14 +33,15 @@
                 <Grid RowDefinitions="Auto,Auto,*,Auto" Margin="4">
                     <Grid Grid.Row="0" ColumnDefinitions="120,*" ColumnSpacing="8" Margin="4">
                         <ctrl:NumericTextBox Grid.Column="0"
-                                             Value="{Binding NewIntervalCents, Mode=TwoWay}"
+                                             x:Name="NewIntervalTextBox"
                                              AllowEmpty="True"
                                              MinimumValue="0"
                                              MaximumValue="12000"
                                              TextAlignment="Center" />
                         <Button Grid.Column="1"
+                                x:Name="AddButton"
                                 HorizontalAlignment="Left" Padding="3"
-                                Command="{Binding AddIntervalCommand}">
+                                Click="OnAddButtonClick">
                             <materialIcons:MaterialIcon Kind="Plus"  IconSize="24" />
                         </Button>
                     </Grid>
@@ -53,7 +54,7 @@
                                 <DataTemplate x:DataType="vm:FretIntervalValueModel">
                                     <Grid ColumnDefinitions="120,*" Margin="0,0,0,6" ColumnSpacing="8">
                                         <ctrl:NumericTextBox Value="{Binding Cents, Mode=TwoWay}"
-                                                             AllowEmpty="True"
+                                                             AllowEmpty="False"
                                                              MinimumValue="0"
                                                              MaximumValue="12000"
                                                              TextAlignment="Center" />

@@ -61,6 +61,132 @@ namespace SiGen.Lang {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to SiGen.
+        /// </summary>
+        public static string AboutDialog_AppName {
+            get {
+                return ResourceManager.GetString("AboutDialog.AppName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Copyright © 2025 James William Turner. Released as open source under the MIT License..
+        /// </summary>
+        public static string AboutDialog_Copyright {
+            get {
+                return ResourceManager.GetString("AboutDialog.Copyright", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SiGen helps luthiers, makers, and curious builders design fretboards and instrument layouts with configurable strings, frets, spacing, and export-ready plans..
+        /// </summary>
+        public static string AboutDialog_Description {
+            get {
+                return ResourceManager.GetString("AboutDialog.Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create layouts for guitars, basses, mandolins, banjos, ukuleles, and custom stringed instruments..
+        /// </summary>
+        public static string AboutDialog_Highlight1 {
+            get {
+                return ResourceManager.GetString("AboutDialog.Highlight1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Adjust scale length, string spacing, fret count, multiscale geometry, and fingerboard dimensions..
+        /// </summary>
+        public static string AboutDialog_Highlight2 {
+            get {
+                return ResourceManager.GetString("AboutDialog.Highlight2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Export your work to SVG, DXF, or PDF for workshop references and production-ready templates..
+        /// </summary>
+        public static string AboutDialog_Highlight3 {
+            get {
+                return ResourceManager.GetString("AboutDialog.Highlight3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to What you can do with SiGen.
+        /// </summary>
+        public static string AboutDialog_HighlightsTitle {
+            get {
+                return ResourceManager.GetString("AboutDialog.HighlightsTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to License.
+        /// </summary>
+        public static string AboutDialog_LicenseLabel {
+            get {
+                return ResourceManager.GetString("AboutDialog.LicenseLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to MIT License.
+        /// </summary>
+        public static string AboutDialog_LicenseName {
+            get {
+                return ResourceManager.GetString("AboutDialog.LicenseName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open.
+        /// </summary>
+        public static string AboutDialog_OpenLinkButton {
+            get {
+                return ResourceManager.GetString("AboutDialog.OpenLinkButton", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Project page.
+        /// </summary>
+        public static string AboutDialog_RepositoryLabel {
+            get {
+                return ResourceManager.GetString("AboutDialog.RepositoryLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Stringed instrument layout designer.
+        /// </summary>
+        public static string AboutDialog_Tagline {
+            get {
+                return ResourceManager.GetString("AboutDialog.Tagline", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to About SiGen.
+        /// </summary>
+        public static string AboutDialog_Title {
+            get {
+                return ResourceManager.GetString("AboutDialog.Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Version.
+        /// </summary>
+        public static string AboutDialog_VersionLabel {
+            get {
+                return ResourceManager.GetString("AboutDialog.VersionLabel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to English.
         /// </summary>
         public static string AppLanguage_English {
@@ -147,6 +273,15 @@ namespace SiGen.Lang {
         public static string Common_Cancel {
             get {
                 return ResourceManager.GetString("Common.Cancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Close.
+        /// </summary>
+        public static string Common_Close {
+            get {
+                return ResourceManager.GetString("Common.Close", resourceCulture);
             }
         }
         
@@ -421,15 +556,6 @@ namespace SiGen.Lang {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Global.
-        /// </summary>
-        public static string EditFretsDialog_GlobalLabel {
-            get {
-                return ResourceManager.GetString("EditFretsDialog.GlobalLabel", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Global fret settings.
         /// </summary>
         public static string EditFretsDialog_GlobalSettingsHeader {
@@ -511,7 +637,7 @@ namespace SiGen.Lang {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Use global.
+        ///   Looks up a localized string similar to Global temperament.
         /// </summary>
         public static string EditFretsDialog_UseGlobal {
             get {
@@ -1069,6 +1195,15 @@ namespace SiGen.Lang {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Export instrument layout.
+        /// </summary>
+        public static string ExportLayoutDialog_Title {
+            get {
+                return ResourceManager.GetString("ExportLayoutDialog.Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Use string gauge for line thickness.
         /// </summary>
         public static string ExportLayoutDialog_UseStringGauge {
@@ -1467,6 +1602,15 @@ namespace SiGen.Lang {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Fit to View.
+        /// </summary>
+        public static string LayoutViewer_ResetView {
+            get {
+                return ResourceManager.GetString("LayoutViewer.ResetView", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Blueprint.
         /// </summary>
         public static string LayoutViewerPreset_Blueprint {
@@ -1584,7 +1728,7 @@ namespace SiGen.Lang {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Measure distances on the layout.
+        ///   Looks up a localized string similar to Click to measure distances on the layout.
         /// </summary>
         public static string MeasureTool_Tooltip {
             get {
@@ -1728,6 +1872,24 @@ namespace SiGen.Lang {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Help.
+        /// </summary>
+        public static string Menu_Help {
+            get {
+                return ResourceManager.GetString("Menu_Help", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to About SiGen.
+        /// </summary>
+        public static string Menu_Help_About {
+            get {
+                return ResourceManager.GetString("Menu_Help_About", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to New Layout.
         /// </summary>
         public static string NewDocumentName {
@@ -1791,6 +1953,123 @@ namespace SiGen.Lang {
         public static string OpenDocument_LoadError_Title {
             get {
                 return ResourceManager.GetString("OpenDocument_LoadError_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Landscape.
+        /// </summary>
+        public static string PdfPageOrientation_Landscape {
+            get {
+                return ResourceManager.GetString("PdfPageOrientation.Landscape", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Portrait.
+        /// </summary>
+        public static string PdfPageOrientation_Portrait {
+            get {
+                return ResourceManager.GetString("PdfPageOrientation.Portrait", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A0.
+        /// </summary>
+        public static string PdfPaperSize_A0 {
+            get {
+                return ResourceManager.GetString("PdfPaperSize.A0", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A1.
+        /// </summary>
+        public static string PdfPaperSize_A1 {
+            get {
+                return ResourceManager.GetString("PdfPaperSize.A1", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A2.
+        /// </summary>
+        public static string PdfPaperSize_A2 {
+            get {
+                return ResourceManager.GetString("PdfPaperSize.A2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A3.
+        /// </summary>
+        public static string PdfPaperSize_A3 {
+            get {
+                return ResourceManager.GetString("PdfPaperSize.A3", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A4.
+        /// </summary>
+        public static string PdfPaperSize_A4 {
+            get {
+                return ResourceManager.GetString("PdfPaperSize.A4", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A5.
+        /// </summary>
+        public static string PdfPaperSize_A5 {
+            get {
+                return ResourceManager.GetString("PdfPaperSize.A5", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to B4.
+        /// </summary>
+        public static string PdfPaperSize_B4 {
+            get {
+                return ResourceManager.GetString("PdfPaperSize.B4", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to B5.
+        /// </summary>
+        public static string PdfPaperSize_B5 {
+            get {
+                return ResourceManager.GetString("PdfPaperSize.B5", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Legal.
+        /// </summary>
+        public static string PdfPaperSize_Legal {
+            get {
+                return ResourceManager.GetString("PdfPaperSize.Legal", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Letter.
+        /// </summary>
+        public static string PdfPaperSize_Letter {
+            get {
+                return ResourceManager.GetString("PdfPaperSize.Letter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tabloid.
+        /// </summary>
+        public static string PdfPaperSize_Tabloid {
+            get {
+                return ResourceManager.GetString("PdfPaperSize.Tabloid", resourceCulture);
             }
         }
         
@@ -2250,6 +2529,78 @@ namespace SiGen.Lang {
         public static string UnitSystem_Metric {
             get {
                 return ResourceManager.GetString("UnitSystem.Metric", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fingerboard.
+        /// </summary>
+        public static string VisibilityMenu_Fingerboard {
+            get {
+                return ResourceManager.GetString("VisibilityMenu.Fingerboard", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Fret Numbers.
+        /// </summary>
+        public static string VisibilityMenu_FretNumbers {
+            get {
+                return ResourceManager.GetString("VisibilityMenu.FretNumbers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Frets.
+        /// </summary>
+        public static string VisibilityMenu_Frets {
+            get {
+                return ResourceManager.GetString("VisibilityMenu.Frets", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Grid.
+        /// </summary>
+        public static string VisibilityMenu_Grid {
+            get {
+                return ResourceManager.GetString("VisibilityMenu.Grid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show.
+        /// </summary>
+        public static string VisibilityMenu_Header {
+            get {
+                return ResourceManager.GetString("VisibilityMenu.Header", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Medians.
+        /// </summary>
+        public static string VisibilityMenu_Medians {
+            get {
+                return ResourceManager.GetString("VisibilityMenu.Medians", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Strings.
+        /// </summary>
+        public static string VisibilityMenu_Strings {
+            get {
+                return ResourceManager.GetString("VisibilityMenu.Strings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Visibility.
+        /// </summary>
+        public static string VisibilityMenu_Tooltip {
+            get {
+                return ResourceManager.GetString("VisibilityMenu.Tooltip", resourceCulture);
             }
         }
     }

@@ -16,9 +16,6 @@ namespace SiGen.ViewModels.Dialogs
         public ObservableCollection<FretIntervalValueModel> Intervals { get; } = new();
 
         [ObservableProperty]
-        private double? newIntervalCents;
-
-        [ObservableProperty]
         private double? generateStartCents;
 
         [ObservableProperty]
@@ -27,7 +24,6 @@ namespace SiGen.ViewModels.Dialogs
         [ObservableProperty]
         private double? generateCount;
 
-        public IRelayCommand AddIntervalCommand { get; }
         public IRelayCommand<FretIntervalValueModel> RemoveIntervalCommand { get; }
         public IRelayCommand ClearIntervalsCommand { get; }
         public IRelayCommand GenerateIntervalsCommand { get; }
@@ -50,34 +46,19 @@ namespace SiGen.ViewModels.Dialogs
             GenerateIntervalCents = 100;
             GenerateCount = 12;
 
-            AddIntervalCommand = new RelayCommand(AddInterval, CanAddInterval);
             RemoveIntervalCommand = new RelayCommand<FretIntervalValueModel>(RemoveInterval);
             ClearIntervalsCommand = new RelayCommand(ClearIntervals);
             GenerateIntervalsCommand = new RelayCommand(GenerateIntervals);
             SaveCommand = new RelayCommand(Save);
         }
 
-        partial void OnNewIntervalCentsChanged(double? value)
+        public void AddInterval(double cents)
         {
-            AddIntervalCommand.NotifyCanExecuteChanged();
-        }
-
-        private bool CanAddInterval()
-        {
-            return NewIntervalCents.HasValue && NewIntervalCents.Value >= 0;
-        }
-
-        private void AddInterval()
-        {
-            if (!NewIntervalCents.HasValue)
+            if (cents < 0)
                 return;
-
-            var value = Math.Round(NewIntervalCents.Value, 4);
-            if (value < 0)
-                return;
-
-            Intervals.Add(new FretIntervalValueModel(value));
-            NewIntervalCents = null;
+            var value = Math.Round(cents, 4);
+            if (!Intervals.Any(x => x.Cents.HasValue && Math.Round(x.Cents.Value, 4) == value))
+                Intervals.Add(new FretIntervalValueModel(value));
         }
 
         private void RemoveInterval(FretIntervalValueModel? value)

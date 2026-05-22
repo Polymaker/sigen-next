@@ -22,7 +22,7 @@ namespace SiGen.ViewModels.Dialogs
 
         public ObservableCollection<FretCourseEditModel> StringCourses { get; } = new();
 
-        public Array Temperaments { get; } = Enum.GetValues<Temperament>();
+        public Array Temperaments { get; } = Enum.GetValues<Temperament>().Where(x => x != Temperament.Custom).ToArray();
 
         public IReadOnlyList<TemperamentOptionItem> TemperamentsWithGlobalOption { get; } = BuildTemperamentOptions();
 
@@ -30,7 +30,9 @@ namespace SiGen.ViewModels.Dialogs
         {
             return [
                 new TemperamentOptionItem(null, Lang.Resources.EditFretsDialog_UseGlobal),
-                ..Enum.GetValues<Temperament>().Select(t =>
+                ..Enum.GetValues<Temperament>()
+                .Where(x => x != Temperament.Custom) //remove custom option from the list, as it doesn't have a specific behavior and would require additional handling
+                .Select(t =>
                     new TemperamentOptionItem(t, Texts.ResourceManager.GetString($"Temperament.{t}", Texts.Culture) ?? t.ToString()))
             ];
         }

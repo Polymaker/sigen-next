@@ -50,6 +50,7 @@ namespace SiGen.ViewModels
         public IAsyncRelayCommand OpenCommand { get; }
         public IAsyncRelayCommand<IDocumentTabViewModel> CloseDocumentCommand { get; }
         public IAsyncRelayCommand ShowSettingsCommand { get; }
+        public IAsyncRelayCommand ShowAboutCommand { get; }
         public IAsyncRelayCommand CloseSelectedDocumentCommand {  get; }
         public IRelayCommand OpenInFileExplorerCommand { get; }
         public IAsyncRelayCommand<ExportTargetFormat> ExportLayoutCommand { get; }
@@ -85,6 +86,7 @@ namespace SiGen.ViewModels
             OpenHomeCommand = new RelayCommand(OpenHomePage);
             OpenFileCommand = new AsyncRelayCommand<string>(OpenDocumentFileAsync);
             ShowSettingsCommand = new AsyncRelayCommand(ShowSettingsAsync);
+            ShowAboutCommand = new AsyncRelayCommand(ShowAboutAsync);
             CloseSelectedDocumentCommand = new AsyncRelayCommand(CloseSelectedDocument, () => SelectedDocument != null);
             OpenInFileExplorerCommand = new RelayCommand(() => OpenInFileExplorer(SelectedDocument as ILayoutDocument), () => SelectedDocument is ILayoutDocument doc && !string.IsNullOrEmpty(doc.FilePath));
             ExportLayoutCommand = new AsyncRelayCommand<ExportTargetFormat>(format => ExportLayout(SelectedDocument as ILayoutDocument, format), _ => SelectedDocument is ILayoutDocument);
@@ -135,6 +137,11 @@ namespace SiGen.ViewModels
         private async Task ShowSettingsAsync()
         {
             await dialogService.ShowUserSettingsDialogAsync();
+        }
+
+        private async Task ShowAboutAsync()
+        {
+            await dialogService.ShowAboutDialogAsync();
         }
 
         #endregion

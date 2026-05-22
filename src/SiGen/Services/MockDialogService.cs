@@ -60,6 +60,11 @@ namespace SiGen.Services
             return Task.FromResult(false);
         }
 
+        public Task ShowAboutDialogAsync()
+        {
+            return Task.CompletedTask;
+        }
+
         public Task ShowErrorAsync(string message, string title = "Error")
         {
             return Task.CompletedTask;

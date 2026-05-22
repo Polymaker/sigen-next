@@ -6,7 +6,9 @@ using Avalonia.Media;
 using Avalonia.VisualTree;
 using SiGen.Maths;
 using SiGen.Measuring;
+using SiGen.Services;
 using SiGen.Settings;
+using SiGen.UI.Controls;
 using System;
 
 namespace SiGen.UI.LayoutViewer.Overlays
@@ -17,6 +19,7 @@ namespace SiGen.UI.LayoutViewer.Overlays
         private const double LabelLineClearancePx = 8;
         private const double LabelOverlapPushPx = 14;
         private const double IndicatorRadiusPx = 6.5;
+        private const double MinComponentLegLengthPx = 8;
         private const string TextBoxClassDark = "measure-overlay-dark";
         private const string TextBoxClassLight = "measure-overlay-light";
 
@@ -39,9 +42,9 @@ namespace SiGen.UI.LayoutViewer.Overlays
         private Line _livePreviewLine;
         private Ellipse _startMarker;
         private Ellipse _snapPreviewMarker;
-        private TextBox _mainText;
-        private TextBox _xText;
-        private TextBox _yText;
+        private MeasureTextBox _mainText;
+        private MeasureTextBox _xText;
+        private MeasureTextBox _yText;
 
         public bool HasStartPoint => _startPoint.HasValue;
         public bool HasCompletedMeasurement => _startPoint.HasValue && _endPoint.HasValue;
@@ -63,7 +66,6 @@ namespace SiGen.UI.LayoutViewer.Overlays
             _mainText = CreateTextBox();
             _xText = CreateTextBox();
             _yText = CreateTextBox();
-
             SetTextBoxContrastTheme(false);
             UpdateTheme(theme);
             HideAll();
@@ -102,12 +104,13 @@ namespace SiGen.UI.LayoutViewer.Overlays
         {
             _snapPreviewPoint = point;
             _snapPreviewVisible = isVisible && point.HasValue;
-            Reposition();
+            RepositionPreview();
         }
 
         public void SetUnitMode(Measuring.UnitSystem unitMode)
         {
             _unitMode = unitMode;
+            UpdateCompletedMeasurementValues();
             Reposition();
         }
 
@@ -128,6 +131,7 @@ namespace SiGen.UI.LayoutViewer.Overlays
             else
             {
                 _endPoint = point;
+                UpdateCompletedMeasurementValues();
             }
             Reposition();
         }
@@ -141,7 +145,7 @@ namespace SiGen.UI.LayoutViewer.Overlays
 
         public void Reposition()
         {
-            UpdateSnapPreviewMarker();
+            RepositionPreview();
 
             if (!_startPoint.HasValue)
             {
@@ -175,16 +179,20 @@ namespace SiGen.UI.LayoutViewer.Overlays
             _mainLine.StartPoint = startScreen;
             _mainLine.EndPoint = endScreen;
             _mainLine.IsVisible = true;
-
-            _mainText.Text = FormatMeasure(VectorD.Distance(start, end));
             _mainText.IsVisible = true;
 
             var hasX = Math.Abs(delta.X) > ZeroToleranceCm;
             var hasY = Math.Abs(delta.Y) > ZeroToleranceCm;
-            var showComponents = hasX && hasY; // only show axis breakdown when truly diagonal
 
             var elbow = new VectorD(end.X, start.Y);
             var elbowScreen = _layoutViewer.VectorToScreen(elbow);
+
+            var xLegLengthPx = Math.Sqrt(Math.Pow(elbowScreen.X - startScreen.X, 2) + Math.Pow(elbowScreen.Y - startScreen.Y, 2));
+            var yLegLengthPx = Math.Sqrt(Math.Pow(endScreen.X - elbowScreen.X, 2) + Math.Pow(endScreen.Y - elbowScreen.Y, 2));
+            var hasVisibleX = xLegLengthPx >= MinComponentLegLengthPx;
+            var hasVisibleY = yLegLengthPx >= MinComponentLegLengthPx;
+            var showComponents = hasX && hasY && hasVisibleX && hasVisibleY; // only show axis breakdown when diagonal and visually meaningful at current zoom
+
             var triangleCenter = new Point(
                 (startScreen.X + elbowScreen.X + endScreen.X) / 3d,
                 (startScreen.Y + elbowScreen.Y + endScreen.Y) / 3d);
@@ -198,14 +206,12 @@ namespace SiGen.UI.LayoutViewer.Overlays
             {
                 _xLine.StartPoint = startScreen;
                 _xLine.EndPoint = elbowScreen;
-                _xText.Text = FormatMeasure(Math.Abs(delta.X));
             }
 
             if (showComponents)
             {
                 _yLine.StartPoint = elbowScreen;
                 _yLine.EndPoint = endScreen;
-                _yText.Text = FormatMeasure(Math.Abs(delta.Y));
             }
 
             var mainRect = PositionLabelAwayFromTriangle(_mainText, startScreen, endScreen, triangleCenter, 0);
@@ -224,6 +230,40 @@ namespace SiGen.UI.LayoutViewer.Overlays
 
             if (showComponents && yRect.HasValue && (yRect.Value.Intersects(mainRect) || (xRect.HasValue && yRect.Value.Intersects(xRect.Value))))
                 PositionLabelAwayFromTriangle(_yText, elbowScreen, endScreen, triangleCenter, LabelOverlapPushPx);
+        }
+
+        private void RepositionPreview()
+        {
+            UpdateSnapPreviewMarker();
+
+            if (!_startPoint.HasValue || _endPoint.HasValue)
+            {
+                _livePreviewLine.IsVisible = false;
+                return;
+            }
+
+            var startScreen = _layoutViewer.VectorToScreen(_startPoint.Value);
+            PositionIndicator(_startMarker, startScreen, true);
+            UpdateLivePreviewLine(startScreen);
+        }
+
+        private void UpdateCompletedMeasurementValues()
+        {
+            if (!_startPoint.HasValue || !_endPoint.HasValue)
+                return;
+
+            var start = _startPoint.Value;
+            var end = _endPoint.Value;
+            var delta = end - start;
+            var targetUnit = _unitMode == Measuring.UnitSystem.Imperial ? LengthUnit.In : LengthUnit.Mm;
+
+            _mainText.Value = Measure.FromNormalizedValue(targetUnit, VectorD.Distance(start, end));
+            _xText.Value = Measure.FromNormalizedValue(targetUnit, Math.Abs(delta.X));
+            _yText.Value = Measure.FromNormalizedValue(targetUnit, Math.Abs(delta.Y));
+
+            _mainText.ApplyValueToText();
+            _xText.ApplyValueToText();
+            _yText.ApplyValueToText();
         }
 
         public void UpdateTheme(LayoutViewerColorScheme theme)
@@ -388,9 +428,9 @@ namespace SiGen.UI.LayoutViewer.Overlays
             };
         }
 
-        private static TextBox CreateTextBox()
+        private static MeasureTextBox CreateTextBox()
         {
-            return new TextBox
+            return new MeasureTextBox
             {
                 IsReadOnly = true,
                 MinHeight = 0,

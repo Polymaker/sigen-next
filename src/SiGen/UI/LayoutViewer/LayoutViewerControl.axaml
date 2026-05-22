@@ -8,6 +8,7 @@ xmlns:ui="using:SiGen.UI"
 xmlns:lv="using:SiGen.UI.LayoutViewer"
 xmlns:conv="using:SiGen.Converters"
 xmlns:snap="using:SiGen.Layouts.Snapping"
+xmlns:visibility="using:SiGen.UI.LayoutViewer"
 xmlns:lang="using:SiGen.Lang"
 xmlns:materialIcons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
 >
@@ -90,8 +91,8 @@ xmlns:materialIcons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Ico
 							  HorizontalAlignment="Left"
 							  Spacing="4">
 					  <ToggleSplitButton IsChecked="{Binding IsMeasureToolActive, RelativeSource={RelativeSource AncestorType=lv:LayoutViewerControl}, Mode=TwoWay}"
-									ToolTip.Tip="{x:Static lang:Resources.MeasureTool_Tooltip}">
-						  <materialIcons:MaterialIcon Kind="Ruler" IconSize="18" />
+									ToolTip.Tip="{x:Static lang:Resources.MeasureTool_Tooltip}" Padding="0">
+						  <materialIcons:MaterialIcon Kind="Ruler" IconSize="24" />
 						   <!--<materialIcons:MaterialIcon Kind="RulerSquare" IconSize="18" />-->
 
 						   <SplitButton.Flyout>
@@ -127,6 +128,54 @@ xmlns:materialIcons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Ico
 						 
 					  </ToggleSplitButton>
 
+					  <SplitButton x:Name="VisibilitySplitButton" Padding="0" 
+								   ToolTip.Tip="{x:Static lang:Resources.VisibilityMenu_Tooltip}"
+								   Click="VisibilitySplitButton_Click">
+						  <materialIcons:MaterialIcon Kind="Eye" IconSize="24" />
+						  <SplitButton.Flyout>
+							  <MenuFlyout Opening="VisibilityMenuFlyout_Opening" Placement="RightEdgeAlignedBottom">
+								  <MenuItem Header="{x:Static lang:Resources.VisibilityMenu_Header}" FontWeight="SemiBold" IsHitTestVisible="False" />
+								  <MenuItem Header="{x:Static lang:Resources.VisibilityMenu_Frets}"
+											Click="VisibilityFilter_Click"
+											StaysOpenOnClick="True"
+											ToggleType="CheckBox"
+											Tag="{x:Static visibility:LayoutViewerVisibleItems.Frets}">
+								  </MenuItem>
+								  <MenuItem Header="{x:Static lang:Resources.VisibilityMenu_FretNumbers}"
+											Click="VisibilityFilter_Click"
+											StaysOpenOnClick="True"
+											ToggleType="CheckBox"
+											Tag="{x:Static visibility:LayoutViewerVisibleItems.FretNumbers}">
+								  </MenuItem>
+								  <MenuItem Header="{x:Static lang:Resources.VisibilityMenu_Strings}"
+											Click="VisibilityFilter_Click"
+											StaysOpenOnClick="True"
+											ToggleType="CheckBox"
+											Tag="{x:Static visibility:LayoutViewerVisibleItems.Strings}">
+								  </MenuItem>
+								  <MenuItem Header="{x:Static lang:Resources.VisibilityMenu_Medians}"
+											Click="VisibilityFilter_Click"
+											StaysOpenOnClick="True"
+											ToggleType="CheckBox"
+											Tag="{x:Static visibility:LayoutViewerVisibleItems.Medians}">
+								  </MenuItem>
+								  <MenuItem Header="{x:Static lang:Resources.VisibilityMenu_Fingerboard}"
+											Click="VisibilityFilter_Click"
+											StaysOpenOnClick="True"
+											ToggleType="CheckBox"
+											Tag="{x:Static visibility:LayoutViewerVisibleItems.Fingerboard}">
+								  </MenuItem>
+								  <MenuItem Header="{x:Static lang:Resources.VisibilityMenu_Grid}"
+											Click="VisibilityFilter_Click"
+											StaysOpenOnClick="True"
+											ToggleType="CheckBox"
+											Tag="{x:Static visibility:LayoutViewerVisibleItems.Grid}">
+								  </MenuItem>
+								  
+							  </MenuFlyout>
+						  </SplitButton.Flyout>
+
+					  </SplitButton>
 				  </StackPanel>
 
 				  <StackPanel Grid.Column="1"
@@ -136,8 +185,8 @@ xmlns:materialIcons="clr-namespace:Material.Icons.Avalonia;assembly=Material.Ico
 					  <TextBox x:Name="ZoomTextBox"
                                MinHeight="0"
                                Text="{Binding Zoom, RelativeSource={RelativeSource AncestorType=lv:LayoutViewerControl}, Mode=TwoWay, Converter={StaticResource ZoomPercentageConverter}, UpdateSourceTrigger=LostFocus}" />
-					  <Button x:Name="ResetViewButton" ToolTip.Tip="Reset View" Click="ResetViewButton_Click">
-						  <materialIcons:MaterialIcon Kind="ImageFilterCenterFocusStrong" IconSize="18" />
+					  <Button x:Name="ResetViewButton" ToolTip.Tip="{x:Static lang:Resources.LayoutViewer_ResetView}" Click="ResetViewButton_Click" Padding="3">
+						  <materialIcons:MaterialIcon Kind="ImageFilterCenterFocusStrong" IconSize="24" />
 					  </Button>
 				  </StackPanel>
 			  </Grid>

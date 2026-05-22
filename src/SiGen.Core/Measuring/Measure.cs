@@ -354,7 +354,7 @@ namespace SiGen.Measuring
         public string ToStringFormatted(CultureInfo? culture = null, bool useAbbreviation = false)
         {
             if (IsEmpty) return string.Empty;
-
+            culture ??= CultureInfo.CurrentUICulture;
             string unitText = Unit switch
             {
                 LengthUnit.Mm => "mm",

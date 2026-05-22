@@ -85,16 +85,13 @@ namespace SiGen.Services
             var viewModel = new EditSpacingDialogViewModel(layoutConfiguration, end);
             var dialogControl = new EditSpacingDialogView();
             return await ShowDialogAsync(dialogControl, viewModel);
-            //return Task.CompletedTask;
         }
 
         public async Task<EditTuningResult?> ShowTuningDialog(ILayoutDocument document)
         {
-            
             var viewModel = ActivatorUtilities.CreateInstance<EditTuningDialogViewModel>(_serviceProvider, document);
             var dialogControl = new EditTuningDialogView();
             return await ShowDialogAsync(dialogControl, viewModel);
-
         }
 
         public async Task<EditStringsResult?> ShowStringsDialog(ILayoutDocument document)
@@ -128,6 +125,13 @@ namespace SiGen.Services
             var dialogControl = new UserSettingsDialogView();
             var result = await ShowDialogAsync(dialogControl, viewModel);
             return result;
+        }
+
+        public async Task ShowAboutDialogAsync()
+        {
+            var viewModel = new AboutDialogViewModel();
+            var dialogControl = new AboutDialogView();
+            await ShowDialogAsync(dialogControl, viewModel);
         }
 
         #endregion

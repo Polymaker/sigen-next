@@ -138,10 +138,14 @@
                         </MenuItem.Icon>
                     </MenuItem>
                 </MenuItem>
-                <!--TODO: Create About Window-->
-         <!--       <MenuItem Header="_Help">
-                    <MenuItem Header="_About..." />
-                </MenuItem>-->
+                <MenuItem Header="{x:Static lang:Resources.Menu_Help}">
+                    <MenuItem Header="{x:Static lang:Resources.Menu_Help_About}"
+                              Command="{Binding ShowAboutCommand}">
+                        <MenuItem.Icon>
+                            <materialIcons:MaterialIcon Kind="InformationOutline" IconSize="16" />
+                        </MenuItem.Icon>
+                    </MenuItem>
+                </MenuItem>
             </Menu>
 
             <Grid>

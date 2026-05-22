@@ -19,13 +19,12 @@ namespace SiGen.ViewModels.Dialogs
 {
     public partial class ExportLayoutDialogViewModel : DialogViewModelBase
     {
-        public override string Title => "Export Layout";
+        public override string Title => Lang.Resources.ExportLayoutDialog_Title;
 
         private ILayoutDocument? _context;
 
         [ObservableProperty]
-        private StringedInstrumentLayout? _layout;
-
+        private StringedInstrumentLayout? _layout; 
 
 
         private readonly IDialogService dialogService;
@@ -152,7 +151,14 @@ namespace SiGen.ViewModels.Dialogs
 
         #region PDF Parameters
 
-        public List<PdfPaperSize> AvailablePaperSizes => new() { PdfPaperSize.A4, PdfPaperSize.Letter, PdfPaperSize.Legal };
+        public List<PdfPaperSize> AvailablePaperSizes => new()
+        {
+            PdfPaperSize.Letter, PdfPaperSize.A4,
+            PdfPaperSize.Legal, PdfPaperSize.A3,
+            PdfPaperSize.Tabloid, PdfPaperSize.A5,
+            PdfPaperSize.B5, PdfPaperSize.B4,
+            PdfPaperSize.A2, PdfPaperSize.A1, PdfPaperSize.A0,
+        };
         public Array PageOrientations => Enum.GetValues(typeof(PdfPageOrientation));
 
         [ObservableProperty]

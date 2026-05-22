@@ -85,6 +85,10 @@ public partial class LayoutViewerControl : UserControl, ILayoutViewerContext
     public static readonly StyledProperty<bool> IsMeasureToolActiveProperty =
         AvaloniaProperty.Register<LayoutViewerControl, bool>(nameof(IsMeasureToolActive), false);
 
+    public static readonly StyledProperty<LayoutViewerVisibleItems> ActiveVisibilityFiltersProperty =
+        AvaloniaProperty.Register<LayoutViewerControl, LayoutViewerVisibleItems>(nameof(ActiveVisibilityFilters),
+            LayoutViewerVisibleItems.All);
+
     public Measuring.UnitSystem UnitMode
     {
         get => GetValue(UnitModeProperty);
@@ -101,6 +105,12 @@ public partial class LayoutViewerControl : UserControl, ILayoutViewerContext
     {
         get => GetValue(IsMeasureToolActiveProperty);
         set => SetValue(IsMeasureToolActiveProperty, value);
+    }
+
+    public LayoutViewerVisibleItems ActiveVisibilityFilters
+    {
+        get => GetValue(ActiveVisibilityFiltersProperty);
+        set => SetValue(ActiveVisibilityFiltersProperty, value);
     }
 
     private TranslateTransform _centerTransform;
@@ -144,7 +154,6 @@ public partial class LayoutViewerControl : UserControl, ILayoutViewerContext
 
         OnColorSchemeChanged();
         LayoutGrid.SetBluePrintBounds(new RectangleM(Measuring.Measure.Cm(-5), Measuring.Measure.Cm(-5), Measuring.Measure.Cm(10), Measuring.Measure.Cm(10)));
-
         zoomEndTimer = new DispatcherTimer { Interval = TimeSpan.FromMilliseconds(200) };
         zoomEndTimer.Tick += ZoomEndTimer_Tick;
     }
@@ -183,6 +192,10 @@ public partial class LayoutViewerControl : UserControl, ILayoutViewerContext
         {
             HideSnapPreview();
             measurementOverlay.Clear();
+        }
+        else if (change.Property == ActiveVisibilityFiltersProperty)
+        {
+            ApplyVisibilityFilters();
         }
 
         if (change.Property == LayoutProperty)
@@ -671,6 +684,14 @@ public partial class LayoutViewerControl : UserControl, ILayoutViewerContext
             }
 
         }
+
+        if (e.Key == Key.Escape && IsMeasureToolActive)
+        {
+            measurementOverlay.Clear();
+            HideSnapPreview();
+            e.Handled = true;
+        }
+
         base.OnKeyUp(e);
     }
 
@@ -861,7 +882,9 @@ public partial class LayoutViewerControl : UserControl, ILayoutViewerContext
         }
         else
         {
-            measurementOverlay.SetEndPoint(selectedPoint);
+            var distance = VectorD.Distance(measurementOverlay.StartPoint!.Value, selectedPoint);
+            if (distance > 0.05) // Minimum distance to set end point
+                measurementOverlay.SetEndPoint(selectedPoint);
         }
     }
 
@@ -892,7 +915,6 @@ public partial class LayoutViewerControl : UserControl, ILayoutViewerContext
     private void CreateLayoutVisualsAndOverlays()
     {
         RenderCanvas.Children.Clear();
-        //OverlayCanvas.Children.Clear();
 
         if (Layout == null) return;
 
@@ -903,8 +925,8 @@ public partial class LayoutViewerControl : UserControl, ILayoutViewerContext
 
         GenerateOverlays();
 
-        foreach (var median in Layout.Elements.OfType<GuideLineElement>())
-            RenderCanvas.Children.Add(new GuideLineVisualElement(median, ColorScheme));
+        foreach (var guideLine in Layout.Elements.OfType<GuideLineElement>())
+            RenderCanvas.Children.Add(new GuideLineVisualElement(guideLine, ColorScheme));
 
         foreach (var edge in Layout.Elements.OfType<FingerboardEdgeElement>())
             RenderCanvas.Children.Add(new FingerboardEdgeVisualElement(edge, ColorScheme));
@@ -913,6 +935,8 @@ public partial class LayoutViewerControl : UserControl, ILayoutViewerContext
 
         foreach (var @string in Layout.Strings)
             RenderCanvas.Children.Add(new StringVisualElement(@string, ColorScheme));
+
+        ApplyVisibilityFilters();
     }
 
     #endregion
@@ -941,8 +965,6 @@ public partial class LayoutViewerControl : UserControl, ILayoutViewerContext
         return new Point(point.X * MeasureUtils.CmToPixels * Zoom, -point.Y * MeasureUtils.CmToPixels * Zoom);
     }
 
-    
-
     private void GenerateOverlays()
     {
         if (Layout == null) return;
@@ -959,6 +981,8 @@ public partial class LayoutViewerControl : UserControl, ILayoutViewerContext
             fretNumberOverlay.InvalidateVisual();
             measurementOverlay.Reposition();
         }
+
+        ApplyVisibilityFilters();
     }
 
     private void RepositionOverlays()
@@ -1004,6 +1028,69 @@ public partial class LayoutViewerControl : UserControl, ILayoutViewerContext
         }
     }
 
+    private void VisibilityFilter_Click(object? sender, Avalonia.Interactivity.RoutedEventArgs e)
+    {
+        if (sender is MenuItem menuItem && menuItem.Tag is LayoutViewerVisibleItems flagToToggle)
+        {
+            if (ActiveVisibilityFilters.HasFlag(flagToToggle))
+                ActiveVisibilityFilters &= ~flagToToggle;
+            else
+                ActiveVisibilityFilters |= flagToToggle;
+        }
+    }
+
+    private void VisibilityMenuFlyout_Opening(object? sender, EventArgs e)
+    {
+        if (sender is MenuFlyout flyout)
+        {
+            foreach (var item in flyout.Items.OfType<MenuItem>())
+            {
+                if (item.Tag is LayoutViewerVisibleItems flag)
+                {
+                    item.IsChecked = ActiveVisibilityFilters.HasFlag(flag);
+                }
+            }
+        }
+    }
+
+    private bool IsElementVisible(LayoutViewerVisibleItems item)
+    {
+        return ActiveVisibilityFilters.HasFlag(item);
+    }
+
+    private void ApplyVisibilityFilters()
+    {
+        LayoutGrid.IsVisible = IsElementVisible(LayoutViewerVisibleItems.Grid);
+
+        foreach (var guideLineVisual in RenderCanvas.Children.OfType<GuideLineVisualElement>())
+        {
+            if (guideLineVisual.Element.Type == GuideLineType.FretboardProjection)
+                guideLineVisual.IsVisible = IsElementVisible(LayoutViewerVisibleItems.Fingerboard);
+            else if (guideLineVisual.Element.Type == GuideLineType.StringMedian)
+                guideLineVisual.IsVisible = IsElementVisible(LayoutViewerVisibleItems.Medians);
+        }
+
+        foreach (var fingerboardVisual in RenderCanvas.Children.OfType<FingerboardEdgeVisualElement>())
+        {
+            fingerboardVisual.IsVisible = IsElementVisible(LayoutViewerVisibleItems.Fingerboard);
+        }
+
+        foreach (var fretVisual in RenderCanvas.Children.OfType<FretRendererControl>())
+        {
+            fretVisual.IsVisible = IsElementVisible(LayoutViewerVisibleItems.Frets);
+        }
+
+        foreach (var stringVisual in RenderCanvas.Children.OfType<StringVisualElement>())
+        {
+            stringVisual.IsVisible = IsElementVisible(LayoutViewerVisibleItems.Strings);
+        }
+
+        fretNumberOverlay.IsVisible = IsElementVisible(LayoutViewerVisibleItems.Frets) && IsElementVisible(LayoutViewerVisibleItems.FretNumbers);
+
+        if (fretNumberOverlay.IsVisible)
+            fretNumberOverlay.InvalidateVisual();
+    }
+
     #endregion
 
     private void OnColorSchemeChanged()
@@ -1021,11 +1108,6 @@ public partial class LayoutViewerControl : UserControl, ILayoutViewerContext
         {
             child.UpdateColorScheme(ColorScheme);
         }
-
-        //foreach (var overlay in OverlayCanvas.Children.OfType<ILayoutRenderable>())
-        //{
-        //    overlay.UpdateColorScheme(ColorScheme);
-        //}
 
         double luminance = RelativeLuminance(ColorScheme.BackgroundColor);
         bool isLightBackground = luminance > 0.5;
@@ -1055,5 +1137,10 @@ public partial class LayoutViewerControl : UserControl, ILayoutViewerContext
         var b = Process(dB);
 
         return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+    }
+
+    private void VisibilitySplitButton_Click(object? sender, RoutedEventArgs e)
+    {
+        VisibilitySplitButton.Flyout?.IsOpen = true;
     }
 }
